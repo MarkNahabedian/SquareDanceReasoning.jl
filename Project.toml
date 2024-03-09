@@ -3,6 +3,9 @@ uuid = "b9c7be03-8993-4d9d-899b-7f8d1d493d3a"
 authors = ["MarkNahabedian <naha@mit.edu> and contributors"]
 version = "1.0.0-DEV"
 
+[deps]
+Rete = "3d46c559-9b3d-4aba-9ca1-48ff7627231e"
+
 [compat]
 julia = "1"
 

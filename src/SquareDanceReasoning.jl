@@ -1,5 +1,9 @@
 module SquareDanceReasoning
 
-# Write your package code here.
+using Rete
+
+abstract type SquareDanceRule <: Rule
+
+include("dancers.jl")
 
 end
