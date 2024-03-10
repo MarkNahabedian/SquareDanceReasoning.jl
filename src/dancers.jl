@@ -3,6 +3,7 @@
 export Gender, Guy, Gal, Unspecified, opposite
 export Dancer, OriginalPartners
 export make_dancers, is_original_head, is_original_side
+export OriginalPartnerRule, OriginalPartners, couple_number
 
 
 """
@@ -79,6 +80,8 @@ struct OriginalPartners
         new(guy, gal)
     end
 end
+
+couple_number(op::OriginalPartners) = op.guy.couple_number
 
 @rule SquareDanceRule.OriginalPartnerRule(guy::Dancer, gal::Dancer) begin
     if guy.couple_number != gal.couple_number

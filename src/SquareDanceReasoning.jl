@@ -2,6 +2,8 @@ module SquareDanceReasoning
 
 using Rete
 
+export SquareDanceRule
+
 abstract type SquareDanceRule <: Rule end
 
 include("coordinate_system.jl")
