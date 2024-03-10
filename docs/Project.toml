@@ -1,3 +1,4 @@
 [deps]
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+Rete = "3d46c559-9b3d-4aba-9ca1-48ff7627231e"
 SquareDanceReasoning = "b9c7be03-8993-4d9d-899b-7f8d1d493d3a"
