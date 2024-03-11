@@ -1,5 +1,6 @@
 
 export DancerState, location, direction, square_up
+export DANCER_HEAR_DISTANCE, near, direction
 
 
 """
@@ -15,13 +16,21 @@ struct DancerState
     dancer::Dancer
     time
     direction
-    down
-    left
+    down::Float32
+    left::Float32
+
+    DancerState(dancer::Dancer, time, direction,
+                down, left) = new(dancer, time, direction,
+                                  Float32(down), Float32(left))
 end
 
 
 location(ds::DancerState) = [ds.down ds.left]
 direction(ds::DancerState) = ds.direction
+
+distance(s1::DancerState, s2::DancerState) =
+    distance(location(s1), location(s2))
+
 
 
 """
@@ -61,4 +70,33 @@ function square_up(dancers::Vector{Dancer};
     end
     results
 end
+
+
+DANCER_HEAR_DISTANCE = 1.2 * COUPLE_DISTANCE
+
+"""
+    near(::DancerState, ::DancerState)
+
+returns true if the two DancerStates are for different dancers and are
+close enough together (within DANCER_HEAR_DISTANCE).
+"""
+function near(d1::DancerState, d2::DancerState)::Bool
+    if d1.dancer == d2.dancer
+        return false
+    end
+    distance(d1, d2) < DANCER_HEAR_DISTANCE
+end
+
+
+"""
+    direction(focus::DancerState, other::DancerState)
+
+returns the direction that `other` is from the point of view of
+`focus`.
+"""
+function direction(focus::DancerState, other::DancerState)
+    down, left = location(other) - location(focus)
+    canonicalize(atan(left, down) / (2 * pi))
+end
+
 
