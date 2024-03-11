@@ -16,6 +16,7 @@ makedocs(;
     ),
     pages=[
         "Home" => "index.md",
+        "Coordinate System" => "coordinate_system.md"
     ],
 )
 
