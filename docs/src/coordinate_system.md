@@ -19,10 +19,12 @@ the direction of a dancer from another dancer's point of view, etc.
 Direction can be absolute or relative.
 
 Directions are expressed as fractions of a full circle, so a change in
-direction of 180 degrees is expressed as a change in Direction of 0.5.
-Direction increases in promenade direction -- counter clockwise.
+direction of 180 degrees is expressed as a change in Direction of
+1//2.  Direction increases in promenade direction -- counter
+clockwise.  An attempt is made to store directions as rational numbers
+to avoid excessive floating point digits.
 
-Direction 0.0 is the direction that the caller is facing and the
+Direction 0 is the direction that the caller is facing and the
 facing direction of couple number one in a squared set.  In a squared
 set, the facing direction of couple number two would be 0.25, that of
 couple number three: 0.5, and that of couple number four: 0.75.
