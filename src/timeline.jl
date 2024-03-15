@@ -20,7 +20,8 @@ struct DancerState
     left::Float32
 
     DancerState(dancer::Dancer, time, direction,
-                down, left) = new(dancer, time, direction,
+                down, left) = new(dancer, time,
+                                  canonicalize(direction),
                                   Float32(down), Float32(left))
 end
 

@@ -10,5 +10,6 @@ include("coordinate_system.jl")
 include("dancers.jl")
 include("timeline.jl")
 include("relative_direction.jl")
+include("formations/formations.jl")
 
 end

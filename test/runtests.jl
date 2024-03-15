@@ -69,7 +69,6 @@ end
     d2 = DancerState(Dancer(2, Unspecified()), 0, fd, dv(0.25)...)
     # in front of d1:
     d3 = DancerState(Dancer(3, Unspecified()), 0, fd, dv(0.0)...)
-    println([d1, d2, d3])
     @test in_front_of(d1, d3)
     @test !in_front_of(d3, d1)
     @test !in_front_of(d1, d2)
@@ -83,4 +82,6 @@ end
     @test !right_of(d1, d2)
     @test !right_of(d2, d3)
 end
+
+include("test_formations/tests.jl")
 
