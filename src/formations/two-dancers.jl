@@ -1,8 +1,6 @@
 
-export TwoDancerFormation, Couple, FaceToFace, BackToBack,
+export Couple, FaceToFace, BackToBack,
     Tandem, MiniWave, RHMiniWave, LHMiniWave
-
-abstract type TwoDancerFormation <: SquareDanceFormation end
 
 struct Couple <: TwoDancerFormation
     beau::DancerState
@@ -11,12 +9,18 @@ end
 
 dancers(f::Couple) = [f.beau, f.belle]
 
+handedness(::Couple) = NoHandedness()
+
+
 struct FaceToFace <: TwoDancerFormation
     a::DancerState
     b::DancerState
 end
 
 dancers(f::FaceToFace) = [f.a, f.b]
+
+handedness(::FaceToFace) = NoHandedness()
+
 
 struct BackToBack <: TwoDancerFormation
     a::DancerState
@@ -25,6 +29,9 @@ end
 
 dancers(f::BackToBack) = [f.a, f.b]
 
+handedness(::BackToBack) = NoHandedness()
+
+
 struct Tandem <: TwoDancerFormation
     leader::DancerState
     trailer::DancerState
@@ -32,23 +39,38 @@ end
 
 dancers(f::Tandem) = [f.leader, f.trader]
 
+handedness(::Tandem) = NoHandedness()
+
+
 abstract type MiniWave <: TwoDancerFormation end
 
 dancers(f::MiniWave) = [f.a, f.b]
+
 
 struct RHMiniWave <: MiniWave
     a::DancerState
     b::DancerState
 end
 
+handedness(::RHMiniWave) = RightHanded()
+
+
 struct LHMiniWave <: MiniWave
     a::DancerState
     b::DancerState
 end
 
+handedness(::LHMiniWave) = LeftHanded()
 
-@rule TwoDancerFormationsRule(ds1::DancerState, ds2::DancerState,                           ::Couple, ::FaceToFace, ::BackToBack, ::Tandem,
-                              ::RHMiniWave, ::LHMiniWave) begin
+
+@rule SquareDanceFormationRule.TwoDancerFormationsRule(ds1::DancerState,
+                                                       ds2::DancerState,
+                                                       ::Couple,
+                                                       ::FaceToFace,
+                                                       ::BackToBack,
+                                                       ::Tandem,
+                                                       ::RHMiniWave,
+                                                       ::LHMiniWave) begin
     if ds1.dancer == ds2.dancer
         return
     end

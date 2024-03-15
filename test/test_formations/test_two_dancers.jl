@@ -6,11 +6,11 @@ using SquareDanceReasoning: TwoDancerFormationsRule
     kb = BasicReteNode("root")
     install(kb, TwoDancerFormationsRule)
     ensure_IsaMemoryNode(kb, Dancer)
+    # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
+    @test length(kb.outputs) == 8
     for dancer in dancers
         receive(kb, dancer)
     end
-    # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
-    @test length(kb.outputs) == 8
     # Couple
     receive(kb, DancerState(dancers[1], 0, 0, 0, 1))
     receive(kb, DancerState(dancers[2], 0, 0, 0, 2))
@@ -43,6 +43,7 @@ using SquareDanceReasoning: TwoDancerFormationsRule
         @test length(m.memory) == 1
         f = first(m.memory)
         @test f isa FaceToFace
+        @test handedness(f) == NoHandedness()
         @test f.a.direction < f.b.direction
         @test f.a.dancer == dancers[3]
         @test f.b.dancer == dancers[4]
@@ -52,6 +53,7 @@ using SquareDanceReasoning: TwoDancerFormationsRule
         @test length(m.memory) == 1
         f = first(m.memory)
         @test f isa BackToBack
+        @test handedness(f) == NoHandedness()
         @test f.a.direction < f.b.direction
         @test f.a.dancer == dancers[6]
         @test f.b.dancer == dancers[5]
@@ -60,6 +62,7 @@ using SquareDanceReasoning: TwoDancerFormationsRule
         m = find_memory_for_type(kb, Tandem)
         @test length(m.memory) == 1
         f = first(m.memory)
+        @test handedness(f) == NoHandedness()
         @test f isa Tandem
         @test f.leader.dancer == dancers[8]
         @test f.trailer.dancer == dancers[7]
@@ -68,6 +71,7 @@ using SquareDanceReasoning: TwoDancerFormationsRule
         m = find_memory_for_type(kb, RHMiniWave)
         @test length(m.memory) == 1
         f = first(m.memory)
+        @test handedness(f) == RightHanded()
         @test f isa RHMiniWave
         @test f.a.direction < f.b.direction
         @test f.a.dancer == dancers[10]
@@ -77,6 +81,7 @@ using SquareDanceReasoning: TwoDancerFormationsRule
         m = find_memory_for_type(kb, LHMiniWave)
         @test length(m.memory) == 1
         f = first(m.memory)
+        @test handedness(f) == LeftHanded()
         @test f isa LHMiniWave
         @test f.a.direction < f.b.direction
         @test f.a.dancer == dancers[11]
