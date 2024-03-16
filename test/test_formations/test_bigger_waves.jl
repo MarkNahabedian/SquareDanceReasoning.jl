@@ -1,4 +1,17 @@
 
+function make_wave(dancers, initial_direction)
+    direction = initial_direction
+    down = 0
+    left = 1
+    map(dancers) do dancer
+        ds = DancerState(dancer, 0, direction, down, left)
+        left += 1
+        direction = opposite(direction)
+        ds
+    end
+end
+    
+
 @testset "test right hand wave of four" begin
     dancers = make_dancers(2)
     kb = BasicReteNode("root")
@@ -10,10 +23,9 @@
     for dancer in dancers
         receive(kb, dancer)
     end
-    receive(kb, DancerState(dancers[1], 0, 1//2, 0, 1))
-    receive(kb, DancerState(dancers[2], 0,    0, 0, 2))
-    receive(kb, DancerState(dancers[3], 0, 1//2, 0, 3))
-    receive(kb, DancerState(dancers[4], 0,    0, 0, 4))
+    for ds in make_wave(dancers, 1//2)
+        receive(kb, ds)
+    end
     # First make sure we have the MiniWaves:
     let
         m = find_memory_for_type(kb, RHMiniWave)
@@ -46,10 +58,9 @@ end
     for dancer in dancers
         receive(kb, dancer)
     end
-    receive(kb, DancerState(dancers[1], 0,    0, 0, 1))
-    receive(kb, DancerState(dancers[2], 0, 1//2, 0, 2))
-    receive(kb, DancerState(dancers[3], 0,    0, 0, 3))
-    receive(kb, DancerState(dancers[4], 0, 1//2, 0, 4))
+    for ds in make_wave(dancers, 0)
+        receive(kb, ds)
+    end
     # First make sure we have the MiniWaves:
     let
         m = find_memory_for_type(kb, RHMiniWave)
@@ -71,3 +82,42 @@ end
     end
 end
 
+@testset "test right hand wave of eight" begin
+    dancers = make_dancers(4)
+    kb = BasicReteNode("root")
+    install(kb, TwoDancerFormationsRule)
+    install(kb, WaveOfFourRule)
+    install(kb, WaveOfEightRule)
+    ensure_IsaMemoryNode(kb, Dancer)
+    # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
+    @test length(kb.outputs) == 14
+    for dancer in dancers
+        receive(kb, dancer)
+    end
+    for ds in make_wave(dancers, 1//2)
+        receive(kb, ds)
+    end
+    # First make sure we have the MiniWaves:
+    let
+        m = find_memory_for_type(kb, RHMiniWave)
+        @test length(m.memory) == 4
+    end
+    let
+        m = find_memory_for_type(kb, LHMiniWave)
+        @test length(m.memory) == 3
+    end
+    let
+        m = find_memory_for_type(kb, RHWaveOfEight)
+        @test length(m.memory) == 1
+        f = first(m.memory)
+        @test handedness(f) == RightHanded()
+        @test f.wave1.wave1.a.dancer == dancers[2]
+        @test f.wave1.wave1.b.dancer == dancers[1]
+        @test f.wave1.wave2.a.dancer == dancers[4]
+        @test f.wave1.wave2.b.dancer == dancers[3]
+        @test f.wave2.wave1.a.dancer == dancers[6]
+        @test f.wave2.wave1.b.dancer == dancers[5]
+        @test f.wave2.wave2.a.dancer == dancers[8]
+        @test f.wave2.wave2.b.dancer == dancers[7]
+    end
+end
