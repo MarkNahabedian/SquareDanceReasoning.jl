@@ -6,11 +6,11 @@ export WaveOfFourRule, WaveOfEightRule
 abstract type WaveOfFour <: FourDancerFormation end
 abstract type WaveOfEight <: EightDancerFormation end
 
-dancers(f::WaveOfFour) = [ dancers(f.wave1)...,
-                           dancers(f.wave2)... ]
+dancer_states(f::WaveOfFour) = [ dancers(f.wave1)...,
+                                 dancers(f.wave2)... ]
 
-dancers(f::WaveOfEight) = [ dancers(f.wave1)...,
-                            dancers(f.wave2)... ]
+dancer_states(f::WaveOfEight) = [ dancers(f.wave1)...,
+                                  dancers(f.wave2)... ]
 
 handedness(f::WaveOfFour) = handedness(f.wave1)
 handedness(f::WaveOfEight) = handedness(f.wave1)

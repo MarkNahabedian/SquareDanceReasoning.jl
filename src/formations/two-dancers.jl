@@ -7,7 +7,7 @@ struct Couple <: TwoDancerFormation
     belle::DancerState
 end
 
-dancers(f::Couple) = [f.beau, f.belle]
+dancer_states(f::Couple) = [f.beau, f.belle]
 
 handedness(::Couple) = NoHandedness()
 
@@ -17,7 +17,7 @@ struct FaceToFace <: TwoDancerFormation
     b::DancerState
 end
 
-dancers(f::FaceToFace) = [f.a, f.b]
+dancer_states(f::FaceToFace) = [f.a, f.b]
 
 handedness(::FaceToFace) = NoHandedness()
 
@@ -27,7 +27,7 @@ struct BackToBack <: TwoDancerFormation
     b::DancerState
 end
 
-dancers(f::BackToBack) = [f.a, f.b]
+dancer_states(f::BackToBack) = [f.a, f.b]
 
 handedness(::BackToBack) = NoHandedness()
 
@@ -37,14 +37,14 @@ struct Tandem <: TwoDancerFormation
     trailer::DancerState
 end
 
-dancers(f::Tandem) = [f.leader, f.trader]
+dancer_states(f::Tandem) = [f.leader, f.trader]
 
 handedness(::Tandem) = NoHandedness()
 
 
 abstract type MiniWave <: TwoDancerFormation end
 
-dancers(f::MiniWave) = [f.a, f.b]
+dancer_states(f::MiniWave) = [f.a, f.b]
 
 
 struct RHMiniWave <: MiniWave

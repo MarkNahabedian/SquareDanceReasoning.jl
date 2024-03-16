@@ -2,6 +2,7 @@
 export SquareDanceFormation, dancers, handedness
 export TwoDancerFormation, FourDancerFormation, EightDancerFormation
 export SquareDanceFormationRule
+export dancer_states
 export handedness, Handedness, NoHandedness, RightHanded, LeftHanded
 
 
@@ -19,12 +20,12 @@ abstract type EightDancerFormation <: SquareDanceFormation end
 
 
 """
-    dancers(formation)
+    dancer_states(formation)
 
-Returns a list of the dancers in the formation, in no particular
-order.
+Returns a list of the `DancerState`s in the formation, in no
+particular order.
 """
-function dancers end
+function dancer_states end
 
 
 """
