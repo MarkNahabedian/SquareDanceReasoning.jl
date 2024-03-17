@@ -1,6 +1,6 @@
 
 export LineOfFour, TwoFacedLine, LineOfFourRule
-export LineOfFourRule, TwoFacedLineRume
+export LineOfFourRule, TwoFacedLineRule
 
 struct LineOfFour <: FourDancerFormation
     a::Couple
@@ -44,7 +44,7 @@ handedness(f::TwoFacedLine) = handedness(f.centers)
 end
 
 
-@rule SquareDanceFormationRule.TwoFacedLineRume(a::Couple, b::Couple,
+@rule SquareDanceFormationRule.TwoFacedLineRule(a::Couple, b::Couple,
                                                 centers::MiniWave,
                                                 ::TwoFacedLine) begin
     if !direction_equal(a.beau.direction,
