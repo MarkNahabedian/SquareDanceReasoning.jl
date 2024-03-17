@@ -10,7 +10,7 @@ end
 
 @testset "lines of four" begin
     dancers = make_dancers(4)
-    kb = BasicReteNode("root")
+    kb = ReteRootNode("root")
     install(kb, SquareDanceFormationRule)
     ensure_IsaMemoryNode(kb, Dancer)
     for dancer in dancers
@@ -56,7 +56,7 @@ end
     
 @testset "two faced lines" begin
     dancers = make_dancers(4)
-    kb = BasicReteNode("root")
+    kb = ReteRootNode("root")
     install(kb, SquareDanceFormationRule)
     ensure_IsaMemoryNode(kb, Dancer)
     for dancer in dancers

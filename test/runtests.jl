@@ -42,7 +42,7 @@ end
 end
 
 @testset "OriginalPartners" begin
-    kb = Rete.BasicReteNode("root")
+    kb = Rete.ReteRootNode("root")
     install(kb, OriginalPartnerRule)
     op_node = ensure_IsaMemoryNode(kb, OriginalPartners)
     dancers = make_dancers(4)

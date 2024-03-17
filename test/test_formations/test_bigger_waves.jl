@@ -14,7 +14,7 @@ end
 
 @testset "test right hand wave of four" begin
     dancers = make_dancers(2)
-    kb = BasicReteNode("root")
+    kb = ReteRootNode("root")
     install(kb, TwoDancerFormationsRule)
     install(kb, WaveOfFourRule)
     ensure_IsaMemoryNode(kb, Dancer)
@@ -49,7 +49,7 @@ end
 
 @testset "test left hand wave of four" begin
     dancers = make_dancers(2)
-    kb = BasicReteNode("root")
+    kb = ReteRootNode("root")
     install(kb, TwoDancerFormationsRule)
     install(kb, WaveOfFourRule)
     ensure_IsaMemoryNode(kb, Dancer)
@@ -84,7 +84,7 @@ end
 
 @testset "test right hand wave of eight" begin
     dancers = make_dancers(4)
-    kb = BasicReteNode("root")
+    kb = ReteRootNode("root")
     install(kb, TwoDancerFormationsRule)
     install(kb, WaveOfFourRule)
     install(kb, WaveOfEightRule)

@@ -3,7 +3,7 @@ using SquareDanceReasoning: TwoDancerFormationsRule
 
 @testset "test two dancer formations" begin
     dancers = make_dancers(6)
-    kb = BasicReteNode("root")
+    kb = ReteRootNode("root")
     install(kb, TwoDancerFormationsRule)
     ensure_IsaMemoryNode(kb, Dancer)
     # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
