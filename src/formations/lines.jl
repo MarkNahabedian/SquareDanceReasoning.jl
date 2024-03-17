@@ -42,4 +42,31 @@ handedness(f::TwoFacedLine) = handedness(f.centers)
     emit(LineOfFour(a, b, centers))
 end
 
- 
+
+@rule SquareDanceFormationRule.TwoFacedLineRume(a::Couple, b::Couple,
+                                                centers::MiniWave,
+                                                ::TwoFacedLine) begin
+    if !direction_equal(a.beau.direction,
+                        opposite(b.beau.direction))
+        return
+    end
+    if handedness(centers) == RightHanded()
+        #  ↑↑↓↓
+        center_dancer_field = :belle
+    else
+        #  ↓↓↑↑
+        @assert handedness(centers) == LeftHanded()
+        center_dancer_field = :beau
+    end
+    # We arbitrarily decide that the `centers.a` field of the
+    # TwoFacedLine should be in the 'a' couple, and `centers.b` should
+    # be in the `b` couple.
+    if centers.a != getfield(a, center_dancer_field)
+        return
+    end
+    if centers.b != getfield(b, center_dancer_field)
+        return
+    end
+    emit(TwoFacedLine(a, b, centers))
+end
+
