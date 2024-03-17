@@ -1,5 +1,6 @@
 
 export LineOfFour, TwoFacedLine, LineOfFourRule
+export LineOfFourRule, TwoFacedLineRume
 
 struct LineOfFour <: FourDancerFormation
     a::Couple

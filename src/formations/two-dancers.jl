@@ -1,6 +1,7 @@
 
 export Couple, FaceToFace, BackToBack,
     Tandem, MiniWave, RHMiniWave, LHMiniWave
+export TwoDancerFormationsRule
 
 struct Couple <: TwoDancerFormation
     beau::DancerState

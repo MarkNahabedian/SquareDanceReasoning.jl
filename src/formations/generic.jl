@@ -11,7 +11,7 @@ export handedness, Handedness, NoHandedness, RightHanded, LeftHanded
 
 the group for all rules relating to square dance formations.
 """
-abstract type SquareDanceFormationRule end
+abstract type SquareDanceFormationRule <: SquareDanceRule end
 
 abstract type SquareDanceFormation end
 abstract type TwoDancerFormation <: SquareDanceFormation end
