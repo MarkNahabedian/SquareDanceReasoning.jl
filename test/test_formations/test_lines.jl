@@ -1,4 +1,5 @@
 
+# Arrange all dancers in a line with the specified down and direction:
 function make_line(dancers, direction, down)
     left = 1
     map(dancers) do dancer
