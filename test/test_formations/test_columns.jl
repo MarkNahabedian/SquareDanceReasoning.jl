@@ -13,6 +13,7 @@
     for ds in make_line(dancers[5:8], 3//4, 1)
         receive(kb, ds)
     end
+    @debug_formations(kb)
     # First make sure we have the Tandems:
     let
         m = find_memory_for_type(kb, Tandem)

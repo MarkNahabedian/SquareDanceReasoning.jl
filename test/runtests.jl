@@ -3,6 +3,8 @@ using Test
 using Rete
 
 
+include("debug_formations.jl")
+
 @testset "directions" begin
     @test opposite(DIRECTION0) == DIRECTION2
     @test opposite(DIRECTION1) == DIRECTION3

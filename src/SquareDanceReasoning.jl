@@ -12,4 +12,6 @@ include("timeline.jl")
 include("relative_direction.jl")
 include("formations/formations.jl")
 
+include("debug.jl")
+
 end
