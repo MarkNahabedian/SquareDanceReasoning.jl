@@ -23,6 +23,7 @@ end
     for ds in make_line(dancers[5:8], 0.5, 1)
         receive(kb, ds)
     end
+    @debug_formations(kb)
     # First make sure we have the Couples:
     let
         m = find_memory_for_type(kb, Couple)
@@ -73,6 +74,7 @@ end
     receive(kb, DancerState(dancers[6], 0,    0, 1, 2))
     receive(kb, DancerState(dancers[7], 0, 1//2, 1, 3))
     receive(kb, DancerState(dancers[8], 0, 1//2, 1, 4))
+    @debug_formations(kb)
     # First make sure we have the Couples:
     let
         m = find_memory_for_type(kb, Couple)
@@ -85,6 +87,7 @@ end
         end
         line_offset = 0
         for line in lines
+            @test length(dancer_states(line)) == 4
             if handedness(line) == RightHanded()
                 @test handedness(line.centers) == RightHanded()
                 @test line.b.beau.dancer == dancers[line_offset + 1]

@@ -6,3 +6,4 @@
 /docs/build/
 /docs/src/formation_hierarchy.md
 /docs/src/rule_hierarchy.md
+/test/test_formations/*.html

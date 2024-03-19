@@ -27,6 +27,7 @@
         @test length(columns) == 2
         columns = sort(columns; by = f -> f.lead.leader.direction)
         #   ←←←←   direction 1//4
+        @test length(dancer_states(columns[1])) == 4
         @test columns[1].tail.trailer.direction == 1/4
         @test handedness(columns[1]) == NoHandedness()
         @test columns[1].tail.trailer.dancer == dancers[1]
@@ -34,6 +35,7 @@
         @test columns[1].lead.trailer.dancer == dancers[3]
         @test columns[1].lead.leader.dancer == dancers[4]
         #   →→→→   direction 3/4
+        @test length(dancer_states(columns[2])) == 4
         @test columns[2].tail.trailer.direction == 3/4
         @test handedness(columns[2]) == NoHandedness()
         @test columns[2].lead.leader.dancer == dancers[5]

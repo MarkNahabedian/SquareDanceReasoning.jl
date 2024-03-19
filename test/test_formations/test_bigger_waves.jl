@@ -26,6 +26,7 @@ end
     for ds in make_wave(dancers, 1//2)
         receive(kb, ds)
     end
+    @debug_formations(kb)
     # First make sure we have the MiniWaves:
     let
         m = find_memory_for_type(kb, RHMiniWave)
@@ -39,6 +40,7 @@ end
         m = find_memory_for_type(kb, RHWaveOfFour)
         @test length(m.memory) == 1
         f = first(m.memory)
+        @test length(dancer_states(f)) == 4
         @test handedness(f) == RightHanded()
         @test f.wave1.a.dancer == dancers[2]
         @test f.wave1.b.dancer == dancers[1]
@@ -61,6 +63,7 @@ end
     for ds in make_wave(dancers, 0)
         receive(kb, ds)
     end
+    @debug_formations(kb)
     # First make sure we have the MiniWaves:
     let
         m = find_memory_for_type(kb, RHMiniWave)
@@ -74,6 +77,7 @@ end
         m = find_memory_for_type(kb, LHWaveOfFour)
         @test length(m.memory) == 1
         f = first(m.memory)
+        @test length(dancer_states(f)) == 4
         @test handedness(f) == LeftHanded()
         @test f.wave1.a.dancer == dancers[3]
         @test f.wave1.b.dancer == dancers[4]
