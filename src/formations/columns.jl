@@ -14,8 +14,9 @@ struct ColumnOfFour <: FourDancerFormation
     centers::Tandem
 end
 
-dancer_states(f::ColumnOfFour) = [ dancer_states(f.lead)...,
-                                   dancer_states(f.tail)... ]
+dancer_states(f::ColumnOfFour)::Vector{DancerState} =
+    [ dancer_states(f.lead)...,
+      dancer_states(f.tail)... ]
 
 handedness(::ColumnOfFour) = NoHandedness()
 

@@ -8,8 +8,9 @@ struct LineOfFour <: FourDancerFormation
     centers::Couple
 end
 
-dancer_states(f::LineOfFour) = [ dancer_states(f.a)...,
-                                 dancer_states(f.b)... ]
+dancer_states(f::LineOfFour)::Vector{DancerState} =
+    [ dancer_states(f.a)...,
+      dancer_states(f.b)... ]
 
 handedness(::LineOfFour) = NoHandedness()
 
@@ -19,8 +20,9 @@ struct TwoFacedLine <: FourDancerFormation
     centers::MiniWave
 end
 
-dancer_states(f::TwoFacedLine) = [ dancer_states(f.a)...,
-                                   dancer_states(f.b)... ]
+dancer_states(f::TwoFacedLine)::Vector{DancerState} =
+    [ dancer_states(f.a)...,
+      dancer_states(f.b)... ]
 
 handedness(f::TwoFacedLine) = handedness(f.centers)
 

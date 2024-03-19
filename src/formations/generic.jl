@@ -20,7 +20,7 @@ abstract type EightDancerFormation <: SquareDanceFormation end
 
 
 """
-    dancer_states(formation)
+    dancer_states(formation)::Vector{DancerState}
 
 Returns a list of the `DancerState`s in the formation, in no
 particular order.
