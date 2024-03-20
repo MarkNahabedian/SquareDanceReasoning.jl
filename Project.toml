@@ -9,6 +9,7 @@ Rete = "3d46c559-9b3d-4aba-9ca1-48ff7627231e"
 XML = "72c71f33-b9b6-44de-8c94-c961784809e2"
 
 [compat]
+XML = "0.3"
 julia = "1"
 
 [extras]
