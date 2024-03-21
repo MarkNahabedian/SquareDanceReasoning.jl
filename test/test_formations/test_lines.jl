@@ -1,14 +1,4 @@
 
-# Arrange all dancers in a line with the specified down and direction:
-function make_line(dancers, direction, down)
-    left = 1
-    map(dancers) do dancer
-        ds = DancerState(dancer, 0, direction, down, left)
-        left += 1
-        ds
-    end
-end
-
 @testset "lines of four" begin
     dancers = make_dancers(4)
     kb = ReteRootNode("root")

@@ -41,7 +41,7 @@ returns a list of `DancerState`s for the initial squared set.
 """
 function square_up(dancers::Vector{Dancer};
                    center = [0.0  0.0],
-                   initial_time = 0)
+                   initial_time = 0)::Vector{DancerState}
     dancers = sort(dancers)
     circle_fraction = FULL_CIRCLE / (length(dancers) / 2)
     rad(angle) = 2 * pi * angle
@@ -51,7 +51,7 @@ function square_up(dancers::Vector{Dancer};
         a = rad(angle_from_center(couple_number))
         [ cos(a) sin(a) ]
     end
-    results = []
+    results = Vector{DancerState}()
     distance_from_center = let
         a = rad(circle_fraction / 2)
         (COUPLE_DISTANCE / 2) * cot(a)
@@ -99,5 +99,4 @@ function direction(focus::DancerState, other::DancerState)
     down, left = location(other) - location(focus)
     canonicalize(atan(left, down) / (2 * pi))
 end
-
 

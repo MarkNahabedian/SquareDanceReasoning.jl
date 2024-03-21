@@ -85,5 +85,53 @@ end
     @test !right_of(d2, d3)
 end
 
+# Arrange all dancers in a line with the specified down and direction:
+function make_line(dancers, direction, down)
+    left = 1
+    map(dancers) do dancer
+        ds = DancerState(dancer, 0, direction, down, left)
+        left += 1
+        ds
+    end
+end
+
+@testset "Bounds" begin
+    let
+        dancers = make_dancers(4)
+        dss = square_up(dancers)
+        bounds = Bounds(dss; margin=0)
+        println(bounds)
+        @test bounds.min_down == -0.5
+        @test bounds.max_down == 0.5
+        @test bounds.min_left == -0.5
+        @test bounds.max_left == 0.5
+    end
+    let
+        dancers = make_dancers(4)
+        dss = [ make_line(dancers[1:4], 0, 0)...,
+                make_line(dancers[5:8], 1//2, 1)... ]
+        bounds = Bounds(dss; margin=0)
+        @test bounds.min_down == 0.0
+        @test bounds.max_down == 1.0
+        @test bounds.min_left == 1.0
+        @test bounds.max_left == 4.0
+        bounds = Bounds(dss)
+        margin = COUPLE_DISTANCE / 2
+        @test bounds.min_down == 0 - margin
+        @test bounds.max_down == 1 + margin
+        @test bounds.min_left == 1 - margin
+        @test bounds.max_left == 4 + margin
+    end
+end
+
+@testset "center" begin
+    dancers = make_dancers(4)
+    dss = square_up(dancers)
+    c = center(dss)
+    eq(a, b) = isapprox(a, b; atol = 0.00001)
+    @test eq(c[1], 0.0)
+    @test eq(c[2], 0.0)
+end
+
 include("test_formations/tests.jl")
 
