@@ -18,6 +18,9 @@ struct Bounds
     min_left
     max_left
 
+    Bounds(min_down, max_down, min_left, max_left) =
+        new(min_down, max_down, min_left, max_left)
+
     function Bounds(dss::Vector{DancerState};
                     margin=COUPLE_DISTANCE/2)
         @assert length(dss) >= 1
@@ -46,6 +49,12 @@ struct Bounds
         new(min_down, max_down, min_left, max_left)
     end
 end
+
+bump_out(bounds::Bounds, amount) =
+    Bounds(bounds.min_down - amount,
+           bounds.max_down + amount,
+           bounds.min_left - amount,
+           bounds.max_left + amount)
 
 
 """
