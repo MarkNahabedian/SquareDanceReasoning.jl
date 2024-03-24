@@ -1,12 +1,12 @@
 
 @testset "columns of four" begin
-    dancers = make_dancers(4)
+    square = make_square(4)
     kb = ReteRootNode("root")
+    install(kb, SquareHasDancers)
     install(kb, SquareDanceFormationRule)
     ensure_IsaMemoryNode(kb, Dancer)
-    for dancer in dancers
-        receive(kb, dancer)
-    end
+    receive(kb, square)
+    dancers = sort(collect(square.dancers))
     for ds in make_line(dancers[1:4], 1//4, 0)
         receive(kb, ds)
     end

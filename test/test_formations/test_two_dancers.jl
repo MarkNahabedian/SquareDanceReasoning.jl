@@ -2,15 +2,14 @@
 using SquareDanceReasoning: TwoDancerFormationsRule
 
 @testset "test two dancer formations" begin
-    dancers = make_dancers(6)
+    square = make_square(6)
     kb = ReteRootNode("root")
+    install(kb, SquareHasDancers)
     install(kb, TwoDancerFormationsRule)
-    ensure_IsaMemoryNode(kb, Dancer)
     # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
-    @test length(kb.outputs) == 8
-    for dancer in dancers
-        receive(kb, dancer)
-    end
+    @test length(kb.outputs) == 9
+    receive(kb, square)
+    dancers = sort(collect(collect(square.dancers)))
     # Couple
     receive(kb, DancerState(dancers[1], 0, 0, 0, 1))
     receive(kb, DancerState(dancers[2], 0, 0, 0, 2))

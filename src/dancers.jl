@@ -2,8 +2,9 @@
 
 export Gender, Guy, Gal, Unspecified, opposite
 export Dancer, OriginalPartners
-export make_dancers, is_original_head, is_original_side
+export is_original_head, is_original_side
 export OriginalPartnerRule, OriginalPartners, couple_number
+export SDSQuare, SquareHasDancers, make_square
 
 
 """
@@ -101,23 +102,6 @@ end
 
 
 """
-    make_dancers(number_of_couples::Int)
-
-Returns a list of `Dancer`s with one Guy and one Gal for each couple
-number.
-"""
-function make_dancers(number_of_couples::Int)
-    dancers = Vector{Dancer}()
-    for couple_number in 1:number_of_couples
-        for gender in [Guy(), Gal()]
-            push!(dancers, Dancer(couple_number, gender))
-        end
-    end
-    dancers
-end
-
-
-"""
     is_original_head(::Dancer)::Bool
 
 returns true if the dancer was originally in a head position.
@@ -133,4 +117,47 @@ returns true if the dancer was originally in a side position.
 is_original_side(d::Dancer)::Bool = iseven(d.couple_number)
 
 
+"""
+    SDSquare(dancers)
 
+SDSquare is a fact that can be asserted to the knowledge base to
+inform it that the dancers form a square.
+"""
+struct SDSquare
+    dancers::Set{Dancer}
+
+    SDSquare(dancers) = new(Set{Dancer}(dancers))
+end
+
+
+"""
+    other_dancers(square::SDSquare, dancers)
+
+Returns the dancers from `square` that are not listed in the `dancers`
+argument.
+"""
+other_dancers(square::SDSquare, dancers) =
+    setdiff(square.dancers, dancers)
+
+
+@rule SquareDanceRule.SquareHasDancers(square::SDSquare, ::Dancer) begin
+    for dancer in square.dancers
+        emit(dancer)
+    end
+end
+
+
+"""
+    make_square(number_of_couples::Int)::SDSquare
+
+Returns an SDSquare with the specified number of couples.
+"""
+function make_square(number_of_couples::Int)::SDSquare
+    dancers = Vector{Dancer}()
+    for couple_number in 1:number_of_couples
+        for gender in [Guy(), Gal()]
+            push!(dancers, Dancer(couple_number, gender))
+        end
+    end
+    SDSquare(dancers)
+end

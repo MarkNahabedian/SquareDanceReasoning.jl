@@ -1,12 +1,10 @@
 
 @testset "lines of four" begin
-    dancers = make_dancers(4)
+    square = make_square(4)
     kb = ReteRootNode("root")
-    install(kb, SquareDanceFormationRule)
-    ensure_IsaMemoryNode(kb, Dancer)
-    for dancer in dancers
-        receive(kb, dancer)
-    end
+    install(kb, SquareDanceRule)
+    receive(kb, square)
+    dancers = sort(collect(square.dancers))
     for ds in make_line(dancers[1:4], 0, 0)
         receive(kb, ds)
     end
@@ -47,13 +45,11 @@
 end
     
 @testset "two faced lines" begin
-    dancers = make_dancers(4)
+    square = make_square(4)
     kb = ReteRootNode("root")
-    install(kb, SquareDanceFormationRule)
-    ensure_IsaMemoryNode(kb, Dancer)
-    for dancer in dancers
-        receive(kb, dancer)
-    end
+    install(kb, SquareDanceRule)
+    receive(kb, square)
+    dancers = collect(square.dancers)
     # Rught hand two faced line:  ↑↑↓↓
     receive(kb, DancerState(dancers[1], 0, 1//2, 0, 1))
     receive(kb, DancerState(dancers[2], 0, 1//2, 0, 2))

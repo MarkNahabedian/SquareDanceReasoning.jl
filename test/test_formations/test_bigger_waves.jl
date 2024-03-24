@@ -13,16 +13,15 @@ end
     
 
 @testset "test right hand wave of four" begin
-    dancers = make_dancers(2)
+    square = make_square(2)
     kb = ReteRootNode("root")
+    install(kb, SquareHasDancers)
     install(kb, TwoDancerFormationsRule)
     install(kb, WaveOfFourRule)
-    ensure_IsaMemoryNode(kb, Dancer)
     # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
-    @test length(kb.outputs) == 11
-    for dancer in dancers
-        receive(kb, dancer)
-    end
+    @test length(kb.outputs) == 12
+    receive(kb, square)
+    dancers = collect(square.dancers)
     for ds in make_wave(dancers, 1//2)
         receive(kb, ds)
     end
@@ -50,16 +49,16 @@ end
 end
 
 @testset "test left hand wave of four" begin
-    dancers = make_dancers(2)
+    square = make_square(2)
     kb = ReteRootNode("root")
+    install(kb, SquareHasDancers)
     install(kb, TwoDancerFormationsRule)
     install(kb, WaveOfFourRule)
     ensure_IsaMemoryNode(kb, Dancer)
     # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
-    @test length(kb.outputs) == 11
-    for dancer in dancers
-        receive(kb, dancer)
-    end
+    @test length(kb.outputs) == 12
+    receive(kb, square)
+    dancers = collect(square.dancers)
     for ds in make_wave(dancers, 0)
         receive(kb, ds)
     end
@@ -87,17 +86,17 @@ end
 end
 
 @testset "test right hand wave of eight" begin
-    dancers = make_dancers(4)
+    square = make_square(4)
     kb = ReteRootNode("root")
+    install(kb, SquareHasDancers)
     install(kb, TwoDancerFormationsRule)
     install(kb, WaveOfFourRule)
     install(kb, WaveOfEightRule)
     ensure_IsaMemoryNode(kb, Dancer)
     # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
-    @test length(kb.outputs) == 14
-    for dancer in dancers
-        receive(kb, dancer)
-    end
+    @test length(kb.outputs) == 15
+    receive(kb, square)
+    dancers = sort(collect(square.dancers))
     for ds in make_wave(dancers, 1//2)
         receive(kb, ds)
     end

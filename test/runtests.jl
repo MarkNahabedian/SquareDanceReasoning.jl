@@ -29,16 +29,18 @@ end
 end
 
 @testset "dancers" begin
-    dancers = make_dancers(4)
-    @test length(dancers) == 8
-    @test is_original_head(dancers[1])
-    @test !is_original_side(dancers[1])
-    @test !is_original_head(dancers[4])
-    @test is_original_side(dancers[4])
+    square = make_square(4)
+    @test length(square.dancers) == 8
+    @test all(filter(is_original_head, square.dancers)) do dancer
+        isodd(dancer.couple_number)
+    end
+    @test all(filter(is_original_side, square.dancers)) do dancer
+        iseven(dancer.couple_number)
+    end
 end
 
 @testset "square up" begin
-    ds = square_up(make_dancers(4))
+    ds = square_up(make_square(4))
     @test length(ds) == 8
     @test isapprox(sum(location, ds), [0.0 0.0]; atol=0.001)
 end
@@ -46,11 +48,10 @@ end
 @testset "OriginalPartners" begin
     kb = Rete.ReteRootNode("root")
     install(kb, OriginalPartnerRule)
+    install(kb, SquareHasDancers)
     op_node = ensure_IsaMemoryNode(kb, OriginalPartners)
-    dancers = make_dancers(4)
-    for d in dancers
-        receive(kb, d)
-    end
+    square = make_square(4)
+    receive(kb, square)
     original_partners = collecting() do c
         askc(c, op_node)
     end
@@ -97,7 +98,8 @@ end
 
 @testset "Bounds" begin
     let
-        dancers = make_dancers(4)
+        square = make_square(4)
+        dancers = collect(square.dancers)
         dss = [ make_line(dancers[1:4], 0, 0)...,
                 make_line(dancers[5:8], 1//2, 1)... ]
         bounds = Bounds(dss; margin=0)
@@ -115,8 +117,8 @@ end
 end
 
 @testset "center" begin
-    dancers = make_dancers(4)
-    dss = square_up(dancers)
+    square = make_square(4)
+    dss = square_up(square)
     c = center(dss)
     eq(a, b) = isapprox(a, b; atol = 0.00001)
     @test eq(c[1], 0.0)

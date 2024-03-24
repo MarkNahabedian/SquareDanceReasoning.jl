@@ -34,7 +34,6 @@ distance(s1::DancerState, s2::DancerState) =
     distance(location(s1), location(s2))
 
 
-
 """
     square_up(dancers; initial_time = 0)
 
@@ -71,6 +70,9 @@ function square_up(dancers::Vector{Dancer};
     end
     results
 end
+
+square_up(square::SDSquare;  initial_time = 0) =
+    square_up(collect(square.dancers); initial_time)
 
 
 DANCER_NEAR_DISTANCE = 1.2 * COUPLE_DISTANCE
