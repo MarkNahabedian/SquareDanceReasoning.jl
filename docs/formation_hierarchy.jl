@@ -1,6 +1,7 @@
 
 using SquareDanceReasoning
 using InteractiveUtils
+using Rete: Rule
 
 const INDENT = "    "
 
@@ -34,7 +35,7 @@ function generate_rule_hierarchy()
                      walk(st, level + 1)
                  end
              end
-             walk(SquareDanceRule, 1)
+             walk(Rule, 1)
          end
 end
 
