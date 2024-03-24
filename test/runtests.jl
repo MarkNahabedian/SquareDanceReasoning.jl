@@ -97,22 +97,31 @@ function make_line(dancers, direction, down)
 end
 
 @testset "Bounds" begin
+    square = make_square(4)
+    dancers = collect(square.dancers)
+    dss = [ make_line(dancers[1:4], 0, 0)...,
+            make_line(dancers[5:8], 1//2, 1)... ]
     let
-        square = make_square(4)
-        dancers = collect(square.dancers)
-        dss = [ make_line(dancers[1:4], 0, 0)...,
-                make_line(dancers[5:8], 1//2, 1)... ]
         bounds = Bounds(dss; margin=0)
         @test bounds.min_down == 0.0
         @test bounds.max_down == 1.0
         @test bounds.min_left == 1.0
         @test bounds.max_left == 4.0
+    end
+    let
         bounds = Bounds(dss)
         margin = COUPLE_DISTANCE / 2
         @test bounds.min_down == 0 - margin
         @test bounds.max_down == 1 + margin
         @test bounds.min_left == 1 - margin
         @test bounds.max_left == 4 + margin
+    end
+    let
+        bounds = Bounds([dss[1], dss[3]])
+        @test in_bounds(bounds, dss[1])
+        @test in_bounds(bounds, dss[2])
+        @test in_bounds(bounds, dss[3])
+        @test !in_bounds(bounds, dss[4])
     end
 end
 

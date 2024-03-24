@@ -1,4 +1,4 @@
-export Bounds, center
+export Bounds, in_bounds, center
 
 
 """
@@ -50,11 +50,28 @@ struct Bounds
     end
 end
 
+
+"""
+    in_bounds(bounds::Bounds, ds::DancerState)::Bool
+
+Returns true if the specified DancerState it located within `bounds`.
+"""
+function in_bounds(bounds::Bounds, ds::DancerState)::Bool
+    if ds.down < bounds.min_down return false end
+    if ds.down > bounds.max_down return false end
+    if ds.left < bounds.min_left return false end
+    if ds.left > bounds.max_left return false end    
+    return true
+end
+
+
 bump_out(bounds::Bounds, amount) =
     Bounds(bounds.min_down - amount,
            bounds.max_down + amount,
            bounds.min_left - amount,
            bounds.max_left + amount)
+
+
 
 
 """
