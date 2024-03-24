@@ -62,6 +62,9 @@ function Base.isless(d1::Dancer, d2::Dancer)::Bool
     end
 end
 
+Base.isless(::Guy, ::Guy) = false
+Base.isless(::Gal, ::Gal) = false
+Base.isless(::Unspecified, ::Unspecified) = false
 Base.isless(::Guy, ::Gal) = true
 Base.isless(::Gal, ::Guy) = false
 Base.isless(::Unspecified, ::Guy) = true

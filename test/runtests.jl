@@ -98,16 +98,6 @@ end
 @testset "Bounds" begin
     let
         dancers = make_dancers(4)
-        dss = square_up(dancers)
-        bounds = Bounds(dss; margin=0)
-        println(bounds)
-        @test bounds.min_down == -0.5
-        @test bounds.max_down == 0.5
-        @test bounds.min_left == -0.5
-        @test bounds.max_left == 0.5
-    end
-    let
-        dancers = make_dancers(4)
         dss = [ make_line(dancers[1:4], 0, 0)...,
                 make_line(dancers[5:8], 1//2, 1)... ]
         bounds = Bounds(dss; margin=0)

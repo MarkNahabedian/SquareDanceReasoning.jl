@@ -1,6 +1,7 @@
 
 export DancerState, location, direction, square_up
-export DANCER_HEAR_DISTANCE, near, direction
+export DANCER_NEAR_DISTANCE, near, direction
+export Collision, CollisionRule
 
 
 """
@@ -43,49 +44,48 @@ function square_up(dancers::Vector{Dancer};
                    center = [0.0  0.0],
                    initial_time = 0)::Vector{DancerState}
     dancers = sort(dancers)
-    circle_fraction = FULL_CIRCLE / (length(dancers) / 2)
+    circle_fraction = FULL_CIRCLE / length(dancers)
+    dancer_direction(dancer) =
+        (dancer.couple_number - 1) * circle_fraction * 2
+    angle_from_center(i) =
+        opposite((i - 1) * circle_fraction - circle_fraction / 2)
     rad(angle) = 2 * pi * angle
-    angle_from_center(couple_number) =
-        (couple_number - 1) * circle_fraction
-    function unit_vector(couple_number)
-        a = rad(angle_from_center(couple_number))
+    function unit_vector(dancer_angle)
+        a = rad(dancer_angle)
         [ cos(a) sin(a) ]
     end
     results = Vector{DancerState}()
-    distance_from_center = let
-        a = rad(circle_fraction / 2)
-        (COUPLE_DISTANCE / 2) * cot(a)
-    end
-    for dancer in dancers
-        angle = angle_from_center(dancer.couple_number)
-        # We assume for simplicity that dancers of Unspecifiedgender
-        # don't square up.
-        d = rad(angle) + (rad(angle) / 2) *
-            (dancer.gender isa Guy ? -1 : 1)
+    distance_from_center =
+        (COUPLE_DISTANCE / 2) +   # additional radius to account for
+                                  # the size of a dancer
+        (COUPLE_DISTANCE / 2) / sin(rad(circle_fraction))
+    for (i, dancer) in enumerate(dancers)
+        angle = angle_from_center(i)
+        direction = dancer_direction(dancer)
         push!(results,
               DancerState(dancer,
                           initial_time,
-                          opposite(angle),
+                          dancer_direction(dancer),
                           Float32.(distance_from_center *
-                              unit_vector(dancer.couple_number))...))
+                              unit_vector(angle))...))
     end
     results
 end
 
 
-DANCER_HEAR_DISTANCE = 1.2 * COUPLE_DISTANCE
+DANCER_NEAR_DISTANCE = 1.2 * COUPLE_DISTANCE
 
 """
     near(::DancerState, ::DancerState)
 
 returns true if the two DancerStates are for different dancers and are
-close enough together (within DANCER_HEAR_DISTANCE).
+close enough together (within DANCER_NEAR_DISTANCE).
 """
 function near(d1::DancerState, d2::DancerState)::Bool
     if d1.dancer == d2.dancer
         return false
     end
-    distance(d1, d2) < DANCER_HEAR_DISTANCE
+    distance(d1, d2) < DANCER_NEAR_DISTANCE
 end
 
 
@@ -98,5 +98,25 @@ returns the direction that `other` is from the point of view of
 function direction(focus::DancerState, other::DancerState)
     down, left = location(other) - location(focus)
     canonicalize(atan(left, down) / (2 * pi))
+end
+
+
+DANCER_COLLISION_DISTANCE = 0.8 * COUPLE_DISTANCE
+
+struct Collision
+    a::DancerState
+    b::DancerState
+end
+
+dancer_states(c::Collision)::Vector{DancerState} = [c.a, c.b]
+
+@rule SquareDanceRule.CollisionRule(a::DancerState, b::DancerState,
+                                    ::Collision) begin
+    if b.dancer <= a.dancer
+        return
+    end
+    if distance(a, b) < DANCER_COLLISION_DISTANCE
+        emit(Collision(a, b))
+    end
 end
 

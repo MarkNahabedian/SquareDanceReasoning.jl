@@ -1,5 +1,5 @@
 
-export ColumnOfFour
+export ColumnOfFour, ColumnOfFourRule
 
 
 """

@@ -153,17 +153,21 @@ formation_id_string(d::Dancer) =
 formation_id_string(ds::DancerState) =
     formation_id_string(ds.dancer)
 
+formation_id_string(f::Collision) =
+    *(string(typeof(f)), "-",
+      join(map(formation_id_string, dancer_states(f)), "-"))
+
 formation_id_string(f::SquareDanceFormation) =
     *(string(typeof(f)), "-",
       join(map(formation_id_string, dancer_states(f)), "-"))
 
 
 function dancer_formations_html(kb::ReteRootNode)
-    formations_by_type = Dict{Type, Vector{SquareDanceFormation}}()
-    askc(kb, SquareDanceFormation) do fact
+    formations_by_type = Dict{Type, Vector}()
+    askc(kb, Union{SquareDanceFormation,
+                   Collision}) do fact
         if !haskey(formations_by_type, typeof(fact))
-            formations_by_type[typeof(fact)] =
-                Vector{SquareDanceFormation}()
+            formations_by_type[typeof(fact)] = []
         end
         push!(formations_by_type[typeof(fact)], fact)
     end
