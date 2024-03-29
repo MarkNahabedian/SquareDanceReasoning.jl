@@ -27,7 +27,7 @@ struct DancerState
 end
 
 
-location(ds::DancerState) = [ds.down ds.left]
+location(ds::DancerState) = [ds.down, ds.left]
 direction(ds::DancerState) = ds.direction
 
 distance(s1::DancerState, s2::DancerState) =

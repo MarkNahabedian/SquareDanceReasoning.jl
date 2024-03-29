@@ -42,7 +42,7 @@ end
 @testset "square up" begin
     ds = square_up(make_square(4))
     @test length(ds) == 8
-    @test isapprox(sum(location, ds), [0.0 0.0]; atol=0.001)
+    @test isapprox(sum(location, ds), [0.0, 0.0]; atol=0.001)
 end
 
 @testset "OriginalPartners" begin
@@ -135,4 +135,6 @@ end
 end
 
 include("test_formations/tests.jl")
+
+include("test_actions/tests.jl")
 

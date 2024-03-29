@@ -75,11 +75,10 @@ bump_out(bounds::Bounds, amount) =
 
 
 """
-    center(dss::Vector{DancerState})
+    center(dss)
 
 returns the center of the specified `DancerState`s as a two element
 Vector of down and left coordinates.
 """
-center(dss::Vector{DancerState}) =
-    sum(location, dss) / length(dss)
+center(dss) = sum(location, dss) / length(dss)
 
