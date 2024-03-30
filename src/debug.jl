@@ -4,48 +4,6 @@ using XML
 using Colors
 using Printf
 
-# elt copied from PanelCutting.jl.
-
-"""
-    elt(f, tagname::AbstractString, things...)
-    elt(tagname::AbstractString, things...)
-
-Return an XML element.  `f` is called with a single argument: either
-an XML.AbstractXMLNode or a Pair describing an XML attribute to be added to the
-resulting element.
-"""
-function elt(f::Function, tagname::AbstractString, things...)
-    attributes = OrderedDict()
-    children = Vector{Union{String, XML.AbstractXMLNode}}()
-    function add_thing(s)
-        if s isa Pair
-            attributes[Symbol(s.first)] = string(s.second)
-        elseif s isa AbstractString
-            push!(children, s)
-        elseif s isa Number
-            push!(children, string(s))
-        elseif s isa XML.AbstractXMLNode
-            push!(children, s)
-        elseif s isa Nothing
-            # Ignore
-        else
-            error("unsupported XML content: $s")
-        end
-    end
-    for thing in things
-        add_thing(thing)
-    end
-    f(add_thing)
-    Node(XML.Element, tagname, attributes, nothing, children)
-end
-
-elt(tagname::AbstractString, things...) = elt(identity, tagname, things...)
-
-
-const SVG_NAMESPACE = "http://www.w3.org/2000/svg"
-
-const FORMATIONS_JAVASCRIPT_URL =
-    "https://marknahabedian.github.io/SquareDanceFormationDiagrams/dancers.js"
 
 const FORMATION_STYLESHEET = """
 svg {
@@ -69,53 +27,6 @@ table {
     fill: black;
 }
 """
-
-function dancer_colors_css(number_of_couples)
-    colors =
-        let
-            incr = 360 / number_of_couples
-            map(incr * (0:(number_of_couples - 1))) do hue
-                # I couldn't get CSS hsl() colors to work properly in
-                # Chrome, so convert to RGB:
-                hsi = HSI(hue, 1.0, 1.)
-                rgb = convert(RGB, hsi)
-                fix(x) = round(255 * x)
-                @sprintf("rgb(%d %d %d)",
-                         fix(rgb.r), fix(rgb.g), fix(rgb.b))
-            end
-        end
-    rules = map(enumerate(colors)) do (couple_number, color)
-                 """.couple$(couple_number)swatch {
-    color: $color;
-}
-.couple$(couple_number) {
-    stroke: black;
-    fill: $color
-}"""                 
-    end
-    join(rules, "\n")
-end
-
-couple_color_swatch(dancer::Dancer) = "couple$(dancer.couple_number)swatch"
-couple_color_swatch(ds::DancerState) = couple_color_swatch(ds.dancer)
-
-daner_color(dancer::Dancer) = "couple$(dancer.couple_number)"
-daner_color(ds::DancerState) = daner_color(ds.dancer)
-
-global DANCER_SYMBOLS = nothing
-
-function load_dancer_symbols()
-    doc = XML.read(joinpath(@__DIR__, "dancer_symbols.svg"), Node)
-    filter(children(children(doc)[1])) do node
-        XML.nodetype(node) == XML.Element && tag(node) == "symbol"
-    end
-end
-
-function __init__()
-    if DANCER_SYMBOLS == nothing
-        global DANCER_SYMBOLS = load_dancer_symbols()
-    end
-end
 
 
 function dancer_states_table(dancer_states)

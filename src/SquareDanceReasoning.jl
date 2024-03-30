@@ -14,6 +14,7 @@ include("geometry.jl")
 include("formations/formations.jl")
 include("actions/actions.jl")
 include("calls/calls.jl")
+include("xml/load.jl")
 
 include("debug.jl")
 
