@@ -102,7 +102,7 @@ end
     dss = [ make_line(dancers[1:4], 0, 0)...,
             make_line(dancers[5:8], 1//2, 1)... ]
     let
-        bounds = Bounds(dss; margin=0)
+        bounds = Bounds(dss)
         @test bounds.min_down == 0.0
         @test bounds.max_down == 1.0
         @test bounds.min_left == 1.0
@@ -110,6 +110,7 @@ end
     end
     let
         bounds = Bounds(dss)
+        bounds = bump_out(bounds)
         margin = COUPLE_DISTANCE / 2
         @test bounds.min_down == 0 - margin
         @test bounds.max_down == 1 + margin
@@ -117,7 +118,7 @@ end
         @test bounds.max_left == 4 + margin
     end
     let
-        bounds = Bounds([dss[1], dss[3]])
+        bounds = bump_out(Bounds([dss[1], dss[3]]))
         @test in_bounds(bounds, dss[1])
         @test in_bounds(bounds, dss[2])
         @test in_bounds(bounds, dss[3])

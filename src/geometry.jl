@@ -1,4 +1,4 @@
-export Bounds, in_bounds, center
+export Bounds, expand, in_bounds, bump_out, center
 
 
 """
@@ -12,43 +12,54 @@ centers of the dancers.
 By default, `margin` is `COUPLE_DISTANCE / 2` so that Bounds describes
 the space actually occupied by the dancers.
 """
-struct Bounds
+mutable struct Bounds
     min_down
     max_down
     min_left
     max_left
 
+    Bounds() =
+        new(typemax(Float32),
+            typemin(Float32),
+            typemax(Float32),
+            typemin(Float32))
+
     Bounds(min_down, max_down, min_left, max_left) =
         new(min_down, max_down, min_left, max_left)
-
-    function Bounds(dss::Vector{DancerState};
-                    margin=COUPLE_DISTANCE/2)
-        @assert length(dss) >= 1
-        min_down = nothing
-        max_down = nothing
-        min_left = nothing
-        max_left = nothing
-        for ds in dss
-            if min_left == nothing || min_left > ds.left
-                min_left = ds.left
-            end
-            if max_left == nothing || max_left < ds.left
-                max_left = ds.left
-            end
-            if min_down == nothing || min_down > ds.down
-                min_down = ds.down
-            end
-            if max_down == nothing || max_down < ds.down
-                max_down = ds.down
-            end
-        end
-        min_down -= margin
-        max_down += margin
-        min_left -= margin
-        max_left += margin
-        new(min_down, max_down, min_left, max_left)
-    end
 end
+
+
+function Bounds(dancer_states)
+    @assert length(dancer_states) >= 1
+    bounds = Bounds()
+    expand(bounds, dancer_states)
+    bounds
+end
+
+
+"""
+    expand(bounds::Bounds, dancer_states)::Bounds
+
+`bounds` is modified to encompass the additional `DancerState`s.
+"""
+function expand(bounds::Bounds, dancer_states)::Bounds
+    for ds in dancer_states
+        if bounds.min_left > ds.left
+            bounds.min_left = ds.left
+        end
+        if bounds.max_left < ds.left
+            bounds.max_left = ds.left
+        end
+        if bounds.min_down > ds.down
+            bounds.min_down = ds.down
+        end
+        if bounds.max_down < ds.down
+            bounds.max_down = ds.down
+        end
+    end
+    bounds
+end
+    
 
 
 """
@@ -65,6 +76,11 @@ function in_bounds(bounds::Bounds, ds::DancerState)::Bool
 end
 
 
+"""
+    bump_out(bounds::Bounds, amount)
+
+Returns a new Bounds object that is expanded at each edge by `amount`.
+"""
 bump_out(bounds::Bounds, amount) =
     Bounds(bounds.min_down - amount,
            bounds.max_down + amount,
@@ -72,6 +88,14 @@ bump_out(bounds::Bounds, amount) =
            bounds.max_left + amount)
 
 
+"""
+    bump_out(bounds::Bounds)
+
+Returns a new Bounds object that is expanded by `COUPLE_DISTANCE / 2`
+on each edge so that instead of encompassing the centers of each
+`Dancer` it encompasses whole daners.
+"""
+bump_out(bounds::Bounds) = bump_out(bounds, COUPLE_DISTANCE / 2)
 
 
 """

@@ -139,7 +139,7 @@ function formation_debug_html(source,   # ::LineNumberNode,
     dancer_states = collecting() do c
         askc(c, kb, DancerState)
     end
-    bounds = Bounds(Vector{DancerState}(dancer_states))
+    bounds = bump_out(Bounds(dancer_states))
 #     source_line = "At $(source.file):$(source.line)"
     elt("html",
         elt("head",
