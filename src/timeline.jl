@@ -2,6 +2,7 @@
 export DancerState, location, direction, square_up
 export DANCER_NEAR_DISTANCE, near, direction
 export Collision, CollisionRule
+export latest_dancer_states
 
 
 """
@@ -120,5 +121,19 @@ dancer_states(c::Collision)::Vector{DancerState} = [c.a, c.b]
     if distance(a, b) < DANCER_COLLISION_DISTANCE
         emit(Collision(a, b))
     end
+end
+
+
+function latest_dancer_states(root::ReteRootNode)::Dict{Dancer, DancerState}
+    latest_dss = Dict{Dancer, DancerState}()
+    askc(root, DancerState) do ds
+        if !haskey(latest_dss, ds.dancer)
+            latest_dss[ds.dancer] = ds
+        end
+        if latest_dss[ds.dancer].time < ds.time
+            latest_dss[ds.dancer] = ds
+        end
+    end
+    latest_dss
 end
 
