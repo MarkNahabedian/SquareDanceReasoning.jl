@@ -150,17 +150,32 @@ end
         dss
     end
     @test get_latest_sync().time == 0
-    for step in [
-        (motion = forward, new_down = 2, new_left = 1),
-        (motion = leftward, new_down = 2, new_left = 2),
-        (motion = backward, new_down = 1, new_left = 2),
-        (motion = rightward, new_down = 1, new_left = 1)
-        ]
-        receive(kb, step.motion(dss_at(get_latest_sync().time)[1], 1, 1))
+    f(ds) = forward(ds, 1, 1)
+    b(ds) = backward(ds, 1, 1)
+    l(ds) = leftward(ds, 1, 1)
+    r(ds) = rightward(ds, 1, 1)
+    rot(ds) = rotate(ds, 1//4, 1)
+    for (i, step) in enumerate([
+        (motion = f,   new_dir = DIRECTION0, new_down = 2, new_left = 1),
+        (motion = l,   new_dir = DIRECTION0, new_down = 2, new_left = 2),
+        (motion = b,   new_dir = DIRECTION0, new_down = 1, new_left = 2),
+        (motion = r,   new_dir = DIRECTION0, new_down = 1, new_left = 1),
+        
+        (motion = rot, new_dir = DIRECTION1, new_down = 1, new_left = 1),
+        (motion = f,   new_dir = DIRECTION1, new_down = 1, new_left = 2),
+        (motion = rot, new_dir = DIRECTION2, new_down = 1, new_left = 2),
+        (motion = f,   new_dir = DIRECTION2, new_down = 0, new_left = 2),
+        (motion = rot, new_dir = DIRECTION3, new_down = 0, new_left = 2),
+        (motion = f,   new_dir = DIRECTION3, new_down = 0, new_left = 1),
+        (motion = rot, new_dir = DIRECTION0, new_down = 0, new_left = 1),
+        (motion = f,   new_dir = DIRECTION0, new_down = 1, new_left = 1)
+        ])
+        receive(kb, step.motion(dss_at(get_latest_sync().time)[1]))
         synchronize(kb)
         ds = dss_at(get_latest_sync().time)[1]
-        @test ds.down == step.new_down
-        @test ds.left == step.new_left
+        @test ds.direction == step.new_dir
+        @test isapprox(ds.down, step.new_down; atol=0.0001)
+        @test isapprox(ds.left, step.new_left; atol=0.0001)
     end
     # Write an animation
     timeline = dancer_timelines(kb)
