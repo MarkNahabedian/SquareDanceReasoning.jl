@@ -19,15 +19,7 @@ It is recommended that `synchronize` should be called after every call
 or each part of a call.
 """
 function synchronize(root::ReteRootNode)
-    latest_dss = Dict{Dancer, DancerState}()
-    askc(root, DancerState) do ds
-        if !haskey(latest_dss, ds.dancer)
-            latest_dss[ds.dancer] = ds
-        end
-        if latest_dss[ds.dancer].time < ds.time
-            latest_dss[ds.dancer] = ds
-        end
-    end
+    latest_dss = latest_dancer_states(root)
     latest = maximum(ds -> ds.time, values(latest_dss))
     for ds in values(latest_dss)
         if ds.time < latest
