@@ -74,10 +74,11 @@ returned.  `time_delta` is the duration of the revolution operation.
 """
 function revolve(ds::DancerState, center,
                  new_direction, time_delta)::DancerState
-    vStart = location(ds) - center
+    # radius from center:
     d = distance(location(ds), center)
+    vStart = location(ds) - center
     thetaStart = atan(vStart[2], vStart[1])
-    thetaEnd = 2 * pi * (new_direction - ds.direction)
+    thetaEnd = thetaStart + 2 * pi * (new_direction - ds.direction)
     downEnd = center[1] + d * cos(thetaEnd)
     leftEnd = center[2] + d * sin(thetaEnd)
     DancerState(ds.dancer, ds.time + time_delta,
@@ -88,7 +89,7 @@ end
 """
     rotate(ds::DancerState, rotation, time_delta)::DancerState
 
-Rotates the dancer ientified by the `DancerState` in place by
+Rotates the dancer idntified by the `DancerState` in place by
 rotation.
 """
 rotate(ds::DancerState, rotation, time_delta)::DancerState =
