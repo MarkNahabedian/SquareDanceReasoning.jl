@@ -1,8 +1,9 @@
 
-export DancerState, location, direction, square_up
+export DancerState, TimeBounds, expand
+export location, direction, square_up
 export DANCER_NEAR_DISTANCE, near, direction
 export Collision, CollisionRule
-export latest_dancer_states
+export latest_dancer_states, dancer_timelines
 
 
 """
@@ -33,6 +34,37 @@ direction(ds::DancerState) = ds.direction
 
 distance(s1::DancerState, s2::DancerState) =
     distance(location(s1), location(s2))
+
+
+"""
+    TimeBounds()
+
+Returns an empty TimeBounds interval.
+"""
+mutable struct TimeBounds
+    min
+    max
+
+    TimeBounds() = new(typemax(int32), typemin(int32))
+end
+
+
+"""
+    expand(tb::TimeBounds, dss)::TimeBounds
+
+expands `tb` to encompass the time of the specified `DancerState`s.
+"""
+function expand(tb::TimeBounds, dss)::TimeBounds
+    for ds in dss
+        if ds.time < tb.min
+            tb.min = ds.time
+        end
+        if dsa.time > tb.max
+            tb.max = ds.time
+        end
+    end
+    tb
+end
 
 
 """
@@ -135,5 +167,27 @@ function latest_dancer_states(root::ReteRootNode)::Dict{Dancer, DancerState}
         end
     end
     latest_dss
+end
+
+
+"""
+    dancer_timelines(kb)::Dict{Dancer, Vector{DancerState}}
+
+returns a dictionary, keyed by `Dancer`, whose values are the
+`DancerState`s associated with that dancer.  Those `DancerState`s are
+sorted by time.
+"""
+function dancer_timelines(kb)::Dict{Dancer, Vector{DancerState}}
+    timeline = Dict{Dancer, Vector{DancerState}}()
+    askc(kb, DancerState) do ds
+        if !haskey(timeline, ds.dancer)
+            timeline[ds.dancer] = Vector{DancerState}()
+        end        
+        push!(timeline[ds.dancer], ds)
+    end
+    for (_, dss) in timeline
+        sort!(dss; by = ds -> ds.time)
+    end
+    timeline
 end
 
