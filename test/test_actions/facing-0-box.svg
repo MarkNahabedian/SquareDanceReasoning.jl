@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-30.000 -50.000 120.000 140.000" width="120.0" height="140.0">
+  <symbol id="Gal" viewBox="-10 -10 20 20" preserveAspectRatio="xMidYMid" overflow="visible">
+    <g transform="translate(-10 -10)">
+      <circle r="8" cx="0" cy="0"/>
+      <circle r="2" cx="8" cy="0" class="DirectionDot"/>
+    </g>
+  </symbol>
+  <symbol id="Guy" viewBox="-10 -10 20 20" preserveAspectRatio="xMidYMid" overflow="visible">
+    <g transform="translate(-10 -10)">
+      <rect width="16" height="16" x="-8" y="-8"/>
+      <circle r="2" cx="8" cy="0" class="DirectionDot"/>
+    </g>
+  </symbol>
+  <symbol id="Neutral" viewBox="-10 -10 20 20" preserveAspectRatio="xMidYMid" overflow="visible">
+    <g transform="translate(-10 -10)">
+      <rect width="16" height="16" x="-8" y="-8" rx="3" ry="3"/>
+      <circle r="2" cx="8" cy="0" class="DirectionDot"/>
+    </g>
+  </symbol>
+  <g>
+    <use width="20" height="20" class="couple1" href="#Neutral">
+      <animate dur="8.0" repeatCount="indefinite" attributeName="x" values="20.0; 20.0; 20.0; 20.0; 20.0; 20.0; 40.0; 40.0; 20.0; 20.0; 40.0; 40.0; 40.0; 40.0; 20.0; 20.0; 20.0"/>
+      <animate dur="8.0" repeatCount="indefinite" attributeName="y" values="20.0; 20.0; 20.0; 20.0; 20.0; 40.0; 40.0; 20.0; 20.0; 20.0; 20.0; 20.0; 0.0; 0.0; -3.67394e-15; -3.67394e-15; 20.0"/>
+      <animateTransform dur="8.0" repeatCount="indefinite" attributeName="transform" type="rotate" values=" 90 20.00 20.00;   0 20.00 20.00; -90 20.00 20.00; -180 20.00 20.00;  90 20.00 20.00;  90 20.00 40.00;  90 40.00 40.00;  90 40.00 20.00;  90 20.00 20.00;   0 20.00 20.00;   0 40.00 20.00; -90 40.00 20.00; -90 40.00 0.00; -180 40.00 0.00; -180 20.00 -0.00;  90 20.00 -0.00;  90 20.00 20.00"/>
+    </use>
+  </g>
+</svg>

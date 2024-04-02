@@ -14,7 +14,7 @@ function animate(timeline::Dict{Dancer, Vector{DancerState}})
     duration *= 0.5
     x(ds) = DANCER_SVG_SIZE * ds.left
     y(ds) = DANCER_SVG_SIZE * ds.down
-    rot(ds) = @sprintf("rotate(%3.0f %3.2f %3.2f)",
+    rot(ds) = @sprintf("%3.0f %3.2f %3.2f",
                        90 - 360 * ds.direction,
                        x(ds), y(ds))
     elt("svg",
@@ -39,11 +39,13 @@ function animate(timeline::Dict{Dancer, Vector{DancerState}})
                           "repeatCount" => "indefinite" ,
                           "attributeName" => "y",
                           "values" => join(map(y, sorted), "; ")),
-                      elt("animate",
+                      elt("animateTransform",
                           "dur" => duration,
                           "repeatCount" => "indefinite" ,
                           "attributeName" => "transform",
-                          "values" => join(map(rot, sorted), "; "))))
+                          "type" => "rotate",
+                          "values" => join(map(rot, sorted), "; "))
+                      ))
             end
         end
         )
