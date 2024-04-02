@@ -1,9 +1,9 @@
 ## Coordinate System
 
-Here we describe the coordinate system used to describe the locatioon
+Here we describe the coordinate system used to describe the location
 and facing direction of each dancer.
 
-The coordinate system provides a *down* coordinate and a *left`*
+The coordinate system provides a *down* coordinate and a *left*
 coordinate.  Down and left are with respect to the caller's point of
 view.  Down is a dancer's distance down the floor -- away from the
 caller.  Left is the dancer's position from the right hand side of the
@@ -20,12 +20,12 @@ Direction can be absolute or relative.
 
 Directions are expressed as fractions of a full circle, so a change in
 direction of 180 degrees is expressed as a change in Direction of
-1//2.  Direction increases in promenade direction -- counter
+1/2.  Direction increases in promenade direction -- counter
 clockwise.  An attempt is made to store directions as rational numbers
 to avoid excessive floating point digits.
 
 Direction 0 is the direction that the caller is facing and the
 facing direction of couple number one in a squared set.  In a squared
-set, the facing direction of couple number two would be 0.25, that of
-couple number three: 0.5, and that of couple number four: 0.75.
+set, the facing direction of couple number two would be 1/4, that of
+couple number three: 1/2, and that of couple number four: 3/4.
 
