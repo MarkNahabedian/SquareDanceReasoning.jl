@@ -96,22 +96,6 @@ function dancer_formations_html(kb::ReteRootNode)
     end
 end
 
-
-function bounds_to_viewbox(bounds::Bounds)
-    bounds = bump_out(bounds, 2)
-    width = abs(DANCER_SVG_SIZE * (bounds.max_left - bounds.min_left))
-    height = abs(DANCER_SVG_SIZE * (bounds.max_down - bounds.min_down))
-    [
-        "viewBox" =>
-            @sprintf("%3.3f %3.3f %3.3f %3.3f",
-                     DANCER_SVG_SIZE * bounds.min_left,
-                     DANCER_SVG_SIZE * bounds.min_down,
-                     width, height),
-        "width" => width,
-        "height" => height
-    ]
-end
-
 function dancer_placement_svg(ds::DancerState)
     # We arrage the coordinates so that increasing down corresponds
     # with increasing SVG Y, and increasing left corresponds with
