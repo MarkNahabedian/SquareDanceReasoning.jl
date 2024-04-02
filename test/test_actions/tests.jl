@@ -156,11 +156,17 @@ end
     r(ds) = rightward(ds, 1, 1)
     rot(ds) = rotate(ds, 1//4, 1)
     for (i, step) in enumerate([
+        # spn in place
+        (motion = rot, new_dir = DIRECTION1, new_down = 1, new_left = 1),
+        (motion = rot, new_dir = DIRECTION2, new_down = 1, new_left = 1),
+        (motion = rot, new_dir = DIRECTION3, new_down = 1, new_left = 1),
+        (motion = rot, new_dir = DIRECTION0, new_down = 1, new_left = 1),
+        # box without changiing facing direction
         (motion = f,   new_dir = DIRECTION0, new_down = 2, new_left = 1),
         (motion = l,   new_dir = DIRECTION0, new_down = 2, new_left = 2),
         (motion = b,   new_dir = DIRECTION0, new_down = 1, new_left = 2),
         (motion = r,   new_dir = DIRECTION0, new_down = 1, new_left = 1),
-        
+        # box, rotating 1/4 left:
         (motion = rot, new_dir = DIRECTION1, new_down = 1, new_left = 1),
         (motion = f,   new_dir = DIRECTION1, new_down = 1, new_left = 2),
         (motion = rot, new_dir = DIRECTION2, new_down = 1, new_left = 2),
