@@ -35,3 +35,8 @@ end
 
 elt(tagname::AbstractString, things...) = elt(identity, tagname, things...)
 
+
+function xmlComment(text::AbstractString)
+    XML.Comment(text)
+end
+
