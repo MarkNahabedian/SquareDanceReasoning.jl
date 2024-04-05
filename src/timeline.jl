@@ -7,7 +7,7 @@ export latest_dancer_states, dancer_timelines
 
 
 """
-    DancerState(dancer, time, down, left, direction)
+    DancerState(dancer, time, direction, down, left)
 
 represents the location and facing direction of a single
 dancer at a moment in time.
@@ -45,26 +45,42 @@ mutable struct TimeBounds
     min
     max
 
-    TimeBounds() = new(typemax(int32), typemin(int32))
+    TimeBounds() = new(typemax(Int32), typemin(Int32))
 end
 
 
 """
-    expand(tb::TimeBounds, dss)::TimeBounds
+    expand(tb::TimeBounds, ds::DancerState)::TimeBounds
 
 expands `tb` to encompass the time of the specified `DancerState`s.
 """
-function expand(tb::TimeBounds, dss)::TimeBounds
-    for ds in dss
-        if ds.time < tb.min
-            tb.min = ds.time
-        end
-        if dsa.time > tb.max
-            tb.max = ds.time
-        end
+function expand(tb::TimeBounds, ds::DancerState)::TimeBounds
+    if ds.time < tb.min
+        tb.min = ds.time
+    end
+    if ds.time > tb.max
+        tb.max = ds.time
     end
     tb
 end
+
+function expand(tb::TimeBounds, dss)::TimeBounds
+    for ds in dss
+        expand(tb, ds)
+    end
+    tb
+end
+
+
+"""
+    percentage(tb::TimeBounds, t)
+
+return where `t` falls within `tb` as a percentage.
+For `t == tb.min` the result would be 0.
+For `t == tb.max` the result would be 100.
+"""
+percentage(tb::TimeBounds, t) =
+    100 * (t - tb.min) / (tb.max - tb.min)
 
 
 """
@@ -189,5 +205,13 @@ function dancer_timelines(kb)::Dict{Dancer, Vector{DancerState}}
         sort!(dss; by = ds -> ds.time)
     end
     timeline
+end
+
+function expand(tb::TimeBounds,
+                timeline::Dict{Dancer, Vector{DancerState}})::TimeBounds
+    for dss in values(timeline)
+        expand(tb, dss)
+    end
+    tb
 end
 
