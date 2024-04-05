@@ -93,7 +93,7 @@ bump_out(bounds::Bounds, amount) =
 
 Returns a new Bounds object that is expanded by `COUPLE_DISTANCE / 2`
 on each edge so that instead of encompassing the centers of each
-`Dancer` it encompasses whole daners.
+`Dancer` it encompasses whole dancers.
 """
 bump_out(bounds::Bounds) = bump_out(bounds, COUPLE_DISTANCE / 2)
 

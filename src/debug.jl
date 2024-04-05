@@ -111,7 +111,7 @@ function dancer_placement_svg(ds::DancerState)
         "y" => y,
         "width" => DANCER_SVG_SIZE,
         "height" => DANCER_SVG_SIZE,
-        "class" => daner_color(ds),
+        "class" => dancer_color(ds),
         gender_css_symbol(ds.dancer.gender)
         )
 end

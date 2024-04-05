@@ -14,7 +14,7 @@ function dancer_colors_css(number_of_couples)
             end
         end
     rules = map(enumerate(colors)) do (couple_number, color)
-                 """.couple$(couple_number)swatch {
+                 """\n.couple$(couple_number)swatch {
     color: $color;
 }
 .couple$(couple_number) {
@@ -28,6 +28,6 @@ end
 couple_color_swatch(dancer::Dancer) = "couple$(dancer.couple_number)swatch"
 couple_color_swatch(ds::DancerState) = couple_color_swatch(ds.dancer)
 
-daner_color(dancer::Dancer) = "couple$(dancer.couple_number)"
-daner_color(ds::DancerState) = daner_color(ds.dancer)
+dancer_color(dancer::Dancer) = "couple$(dancer.couple_number)"
+dancer_color(ds::DancerState) = dancer_color(ds.dancer)
 
