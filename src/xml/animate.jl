@@ -27,7 +27,7 @@ function animate(timeline::Dict{Dancer, Vector{DancerState}})
                 a(elt("use",
                       "width" => DANCER_SVG_SIZE,
                       "height" => DANCER_SVG_SIZE,
-                      "class" => daner_color(dancer),
+                      "class" => dancer_color(dancer),
                       gender_css_symbol(dancer.gender),
                       elt("animate",
                           "dur" => duration,
