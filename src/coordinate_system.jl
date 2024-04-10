@@ -65,14 +65,14 @@ quarter_right(direction) = canonicalize(direction - FULL_CIRCLE // 4)
 
 
 """
-CoupleDistance is the distance between (the center reference points
+COUPLE_DISTANCE is the distance between (the center reference points
 of) two dancers standing side by side, face to face, or back to back.
 """
 const COUPLE_DISTANCE::Float32 = 1.0
 
 
 """
-    distance9p1, p2)
+    distance(p1, p2)
 
 returns the distance between the two points represented by vectors.
 """

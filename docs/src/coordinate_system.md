@@ -29,3 +29,15 @@ facing direction of couple number one in a squared set.  In a squared
 set, the facing direction of couple number two would be 1/4, that of
 couple number three: 1/2, and that of couple number four: 3/4.
 
+
+### Definitions Relating to the Coordinate system
+
+- [`FULL_CIRCLE`](@ref)
+- [`canonicalize`](@ref)
+- [`direction_equal`](@ref)
+- [`opposite`](@ref)
+- [`quarter_left`](@ref)
+- [`quarter_right`](@ref)
+- [`COUPLE_DISTANCE`](@ref)
+- [`distance`](@ref)
+
