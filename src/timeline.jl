@@ -8,6 +8,7 @@ export latest_dancer_states, dancer_timelines
 
 """
     DancerState(dancer, time, direction, down, left)
+    DancerState(previoous::DancerSTate, time, direction, down, left)
 
 represents the location and facing direction of a single
 dancer at a moment in time.
@@ -16,6 +17,7 @@ dancer at a moment in time.
 number of beats, for example.
 """
 struct DancerState
+    previous::Union{Nothing, DancerState}
     dancer::Dancer
     time
     direction
@@ -23,8 +25,13 @@ struct DancerState
     left::Float32
 
     DancerState(dancer::Dancer, time, direction,
-                down, left) = new(dancer, time,
+                down, left) = new(nothing, dancer, time,
                                   canonicalize(direction),
+                                  Float32(down), Float32(left))
+
+    DancerState(previous::DancerState, time, direction,
+                down, left) = new(previous, previous.dancer,
+                                  time, canonicalize(direction),
                                   Float32(down), Float32(left))
 end
 
@@ -34,6 +41,27 @@ direction(ds::DancerState) = ds.direction
 
 distance(s1::DancerState, s2::DancerState) =
     distance(location(s1), location(s2))
+
+
+function Base.show(io::IO, ::MIME"text/plain", ds::DancerState)
+    # Definition cribbed from Base._show_default(io::IO, @nospecialize(x))
+    need_comma = false
+    print(io, "DancerState(")
+    for f in fieldnames(typeof(ds))
+        if !(f in (:previous,))
+            if need_comma
+                print(io, ", ")
+            end
+            need_comma = true
+            if !isdefined(ds, f)
+                print(io, Base.undef_ref_str)
+            else
+                show(io, getfield(ds, f))
+            end
+        end
+    end
+    print(io, ")")
+end
 
 
 """

@@ -12,7 +12,7 @@ function forward(ds::DancerState, distance, time_delta)::DancerState
     a = 2 * pi * ds.direction
     down = ds.down + distance * cos(a)
     left = ds.left + distance * sin(a)
-    DancerState(ds.dancer, ds.time + time_delta,
+    DancerState(ds, ds.time + time_delta,
                 ds.direction, down, left)
 end
 
@@ -27,7 +27,7 @@ function backward(ds::DancerState, distance, time_delta)
     a = 2 * pi * opposite(ds.direction)
     down = ds.down + distance * cos(a)
     left = ds.left + distance * sin(a)
-    DancerState(ds.dancer, ds.time + time_delta,
+    DancerState(ds, ds.time + time_delta,
                 ds.direction, down, left)
 end
 
@@ -43,7 +43,7 @@ function rightward(ds::DancerState, distance, time_delta)
     a = 2 * pi * quarter_right(ds.direction)
     down = ds.down + distance * cos(a)
     left = ds.left + distance * sin(a)
-    DancerState(ds.dancer, ds.time + time_delta,
+    DancerState(ds, ds.time + time_delta,
                 ds.direction, down, left)
 end
 
@@ -59,7 +59,7 @@ function leftward(ds::DancerState, distance, time_delta)
     a = 2 * pi * quarter_left(ds.direction)
     down = ds.down + distance * cos(a)
     left = ds.left + distance * sin(a)
-    DancerState(ds.dancer, ds.time + time_delta,
+    DancerState(ds, ds.time + time_delta,
                 ds.direction, down, left)
 end
 
@@ -81,7 +81,7 @@ function revolve(ds::DancerState, center,
     thetaEnd = thetaStart + 2 * pi * (new_direction - ds.direction)
     downEnd = center[1] + d * cos(thetaEnd)
     leftEnd = center[2] + d * sin(thetaEnd)
-    DancerState(ds.dancer, ds.time + time_delta,
+    DancerState(ds, ds.time + time_delta,
                 new_direction, downEnd, leftEnd)
 end
 
