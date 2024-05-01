@@ -13,9 +13,31 @@ the group for all rules relating to square dance formations.
 """
 abstract type SquareDanceFormationRule <: SquareDanceRule end
 
+"""
+SquareDanceFormation is the abstract supertype of all square dance
+formations.
+"""
 abstract type SquareDanceFormation end
+
+
+"""
+TwoDancerFormation is the abstract supertype of all square dance
+formations involving two dancers.
+"""
 abstract type TwoDancerFormation <: SquareDanceFormation end
+
+
+"""
+FourDancerFormation is the abstract supertype of all square dance
+formations involving four dancers.
+"""
 abstract type FourDancerFormation <: SquareDanceFormation end
+
+
+"""
+EightDancerFormation is the abstract supertype of all square dance
+formations involving eight dancers.
+"""
 abstract type EightDancerFormation <: SquareDanceFormation end
 
 

@@ -4,6 +4,11 @@ using Rete
 
 export SquareDanceRule
 
+
+"""
+SquareDanceRule is the abstract supertype for all rules defined
+in this package.
+"""
 abstract type SquareDanceRule <: Rule end
 
 include("coordinate_system.jl")

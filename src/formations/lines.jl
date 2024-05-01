@@ -2,6 +2,11 @@
 export LineOfFour, TwoFacedLine, LineOfFourRule
 export LineOfFourRule, TwoFacedLineRule
 
+
+"""
+LineOfFour represents a line of four dancerrs all facing
+in the same direction.
+"""
 struct LineOfFour <: FourDancerFormation
     a::Couple
     b::Couple
@@ -14,6 +19,10 @@ dancer_states(f::LineOfFour)::Vector{DancerState} =
 
 handedness(::LineOfFour) = NoHandedness()
 
+
+"""
+TwoFacedLine represents a two faced line formation.
+"""
 struct TwoFacedLine <: FourDancerFormation
     a::Couple
     b::Couple
@@ -45,6 +54,11 @@ handedness(f::TwoFacedLine) = handedness(f.centers)
     emit(LineOfFour(a, b, centers))
 end
 
+@doc """
+LineOfFourRule is the rule for iderntifying a [`LineOfFour`](@ref)
+formation.
+""" LineOfFourRule
+
 
 @rule SquareDanceFormationRule.TwoFacedLineRule(a::Couple, b::Couple,
                                                 centers::MiniWave,
@@ -73,3 +87,7 @@ end
     emit(TwoFacedLine(a, b, centers))
 end
 
+@doc """
+TwoFacedLineRule is the rule for identifying [`TwoFacedLine`](@ref)
+formations.
+""" TwoFacedLineRule

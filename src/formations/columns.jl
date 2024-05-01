@@ -39,3 +39,7 @@ handedness(::ColumnOfFour) = NoHandedness()
     emit(ColumnOfFour(lead, tail, centers))
 end
 
+@doc """
+ColumnOfFourRule is the rule for identifying [`ColumnOfFour`](@ref)
+formations.
+""" ColumnOfFourRule

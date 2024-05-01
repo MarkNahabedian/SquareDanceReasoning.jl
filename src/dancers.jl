@@ -87,7 +87,9 @@ end
 
 couple_number(op::OriginalPartners) = op.guy.couple_number
 
-@rule SquareDanceRule.OriginalPartnerRule(guy::Dancer, gal::Dancer) begin
+
+@rule SquareDanceRule.OriginalPartnerRule(guy::Dancer, gal::Dancer,
+                                          ::OriginalPartners) begin
     if guy.couple_number != gal.couple_number
         return
     end
@@ -99,6 +101,11 @@ couple_number(op::OriginalPartners) = op.guy.couple_number
     end
     emit(OriginalPartners(guy, gal))
 end        
+
+@doc """
+OriginalPartnerRule is a rule that identifies the original
+partners of a square dance set.
+""" OriginalPartnerRule
 
 
 """
@@ -145,6 +152,12 @@ other_dancers(square::SDSquare, dancers) =
         emit(dancer)
     end
 end
+
+@doc """
+SquareHasDancers is a convenience rule for asserting the
+`Dancer`s from a `SDSquare`.
+""" SquareHasDancers
+
 
 
 """

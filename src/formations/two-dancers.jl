@@ -3,6 +3,13 @@ export Couple, FaceToFace, BackToBack,
     Tandem, MiniWave, RHMiniWave, LHMiniWave
 export TwoDancerFormationsRule
 
+
+"""
+    Couble(beau::DancerState, belle::DancerState)
+
+Couple represents a formation of two dancers both
+facing the same direction.
+"""
 struct Couple <: TwoDancerFormation
     beau::DancerState
     belle::DancerState
@@ -13,6 +20,9 @@ dancer_states(f::Couple)::Vector{DancerState} = [f.beau, f.belle]
 handedness(::Couple) = NoHandedness()
 
 
+"""
+FaceToFace represents a formation of two dancers facing each other.
+"""
 struct FaceToFace <: TwoDancerFormation
     a::DancerState
     b::DancerState
@@ -23,6 +33,10 @@ dancer_states(f::FaceToFace)::Vector{DancerState} = [f.a, f.b]
 handedness(::FaceToFace) = NoHandedness()
 
 
+"""
+BackToBack represents a formation of two dancers with their backs
+facing each other.
+"""
 struct BackToBack <: TwoDancerFormation
     a::DancerState
     b::DancerState
@@ -33,6 +47,12 @@ dancer_states(f::BackToBack)::Vector{DancerState} = [f.a, f.b]
 handedness(::BackToBack) = NoHandedness()
 
 
+"""
+    Tandem(leaderLLDancerState, trailer::DancerState)
+
+Tandem repreents a formation of two dancers where the `trailer`
+is facing the back of the `leader`.
+"""
 struct Tandem <: TwoDancerFormation
     leader::DancerState
     trailer::DancerState
@@ -43,11 +63,17 @@ dancer_states(f::Tandem)::Vector{DancerState} = [f.leader, f.trailer]
 handedness(::Tandem) = NoHandedness()
 
 
+"""
+MiniWave is the abstract supertype for all two dancer waves.
+"""
 abstract type MiniWave <: TwoDancerFormation end
 
 dancer_states(f::MiniWave)::Vector{DancerState} = [f.a, f.b]
 
 
+"""
+RHMiniWave represents a right handed wave of two dancers.
+"""
 struct RHMiniWave <: MiniWave
     a::DancerState
     b::DancerState
@@ -56,6 +82,9 @@ end
 handedness(::RHMiniWave) = RightHanded()
 
 
+"""
+LHMiniWave represents a left handed wave of two dancers.
+"""
 struct LHMiniWave <: MiniWave
     a::DancerState
     b::DancerState
@@ -113,4 +142,11 @@ handedness(::LHMiniWave) = LeftHanded()
         end
     end
 end
+
+@doc """
+TwoDancerFormationsRule is the rule for identifying all two dancer
+formations: [`Couple`](@ref), [`FaceToFace`](@ref),
+[`BackToBack`](@ref), [`Tandem`](@ref), [`RHMiniWave`](@ref), and
+[`LHMiniWave`](@ref).
+""" TwoDancerFormationsRule
 

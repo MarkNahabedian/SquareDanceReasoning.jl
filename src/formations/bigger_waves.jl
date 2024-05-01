@@ -3,7 +3,18 @@ export WaveOfFour, WaveOfEight, RHWaveOfFour, LHWaveOfFour
 export RHWaveOfEight, LHWaveOfEight
 export WaveOfFourRule, WaveOfEightRule
 
+
+"""
+WaveOfFour is the abstract supertype for right and left handed
+waves of four dancers.
+"""
 abstract type WaveOfFour <: FourDancerFormation end
+
+
+"""
+WaveOfEight is the abstract supertype for right and left handed
+waves of eight dancers.
+"""
 abstract type WaveOfEight <: EightDancerFormation end
 
 dancer_states(f::WaveOfFour)::Vector{DancerState} =
@@ -17,24 +28,40 @@ dancer_states(f::WaveOfEight)::Vector{DancerState} =
 handedness(f::WaveOfFour) = handedness(f.wave1)
 handedness(f::WaveOfEight) = handedness(f.wave1)
 
+
+"""
+RHWaveOfFour represents a right handed wave of four dancers.
+"""
 struct RHWaveOfFour <: WaveOfFour
     wave1::RHMiniWave
     wave2::RHMiniWave
     centers::LHMiniWave
 end
 
+
+"""
+LHWaveOfFour represents a left handed wave of four dancers.
+"""
 struct LHWaveOfFour <: WaveOfFour
     wave1::LHMiniWave
     wave2::LHMiniWave
     centers::RHMiniWave
 end
 
+
+"""
+RHWaveOfEight represents a right handed wave of eight dancers.
+"""
 struct RHWaveOfEight <: WaveOfEight
     wave1::RHWaveOfFour
     wave2::RHWaveOfFour
     centers::LHMiniWave
 end
 
+
+"""
+LHWaveOfEight represents a right handed wave of eight dancers.
+"""
 struct LHWaveOfEight <: WaveOfEight
     wave1::LHWaveOfFour
     wave2::LHWaveOfFour
@@ -73,6 +100,11 @@ end
     emit(constructor(wave1, wave2, centers))
 end
 
+@doc """
+WaveOfFourRule is the rule for identifying waves of four
+dancers: [`RHWaveOfFour`](@ref) and [`LHWaveOfFour`](@ref).
+""" WaveOfFourRule
+
 
 # Note that the Rete will have memory nodes for WaveOfFour as well as
 # RHWaveOfFour and LHWaveOfFour.
@@ -107,3 +139,7 @@ end
     emit(constructor(wave1, wave2, centers))
 end
 
+@doc """
+WaveOfEightRule is the rule for identifying waves of eight dancers:
+[`RHWaveOfEight`](@ref) and [`LHWaveOfEight`](@ref).
+""" WaveOfEightRule

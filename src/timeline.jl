@@ -182,12 +182,17 @@ end
 
 DANCER_COLLISION_DISTANCE = 0.8 * COUPLE_DISTANCE
 
+
+"""
+Collision notes that two dancers are occupying the same space.
+"""
 struct Collision
     a::DancerState
     b::DancerState
 end
 
 dancer_states(c::Collision)::Vector{DancerState} = [c.a, c.b]
+
 
 @rule SquareDanceRule.CollisionRule(a::DancerState, b::DancerState,
                                     ::Collision) begin
@@ -198,6 +203,12 @@ dancer_states(c::Collision)::Vector{DancerState} = [c.a, c.b]
         emit(Collision(a, b))
     end
 end
+
+@doc """
+CollisionRule is a rule for detecting when two `DancerState`s
+occupy the same space.  It asserts [`Collision`](@ref).
+""" CollisionRule
+
 
 
 function latest_dancer_states(root::ReteRootNode)::Dict{Dancer, DancerState}
