@@ -3,7 +3,7 @@ using SquareDanceReasoning
 using InteractiveUtils
 using Rete: Rule
 
-const INDENT = "    "
+const INDENT = "  "
 
 function generate_formation_hierarchy()
     open(joinpath(@__DIR__, "src", "formation_hierarchy.md"),
@@ -13,7 +13,7 @@ function generate_formation_hierarchy()
                      "\nThese are the formations that are currently supported:\n")
              function walk(f, level)
                  println(io, repeat(INDENT, level),
-                         "[`$f`](@ref)")
+                         " - [`$f`](@ref)")
                  for st in sort(subtypes(f); by=string)
                      walk(st, level + 1)
                  end
@@ -23,6 +23,7 @@ function generate_formation_hierarchy()
 end
 
 function generate_rule_hierarchy()
+    noref = [ Rule ]
     open(joinpath(@__DIR__, "src", "rule_hierarchy.md"),
          "w") do io
              println(io, "# Hierarchy of Knowledge Base Rules")
@@ -30,7 +31,11 @@ function generate_rule_hierarchy()
                      "\nThese are the knowledge base rules we use:\n")
              function walk(t, level)
                  println(io, repeat(INDENT, level),
-                         "[`$t`](@ref)")
+                         if t in noref
+                             " - $t"
+                         else
+                             " - [`$t`](@ref)"
+                         end)
                  for st in sort(subtypes(t); by=string)
                      walk(st, level + 1)
                  end
