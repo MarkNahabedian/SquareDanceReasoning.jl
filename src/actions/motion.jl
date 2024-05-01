@@ -1,5 +1,6 @@
 
-export forward, backward, rightward, leftward, revolve, rotate
+export forward, backward, rightward, leftward, revolve, rotate,
+    can_roll
 
 
 """
@@ -95,4 +96,26 @@ rotation.
 rotate(ds::DancerState, rotation, time_delta)::DancerState =
     revolve(ds::DancerState, location(ds),
             ds.direction + rotation, time_delta)
+
+
+"""
+    can_roll(ds::DancerState)
+
+Determine whether the modifier "and roll" can be applied to the
+DancerState.  If the dancer can roll then `can_roll` returns a
+non-zero rotation value.
+
+This is not useful for "and roll as if you could".
+"""
+function can_roll(ds::DancerState)
+    p = ds.previous
+    r = ds.direction - p.direction
+    # Because functions like synchronize can add zero-motion
+    # DancerStates, skip those over to determine roll:
+    if r == 0 && (ds.down - p.down) == 0 && (ds.left - p.left) == 0
+        can_roll(p)
+    else
+        r
+    end
+end
 

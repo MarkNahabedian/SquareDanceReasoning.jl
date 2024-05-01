@@ -9,6 +9,7 @@
         @test ds0.direction == ds1.direction
         @test ds0.down == ds1.down
         @test ds0.left + 2 == ds1.left
+        @test can_roll(ds1) == 0
     end
     let
         ds0 = DancerState(Dancer(1, Unspecified()),
@@ -19,6 +20,7 @@
         @test ds0.direction == ds1.direction
         @test ds0.down - 2 == ds1.down
         @test ds0.left == ds1.left
+        @test can_roll(ds1) == 0
     end
 end
 
@@ -32,6 +34,7 @@ end
         @test ds0.direction == ds1.direction
         @test ds0.down == ds1.down
         @test ds0.left - 2 == ds1.left
+        @test can_roll(ds1) == 0
     end
     let
         ds0 = DancerState(Dancer(1, Unspecified()),
@@ -42,6 +45,7 @@ end
         @test ds0.direction == ds1.direction
         @test ds0.down + 2 == ds1.down
         @test ds0.left == ds1.left
+        @test can_roll(ds1) == 0
     end
 end
 
@@ -55,6 +59,7 @@ end
         @test ds0.direction == ds1.direction
         @test ds0.down - 2 == ds1.down
         @test ds0.left == ds1.left
+        @test can_roll(ds1) == 0
     end
     let
         ds0 = DancerState(Dancer(1, Unspecified()),
@@ -65,6 +70,7 @@ end
         @test ds0.direction == ds1.direction
         @test ds0.down == ds1.down
         @test ds0.left - 2 == ds1.left
+        @test can_roll(ds1) == 0
     end
 end
 
@@ -78,6 +84,7 @@ end
         @test ds0.direction == ds1.direction
         @test ds0.down + 2 == ds1.down
         @test ds0.left == ds1.left
+        @test can_roll(ds1) == 0
     end
     let
         ds0 = DancerState(Dancer(1, Unspecified()),
@@ -88,6 +95,7 @@ end
         @test ds0.direction == ds1.direction
         @test ds0.down == ds1.down
         @test ds0.left + 2 == ds1.left
+        @test can_roll(ds1) == 0
     end
 end
 
@@ -102,8 +110,10 @@ end
         @test ds1.direction == DIRECTION2
         @test ds1.down == ds0.down
         @test ds1.left == ds0.left
+        @test can_roll(ds1) == DIRECTION2 - DIRECTION1
     end
     let
+        # Revolve around a another point:
         ds0 = DancerState(Dancer(1, Unspecified()),
                           0, DIRECTION1, 1, 0)
         ds1 = revolve(ds0, [0, 0], DIRECTION2, 1)
@@ -112,6 +122,7 @@ end
         @test ds1.direction == DIRECTION2
         @test isapprox(ds1.down, 0; atol=0.0001)
         @test isapprox(ds1.left, 1; atol=0.0001)
+        @test can_roll(ds1) == DIRECTION2 - DIRECTION1
     end
 end
 
