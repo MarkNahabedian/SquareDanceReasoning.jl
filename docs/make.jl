@@ -16,7 +16,7 @@ makedocs(;
     repo="https://github.com/MarkNahabedian/SquareDanceReasoning.jl/blob/{commit}{path}#{line}",
     sitename="SquareDanceReasoning.jl",
     format=Documenter.HTML(;
-        prettyurls=get(ENV, "CI", "false") == "true",
+        prettyurls=false,
         canonical="https://MarkNahabedian.github.io/SquareDanceReasoning.jl",
         edit_link="main",
         assets=String[],
