@@ -76,3 +76,7 @@ jobs:
           using SquareDanceReasoning
           DocMeta.setdocmeta!(SquareDanceReasoning, :DocTestSetup, :(using SquareDanceReasoning); recursive=true)
           doctest(SquareDanceReasoning)
+      - run: julia --project=docs docs/make.jl
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
