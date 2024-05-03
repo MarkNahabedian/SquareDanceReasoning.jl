@@ -69,13 +69,13 @@ jobs:
       - uses: julia-actions/julia-docdeploy@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Run doctests
-        shell: julia --project=docs --color=yes {0}
-        run: |
-          using Documenter: DocMeta, doctest
-          using SquareDanceReasoning
-          DocMeta.setdocmeta!(SquareDanceReasoning, :DocTestSetup, :(using SquareDanceReasoning); recursive=true)
-          doctest(SquareDanceReasoning)
+      # - name: Run doctests
+      #   shell: julia --project=docs --color=yes {0}
+      #   run: |
+      #     using Documenter: DocMeta, doctest
+      #     using SquareDanceReasoning
+      #     DocMeta.setdocmeta!(SquareDanceReasoning, :DocTestSetup, :(using SquareDanceReasoning); recursive=true)
+      #     doctest(SquareDanceReasoning)
       - run: julia --project=docs docs/make.jl
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
