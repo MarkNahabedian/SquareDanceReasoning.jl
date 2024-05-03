@@ -5,3 +5,8 @@
 [![Build Status](https://github.com/MarkNahabedian/SquareDanceReasoning.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/MarkNahabedian/SquareDanceReasoning.jl/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/MarkNahabedian/SquareDanceReasoning.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/MarkNahabedian/SquareDanceReasoning.jl)
 [![CompatHelper](https://github.com/MarkNahabedian/SquareDanceReasoning.jl/actions/workflows/CompatHelper.yml/badge.svg)](https://github.com/MarkNahabedian/SquareDanceReasoning.jl/actions/workflows/CompatHelper.yml)
+
+
+SquareDanceReasoning is a package for modeling Modern Western Square Dancing.
+
+It is very mucha work in progress.
