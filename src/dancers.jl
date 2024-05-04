@@ -127,8 +127,15 @@ is_original_side(d::Dancer)::Bool = iseven(d.couple_number)
 """
     SDSquare(dancers)
 
+SDSquare represents the dancers in a square.
+
+`make_square(number_of_dancers)` will return an `SDSquare`.
+
 SDSquare is a fact that can be asserted to the knowledge base to
 inform it that the dancers form a square.
+
+`other_dancers(::SDSquare, dancers)` returns the set of `Dancer`s
+that are in the SDSquare but are not in `dancers`.
 """
 struct SDSquare
     dancers::Set{Dancer}
