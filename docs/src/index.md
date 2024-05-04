@@ -30,6 +30,10 @@ using a rule based expert system.
 See [Hierarchy of Knowledge Base Rules](@ref)
 for a list of the rules that are implemented.
 
+To facilitate recognizing formations, the relative position predicates
+[`in_front_of`](@ref), [`behind`](@ref), [`left_of`](@ref), and
+[`right_of`](@ref) are provided.
+
 
 ```@index
 ```
