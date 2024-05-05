@@ -1,7 +1,7 @@
 
 using SquareDanceReasoning
 using InteractiveUtils
-using Rete: Rule
+using Rete: Rule, emits
 
 const INDENT = "  "
 
@@ -32,10 +32,13 @@ function generate_rule_hierarchy()
              function walk(t, level)
                  println(io, repeat(INDENT, level),
                          if t in noref
-                             " - $t"
+                             " - **$t**"
                          else
-                             " - [`$t`](@ref)"
-                         end)
+                             " - **[`$t`](@ref)**"
+                         end, ": ",
+                         join(map(emits(t)) do e
+                                      "[`$e`](@ref)"
+                                  end, ", "))
                  for st in sort(subtypes(t); by=string)
                      walk(st, level + 1)
                  end
