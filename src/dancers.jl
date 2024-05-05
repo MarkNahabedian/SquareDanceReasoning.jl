@@ -74,6 +74,12 @@ Base.isless(::Guy, ::Unspecified) = false
 Base.isless(::Gal, ::Unspecified) = false
 
 
+"""
+    OriginalPartners(guy::Dancer, gal::Dancer)
+
+OriginalPartners is a fact in the knowledge base that identifies the
+original partners in a square.
+"""
 struct OriginalPartners
     guy::Dancer
     gal::Dancer
