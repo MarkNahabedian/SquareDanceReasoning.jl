@@ -3,11 +3,8 @@ using SquareDanceReasoning: TwoDancerFormationsRule
 
 @testset "test two dancer formations" begin
     square = make_square(6)
-    kb = ReteRootNode("root")
-    install(kb, SquareHasDancers)
-    install(kb, TwoDancerFormationsRule)
+    kb = make_kb()
     # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
-    @test length(kb.outputs) == 9
     receive(kb, square)
     dancers = sort(collect(collect(square.dancers)))
     # Couple

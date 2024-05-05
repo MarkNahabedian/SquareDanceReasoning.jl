@@ -1,10 +1,7 @@
 
 @testset "columns of four" begin
     square = make_square(4)
-    kb = ReteRootNode("root")
-    install(kb, SquareHasDancers)
-    install(kb, SquareDanceFormationRule)
-    ensure_IsaMemoryNode(kb, Dancer)
+    kb = make_kb()
     receive(kb, square)
     dancers = sort(collect(square.dancers))
     for ds in make_line(dancers[1:4], 1//4, 0)

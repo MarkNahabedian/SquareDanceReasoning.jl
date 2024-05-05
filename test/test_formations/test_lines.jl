@@ -1,8 +1,7 @@
 
 @testset "lines of four" begin
     square = make_square(4)
-    kb = ReteRootNode("root")
-    install(kb, SquareDanceRule)
+    kb = make_kb()
     receive(kb, square)
     dancers = sort(collect(square.dancers))
     for ds in make_line(dancers[1:4], 0, 0)
@@ -46,8 +45,7 @@ end
     
 @testset "two faced lines" begin
     square = make_square(4)
-    kb = ReteRootNode("root")
-    install(kb, SquareDanceRule)
+    kb = make_kb()
     receive(kb, square)
     dancers = collect(square.dancers)
     # Rught hand two faced line:  ↑↑↓↓

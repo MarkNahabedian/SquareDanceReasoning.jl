@@ -14,12 +14,8 @@ end
 
 @testset "test right hand wave of four" begin
     square = make_square(2)
-    kb = ReteRootNode("root")
-    install(kb, SquareHasDancers)
-    install(kb, TwoDancerFormationsRule)
-    install(kb, WaveOfFourRule)
+    kb = make_kb()
     # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
-    @test length(kb.outputs) == 12
     receive(kb, square)
     dancers = collect(square.dancers)
     for ds in make_wave(dancers, 1//2)

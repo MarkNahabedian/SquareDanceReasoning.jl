@@ -2,7 +2,7 @@ module SquareDanceReasoning
 
 using Rete
 
-export SquareDanceRule
+export SquareDanceRule, make_kb
 
 
 """
@@ -22,5 +22,18 @@ include("calls/calls.jl")
 include("xml/load.jl")
 
 include("debug.jl")
+
+
+"""
+    make_kb()
+
+Creates SquareDanceReasoning knowledge base with no facts, but with
+all rules installed..
+"""
+function make_kb()
+    kb = ReteRootNode("SquareDanceReasoning")
+    install(kb, SquareDanceRule)
+    kb
+end
 
 end
