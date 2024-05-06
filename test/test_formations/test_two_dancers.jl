@@ -8,23 +8,23 @@ using SquareDanceReasoning: TwoDancerFormationsRule
     receive(kb, square)
     dancers = sort(collect(collect(square.dancers)))
     # Couple
-    receive(kb, DancerState(dancers[1], 0, 0, 0, 1))
-    receive(kb, DancerState(dancers[2], 0, 0, 0, 2))
+    receive(kb, DancerState(dancers[1], 0,    0, 0, 1))
+    receive(kb, DancerState(dancers[2], 0,    0, 0, 2))
     # FaceToFace
-    receive(kb, DancerState(dancers[3], 0, 1//4, 2, 1))
-    receive(kb, DancerState(dancers[4], 0, 3//4, 2, 2))
+    receive(kb, DancerState(dancers[3], 0, 1//4, 2, 4))
+    receive(kb, DancerState(dancers[4], 0, 3//4, 2, 5))
     # BackToBack
-    receive(kb, DancerState(dancers[5], 0, 3//4, 4, 1))
-    receive(kb, DancerState(dancers[6], 0, 1//4, 4, 2))
+    receive(kb, DancerState(dancers[5], 0, 3//4, 4, 7))
+    receive(kb, DancerState(dancers[6], 0, 1//4, 4, 8))
     # Tandem
-    receive(kb, DancerState(dancers[7], 0, 1//4, 6, 1))
-    receive(kb, DancerState(dancers[8], 0, 1//4, 6, 2))    
+    receive(kb, DancerState(dancers[7], 0, 1//4, 6, 10))
+    receive(kb, DancerState(dancers[8], 0, 1//4, 6, 11))    
     # RHMiniWave
-    receive(kb, DancerState(dancers[9],  0, 1//2, 8, 1))
-    receive(kb, DancerState(dancers[10], 0,    0, 8, 2))
+    receive(kb, DancerState(dancers[9],  0, 1//2, 8, 13))
+    receive(kb, DancerState(dancers[10], 0,    0, 8, 14))
     # LHMiniWave
-    receive(kb, DancerState(dancers[11], 0,    0, 10, 1))
-    receive(kb, DancerState(dancers[12], 0, 1//2, 10, 2))
+    receive(kb, DancerState(dancers[11], 0,    0, 10, 16))
+    receive(kb, DancerState(dancers[12], 0, 1//2, 10, 17))
     @debug_formations(kb)
     let
         m = find_memory_for_type(kb, Couple)
