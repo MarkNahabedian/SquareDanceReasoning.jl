@@ -119,36 +119,42 @@ percentage(tb::TimeBounds, t) =
 returns a list of `DancerState`s for the initial squared set.
 """
 function square_up(dancers::Vector{Dancer};
-                   center = [0.0  0.0],
+                   center = [0.0, 0.0],
                    initial_time = 0)::Vector{DancerState}
     dancers = sort(dancers)
-    circle_fraction = FULL_CIRCLE / length(dancers)
-    dancer_direction(dancer) =
-        (dancer.couple_number - 1) * circle_fraction * 2
-    angle_from_center(i) =
-        opposite((i - 1) * circle_fraction - circle_fraction / 2)
-    rad(angle) = 2 * pi * angle
-    function unit_vector(dancer_angle)
-        a = rad(dancer_angle)
-        [ cos(a) sin(a) ]
-    end
+    couple_circle_fraction = 2 * FULL_CIRCLE / length(dancers)
+    rad(fracangle) = 2 * pi * fracangle
+    # Compute distance of "toe line" of dancers from center:
+    toe_distance = COUPLE_DISTANCE / tan(rad(couple_circle_fraction / 2))
+    ref_distance = toe_distance + COUPLE_DISTANCE / 2
     results = Vector{DancerState}()
-    distance_from_center =
-        (COUPLE_DISTANCE / 2) +   # additional radius to account for
-                                  # the size of a dancer
-        (COUPLE_DISTANCE / 2) / sin(rad(circle_fraction))
-    for (i, dancer) in enumerate(dancers)
-        angle = angle_from_center(i)
-        direction = dancer_direction(dancer)
+    for dancer in dancers
+        couple_fracangle = opposite((dancer.couple_number - 1) *
+            couple_circle_fraction)
+        couple_direction_vector = [ cos(rad(couple_fracangle)),
+                                    sin(rad(couple_fracangle)) ]
+        gender_vector = let
+            d = if dancer.gender == Guy()
+                - 1//4
+            elseif dancer.gender == Gal()
+                1//4
+            else
+                error("$(Unspecified()) gender not supported by square_up.")
+            end
+            [ cos(rad(couple_fracangle + d)),
+              sin(rad(couple_fracangle + d)) ]
+        end
+        dancer_vector = center + ref_distance * couple_direction_vector +
+            (COUPLE_DISTANCE / 2) * gender_vector
         push!(results,
               DancerState(dancer,
                           initial_time,
-                          dancer_direction(dancer),
-                          Float32.(distance_from_center *
-                              unit_vector(angle))...))
+                          opposite(couple_fracangle),
+                          Float32.(dancer_vector)...))
     end
     results
 end
+
 
 square_up(square::SDSquare;  initial_time = 0) =
     square_up(collect(square.dancers); initial_time)
