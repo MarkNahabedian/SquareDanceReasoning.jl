@@ -63,6 +63,8 @@ function Base.show(io::IO, ::MIME"text/plain", ds::DancerState)
     print(io, ")")
 end
 
+Base.in(ds::DancerState, sq::SDSquare) = in(ds.dancer, sq.dancers)
+
 
 """
     TimeBounds()
