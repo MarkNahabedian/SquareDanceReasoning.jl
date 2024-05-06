@@ -93,7 +93,9 @@ end
 handedness(::LHMiniWave) = LeftHanded()
 
 
-@rule SquareDanceFormationRule.TwoDancerFormationsRule(ds1::DancerState,
+@rule SquareDanceFormationRule.TwoDancerFormationsRule(kb::ReteRootNode,
+                                                       sq::SDSquare,
+                                                       ds1::DancerState,
                                                        ds2::DancerState,
                                                        ::Couple,
                                                        ::FaceToFace,
@@ -101,12 +103,38 @@ handedness(::LHMiniWave) = LeftHanded()
                                                        ::Tandem,
                                                        ::RHMiniWave,
                                                        ::LHMiniWave) begin
+    # Not the same dancer:
     if ds1.dancer == ds2.dancer
         return
     end
-    # Maybe we don't want to use the hear test for FaceToFace.
-    if !near(ds1, ds2)
+    # Contemporary:
+    if ds1.time != ds2.time
         return
+    end
+    # In the same square:
+    if !in(ds1, sq) || !in(ds2, sq)
+        return
+    end
+    # Rather than using near, make sure there are no other dancers
+    # between these two:
+    let
+        these = [ds1, ds2]
+        b = bump_out(Bounds(these))
+        encroaching = false
+        askc(kb, DancerState) do ds
+            if !(ds in these)
+                if ds.time == ds1.time
+                    if in_bounds(b, ds)
+                        encroaching = true
+                        # It would be nice to have a short-circuiting exit
+                        # for askc.
+                    end
+                end
+            end
+        end
+        if encroaching
+            return
+        end
     end
     if direction_equal(ds1.direction, ds2.direction)
         # Couple or Tandem?
