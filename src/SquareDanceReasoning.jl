@@ -13,6 +13,7 @@ abstract type SquareDanceRule <: Rule end
 
 include("coordinate_system.jl")
 include("dancers.jl")
+include("SDSquare.jl")
 include("timeline.jl")
 include("relative_direction.jl")
 include("geometry.jl")
@@ -33,6 +34,9 @@ all rules installed..
 function make_kb()
     kb = ReteRootNode("SquareDanceReasoning")
     install(kb, SquareDanceRule)
+    # Make the knowledge base self-aware:
+    ensure_IsaMemoryNode(kb, typeof(kb))
+    receive(kb, kb)
     kb
 end
 
