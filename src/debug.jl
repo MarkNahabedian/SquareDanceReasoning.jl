@@ -39,6 +39,7 @@ function dancer_states_table(dancer_states)
             elt("td", ds.down),
             elt("td", ds.left),
             elt("td", "class" => "$(couple_color_swatch(ds))",
+                # Full block unicode character
                 "\u2588\u2588\u2588"))
     elt("div", 
         "class" => "DancerState-table",
@@ -80,7 +81,11 @@ function dancer_formations_html(kb::ReteRootNode)
         if !haskey(formations_by_type, typeof(fact))
             formations_by_type[typeof(fact)] = []
         end
-        push!(formations_by_type[typeof(fact)], fact)
+        # Some formations are stored in memory nodes for their
+        # supertypes as well.  Avoid duplicates:
+        if !in(fact, formations_by_type[typeof(fact)])
+             push!(formations_by_type[typeof(fact)], fact)
+        end
     end
     ks = sort(collect(keys(formations_by_type)); by = string)
     elt("ul") do a
