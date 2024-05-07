@@ -27,6 +27,13 @@ using SquareDanceReasoning: TwoDancerFormationsRule
     receive(kb, DancerState(dancers[12], 0, 1//2, 10, 17))
     @debug_formations(kb)
     let
+        count = 0
+        askc(kb, DancerState) do ds
+            count += 1
+        end
+        @test count == 12
+    end
+    let
         m = find_memory_for_type(kb, Couple)
         @test length(m.memory) == 1
         f = first(m.memory)
