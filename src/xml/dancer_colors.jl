@@ -25,8 +25,10 @@ function dancer_colors_css(number_of_couples)
     join(rules, "\n")
 end
 
+#=
 couple_color_swatch(dancer::Dancer) = "couple$(dancer.couple_number)swatch"
 couple_color_swatch(ds::DancerState) = couple_color_swatch(ds.dancer)
+=#
 
 dancer_color(dancer::Dancer) = "couple$(dancer.couple_number)"
 dancer_color(ds::DancerState) = dancer_color(ds.dancer)
