@@ -81,7 +81,6 @@ function animate(timeline::Dict{Dancer, Vector{DancerState}})
             DIRECTION_DOT_STYLE,
             dancer_colors_css(ceil(length(keys(timeline)) / 2)),
             keyframes(timeline)),
-        DANCER_SYMBOLS...,
         elt("g") do a
             for (dancer, dss) in timeline
                 sorted = sort(dss; by = ds -> ds.time)
