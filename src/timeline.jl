@@ -42,6 +42,12 @@ direction(ds::DancerState) = ds.direction
 distance(s1::DancerState, s2::DancerState) =
     distance(location(s1), location(s2))
 
+# Should DancerState be a subtype of Formation?  Whenwe query for
+# Formations we probably don't want the clutter of individual dancers,
+# but it's convenient for formation_svg to wrap a single DancerState
+# in SVG.
+dancer_states(ds::DancerState) = [ ds ]
+
 
 function Base.show(io::IO, ::MIME"text/plain", ds::DancerState)
     # Definition cribbed from Base._show_default(io::IO, @nospecialize(x))

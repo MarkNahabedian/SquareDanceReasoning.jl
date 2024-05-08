@@ -18,13 +18,10 @@ and list all of the formations in the knowledgebase.
 macro debug_formations(kb)
     esc(
         quote
-            let
-                doc = formation_debug_html($__source__,
-                                           Test.get_testset(),
-                                           $kb)
-                XML.write($(file_name_for_source_location(__source__)),
-                          doc)
-            end
+            formation_debug_html($__source__,
+                                 Test.get_testset(),
+                                 $(file_name_for_source_location(__source__)),
+                                 $kb)
         end)
 end
 

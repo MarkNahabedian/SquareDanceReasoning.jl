@@ -38,9 +38,13 @@ function dancer_states_table(dancer_states)
             elt("td", ds.direction),
             elt("td", ds.down),
             elt("td", ds.left),
+            #=
             elt("td", "class" => "$(couple_color_swatch(ds))",
                 # Full block unicode character
-                "\u2588\u2588\u2588"))
+                "\u2588\u2588\u2588")
+            =#
+            elt("td", formation_svg(ds; margin=COUPLE_DISTANCE/2))
+            )
     elt("div", 
         "class" => "DancerState-table",
         elt("table",
@@ -52,7 +56,7 @@ function dancer_states_table(dancer_states)
                     elt("th", "direction"),
                     elt("th", "down"),
                     elt("th", "left"),
-                    elt("th", "couple color")),
+                    elt("th", "symbol")),
             elt("tbody",
                 map(dancer_state_row,
                     sort(dancer_states; by = ds -> ds.dancer))...))))
@@ -123,37 +127,50 @@ end
 
 function formation_debug_html(source,   # ::LineNumberNode,
                               testset,  # Test.AbstractTestSet
+                              output_path,
                               kb::ReteRootNode)
+    # ".." from the output path up to the repository root:
+    docbase =
+        join(repeat([".."],
+                    length(
+                        splitpath(
+                            relpath(dirname(output_path),
+                                    abspath(joinpath(
+                                        pathof(SquareDanceReasoning),
+                                        "../..")))))),
+             "/")
     desc = testset.description
     dancer_states = collecting() do c
         askc(c, kb, DancerState)
     end
     bounds = bump_out(Bounds(dancer_states))
 #     source_line = "At $(source.file):$(source.line)"
-    elt("html",
-        elt("head",
-            elt("meta", "charset" => "utf-8"),
-            elt("title", desc),
-            elt("style", "\n",
-                FORMATION_STYLESHEET,
-                dancer_colors_css(ceil(length(dancer_states) / 2)),
-                "\n")),
-        elt("body",
-            elt("h1", desc),
-#            elt("p", source_line),
-            elt("div",
-                elt("h2", "Dancer Location and Facing Direction"),
-                dancer_states_table(dancer_states)),
-            elt("div",
-                elt("h2", "Formations"),
-                dancer_formations_html(kb)),
-            elt("div",
-                elt("svg",
-                    "id" => "floor",
-                    "xmlns" => SVG_NAMESPACE,
-                    bounds_to_viewbox(bounds)...,
-                    DANCER_SYMBOLS...,
-                    elt("g",
-                        dancer_placement_svg.(dancer_states)...)))
-            ))
+    doc =
+        elt("html",
+            elt("head",
+                elt("meta", "charset" => "utf-8"),
+                elt("base", "href" => docbase),
+                elt("title", desc),
+                elt("style", "\n",
+                    FORMATION_STYLESHEET,
+                    dancer_colors_css(ceil(length(dancer_states) / 2)),
+                    "\n")),
+            elt("body",
+                elt("h1", desc),
+                #            elt("p", source_line),
+                elt("div",
+                    elt("h2", "Dancer Location and Facing Direction"),
+                    dancer_states_table(dancer_states)),
+                elt("div",
+                    elt("h2", "Formations"),
+                    dancer_formations_html(kb)),
+                elt("div",
+                    elt("svg",
+                        "id" => "floor",
+                        "xmlns" => SVG_NAMESPACE,
+                        bounds_to_viewbox(bounds)...,
+                        elt("g",
+                            dancer_svg.(dancer_states)...)))
+                ))
+    XML.write(output_path, doc)
 end
