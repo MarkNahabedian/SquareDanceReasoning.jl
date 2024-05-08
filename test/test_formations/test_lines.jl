@@ -41,6 +41,7 @@
             @test length(m.memory) == 4
         end
     end
+    collect_formation_examples(kb)
 end
     
 @testset "two faced lines" begin
@@ -98,5 +99,6 @@ end
             @test length(m.memory) == 2
         end
     end
+    collect_formation_examples(kb)
 end
 

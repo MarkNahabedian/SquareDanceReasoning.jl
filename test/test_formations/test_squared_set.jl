@@ -14,6 +14,7 @@
     @test 4 == counting() do c
         askc(c, kb, FaceToFace)
     end
+    collect_formation_examples(kb)
 end
 
 @testset "Squared Set with joker" begin

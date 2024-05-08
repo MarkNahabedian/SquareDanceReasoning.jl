@@ -42,6 +42,7 @@ end
         @test f.wave2.a.dancer == dancers[4]
         @test f.wave2.b.dancer == dancers[3]
     end
+    collect_formation_examples(kb)
 end
 
 @testset "test left hand wave of four" begin
@@ -74,6 +75,7 @@ end
         @test f.wave2.a.dancer == dancers[1]
         @test f.wave2.b.dancer == dancers[2]
     end
+    collect_formation_examples(kb)
 end
 
 @testset "test right hand wave of eight" begin
@@ -108,4 +110,5 @@ end
         @test f.wave2.wave2.a.dancer == dancers[8]
         @test f.wave2.wave2.b.dancer == dancers[7]
     end
+    collect_formation_examples(kb)
 end

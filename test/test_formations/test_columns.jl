@@ -40,5 +40,6 @@
         @test columns[2].tail.leader.dancer == dancers[7]
         @test columns[2].tail.trailer.dancer == dancers[8]
     end
+    collect_formation_examples(kb)
 end
 

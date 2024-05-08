@@ -1,6 +1,7 @@
 
 
 include("generic.jl")
+include("examples.jl")
 include("two-dancers.jl")
 include("bigger_waves.jl")
 include("lines.jl")

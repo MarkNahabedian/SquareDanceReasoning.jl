@@ -1,6 +1,4 @@
 
-using SquareDanceReasoning: TwoDancerFormationsRule
-
 @testset "test two dancer formations" begin
     square = make_square(6)
     kb = make_kb()
@@ -97,5 +95,6 @@ using SquareDanceReasoning: TwoDancerFormationsRule
         @test f.a.dancer == dancers[11]
         @test f.b.dancer == dancers[12]
     end
+    collect_formation_examples(kb)
 end
 
