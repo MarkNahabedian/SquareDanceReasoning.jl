@@ -66,6 +66,8 @@ end
     in_bounds(bounds::Bounds, ds::DancerState)::Bool
 
 Returns true if the specified DancerState it located within `bounds`.
+
+in_bounds(Bounds([ds]), ds) == true
 """
 function in_bounds(bounds::Bounds, ds::DancerState)::Bool
     if ds.down < bounds.min_down return false end
