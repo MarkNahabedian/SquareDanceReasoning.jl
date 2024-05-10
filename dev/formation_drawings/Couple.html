@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Couple · SquareDanceReasoning.jl</title><meta name="title" content="Couple · SquareDanceReasoning.jl"/><meta property="og:title" content="Couple · SquareDanceReasoning.jl"/><meta property="twitter:title" content="Couple · SquareDanceReasoning.jl"/><meta name="description" content="Documentation for SquareDanceReasoning.jl."/><meta property="og:description" content="Documentation for SquareDanceReasoning.jl."/><meta property="twitter:description" content="Documentation for SquareDanceReasoning.jl."/><meta property="og:url" content="https://MarkNahabedian.github.io/SquareDanceReasoning.jl/formation_drawings/Couple.html"/><meta property="twitter:url" content="https://MarkNahabedian.github.io/SquareDanceReasoning.jl/formation_drawings/Couple.html"/><link rel="canonical" href="https://MarkNahabedian.github.io/SquareDanceReasoning.jl/formation_drawings/Couple.html"/><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../search_index.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../index.html">SquareDanceReasoning.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../index.html">Home</a></li><li><a class="tocitem" href="../coordinate_system.html">Coordinate System</a></li><li><a class="tocitem" href="../motion_primitives.html">Motion Primitives</a></li><li><a class="tocitem" href="../formation_hierarchy.html">Supported Formations</a></li><li><a class="tocitem" href="../rule_hierarchy.html">Rule Hierarchy</a></li><li><span class="tocitem">Formation Drawings</span><ul><li><a class="tocitem" href="BackToBack.html">BackToBack</a></li><li><a class="tocitem" href="ColumnOfFour.html">ColumnOfFour</a></li><li class="is-active"><a class="tocitem" href="Couple.html">Couple</a></li><li><a class="tocitem" href="FaceToFace.html">FaceToFace</a></li><li><a class="tocitem" href="LHMiniWave.html">LHMiniWave</a></li><li><a class="tocitem" href="LHWaveOfFour.html">LHWaveOfFour</a></li><li><a class="tocitem" href="LineOfFour.html">LineOfFour</a></li><li><a class="tocitem" href="RHMiniWave.html">RHMiniWave</a></li><li><a class="tocitem" href="RHWaveOfEight.html">RHWaveOfEight</a></li><li><a class="tocitem" href="RHWaveOfFour.html">RHWaveOfFour</a></li><li><a class="tocitem" href="Tandem.html">Tandem</a></li><li><a class="tocitem" href="TwoFacedLine.html">TwoFacedLine</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Formation Drawings</a></li><li class="is-active"><a href="Couple.html">Couple</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href="Couple.html">Couple</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/MarkNahabedian/SquareDanceReasoning.jl/blob/main/docs/src/formation_drawings/Couple.md#" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Couple</title>
+    <style>
+      
+
+      svg {
+    background-color: "gray";
+}
+table {
+    empty-cells: show;
+}
+.DancerState-table th {
+    text-align: center;
+    margin-left: 8em;
+    margin-right: 8em;
+}
+.DancerState-table td {
+    text-align: center;
+    margin-left: 8em;
+    margin-right: 8em;
+}
+.DirectionDot {
+    stroke: black;
+    fill: black;
+}
+
+      
+.couple1swatch {
+    color: rgb(255 0 0);
+}
+.couple1 {
+    stroke: black;
+    fill: rgb(255 0 0)
+}
+      
+
+    </style>
+  </head>
+  <body>
+    <h1>Couple</h1>
+    <div>
+      <h2>Dancer Location and Facing Direction</h2>
+      <div class="DancerState-table">
+        <table>
+          <thead>
+            <tr>
+              <th>id</th>
+              <th>dancer</th>
+              <th>time</th>
+              <th>direction</th>
+              <th>down</th>
+              <th>left</th>
+              <th>symbol</th>
+            </tr>
+            <tbody>
+              <tr>
+                <td>1m</td>
+                <td>Dancer(1, Guy())</td>
+                <td>-1</td>
+                <td>0.0</td>
+                <td>-1.5</td>
+                <td>0.5</td>
+                <td>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0.000 -40.000 20.000 20.000" width="20.0" height="20.0">
+                    <g>
+                      <use href="src/xml/dancer_symbols.svg#Guy" transform="rotate( 90 10.00 -30.00)" x="10.0" y="-30.0" width="20" height="20" class="couple1"/>
+                    </g>
+                  </svg>
+                </td>
+              </tr>
+              <tr>
+                <td>1f</td>
+                <td>Dancer(1, Gal())</td>
+                <td>-1</td>
+                <td>0.0</td>
+                <td>-1.5</td>
+                <td>-0.5</td>
+                <td>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="-20.000 -40.000 20.000 20.000" width="20.0" height="20.0">
+                    <g>
+                      <use href="src/xml/dancer_symbols.svg#Gal" transform="rotate( 90 -10.00 -30.00)" x="-10.0" y="-30.0" width="20" height="20" class="couple1"/>
+                    </g>
+                  </svg>
+                </td>
+              </tr>
+            </tbody>
+          </thead>
+        </table>
+      </div>
+    </div>
+    <div>
+      <h2>Formations</h2>
+      <ul>
+        <li>
+          Couple
+          <ul>
+            <li>Couple-1m-1f</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <svg id="floor" xmlns="http://www.w3.org/2000/svg" viewBox="-20.000 -40.000 40.000 20.000" width="40.0" height="20.0">
+        <g>
+          <use href="src/xml/dancer_symbols.svg#Guy" transform="rotate( 90 10.00 -30.00)" x="10.0" y="-30.0" width="20" height="20" class="couple1"/>
+          <use href="src/xml/dancer_symbols.svg#Gal" transform="rotate( 90 -10.00 -30.00)" x="-10.0" y="-30.0" width="20" height="20" class="couple1"/>
+        </g>
+      </svg>
+    </div>
+  </body>
+</html></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="ColumnOfFour.html">« ColumnOfFour</a><a class="docs-footer-nextpage" href="FaceToFace.html">FaceToFace »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.4.1 on <span class="colophon-date" title="Friday 10 May 2024 23:02">Friday 10 May 2024</span>. Using Julia version 1.10.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
