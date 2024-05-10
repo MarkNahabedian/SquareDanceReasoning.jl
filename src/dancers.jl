@@ -37,6 +37,12 @@ opposite(::Guy) = Gal()
 opposite(::Gal) = Guy()
 opposite(::Unspecified) = Unspecified()
 
+GENDER_FROM_STRING = Dict{String, Gender}(
+"Guy" => Guy(),
+"Gal" => Gal(),
+"Unspecified" => Unspecified()
+)
+
 
 """
     Dancer(couple_number::Int, ::Gender)

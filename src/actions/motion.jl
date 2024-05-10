@@ -1,6 +1,6 @@
 
 export forward, backward, rightward, leftward, revolve, rotate,
-    can_roll
+    jitter, can_roll
 
 
 """
@@ -119,3 +119,22 @@ function can_roll(ds::DancerState)
     end
 end
 
+
+"""
+    jitter(ds::DancerState, time_delta)::DancerState
+
+Adds noise to the position and facing direction of the DancerState.
+This allows us to test whether our formation recognition rules are
+sensitive to such noise.
+"""
+function jitter(ds::DancerState, time_delta)::DancerState
+    displacement_direction = 2 * pi * (rand(Float32) * 0.1 - 0.05)
+    displacement = 0.05 * (COUPLE_DISTANCE / 2) *
+        [ cos(displacement_direction),
+          sin(displacement_direction) ]
+    DancerState(ds,
+                ds.time + time_delta,
+                ds.direction + (rand(Float32) * 0.1 - 0.05),
+                ds.down + displacement[1],
+                ds.left + displacement[2])
+end

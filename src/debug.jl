@@ -129,6 +129,13 @@ function formation_debug_html(source,   # ::LineNumberNode,
                               testset,  # Test.AbstractTestSet
                               output_path,
                               kb::ReteRootNode)
+    write_formation_html_file(testset.description, output_path, kb)
+end
+
+
+# Write an HTML file that describes the DancerStates and concluded
+# formations
+function write_formation_html_file(title, output_path, kb::ReteRootNode)
     # ".." from the output path up to the repository root:
     docbase =
         join(repeat([".."],
@@ -136,28 +143,26 @@ function formation_debug_html(source,   # ::LineNumberNode,
                         splitpath(
                             relpath(dirname(output_path),
                                     abspath(joinpath(
-                                        pathof(SquareDanceReasoning),
-                                        "../..")))))),
+                                        dirname(pathof(SquareDanceReasoning)),
+                                        "..")))))),
              "/")
-    desc = testset.description
     dancer_states = collecting() do c
         askc(c, kb, DancerState)
     end
     bounds = bump_out(Bounds(dancer_states))
-#     source_line = "At $(source.file):$(source.line)"
     doc =
         elt("html",
             elt("head",
                 elt("meta", "charset" => "utf-8"),
-                elt("base", "href" => docbase),
-                elt("title", desc),
+                # Adding a base element seems to break the Documenter
+                # navigation links.  elt("base", "href" => docbase),
+                elt("title", title),
                 elt("style", "\n",
                     FORMATION_STYLESHEET,
                     dancer_colors_css(ceil(length(dancer_states) / 2)),
                     "\n")),
             elt("body",
-                elt("h1", desc),
-                #            elt("p", source_line),
+                elt("h1", title),
                 elt("div",
                     elt("h2", "Dancer Location and Facing Direction"),
                     dancer_states_table(dancer_states)),
