@@ -137,6 +137,7 @@ end
 # formations
 function write_formation_html_file(title, output_path, kb::ReteRootNode)
     # ".." from the output path up to the repository root:
+    #=
     docbase =
         join(repeat([".."],
                     length(
@@ -146,6 +147,7 @@ function write_formation_html_file(title, output_path, kb::ReteRootNode)
                                         dirname(pathof(SquareDanceReasoning)),
                                         "..")))))),
              "/")
+    =#
     dancer_states = collecting() do c
         askc(c, kb, DancerState)
     end

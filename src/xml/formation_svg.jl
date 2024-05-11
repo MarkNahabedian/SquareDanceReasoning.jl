@@ -1,7 +1,7 @@
 
 export formation_svg, dancer_svg
 
-DANCER_SYMBOLS_URI = "src/xml/dancer_symbols.svg"
+DANCER_SYMBOLS_URI = "../dancer_symbols.svg"
 
 gender_fragment(::Guy) = "Guy"
 gender_fragment(::Gal) = "Gal"

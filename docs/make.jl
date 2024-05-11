@@ -28,6 +28,8 @@ let
             rm(f)
         end
     end
+    cp(joinpath(@__DIR__, "../src/xml/dancer_symbols.svg"),
+       joinpath(@__DIR__, "src/dancer_symbols.svg"))
 end
 
 makedocs(;
