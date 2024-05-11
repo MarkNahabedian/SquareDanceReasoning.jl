@@ -4,7 +4,7 @@
     kb = make_kb()
     # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
     receive(kb, square)
-    dancers = sort(collect(collect(square.dancers)))
+    dancers = sort(collect(square.dancers))
     # Couple
     receive(kb, DancerState(dancers[1], 0,    0, 0, 1))
     receive(kb, DancerState(dancers[2], 0,    0, 0, 2))
