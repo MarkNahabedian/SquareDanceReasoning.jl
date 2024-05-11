@@ -29,7 +29,8 @@ let
         end
     end
     cp(joinpath(@__DIR__, "../src/xml/dancer_symbols.svg"),
-       joinpath(@__DIR__, "src/dancer_symbols.svg"))
+       joinpath(@__DIR__, "src/dancer_symbols.svg");
+       force=true)
 end
 
 makedocs(;
