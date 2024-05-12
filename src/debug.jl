@@ -29,7 +29,7 @@ table {
 """
 
 
-function dancer_states_table(dancer_states)
+function dancer_states_table(dancer_states, symbol_uri_base)
     dancer_state_row(ds::DancerState) =
         elt("tr",
             elt("td", formation_id_string(ds)),
@@ -43,7 +43,8 @@ function dancer_states_table(dancer_states)
                 # Full block unicode character
                 "\u2588\u2588\u2588")
             =#
-            elt("td", formation_svg(ds; margin=COUPLE_DISTANCE/2))
+            elt("td", formation_svg(ds, symbol_uri_base;
+                                    margin=COUPLE_DISTANCE/2))
             )
     elt("div", 
         "class" => "DancerState-table",
@@ -136,18 +137,7 @@ end
 # Write an HTML file that describes the DancerStates and concluded
 # formations
 function write_formation_html_file(title, output_path, kb::ReteRootNode)
-    # ".." from the output path up to the repository root:
-    #=
-    docbase =
-        join(repeat([".."],
-                    length(
-                        splitpath(
-                            relpath(dirname(output_path),
-                                    abspath(joinpath(
-                                        dirname(pathof(SquareDanceReasoning)),
-                                        "..")))))),
-             "/")
-    =#
+    symbol_uri_base = dancer_symbol_uri(output_path)
     dancer_states = collecting() do c
         askc(c, kb, DancerState)
     end
@@ -167,7 +157,7 @@ function write_formation_html_file(title, output_path, kb::ReteRootNode)
                 elt("h1", title),
                 elt("div",
                     elt("h2", "Dancer Location and Facing Direction"),
-                    dancer_states_table(dancer_states)),
+                    dancer_states_table(dancer_states, symbol_uri_base)),
                 elt("div",
                     elt("h2", "Formations"),
                     dancer_formations_html(kb)),
@@ -177,7 +167,9 @@ function write_formation_html_file(title, output_path, kb::ReteRootNode)
                         "xmlns" => SVG_NAMESPACE,
                         bounds_to_viewbox(bounds)...,
                         elt("g",
-                            dancer_svg.(dancer_states)...)))
+                            map(dancer_states) do ds
+                                dancer_svg(ds, symbol_uri_base)
+                            end...)))
                 ))
     XML.write(output_path, doc)
 end

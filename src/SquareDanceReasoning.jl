@@ -5,6 +5,9 @@ using Rete
 export SquareDanceRule, make_kb
 
 
+REPO_ROOT = abspath(joinpath(@__DIR__, ".."))
+
+
 """
 SquareDanceRule is the abstract supertype for all rules defined
 in this package.
