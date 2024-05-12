@@ -79,7 +79,7 @@ end
 Returns an SVG element that illustrates the formation.
 
 `symbol_uri_base` is a relative URL to the SVG symbols file.
-See [`path`](@ref).
+See [`dancer_symbol_uri`](@ref).
 
 If `id` is specified, it will be the XML Id of the drawing.
 
