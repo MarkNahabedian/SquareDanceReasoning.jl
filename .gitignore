@@ -4,6 +4,8 @@
 /Manifest.toml
 /docs/Manifest.toml
 /docs/build/
+/docs/src/formation_drawings/
 /docs/src/formation_hierarchy.md
 /docs/src/rule_hierarchy.md
+/docs/src/dancer_symbols.svg
 /test/test_formations/*.html
