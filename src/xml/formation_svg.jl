@@ -13,6 +13,7 @@ DANCER_SYMBOLS_URI = Dict{Vector{String}, String}(
     # deviant path separators.
     # path relative to repo root => path relative to HTML file:
     splitpath("test/test_formations") => "../../src/xml/dancer_symbols.svg",
+    splitpath("test/test_actions") => "../../src/xml/dancer_symbols.svg",
     # dancer_symbols.svg gets copied there by docs/make.jl
     splitpath("docs/src/formation_drawings") => "../dancer_symbols.svg"
 )
