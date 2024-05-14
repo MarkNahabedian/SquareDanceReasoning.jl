@@ -84,3 +84,63 @@ end
     collect_formation_examples(kb)
 end
 
+@testset "Test RHBoxOfFour" begin
+    square = make_square(2)
+    kb = make_kb()
+    # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
+    receive(kb, square)
+    dancers = sort(collect(square.dancers))
+    receive(kb, DancerState(dancers[1], 0, 0//4, 1, 2)) # tandem1, trailer
+    receive(kb, DancerState(dancers[2], 0, 0//4, 2, 2)) # tandem1, leader
+    receive(kb, DancerState(dancers[3], 0, 2//4, 2, 1)) # tandem2, trailer
+    receive(kb, DancerState(dancers[4], 0, 2//4, 1, 1)) # tandem2, leader
+    @debug_formations(kb)
+    @test 2 == counting() do c
+        askc(c, kb, Tandem)
+    end
+    @test 2 == counting() do c
+        askc(c, kb, RHMiniWave)
+    end
+    box = collecting() do c
+        askc(c, kb, RHBoxOfFour)
+    end
+    @test length(box) == 1
+    box = box[1]
+    @test length(dancer_states(box)) == 4
+    @test handedness(box) == RightHanded()
+    @test box.tandem1.leader.dancer == dancers[2]
+    @test box.tandem2.leader.dancer == dancers[4]
+    @test box.tandem1.trailer.dancer == dancers[1]
+    @test box.tandem2.trailer.dancer == dancers[3]
+end
+
+@testset "Test LHBoxOfFour" begin
+    square = make_square(2)
+    kb = make_kb()
+    # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
+    receive(kb, square)
+    dancers = sort(collect(square.dancers))
+    receive(kb, DancerState(dancers[1], 0, 0//4, 1, 1)) # tandem1, trailer
+    receive(kb, DancerState(dancers[2], 0, 0//4, 2, 1)) # tandem1, leader
+    receive(kb, DancerState(dancers[3], 0, 2//4, 2, 2)) # tandem2, trailer
+    receive(kb, DancerState(dancers[4], 0, 2//4, 1, 2)) # tandem2, leader
+    @debug_formations(kb)
+    @test 2 == counting() do c
+        askc(c, kb, Tandem)
+    end
+    @test 2 == counting() do c
+        askc(c, kb, LHMiniWave)
+    end
+    box = collecting() do c
+        askc(c, kb, LHBoxOfFour)
+    end
+    @test length(box) == 1
+    box = box[1]
+    @test length(dancer_states(box)) == 4
+    @test handedness(box) == LeftHanded()
+    @test box.tandem1.leader.dancer == dancers[2]
+    @test box.tandem2.leader.dancer == dancers[4]
+    @test box.tandem1.trailer.dancer == dancers[1]
+    @test box.tandem2.trailer.dancer == dancers[3]
+end
+

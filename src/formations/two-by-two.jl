@@ -1,6 +1,7 @@
 # Formations of four dancers that are two dancers wide and two high.
 
 export FacingCouples, BackToBackCouples, TandemCouples, CoupleBoxRule
+export BoxOfFour, RHBoxOfFour, LHBoxOfFour
 
 
 """
@@ -88,3 +89,72 @@ CoupleBoxRule is the rule for identifying two couples arranged in a
 two by two box.
 """ CoupleBoxRule
 
+
+"""
+BoxOfFour is the abstract supertype for RHBoxOfFour and LHBoxOfFour.
+"""
+abstract type BoxOfFour <: FourDancerFormation end
+
+dancer_states(b::BoxOfFour) = [ dancer_states(b.miniwave1)...,
+                                dancer_states(b.miniwave2)... ]
+
+handedness(b::BoxOfFour) = handedness(b.miniwave1)
+
+
+"""
+RHBoxOfFour represents a right handed "box circulate" formation.
+"""
+struct RHBoxOfFour <: BoxOfFour
+    miniwave1::RHMiniWave
+    miniwave2::RHMiniWave
+    tandem1::Tandem
+    tandem2::Tandem
+end
+
+
+"""
+LHBoxOfFour represents a left handed "box circulate" formation.
+"""
+struct LHBoxOfFour <: BoxOfFour
+    miniwave1::LHMiniWave
+    miniwave2::LHMiniWave
+    tandem1::Tandem
+    tandem2::Tandem
+end
+
+
+@rule SquareDanceFormationRule.BoxOfFourRule(mw1::MiniWave,
+                                             mw2::MiniWave,
+                                             t1::Tandem,
+                                             t2::Tandem,
+                                             ::RHBoxOfFour,
+                                             ::LHBoxOfFour) begin
+    if mw1 == mw2
+        return
+    end
+    if t1 == t2
+        return
+    end
+    if !(handedness(mw1) == handedness(mw2))
+        return
+    end
+    # Disambiguate tandems by facing direction:
+    if t1.leader.direction > t2.leader.direction
+        return
+    end
+    if (t1.leader in dancer_states(mw1) &&
+        t1.trailer in dancer_states(mw2) &&
+        t2.leader in dancer_states(mw2) &&
+        t2.trailer in dancer_states(mw1))
+        if handedness(mw1) == RightHanded()
+            emit(RHBoxOfFour(mw1, mw2, t1, t2))
+        else
+            emit(LHBoxOfFour(mw1, mw2, t1, t2))
+        end
+    end
+end
+
+@doc """
+BoxOfFourRule is the rule for identifying right or left handed "box
+circulate" formations.
+""" BoxOfFourRule
