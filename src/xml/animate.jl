@@ -1,11 +1,19 @@
 export animate
 
+function show_to_string(ds)
+    io = IOBuffer()
+    show(io, MIME"text/plain"(), ds)
+    String(take!(io))
+end
+
+
 """
     fixed(x)
 
 truncates ludicrously small floating point numbers.
 """
 fixed(x::Real) = trunc(2048 * x) / 2048
+
 
 dancer_keyframe_id(d::Dancer) =
     "dancer_$(d.couple_number)_$(xml_id_letter(d.gender))"
@@ -35,6 +43,16 @@ const DIRECTION_DOT_STYLE =
 """\n.DirectionDot {
     stroke: black;
     fill: black;
+}
+"""
+
+
+const ANIMATION_PROPERTY = """
+svg {
+    animation-delay: 0.5s;
+    animation-duration: 5s;
+    animation-direction: normal;
+    animation-iteration-count: infinite;
 }
 """
 
@@ -81,6 +99,7 @@ function animate(output_file, timeline::Dict{Dancer, Vector{DancerState}})
               elt("style",
                   DIRECTION_DOT_STYLE,
                   dancer_colors_css(ceil(length(keys(timeline)) / 2)),
+                  ANIMATION_PROPERTY,
                   keyframes(timeline)),
               elt("g") do a
                   for (dancer, dss) in timeline
@@ -94,7 +113,8 @@ function animate(output_file, timeline::Dict{Dancer, Vector{DancerState}})
                             "x" => x(first(sorted)),
                             "y" => y(first(sorted)),
                             "transform" => "rotate($(rot(first(sorted))))",
-                            xmlComment("\n" * join(sorted, "\n") * "\n"),
+                            xmlComment("\n" * join(map(show_to_string, sorted),
+                                                   "\n") * "\n"),
                             #=
                             elt("animate",
                                 "dur" => duration,
