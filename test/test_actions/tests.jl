@@ -167,7 +167,7 @@ end
     r(ds) = rightward(ds, 1, 1)
     rot(ds) = rotate(ds, 1//4, 1)
     for (i, step) in enumerate([
-        # spn in place
+        # spin in place
         (motion = rot, new_dir = DIRECTION1, new_down = 1, new_left = 1),
         (motion = rot, new_dir = DIRECTION2, new_down = 1, new_left = 1),
         (motion = rot, new_dir = DIRECTION3, new_down = 1, new_left = 1),
@@ -196,8 +196,7 @@ end
     end
     # Write an animation
     timeline = dancer_timelines(kb)
-    XML.write(joinpath(@__DIR__, "facing-0-box.svg"),
-              animate(timeline))
+    animate(joinpath(@__DIR__, "facing-0-box.svg"), timeline)
 end
 
 @testset "test synchronize 2" begin
@@ -271,7 +270,6 @@ end
                end) == 0:17
     # Write an animation
     timeline = dancer_timelines(kb)
-    XML.write(joinpath(@__DIR__, "single_file_prropmenade.svg"),
-              animate(timeline))
+    animate(joinpath(@__DIR__, "single_file_prropmenade.svg"), timeline)
 end
 

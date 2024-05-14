@@ -39,7 +39,7 @@ const DIRECTION_DOT_STYLE =
 """
 
 
-function animate(timeline::Dict{Dancer, Vector{DancerState}})
+function animate(output_file, timeline::Dict{Dancer, Vector{DancerState}})
     bounds = Bounds()
     for dss in values(timeline)
         bounds = expand(bounds, dss)
@@ -55,6 +55,7 @@ function animate(timeline::Dict{Dancer, Vector{DancerState}})
     y(ds) = fixed(DANCER_SVG_SIZE * ds.down)
     svgangle(ds) = fixed(mod(90 - 360 * ds.direction, 360))
     rot(ds) = "$(svgangle(ds))deg $(x(ds)) $(y(ds))"
+    symbol_uri_base = dancer_symbol_uri(output_file)
 #=
     function rotations(sorted_dss)
         from = []
@@ -74,52 +75,53 @@ function animate(timeline::Dict{Dancer, Vector{DancerState}})
          "to" => join(to, "; ") ]
     end
     =#
-    elt("svg",
-        "xmlns" => SVG_NAMESPACE,
-        bounds_to_viewbox(bounds)...,
-        elt("style",
-            DIRECTION_DOT_STYLE,
-            dancer_colors_css(ceil(length(keys(timeline)) / 2)),
-            keyframes(timeline)),
-        elt("g") do a
-            for (dancer, dss) in timeline
-                sorted = sort(dss; by = ds -> ds.time)
-                a(elt("use",
-                      "id" => dancer_keyframe_id(dancer),
-                      "width" => DANCER_SVG_SIZE,
-                      "height" => DANCER_SVG_SIZE,
-                      "class" => dancer_color(dancer),
-                      "x" => x(first(sorted)),
-                      "y" => y(first(sorted)),
-                      "transform" => "rotate($(rot(first(sorted))))",
-                      gender_css_symbol(dancer.gender),
-                      xmlComment("\n" * join(sorted, "\n") * "\n"),
-#=
-                      elt("animate",
-                          "dur" => duration,
-                          "repeatCount" => "indefinite" ,
-                          "attributeName" => "x",
-                          "values" => join(map(x, sorted), "; ")),
-                      elt("animate",
-                          "dur" => duration,
-                          "repeatCount" => "indefinite" ,
-                          "attributeName" => "y",
-                          "values" => join(map(y, sorted), "; ")),
-                      elt("animateTransform",
-                          "attributeType" => "XML",
-                          "dur" => duration,
-                          "repeatCount" => "indefinite" ,
-                          "attributeName" => "transform",
-                          "type" => "rotate",
-                          # "values" => join(map(rot, sorted), "; ")
-                          # "from" => rot(first(sorted)),
-                          # "by" => join(relative_rotations(sorted), "; ")
-                          rotations(sorted)...
-                              )
-=#
-                      ))
-            end
-        end
-        )
+    doc = elt("svg",
+              "xmlns" => SVG_NAMESPACE,
+              bounds_to_viewbox(bounds)...,
+              elt("style",
+                  DIRECTION_DOT_STYLE,
+                  dancer_colors_css(ceil(length(keys(timeline)) / 2)),
+                  keyframes(timeline)),
+              elt("g") do a
+                  for (dancer, dss) in timeline
+                      sorted = sort(dss; by = ds -> ds.time)
+                      a(elt("use",
+                            "id" => dancer_keyframe_id(dancer),
+                            "href" => "$symbol_uri_base#$(gender_fragment(dancer.gender))",
+                            "width" => DANCER_SVG_SIZE,
+                            "height" => DANCER_SVG_SIZE,
+                            "class" => dancer_color(dancer),
+                            "x" => x(first(sorted)),
+                            "y" => y(first(sorted)),
+                            "transform" => "rotate($(rot(first(sorted))))",
+                            xmlComment("\n" * join(sorted, "\n") * "\n"),
+                            #=
+                            elt("animate",
+                                "dur" => duration,
+                                "repeatCount" => "indefinite" ,
+                                "attributeName" => "x",
+                                "values" => join(map(x, sorted), "; ")),
+                            elt("animate",
+                                "dur" => duration,
+                                "repeatCount" => "indefinite" ,
+                                "attributeName" => "y",
+                                "values" => join(map(y, sorted), "; ")),
+                            elt("animateTransform",
+                                "attributeType" => "XML",
+                                "dur" => duration,
+                                "repeatCount" => "indefinite" ,
+                                "attributeName" => "transform",
+                                "type" => "rotate",
+                                # "values" => join(map(rot, sorted), "; ")
+                                # "from" => rot(first(sorted)),
+                                # "by" => join(relative_rotations(sorted), "; ")
+                                rotations(sorted)...
+                                )
+                            =#
+                            ))
+                  end
+              end
+              )
+    XML.write(output_file, doc)
 end
 
