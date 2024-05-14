@@ -112,6 +112,7 @@ end
     @test box.tandem2.leader.dancer == dancers[4]
     @test box.tandem1.trailer.dancer == dancers[1]
     @test box.tandem2.trailer.dancer == dancers[3]
+    collect_formation_examples(kb)
 end
 
 @testset "Test LHBoxOfFour" begin
@@ -142,5 +143,6 @@ end
     @test box.tandem2.leader.dancer == dancers[4]
     @test box.tandem1.trailer.dancer == dancers[1]
     @test box.tandem2.trailer.dancer == dancers[3]
+    collect_formation_examples(kb)
 end
 

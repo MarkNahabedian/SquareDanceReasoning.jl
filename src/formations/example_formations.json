@@ -157,6 +157,39 @@
     ]
   },
   {
+    "name": "LHBoxOfFour",
+    "dancer_states": [
+      {
+        "couple_number": 1,
+        "gender": "Gal",
+        "direction": 0.0,
+        "down": 2.0,
+        "left": 1.0
+      },
+      {
+        "couple_number": 2,
+        "gender": "Guy",
+        "direction": 0.5,
+        "down": 2.0,
+        "left": 2.0
+      },
+      {
+        "couple_number": 1,
+        "gender": "Guy",
+        "direction": 0.0,
+        "down": 1.0,
+        "left": 1.0
+      },
+      {
+        "couple_number": 2,
+        "gender": "Gal",
+        "direction": 0.5,
+        "down": 1.0,
+        "left": 2.0
+      }
+    ]
+  },
+  {
     "name": "LHMiniWave",
     "dancer_states": [
       {
@@ -247,28 +280,28 @@
       {
         "couple_number": 1,
         "gender": "Gal",
-        "direction": 0.25,
-        "down": 0.0,
+        "direction": 0.0,
+        "down": 2.0,
         "left": 2.0
       },
       {
-        "couple_number": 3,
-        "gender": "Gal",
-        "direction": 0.75,
-        "down": 1.0,
-        "left": 2.0
+        "couple_number": 2,
+        "gender": "Guy",
+        "direction": 0.5,
+        "down": 2.0,
+        "left": 1.0
       },
       {
         "couple_number": 1,
         "gender": "Guy",
-        "direction": 0.25,
-        "down": 0.0,
-        "left": 1.0
+        "direction": 0.0,
+        "down": 1.0,
+        "left": 2.0
       },
       {
-        "couple_number": 3,
-        "gender": "Guy",
-        "direction": 0.75,
+        "couple_number": 2,
+        "gender": "Gal",
+        "direction": 0.5,
         "down": 1.0,
         "left": 1.0
       }
