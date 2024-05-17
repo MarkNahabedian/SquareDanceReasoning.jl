@@ -19,6 +19,8 @@ dancer_states(f::LineOfFour)::Vector{DancerState} =
 
 handedness(::LineOfFour) = NoHandedness()
 
+direction(f::LineOfFour) = direction(f.a)
+
 
 """
 TwoFacedLine represents a two faced line formation.
@@ -39,10 +41,10 @@ handedness(f::TwoFacedLine) = handedness(f.centers)
 @rule SquareDanceFormationRule.LineOfFourRule(a::Couple, b::Couple,
                                               centers::Couple,
                                               ::LineOfFour) begin
-    if !direction_equal(a.beau.direction, b.beau.direction)
+    if !direction_equal(direction(a), direction(b))
         return
     end
-    if !direction_equal(a.beau.direction, centers.beau.direction)
+    if !direction_equal(direction(a), direction(centers))
         return
     end
     if centers.beau != b.belle
@@ -63,8 +65,8 @@ formation.
 @rule SquareDanceFormationRule.TwoFacedLineRule(a::Couple, b::Couple,
                                                 centers::MiniWave,
                                                 ::TwoFacedLine) begin
-    if !direction_equal(a.beau.direction,
-                        opposite(b.beau.direction))
+    if !direction_equal(direction(a),
+                        opposite(direction(b)))
         return
     end
     if handedness(centers) == RightHanded()

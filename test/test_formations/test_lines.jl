@@ -7,7 +7,7 @@
     for ds in make_line(dancers[1:4], 0, 0)
         receive(kb, ds)
     end
-    for ds in make_line(dancers[5:8], 0.5, 1)
+    for ds in make_line(dancers[5:8], 1//2, 1)
         receive(kb, ds)
     end
     @debug_formations(kb)
@@ -21,7 +21,9 @@
         lines = collecting() do c
             askc(c, m)
         end
-        lines = sort(lines; by = f -> f.a.beau.direction)
+        lines = sort(lines; by = f -> direction(f))
+        @test direction(lines[1]) == 0
+        @test direction(lines[2]) == 1//2
         @test length(lines) == 2
         handedness(lines[1]) == NoHandedness()
         @test length(dancer_states(lines[1])) == 4

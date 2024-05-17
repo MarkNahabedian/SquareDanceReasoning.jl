@@ -77,3 +77,10 @@ RightHanded(), LeftHanded() or NoHandedness()
 """
 function handedness end
 
+
+"""
+    direction(formation)
+If all of the dancers of formation are facing in the same direction
+then return that direction.  Otherwise get a no such method error.
+"""
+function direction end

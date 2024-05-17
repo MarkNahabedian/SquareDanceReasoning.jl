@@ -19,6 +19,8 @@ dancer_states(f::Couple)::Vector{DancerState} = [f.beau, f.belle]
 
 handedness(::Couple) = NoHandedness()
 
+direction(f::Couple) = direction(f.beau)
+
 
 """
 FaceToFace represents a formation of two dancers facing each other.
@@ -61,6 +63,8 @@ end
 dancer_states(f::Tandem)::Vector{DancerState} = [f.leader, f.trailer]
 
 handedness(::Tandem) = NoHandedness()
+
+direction(f::Tandem) = direction(f.leader)
 
 
 """
@@ -136,7 +140,7 @@ handedness(::LHMiniWave) = LeftHanded()
             return
         end
     end
-    if direction_equal(ds1.direction, ds2.direction)
+    if direction_equal(direction(ds1), direction(ds2))
         # Couple or Tandem?
         if right_of(ds1, ds2) && left_of(ds2, ds1)
             emit(Couple(ds1, ds2))
@@ -146,10 +150,10 @@ handedness(::LHMiniWave) = LeftHanded()
             emit(Tandem(ds2, ds1))
             return
         end
-    elseif direction_equal(ds1.direction, opposite(ds2.direction))
+    elseif direction_equal(direction(ds1), opposite(direction(ds2)))
         # FaceToFace, BackToBack or MiniWave We break symetry using
         # dancer facing direction instead of dancer order.
-        if ds2.direction < ds1.direction
+        if direction(ds2) < direction(ds1)
             return
         end
         if in_front_of(ds1, ds2) && in_front_of(ds2, ds1)

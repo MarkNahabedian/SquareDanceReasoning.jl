@@ -77,6 +77,7 @@ end
     tc = tc[1]
     @test length(dancer_states(tc)) == 4
     @test handedness(tc) == NoHandedness()
+    @test direction(tc) == 1//4
     @test tc.leaders.beau.dancer == dancers[1]
     @test tc.leaders.belle.dancer == dancers[2]
     @test tc.trailers.beau.dancer == dancers[3]

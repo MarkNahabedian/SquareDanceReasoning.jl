@@ -50,6 +50,8 @@ dancer_states(f::TandemCouples)::Vector{DancerState} =
 
 handedness(::TandemCouples) = NoHandedness()
 
+direction(f::TandemCouples) = direction(f.leaders)
+
 
 @rule SquareDanceFormationRule.CoupleBoxRule(couple1::Couple,
                                              couple2::Couple,
@@ -60,16 +62,16 @@ handedness(::TandemCouples) = NoHandedness()
         return
     end
     # Symetry disambiguation
-    if couple1.beau.direction > couple2.beau.direction
+    if direction(couple1) > direction(couple2)
         return
     end
-    if (direction_equal(couple1.beau.direction,
-                        couple2.beau.direction) &&
-                            in_front_of(couple2.beau, couple1.beau) &&
-                            in_front_of(couple2.belle, couple1.belle))
+    if (direction_equal(direction(couple1),
+                        direction(couple2)) &&
+        in_front_of(couple2.beau, couple1.beau) &&
+        in_front_of(couple2.belle, couple1.belle))
         emit(TandemCouples(couple1, couple2))
-    elseif direction_equal(couple1.beau.direction,
-                           opposite(couple2.beau.direction))
+    elseif direction_equal(direction(couple1),
+                           opposite(direction(couple2)))
         if (in_front_of(couple1.beau, couple2.belle) &&
             in_front_of(couple2.belle, couple1.beau) &&
             in_front_of(couple1.belle, couple2.beau) &&
@@ -139,7 +141,7 @@ end
         return
     end
     # Disambiguate tandems by facing direction:
-    if t1.leader.direction > t2.leader.direction
+    if direction(t1) > direction(t2)
         return
     end
     if (t1.leader in dancer_states(mw1) &&

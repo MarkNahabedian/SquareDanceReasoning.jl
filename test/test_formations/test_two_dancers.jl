@@ -37,6 +37,7 @@
         f = first(m.memory)
         @test length(dancer_states(f)) == 2
         @test f isa Couple
+        @test direction(f) == 0
         @test direction_equal(f.beau.direction, f.belle.direction)
         @test f.beau.dancer == dancers[2]
         @test f.belle.dancer == dancers[1]
@@ -69,6 +70,7 @@
         f = first(m.memory)
         @test length(dancer_states(f)) == 2
         @test handedness(f) == NoHandedness()
+        @test direction(f) == 1//4
         @test f isa Tandem
         @test f.leader.dancer == dancers[8]
         @test f.trailer.dancer == dancers[7]

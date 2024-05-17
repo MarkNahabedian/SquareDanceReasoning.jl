@@ -20,14 +20,16 @@ dancer_states(f::ColumnOfFour)::Vector{DancerState} =
 
 handedness(::ColumnOfFour) = NoHandedness()
 
+direction(f::ColumnOfFour) = direction(f.lead)
+
 
 @rule SquareDanceFormationRule.ColumnOfFourRule(lead::Tandem, tail::Tandem,
                                                 centers::Tandem,
                                                 ::ColumnOfFour) begin
-    if !direction_equal(lead.leader.direction, tail.leader.direction)
+    if !direction_equal(direction(lead), direction(tail))
         return
     end
-    if !direction_equal(lead.leader.direction, centers.leader.direction)
+    if !direction_equal(direction(lead), direction(centers))
         return
     end
     if lead.trailer != centers.leader
