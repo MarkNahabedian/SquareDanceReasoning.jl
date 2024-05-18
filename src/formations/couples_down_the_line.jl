@@ -175,7 +175,7 @@ handedness(::CompletedDoublePassThru) = NoHandedness()
 end
 
 @doc """
-SquareDanceFormationRule is the rule for rtecognizing
-SquareDanceFormation formations.
-""" SquareDanceFormationRuleRule
+CompletedDoublePassThruRule is the rule for rtecognizing
+CompletedDoublePassThru formations.
+""" CompletedDoublePassThruRule
 
