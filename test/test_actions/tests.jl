@@ -197,8 +197,7 @@ end
     # Write an animation
     latest = latest_dancer_states(kb)
     animate(joinpath(@__DIR__, "facing-0-box.svg"),
-            values(latest),
-            60)
+            latest, 60)
 end
 
 @testset "test synchronize 2" begin
@@ -273,7 +272,6 @@ end
     # Write an animation
     latest = latest_dancer_states(kb)
     animate(joinpath(@__DIR__, "single_file_prropmenade.svg"),
-            values(latest),
-            60)
+            latest, 60)
 end
 

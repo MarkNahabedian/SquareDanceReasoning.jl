@@ -53,6 +53,10 @@ function animation_properties(dancer::Dancer, duration_seconds)
 end
 
 
+animate(output_file, d::Dict{Dancer, DancerState}, bpm) =
+    animate(output_file, collect(values(d)), bpm)
+
+
 """
     animate(output_file, dancer_states, bpm)
 
@@ -68,6 +72,7 @@ Assuming each unit of `time` in a `DancerState` is a single beat,
 animation.
 """
 function animate(output_file, dancer_states, bpm)
+    dancer_states = sort(dancer_states; by = ds -> ds.dancer)
     number_of_couples = ceil(length(dancer_states) / 2)
     tbounds = TimeBounds()
     bounds = Bounds()
