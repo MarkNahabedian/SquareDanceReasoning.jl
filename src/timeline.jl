@@ -3,7 +3,7 @@ export DancerState, TimeBounds, expand
 export location, direction, square_up
 export DANCER_NEAR_DISTANCE, near, direction
 export Collision, CollisionRule
-export latest_dancer_states, dancer_timelines
+export latest_dancer_states, history, earliest
 
 
 """
@@ -240,25 +240,25 @@ end
 
 
 """
-    dancer_timelines(kb)::Dict{Dancer, Vector{DancerState}}
+    latest_dancer_states(kb)::Dict{Dancer, DancerState}
 
-returns a dictionary, keyed by `Dancer`, whose values are the
-`DancerState`s associated with that dancer.  Those `DancerState`s are
-sorted by time.
+Return a Dict that provides the latest `DancerState` for each
+`Dancer`.
 """
-function dancer_timelines(kb)::Dict{Dancer, Vector{DancerState}}
-    timeline = Dict{Dancer, Vector{DancerState}}()
+function latest_dancer_states(kb)::Dict{Dancer, DancerState}
+    result = Dict{Dancer, DancerState}()
     askc(kb, DancerState) do ds
-        if !haskey(timeline, ds.dancer)
-            timeline[ds.dancer] = Vector{DancerState}()
-        end        
-        push!(timeline[ds.dancer], ds)
+        if haskey(result, ds.dancer)
+            if ds.time > result[ds.dancer].time
+                result[ds.dancer] = ds
+            end
+        else
+            result[ds.dancer] = ds
+        end
     end
-    for (_, dss) in timeline
-        sort!(dss; by = ds -> ds.time)
-    end
-    timeline
+    result
 end
+
 
 function expand(tb::TimeBounds,
                 timeline::Dict{Dancer, Vector{DancerState}})::TimeBounds
@@ -266,5 +266,33 @@ function expand(tb::TimeBounds,
         expand(tb, dss)
     end
     tb
+end
+
+
+"""
+    history(f, ds::DancerState)
+
+Calls f on `ds` and all of its `previous` DancerStates in
+chronological order.
+"""
+function history(f, ds::DancerState)
+    if ds.previous !== nothing
+        history(f, ds.previous)
+    end
+    f(ds)
+end
+
+
+"""
+    earliest(ds::DancerState)
+
+Returns the earliest DancerState in the specified `DancerState`'s
+`previous` chain.
+"""
+function earliest(ds::DancerState)
+    while ds.previous != nothing
+        ds = ds.previous
+    end
+    ds
 end
 

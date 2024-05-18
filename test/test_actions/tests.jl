@@ -195,8 +195,10 @@ end
         @test isapprox(ds.left, step.new_left; atol=0.0001)
     end
     # Write an animation
-    timeline = dancer_timelines(kb)
-    animate(joinpath(@__DIR__, "facing-0-box.svg"), timeline)
+    latest = latest_dancer_states(kb)
+    animate(joinpath(@__DIR__, "facing-0-box.svg"),
+            values(latest),
+            60)
 end
 
 @testset "test synchronize 2" begin
@@ -269,7 +271,9 @@ end
                    end
                end) == 0:17
     # Write an animation
-    timeline = dancer_timelines(kb)
-    animate(joinpath(@__DIR__, "single_file_prropmenade.svg"), timeline)
+    latest = latest_dancer_states(kb)
+    animate(joinpath(@__DIR__, "single_file_prropmenade.svg"),
+            values(latest),
+            60)
 end
 
