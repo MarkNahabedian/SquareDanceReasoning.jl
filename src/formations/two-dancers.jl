@@ -121,24 +121,8 @@ handedness(::LHMiniWave) = LeftHanded()
     end
     # Rather than using near, make sure there are no other dancers
     # between these two:
-    let
-        these = [ds1, ds2]
-        b = bump_out(Bounds(these))
-        encroaching = false
-        askc(kb, DancerState) do ds
-            if !(ds in these)
-                if ds.time == ds1.time
-                    if in_bounds(b, ds)
-                        encroaching = true
-                        # It would be nice to have a short-circuiting exit
-                        # for askc.
-                    end
-                end
-            end
-        end
-        if encroaching
-            return
-        end
+    if encroached_on([ds1, ds2], kb)
+        return
     end
     if direction_equal(direction(ds1), direction(ds2))
         # Couple or Tandem?

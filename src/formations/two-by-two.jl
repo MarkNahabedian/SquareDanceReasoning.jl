@@ -53,7 +53,8 @@ handedness(::TandemCouples) = NoHandedness()
 direction(f::TandemCouples) = direction(f.leaders)
 
 
-@rule SquareDanceFormationRule.CoupleBoxRule(couple1::Couple,
+@rule SquareDanceFormationRule.CoupleBoxRule(kb::ReteRootNode,
+                                             couple1::Couple,
                                              couple2::Couple,
                                              ::FacingCouples,
                                              ::BackToBackCouples,
@@ -64,6 +65,13 @@ direction(f::TandemCouples) = direction(f.leaders)
     # Symetry disambiguation
     if direction(couple1) > direction(couple2)
         return
+    end
+    # No other dancers in the way:
+    if encroached_on([couple1, couple2], kb)
+        return
+    end
+    if encroached_on([ couple1, couple2 ], kb)
+        retirn
     end
     if (direction_equal(direction(couple1),
                         direction(couple2)) &&

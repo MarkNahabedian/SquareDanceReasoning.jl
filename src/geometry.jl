@@ -1,4 +1,7 @@
-export Bounds, expand, in_bounds, bump_out, center
+using Base.Iterators: flatten
+
+export Bounds, expand, in_bounds, bump_out, encroached_on
+export center
 
 
 """
@@ -6,7 +9,7 @@ export Bounds, expand, in_bounds, bump_out, center
                         margin = COUPLE_DISTANCE / 2)
 
 represents the bounding rectangle surrounding the specified
-`DancerSTate`s.  If `margin` is 0 then Bounds surrponds just the
+`DancerState`s.  If `margin` is 0 then Bounds surrounds just the
 centers of the dancers.
 
 By default, `margin` is `COUPLE_DISTANCE / 2` so that Bounds describes
@@ -29,37 +32,42 @@ mutable struct Bounds
 end
 
 
-function Bounds(dancer_states)
-    @assert length(dancer_states) >= 1
+function Bounds(formations...)
     bounds = Bounds()
-    expand(bounds, dancer_states)
+    expand(bounds, formations...)
+    @assert bounds.min_down < typemax(Float32)
     bounds
 end
 
 
 """
-    expand(bounds::Bounds, dancer_states)::Bounds
+    expand(bounds::Bounds, ::DancerState)::Bounds
 
-`bounds` is modified to encompass the additional `DancerState`s.
+`bounds` is modified to encompass the additional `DancerState`.
 """
-function expand(bounds::Bounds, dancer_states)::Bounds
-    for ds in dancer_states
-        if bounds.min_left > ds.left
-            bounds.min_left = ds.left
-        end
-        if bounds.max_left < ds.left
-            bounds.max_left = ds.left
-        end
-        if bounds.min_down > ds.down
-            bounds.min_down = ds.down
-        end
-        if bounds.max_down < ds.down
-            bounds.max_down = ds.down
-        end
+function expand(bounds::Bounds, ds::DancerState)::Bounds
+    if bounds.min_left > ds.left
+        bounds.min_left = ds.left
+    end
+    if bounds.max_left < ds.left
+        bounds.max_left = ds.left
+    end
+    if bounds.min_down > ds.down
+        bounds.min_down = ds.down
+    end
+    if bounds.max_down < ds.down
+        bounds.max_down = ds.down
     end
     bounds
 end
-    
+
+function expand(bounds::Bounds, formations)::Bounds
+    dss = flatten(map(dancer_states, formations))
+    for ds in dss
+        bounds = expand(bounds, ds)
+    end
+    bounds
+end
 
 
 """
@@ -98,6 +106,32 @@ on each edge so that instead of encompassing the centers of each
 `Dancer` it encompasses whole dancers.
 """
 bump_out(bounds::Bounds) = bump_out(bounds, COUPLE_DISTANCE / 2)
+
+
+"""
+    encroached_on(formations, kb)
+
+Returns true if any of the other contemporary `DancerState`s in the
+knowledge base are within the `Bounds` of the specified `formations`.
+"""
+function encroached_on(formations, kb)
+    these = flatten(map(dancer_states, formations))
+    b = bump_out(Bounds(these))
+    time = first(these).time
+    encroaching = false
+    askc(kb, DancerState) do ds
+        if !(ds in these)
+            if ds.time == first(these).time
+                if in_bounds(b, ds)
+                    encroaching = true
+                    # It would be nice to have a short-circuiting exit
+                    # for askc.
+                end
+            end
+        end
+    end
+    encroaching
+end
 
 
 """

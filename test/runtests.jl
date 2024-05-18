@@ -135,6 +135,48 @@ end
     @test eq(c[2], 0.0)
 end
 
+@testset "test grid_arrangement columns" begin
+    let # columns
+        dancers = sort(collect(make_square(4).dancers))
+        dancer_indices = [ 1 2 3 4;
+                           5 6 7 8 ]
+        directions = [ "→→→→",
+                       "←←←←" ]
+        a = grid_arrangement(dancers, dancer_indices, directions)
+        directions = SquareDanceReasoning.arrows_to_directions(directions)
+        for down in 1:2
+            for left in 1:4
+                ds = a[down, left]
+                @test ds isa DancerState
+                @test ds.down == down
+                @test ds.left == left
+                @test ds.direction == directions[down, left]
+                @test ds.dancer == dancers[dancer_indices[down, left]]
+            end
+        end
+    end
+    let # boxes
+        dancers = sort(collect(make_square(4).dancers))
+        dancer_indices = [ 1 2 3 4;
+                           5 6 7 8 ]
+        directions = [ "↓↑↓↑",
+                       "↓↑↓↑" ]
+        a = grid_arrangement(dancers, dancer_indices, directions)
+        directions = SquareDanceReasoning.arrows_to_directions(directions)
+        for down in 1:2
+            for left in 1:4
+                ds = a[down, left]
+                @test ds isa DancerState
+                @test ds.down == down
+                @test ds.left == left
+                @test ds.direction == directions[down, left]
+                @test ds.dancer == dancers[dancer_indices[down, left]]
+            end
+        end
+    end
+end
+
+
 include("test_formations/tests.jl")
 
 include("test_actions/tests.jl")
