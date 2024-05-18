@@ -24,13 +24,15 @@ function keyframes(timeline)
     write(io, "\n")
     x(ds) = fixed(DANCER_SVG_SIZE * ds.left)
     y(ds) = fixed(DANCER_SVG_SIZE * ds.down)
-    svgangle(ds) = fixed(mod(90 - 360 * ds.direction, 360))
-    rot(ds) = "$(svgangle(ds))deg $(x(ds)) $(y(ds))"
+    svgangle(ds) = fixed(mod(90 - 360 * Float32(ds.direction), 360))
+    rot(ds) = "$(svgangle(ds)) $(x(ds)) $(y(ds))"
+    transform(ds) = "rotate($(rot(ds)))"
     for (dancer, dss) in timeline
         println(io, "@keyframes $(dancer_keyframe_id(dancer)) {")
         for ds in dss
             println(io, "    $(fixed(percentage(tb, ds.time)))% {")
             println(io, "        x: $(x(ds)); y: $(y(ds));")
+            println(io, "        transform: $(transform(ds))")
             println(io, "    }")
         end
         println(io, "}")
@@ -71,8 +73,8 @@ function animate(output_file, timeline::Dict{Dancer, Vector{DancerState}})
     duration *= 0.5
     x(ds) = fixed(DANCER_SVG_SIZE * ds.left)
     y(ds) = fixed(DANCER_SVG_SIZE * ds.down)
-    svgangle(ds) = fixed(mod(90 - 360 * ds.direction, 360))
-    rot(ds) = "$(svgangle(ds))deg $(x(ds)) $(y(ds))"
+    svgangle(ds) = fixed(mod(90 - 360 * Float32(ds.direction), 360))
+    rot(ds) = "$(svgangle(ds)) $(x(ds)) $(y(ds))"
     symbol_uri_base = dancer_symbol_uri(output_file)
 #=
     function rotations(sorted_dss)
