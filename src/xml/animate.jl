@@ -104,6 +104,7 @@ function animate(output_file, dancer_states, bpm)
                       comment = IOBuffer()
                       history(ds) do ds
                           show(comment, MIME"text/plain"(), ds)
+                          write(comment, "\n")
                       end
                       a(elt("use",
                             "id" => dancer_keyframe_id(ds.dancer),
