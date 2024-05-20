@@ -2,7 +2,7 @@
 
 julia_version = "1.10.3"
 manifest_format = "2.0"
-project_hash = "91504bf2a8364444b6ffe788f4733b0faa58cc2c"
+project_hash = "23ba054df02f1ae2870f480b07b96e0a5d407aff"
 
 [[deps.Artifacts]]
 uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
@@ -18,9 +18,9 @@ version = "0.11.5"
 
 [[deps.Colors]]
 deps = ["ColorTypes", "FixedPointNumbers", "Reexport"]
-git-tree-sha1 = "fc08e5930ee9a4e03f84bfb5211cb54e7769758a"
+git-tree-sha1 = "362a287c3aa50601b0bc359053d5c2468f0e7ce0"
 uuid = "5ae59095-9a9b-59fe-a467-6f913c188581"
-version = "0.12.10"
+version = "0.12.11"
 
 [[deps.CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
@@ -33,9 +33,9 @@ uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
 
 [[deps.FixedPointNumbers]]
 deps = ["Statistics"]
-git-tree-sha1 = "335bfdceacc84c5cdf16aadc768aa5ddfc5383cc"
+git-tree-sha1 = "05882d6995ae5c12bb5f36dd2ed3f61c98cbb172"
 uuid = "53c48c17-4a7d-5ca2-90c5-79b7896eea93"
-version = "0.8.4"
+version = "0.8.5"
 
 [[deps.InteractiveUtils]]
 deps = ["Markdown"]
@@ -115,7 +115,7 @@ version = "1.2.2"
 
 [[deps.Rete]]
 deps = ["InteractiveUtils", "IterTools", "MacroTools", "OrderedCollections"]
-git-tree-sha1 = "f328d1f9f8584ccb513ef5adb0cf932a0784b69d"
+git-tree-sha1 = "06edd1c9d4a561c70ac625f01f619706bfbdfe07"
 repo-rev = "main"
 repo-url = "https://github.com/MarkNahabedian/Rete.jl"
 uuid = "3d46c559-9b3d-4aba-9ca1-48ff7627231e"
@@ -157,9 +157,9 @@ uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 
 [[deps.XML]]
 deps = ["Mmap", "OrderedCollections"]
-git-tree-sha1 = "04935ec358bd655bfe135a19f6d905fb2d7c330d"
+git-tree-sha1 = "bd0d8b24147b5b69b8a5f8a3222a3ff1718a3ac6"
 uuid = "72c71f33-b9b6-44de-8c94-c961784809e2"
-version = "0.3.2"
+version = "0.3.3"
 
 [[deps.libblastrampoline_jll]]
 deps = ["Artifacts", "Libdl"]
