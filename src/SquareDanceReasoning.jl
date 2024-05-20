@@ -39,7 +39,7 @@ function make_kb()
     kb = ReteRootNode("SquareDanceReasoning")
     install(kb, SquareDanceRule)
     # Make the knowledge base self-aware:
-    ensure_IsaMemoryNode(kb, typeof(kb))
+    ensure_memory_node(kb, typeof(kb))
     receive(kb, kb)
     kb
 end

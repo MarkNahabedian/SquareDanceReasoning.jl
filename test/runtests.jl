@@ -49,7 +49,7 @@ end
     kb = Rete.ReteRootNode("root")
     install(kb, OriginalPartnerRule)
     install(kb, SquareHasDancers)
-    op_node = ensure_IsaMemoryNode(kb, OriginalPartners)
+    op_node = ensure_memory_node(kb, OriginalPartners)
     square = make_square(4)
     receive(kb, square)
     original_partners = collecting() do c

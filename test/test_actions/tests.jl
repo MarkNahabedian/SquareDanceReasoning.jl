@@ -131,9 +131,9 @@ end
     # Don't install all of the rules until we can control the forward
     # triggers.
     install(kb, SquareHasDancers)
-    synced = ensure_IsaMemoryNode(kb, Synchronized)
-    ensure_IsaMemoryNode(kb, Dancer)
-    dancer_states = ensure_IsaMemoryNode(kb, DancerState)
+    synced = ensure_memory_node(kb, Synchronized)
+    ensure_memory_node(kb, Dancer)
+    dancer_states = ensure_memory_node(kb, DancerState)
     latest_sync = BackwardExtremumNode(>,
                                        s -> s.time,
                                        "Latest Synchronized")
@@ -205,8 +205,8 @@ end
     # Don't install all of the rules until we can control the forward
     # triggers.
     install(kb, SquareHasDancers)
-    synced = ensure_IsaMemoryNode(kb, Synchronized)
-    dancer_states = ensure_IsaMemoryNode(kb, DancerState)
+    synced = ensure_memory_node(kb, Synchronized)
+    dancer_states = ensure_memory_node(kb, DancerState)
     latest_sync = BackwardExtremumNode(>,
                                        s -> s.time,
                                        "Latest Synchronized")
