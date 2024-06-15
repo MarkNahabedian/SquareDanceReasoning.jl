@@ -126,6 +126,17 @@ end
     end
 end
 
+@testset "test animate" begin
+    ds = DancerState(Dancer(1, Unspecified()),
+                     0, 0, 0, -1)
+    center = [0, 0]
+    for d in (1:32)//32
+        ds = revolve(ds, center, d, 0.5)
+    end
+    animate(joinpath(@__DIR__, "revolve-singe-dancer.svg"),
+            [ds], 60)
+end
+
 @testset "test synchronize" begin
     kb = ReteRootNode("root")
     # Don't install all of the rules until we can control the forward
