@@ -69,8 +69,8 @@ end
     revolve(ds::DancerState, center, new_direction, time_delta)::DancerState
 
 Revolves the `Dancer` identified by `ds` around `center` (a two
-element Vector of `down` and left` coordinates) until the `Dancer`'s
-new facing direction is `new_direction`.  A new `DancerState is
+element Vector of `down` and `left` coordinates) until the `Dancer`'s
+new facing direction is `new_direction`.  A new `DancerState` is
 returned.  `time_delta` is the duration of the revolution operation.
 """
 function revolve(ds::DancerState, center,
