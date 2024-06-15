@@ -109,6 +109,17 @@ end
 
 
 """
+    fraction(tb::TimeBounds, t)
+
+return where `t` falls within `tb` as a fraction.
+For `t == tb.min` the result would be 0.
+For `t == tb.max` the result would be 100.
+"""
+fraction(tb::TimeBounds, t) =
+    (t - tb.min) / (tb.max - tb.min)
+
+
+"""
     percentage(tb::TimeBounds, t)
 
 return where `t` falls within `tb` as a percentage.
@@ -280,6 +291,13 @@ function history(f, ds::DancerState)
         history(f, ds.previous)
     end
     f(ds)
+end
+
+
+function history(ds::DancerState)
+    collecting() do c
+        history(c, ds)
+    end
 end
 
 
