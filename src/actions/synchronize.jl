@@ -12,7 +12,7 @@ end
 Posts a Synchronized fact to the knowledge base corresponding to the
 latest time among all `DancerState`s in the knowledge base.
 
-For and DancerSTate that is behind that time, a new DancerState is
+For and DancerState that is behind that time, a new DancerState is
 asserted for the latest time.
 
 It is recommended that `synchronize` should be called after every call
