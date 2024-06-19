@@ -1,4 +1,4 @@
-# Formations of four dancers that are two dancers wide and two high.
+u# Formations of four dancers that are two dancers wide and two high.
 
 export FacingCouples, BackToBackCouples, TandemCouples, CoupleBoxRule
 export BoxOfFour, RHBoxOfFour, LHBoxOfFour, BoxOfFourRule
@@ -71,7 +71,7 @@ direction(f::TandemCouples) = direction(f.leaders)
         return
     end
     if encroached_on([ couple1, couple2 ], kb)
-        retirn
+        return
     end
     if (direction_equal(direction(couple1),
                         direction(couple2)) &&
