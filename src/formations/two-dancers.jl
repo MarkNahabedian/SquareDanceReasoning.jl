@@ -5,7 +5,7 @@ export TwoDancerFormationsRule
 
 
 """
-    Couble(beau::DancerState, belle::DancerState)
+    Couple(beau::DancerState, belle::DancerState)
 
 Couple represents a formation of two dancers both
 facing the same direction.
