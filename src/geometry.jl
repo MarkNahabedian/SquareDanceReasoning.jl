@@ -35,7 +35,9 @@ end
 function Bounds(formations...)
     bounds = Bounds()
     expand(bounds, formations...)
-    @assert bounds.min_down < typemax(Float32)
+    if bounds.min_down == typemax(Float32)
+        error("No formations for Bounds")
+    end
     bounds
 end
 
