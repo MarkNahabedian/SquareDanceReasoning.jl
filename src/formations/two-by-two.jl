@@ -1,4 +1,4 @@
-u# Formations of four dancers that are two dancers wide and two high.
+# Formations of four dancers that are two dancers wide and two high.
 
 export FacingCouples, BackToBackCouples, TandemCouples, CoupleBoxRule
 export BoxOfFour, RHBoxOfFour, LHBoxOfFour, BoxOfFourRule
