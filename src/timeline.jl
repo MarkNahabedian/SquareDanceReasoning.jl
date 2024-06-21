@@ -193,18 +193,6 @@ function near(d1::DancerState, d2::DancerState)::Bool
 end
 
 
-"""
-    direction(focus::DancerState, other::DancerState)
-
-returns the direction that `other` is from the point of view of
-`focus`.
-"""
-function direction(focus::DancerState, other::DancerState)
-    down, left = location(other) - location(focus)
-    canonicalize(atan(left, down) / (2 * pi))
-end
-
-
 DANCER_COLLISION_DISTANCE = 0.8 * COUPLE_DISTANCE
 
 

@@ -144,3 +144,21 @@ Vector of down and left coordinates.
 """
 center(dss) = sum(location, dss) / length(dss)
 
+
+function location(v::Vector)
+    @assert length(v) == 2
+    v
+end
+
+
+"""
+    direction(focus, other)
+
+returns the direction that `other` is from the point of view of
+`focus`.
+"""
+function direction(focus, other)
+    down, left = location(other) - location(focus)
+    canonicalize(atan(left, down) / (2 * pi))
+end
+
