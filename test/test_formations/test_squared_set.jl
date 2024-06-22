@@ -17,6 +17,9 @@
     @test 1 == counting() do c
         askc(c, kb, SquaredSet)
     end
+    @test 1 == counting() do c
+        askc(c, kb, CircleOfEight)
+    end
     collect_formation_examples(kb)
 end
 
@@ -39,6 +42,9 @@ end
     end
     @test 0 == counting() do c
         askc(c, kb, SquaredSet)
+    end
+    @test 1 == counting() do c
+        askc(c, kb, CircleOfEight)
     end
 end
 
