@@ -28,6 +28,11 @@ FaceToFace represents a formation of two dancers facing each other.
 struct FaceToFace <: TwoDancerFormation
     a::DancerState
     b::DancerState
+
+    function FaceToFace(a, b)
+        @assert a.direction < b.direction
+        new(a, b)
+    end
 end
 
 dancer_states(f::FaceToFace)::Vector{DancerState} = [f.a, f.b]
@@ -42,6 +47,11 @@ facing each other.
 struct BackToBack <: TwoDancerFormation
     a::DancerState
     b::DancerState
+
+    function BackToBack(a, b)
+        @assert a.direction < b.direction
+        new(a, b)
+    end
 end
 
 dancer_states(f::BackToBack)::Vector{DancerState} = [f.a, f.b]
@@ -81,6 +91,11 @@ RHMiniWave represents a right handed wave of two dancers.
 struct RHMiniWave <: MiniWave
     a::DancerState
     b::DancerState
+
+    function RHMiniWave(a, b)
+        @assert a.direction < b.direction
+        new(a, b)
+    end
 end
 
 handedness(::RHMiniWave) = RightHanded()
@@ -92,6 +107,11 @@ LHMiniWave represents a left handed wave of two dancers.
 struct LHMiniWave <: MiniWave
     a::DancerState
     b::DancerState
+
+    function LHMiniWave(a, b)
+        @assert a.direction < b.direction
+        new(a, b)
+    end
 end
 
 handedness(::LHMiniWave) = LeftHanded()
