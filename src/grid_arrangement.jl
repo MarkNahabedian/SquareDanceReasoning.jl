@@ -43,18 +43,18 @@ dancers are arranges in a rectangular grid of the specified
 dimensions.
 
 `dancers` is a vector of `Dancer`s indexed by `dancer_indices`.  A
-dancer index can be 0 to indicate that there is no cancer in that
+dancer index can be 0 to indicate that there is no dancer in that
 positriion.
 
 `dancer_indices` and `dancer_directions` are Arrays of the same
 dimensions.  This determiines the dimensions of the resulting grid.
 
-Alternatively, dancer_directions can be a Vector of strings of Unicode
-arrow characters.
+Alternatively, dancer_directions can be a Vector of strings of the
+Unicode arrow characters ←, ↑, →, or ↓, with the space character
+serving as a placeholder where there is no dancer.
 
 The two indices of each array correspond to the `down` and `left`
 coordinates respectively.
-
 """
 function grid_arrangement(dancers::Vector{Dancer},
                           dancer_indices::Array{<:Integer, 2},
