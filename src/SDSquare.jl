@@ -23,6 +23,8 @@ end
 
 Base.in(dancer::Dancer, sq::SDSquare) = in(dancer, sq.dancers)
 
+dancers(s::SDSquare) = sort(collect(s.dancers))
+
 
 """
     other_dancers(square::SDSquare, dancers)

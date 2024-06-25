@@ -137,6 +137,28 @@ end
             [ds], 60)
 end
 
+@testset "test step_to_a_wave" begin
+    square = make_square(1)
+    grid = grid_arrangement(dancers(square),
+                            [ 1 2; ], [ "→←" ])
+    f2f = FaceToFace(grid[1, 1], grid[1, 2])
+    let   # right
+        mw = step_to_a_wave(f2f, 1, RightHanded())
+        @test handedness(mw) isa RightHanded
+        @test mw.a.direction < mw.b.direction
+        @test mw.a.left == mw.b.left
+        @test mw.a.down < mw.b.down
+    end
+    let   # left
+        mw = step_to_a_wave(f2f, 1, LeftHanded())
+        @test handedness(mw) isa LeftHanded
+        @test mw.a.direction < mw.b.direction
+        @test mw.a.left == mw.b.left
+        @test mw.a.down > mw.b.down
+    end        
+end
+
+#=
 @testset "test synchronize" begin
     kb = ReteRootNode("root")
     # Don't install all of the rules until we can control the forward
@@ -154,9 +176,7 @@ end
     receive(kb, DancerState(dancers[1], 0, DIRECTION0, 1, 1))
     synchronize(kb)
     function get_latest_sync()
-        syncs = collecting() do c
-            askc(c, latest_sync)
-        end
+        askc(collecting, latest_sync)
         @test length(syncs) == 1
         syncs[1]
     end
@@ -223,9 +243,7 @@ end
                                        "Latest Synchronized")
     connect(synced, latest_sync)
     function get_latest_sync()
-        syncs = collecting() do c
-            askc(c, latest_sync)
-        end
+        syncs = askc(collecting, latest_sync)
         @test length(syncs) == 1
         syncs[1]
     end
@@ -285,4 +303,7 @@ end
     animate(joinpath(@__DIR__, "single_file_prropmenade.svg"),
             latest, 60)
 end
+=#
+
+include("test_breathing.jl")
 

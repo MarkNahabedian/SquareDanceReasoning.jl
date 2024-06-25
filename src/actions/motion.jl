@@ -1,6 +1,12 @@
 
 export forward, backward, rightward, leftward, revolve, rotate,
-    jitter, can_roll
+    jitter, can_roll, step_to_a_wave
+
+
+function move(p::Vector, direction, distance)
+    a = 2 * pi * direction
+    p + distance * [ cos(a), sin(a) ]
+end
 
 
 """
@@ -10,11 +16,9 @@ Move the `Dancer` identified by `ds` forward (based on ds.direction)
 the specified distance by returning a new dancer state.
 """
 function forward(ds::DancerState, distance, time_delta)::DancerState
-    a = 2 * pi * ds.direction
-    down = ds.down + distance * cos(a)
-    left = ds.left + distance * sin(a)
     DancerState(ds, ds.time + time_delta,
-                ds.direction, down, left)
+                ds.direction,
+                move(location(ds), ds.direction, distance)...)
 end
 
 
@@ -37,15 +41,14 @@ end
     rightward(ds::DancerState, distance, time_delta)::DancerState
 
 Move the `Dancer` identified by `ds` to the right (based on
-ds.direction) to the right the specified distance by returning a new
-dancer state.
+ds.direction) by the specified distance by returning a new dancer
+state.
 """
 function rightward(ds::DancerState, distance, time_delta)
-    a = 2 * pi * quarter_right(ds.direction)
-    down = ds.down + distance * cos(a)
-    left = ds.left + distance * sin(a)
     DancerState(ds, ds.time + time_delta,
-                ds.direction, down, left)
+                ds.direction,
+                move(location(ds), quarter_right(ds.direction),
+                     distance)...)
 end
 
 
@@ -53,15 +56,14 @@ end
     leftward(ds::DancerState, distance, time_delta)::DancerState
 
 Move the `Dancer` identified by `ds` to the left (based on
-ds.direction) to the right the specified distance by returning a new
-dancer state.
+ds.direction) by the specified distance by returning a new dancer
+state.
 """
 function leftward(ds::DancerState, distance, time_delta)
-    a = 2 * pi * quarter_left(ds.direction)
-    down = ds.down + distance * cos(a)
-    left = ds.left + distance * sin(a)
     DancerState(ds, ds.time + time_delta,
-                ds.direction, down, left)
+                ds.direction,
+                move(location(ds), quarter_left(ds.direction),
+                     distance)...)
 end
 
 
@@ -138,3 +140,35 @@ function jitter(ds::DancerState, time_delta)::DancerState
                 ds.down + displacement[1],
                 ds.left + displacement[2])
 end
+
+
+"""
+    step_to_a_wave(f::FaceToFace, time_delta, h::Handedness)::MiniWave
+
+The face to face dancers move up to make a right or left handed
+miniwave.
+"""
+function step_to_a_wave(f::FaceToFace, time_delta,
+                        h::Handedness)::MiniWave
+    # Sometimes in the square dancer shorthand for describing calls,
+    # this action is referred to as "touch".  There's already a
+    # function in Base with that name though.
+    d = distance(dancer_states(f)...)/2
+    function move1(ds, sideways)
+        to = move(move(location(ds), ds.direction, d),
+                  sideways(ds.direction),
+                  COUPLE_DISTANCE / 2)
+        DancerState(ds, ds.time + time_delta,
+                    ds.direction, to...)
+    end
+    sideways = if h isa RightHanded
+        return RHMiniWave(move1(f.a, quarter_left),
+                          move1(f.b, quarter_left))
+    elseif h isa LeftHanded
+        return LHMiniWave(move1(f.a, quarter_right),
+                          move1(f.b, quarter_right))
+    else
+        error("touch requires either RightHanded or LeftHanded Handedness.")
+    end
+end
+
