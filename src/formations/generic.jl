@@ -13,11 +13,12 @@ the group for all rules relating to square dance formations.
 """
 abstract type SquareDanceFormationRule <: SquareDanceRule end
 
+
 """
 SquareDanceFormation is the abstract supertype of all square dance
 formations.
 """
-abstract type SquareDanceFormation end
+abstract type SquareDanceFormation <: TemporalFact end
 
 
 """
@@ -84,3 +85,8 @@ If all of the dancers of formation are facing in the same direction
 then return that direction.  Otherwise get a no such method error.
 """
 function direction end
+
+
+Base.in(ds::DancerState, f::SquareDanceFormation)::Bool =
+    in(ds, dancer_states(f))
+
