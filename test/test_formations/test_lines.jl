@@ -3,11 +3,10 @@
     square = make_square(4)
     kb = make_kb()
     receive(kb, square)
-    dancers = sort(collect(square.dancers))
-    for ds in make_line(dancers[1:4], 0, 0)
+    for ds in make_line(square[1:4], 0, 0)
         receive(kb, ds)
     end
-    for ds in make_line(dancers[5:8], 1//2, 1)
+    for ds in make_line(square[5:8], 1//2, 1)
         receive(kb, ds)
     end
     @debug_formations(kb)
@@ -27,16 +26,16 @@
         @test length(lines) == 2
         handedness(lines[1]) == NoHandedness()
         @test length(dancer_states(lines[1])) == 4
-        @test lines[1].a.belle.dancer == dancers[1]
-        @test lines[1].a.beau.dancer == dancers[2]
-        @test lines[1].b.belle.dancer == dancers[3]
-        @test lines[1].b.beau.dancer == dancers[4]
+        @test lines[1].a.belle.dancer == square[1]
+        @test lines[1].a.beau.dancer == square[2]
+        @test lines[1].b.belle.dancer == square[3]
+        @test lines[1].b.beau.dancer == square[4]
         handedness(lines[2]) == NoHandedness()
         @test length(dancer_states(lines[2])) == 4
-        @test lines[2].b.beau.dancer == dancers[5]
-        @test lines[2].b.belle.dancer == dancers[6]
-        @test lines[2].a.beau.dancer == dancers[7]
-        @test lines[2].a.belle.dancer == dancers[8]
+        @test lines[2].b.beau.dancer == square[5]
+        @test lines[2].b.belle.dancer == square[6]
+        @test lines[2].a.beau.dancer == square[7]
+        @test lines[2].a.belle.dancer == square[8]
         # We should also have four FaceToFace formations
         let
             m = find_memory_for_type(kb, FaceToFace)
@@ -50,17 +49,16 @@ end
     square = make_square(4)
     kb = make_kb()
     receive(kb, square)
-    dancers = collect(square.dancers)
     # Rught hand two faced line:  ↑↑↓↓
-    receive(kb, DancerState(dancers[1], 0, 1//2, 0, 1))
-    receive(kb, DancerState(dancers[2], 0, 1//2, 0, 2))
-    receive(kb, DancerState(dancers[3], 0,    0, 0, 3))
-    receive(kb, DancerState(dancers[4], 0,    0, 0, 4))
+    receive(kb, DancerState(square[1], 0, 1//2, 0, 1))
+    receive(kb, DancerState(square[2], 0, 1//2, 0, 2))
+    receive(kb, DancerState(square[3], 0,    0, 0, 3))
+    receive(kb, DancerState(square[4], 0,    0, 0, 4))
     # Left hand two faced line    ↓↓↑↑
-    receive(kb, DancerState(dancers[5], 0,    0, 1, 1))
-    receive(kb, DancerState(dancers[6], 0,    0, 1, 2))
-    receive(kb, DancerState(dancers[7], 0, 1//2, 1, 3))
-    receive(kb, DancerState(dancers[8], 0, 1//2, 1, 4))
+    receive(kb, DancerState(square[5], 0,    0, 1, 1))
+    receive(kb, DancerState(square[6], 0,    0, 1, 2))
+    receive(kb, DancerState(square[7], 0, 1//2, 1, 3))
+    receive(kb, DancerState(square[8], 0, 1//2, 1, 4))
     @debug_formations(kb)
     # First make sure we have the Couples:
     let
@@ -77,16 +75,16 @@ end
             @test length(dancer_states(line)) == 4
             if handedness(line) == RightHanded()
                 @test handedness(line.centers) == RightHanded()
-                @test line.b.beau.dancer == dancers[line_offset + 1]
-                @test line.b.belle.dancer == dancers[line_offset + 2]
-                @test line.a.belle.dancer == dancers[line_offset + 3]
-                @test line.a.beau.dancer == dancers[line_offset + 4]
+                @test line.b.beau.dancer == square[line_offset + 1]
+                @test line.b.belle.dancer == square[line_offset + 2]
+                @test line.a.belle.dancer == square[line_offset + 3]
+                @test line.a.beau.dancer == square[line_offset + 4]
             else
                 @test handedness(line.centers) == LeftHanded()
-                @test line.a.belle.dancer == dancers[line_offset + 1]
-                @test line.a.beau.dancer == dancers[line_offset + 2]
-                @test line.b.beau.dancer == dancers[line_offset + 3]
-                @test line.b.belle.dancer == dancers[line_offset + 4]
+                @test line.a.belle.dancer == square[line_offset + 1]
+                @test line.a.beau.dancer == square[line_offset + 2]
+                @test line.b.beau.dancer == square[line_offset + 3]
+                @test line.b.belle.dancer == square[line_offset + 4]
             end
             line_offset += 4
         end

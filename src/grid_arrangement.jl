@@ -76,3 +76,8 @@ function grid_arrangement(dancers::Vector{Dancer},
     result
 end
 
+grid_arrangement(square::SDSquare, dancer_indices, dancer_directions) =
+    grid_arrangement(square.dancers,
+                     dancer_indices,
+                     dancer_directions)
+

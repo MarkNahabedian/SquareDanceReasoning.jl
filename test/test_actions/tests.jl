@@ -139,7 +139,7 @@ end
 
 @testset "test step_to_a_wave" begin
     square = make_square(1)
-    grid = grid_arrangement(dancers(square),
+    grid = grid_arrangement(square,
                             [ 1 2; ], [ "→←" ])
     f2f = FaceToFace(grid[1, 1], grid[1, 2])
     let   # right

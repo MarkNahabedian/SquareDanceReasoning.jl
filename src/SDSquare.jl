@@ -15,15 +15,27 @@ inform it that the dancers form a square.
 that are in the SDSquare but are not in `dancers`.
 """
 struct SDSquare
-    dancers::Set{Dancer}
+    dancers
 
-    SDSquare(dancers) = new(Set{Dancer}(dancers))
+    SDSquare(dancers) = new(sort(dancers))
 end
 
 
+# SDSquare is indexable:
+Base.getindex(s::SDSquare, i) = getindex(s.dancers, i)
+Base.firstindex(s::SDSquare) = firstindex(s.dancers)
+Base.lastindex(s::SDSquare) = lastindex(s.dancers)
+
+# SDSquare is iterable:
+Base.iterate(s::SDSquare) = iterate(s.dancers)
+Base.IteratorSize(::Type{SDSquare}) = Base.HasLength()
+Base.IteratorEltype(::Type{SDSquare}) = Base.HasEltype()
+Base.eltype(::Type{SDSquare}) = Dancer
+Base.length(s::SDSquare) = length(s.dancers)
+
 Base.in(dancer::Dancer, sq::SDSquare) = in(dancer, sq.dancers)
 
-dancers(s::SDSquare) = sort(collect(s.dancers))
+# dancers(s::SDSquare) = sort(collect(s.dancers))
 
 
 """

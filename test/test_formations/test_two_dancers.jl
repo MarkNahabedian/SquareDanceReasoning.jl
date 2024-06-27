@@ -5,12 +5,11 @@ function two_dancer_formation_test_setup(grid_dancer_indices,
     kb = make_kb()
     # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
     receive(kb, square)
-    dancers = sort(collect(square.dancers))
-    grid = grid_arrangement(dancers,
+    grid = grid_arrangement(square,
                             grid_dancer_indices,
                             grid_dancer_directions)
     receive.([kb], grid)
-    return kb, dancers
+    return kb, square.dancers
 end
 
 

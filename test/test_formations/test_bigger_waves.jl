@@ -17,8 +17,7 @@ end
     kb = make_kb()
     # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
     receive(kb, square)
-    dancers = collect(square.dancers)
-    for ds in make_wave(dancers, 1//2)
+    for ds in make_wave(square.dancers, 1//2)
         receive(kb, ds)
     end
     @debug_formations(kb)
@@ -37,10 +36,10 @@ end
         f = first(m.memory)
         @test length(dancer_states(f)) == 4
         @test handedness(f) == RightHanded()
-        @test f.wave1.a.dancer == dancers[2]
-        @test f.wave1.b.dancer == dancers[1]
-        @test f.wave2.a.dancer == dancers[4]
-        @test f.wave2.b.dancer == dancers[3]
+        @test f.wave1.a.dancer == square[2]
+        @test f.wave1.b.dancer == square[1]
+        @test f.wave2.a.dancer == square[4]
+        @test f.wave2.b.dancer == square[3]
     end
     collect_formation_examples(kb)
 end
@@ -50,8 +49,7 @@ end
     kb = make_kb()
     # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
     receive(kb, square)
-    dancers = collect(square.dancers)
-    for ds in make_wave(dancers, 0)
+    for ds in make_wave(square.dancers, 0)
         receive(kb, ds)
     end
     @debug_formations(kb)
@@ -70,10 +68,10 @@ end
         f = first(m.memory)
         @test length(dancer_states(f)) == 4
         @test handedness(f) == LeftHanded()
-        @test f.wave1.a.dancer == dancers[3]
-        @test f.wave1.b.dancer == dancers[4]
-        @test f.wave2.a.dancer == dancers[1]
-        @test f.wave2.b.dancer == dancers[2]
+        @test f.wave1.a.dancer == square[3]
+        @test f.wave1.b.dancer == square[4]
+        @test f.wave2.a.dancer == square[1]
+        @test f.wave2.b.dancer == square[2]
     end
     collect_formation_examples(kb)
 end
@@ -83,8 +81,7 @@ end
     kb = make_kb()
     # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
     receive(kb, square)
-    dancers = sort(collect(square.dancers))
-    for ds in make_wave(dancers, 1//2)
+    for ds in make_wave(square.dancers, 1//2)
         receive(kb, ds)
     end
     # First make sure we have the MiniWaves:
@@ -101,14 +98,14 @@ end
         @test length(m.memory) == 1
         f = first(m.memory)
         @test handedness(f) == RightHanded()
-        @test f.wave1.wave1.a.dancer == dancers[2]
-        @test f.wave1.wave1.b.dancer == dancers[1]
-        @test f.wave1.wave2.a.dancer == dancers[4]
-        @test f.wave1.wave2.b.dancer == dancers[3]
-        @test f.wave2.wave1.a.dancer == dancers[6]
-        @test f.wave2.wave1.b.dancer == dancers[5]
-        @test f.wave2.wave2.a.dancer == dancers[8]
-        @test f.wave2.wave2.b.dancer == dancers[7]
+        @test f.wave1.wave1.a.dancer == square[2]
+        @test f.wave1.wave1.b.dancer == square[1]
+        @test f.wave1.wave2.a.dancer == square[4]
+        @test f.wave1.wave2.b.dancer == square[3]
+        @test f.wave2.wave1.a.dancer == square[6]
+        @test f.wave2.wave1.b.dancer == square[5]
+        @test f.wave2.wave2.a.dancer == square[8]
+        @test f.wave2.wave2.b.dancer == square[7]
     end
     collect_formation_examples(kb)
 end

@@ -4,8 +4,7 @@
     kb = make_kb()
     # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
     receive(kb, square)
-    dancers = sort(collect(square.dancers))
-    grid = grid_arrangement(dancers,
+    grid = grid_arrangement(square.dancers,
                             [ 3 1 6 8;
                               4 2 5 7 ],
                             [ "→→←←";
@@ -32,14 +31,14 @@
     f = f[1]
     @test length(dancer_states(f)) == 8
     @test handedness(f) == NoHandedness()
-    @test f.tandem_couples1.leaders.beau.dancer == dancers[1]
-    @test f.tandem_couples1.leaders.belle.dancer == dancers[2]
-    @test f.tandem_couples1.trailers.beau.dancer == dancers[3]
-    @test f.tandem_couples1.trailers.belle.dancer == dancers[4]
-    @test f.tandem_couples2.leaders.beau.dancer == dancers[5]
-    @test f.tandem_couples2.leaders.belle.dancer == dancers[6]
-    @test f.tandem_couples2.trailers.beau.dancer == dancers[7]
-    @test f.tandem_couples2.trailers.belle.dancer == dancers[8]
+    @test f.tandem_couples1.leaders.beau.dancer == square[1]
+    @test f.tandem_couples1.leaders.belle.dancer == square[2]
+    @test f.tandem_couples1.trailers.beau.dancer == square[3]
+    @test f.tandem_couples1.trailers.belle.dancer == square[4]
+    @test f.tandem_couples2.leaders.beau.dancer == square[5]
+    @test f.tandem_couples2.leaders.belle.dancer == square[6]
+    @test f.tandem_couples2.trailers.beau.dancer == square[7]
+    @test f.tandem_couples2.trailers.belle.dancer == square[8]
     collect_formation_examples(kb)
 end
 
@@ -49,8 +48,7 @@ end
     kb = make_kb()
     # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
     receive(kb, square)
-    dancers = sort(collect(square.dancers))
-    grid = grid_arrangement(dancers,
+    grid = grid_arrangement(square.dancers,
                             [ 1 4 5 8;
                               2 3 6 7 ],
                             [ "→←→←";
@@ -77,14 +75,14 @@ end
     f = f[1]
     @test length(dancer_states(f)) == 8
     @test handedness(f) == NoHandedness()
-    @test f.facing_couples1.couple1.beau.dancer == dancers[1]
-    @test f.facing_couples1.couple1.belle.dancer == dancers[2]
-    @test f.facing_couples1.couple2.beau.dancer == dancers[3]
-    @test f.facing_couples1.couple2.belle.dancer == dancers[4]
-    @test f.facing_couples2.couple1.beau.dancer == dancers[5]
-    @test f.facing_couples2.couple1.belle.dancer == dancers[6]
-    @test f.facing_couples2.couple2.beau.dancer == dancers[7]
-    @test f.facing_couples2.couple2.belle.dancer == dancers[8]
+    @test f.facing_couples1.couple1.beau.dancer == square[1]
+    @test f.facing_couples1.couple1.belle.dancer == square[2]
+    @test f.facing_couples1.couple2.beau.dancer == square[3]
+    @test f.facing_couples1.couple2.belle.dancer == square[4]
+    @test f.facing_couples2.couple1.beau.dancer == square[5]
+    @test f.facing_couples2.couple1.belle.dancer == square[6]
+    @test f.facing_couples2.couple2.beau.dancer == square[7]
+    @test f.facing_couples2.couple2.belle.dancer == square[8]
     collect_formation_examples(kb)
 end
 
@@ -94,8 +92,7 @@ end
     kb = make_kb()
     # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
     receive(kb, square)
-    dancers = sort(collect(square.dancers))
-    grid = grid_arrangement(dancers,
+    grid = grid_arrangement(square.dancers,
                             [ 2 3 6 7;
                               1 4 5 8 ],
                             [ "←→←→",
@@ -122,14 +119,14 @@ end
     f = f[1]
     @test length(dancer_states(f)) == 8
     @test handedness(f) == NoHandedness()
-    @test f.bbcouples1.couple1.beau.dancer == dancers[3]
-    @test f.bbcouples1.couple1.belle.dancer == dancers[4]
-    @test f.bbcouples1.couple2.beau.dancer == dancers[1]
-    @test f.bbcouples1.couple2.belle.dancer == dancers[2]
-    @test f.bbcouples2.couple1.beau.dancer == dancers[7]
-    @test f.bbcouples2.couple1.belle.dancer == dancers[8]
-    @test f.bbcouples2.couple2.beau.dancer == dancers[5]
-    @test f.bbcouples2.couple2.belle.dancer == dancers[6]
+    @test f.bbcouples1.couple1.beau.dancer == square[3]
+    @test f.bbcouples1.couple1.belle.dancer == square[4]
+    @test f.bbcouples1.couple2.beau.dancer == square[1]
+    @test f.bbcouples1.couple2.belle.dancer == square[2]
+    @test f.bbcouples2.couple1.beau.dancer == square[7]
+    @test f.bbcouples2.couple1.belle.dancer == square[8]
+    @test f.bbcouples2.couple2.beau.dancer == square[5]
+    @test f.bbcouples2.couple2.belle.dancer == square[6]
     collect_formation_examples(kb)
 end
 
@@ -138,8 +135,7 @@ end
     kb = make_kb()
     # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
     receive(kb, square)
-    dancers = sort(collect(square.dancers))
-    grid = grid_arrangement(dancers,
+    grid = grid_arrangement(square.dancers,
                             [ 2 4 5 7;
                               1 3 6 8 ],
                             [ "←←→→",
@@ -169,14 +165,14 @@ end
     f = f[1]
     @test length(dancer_states(f)) == 8
     @test handedness(f) == NoHandedness()
-    @test f.tandem_couples1.leaders.beau.dancer == dancers[7]
-    @test f.tandem_couples1.leaders.belle.dancer == dancers[8]
-    @test f.tandem_couples1.trailers.beau.dancer == dancers[5]
-    @test f.tandem_couples1.trailers.belle.dancer == dancers[6]
-    @test f.tandem_couples2.leaders.beau.dancer == dancers[1]
-    @test f.tandem_couples2.leaders.belle.dancer == dancers[2]
-    @test f.tandem_couples2.trailers.beau.dancer == dancers[3]
-    @test f.tandem_couples2.trailers.belle.dancer == dancers[4]
+    @test f.tandem_couples1.leaders.beau.dancer == square[7]
+    @test f.tandem_couples1.leaders.belle.dancer == square[8]
+    @test f.tandem_couples1.trailers.beau.dancer == square[5]
+    @test f.tandem_couples1.trailers.belle.dancer == square[6]
+    @test f.tandem_couples2.leaders.beau.dancer == square[1]
+    @test f.tandem_couples2.leaders.belle.dancer == square[2]
+    @test f.tandem_couples2.trailers.beau.dancer == square[3]
+    @test f.tandem_couples2.trailers.belle.dancer == square[4]
     collect_formation_examples(kb)
 end
 
