@@ -1,8 +1,10 @@
+using LinearAlgebra: dot, normalize!
+
 module SquareDanceReasoning
 
 using Rete
 
-export SquareDanceRule, make_kb
+export SquareDanceRule, TemporalFact, make_kb
 
 
 REPO_ROOT = abspath(joinpath(@__DIR__, ".."))
@@ -13,6 +15,15 @@ SquareDanceRule is the abstract supertype for all rules defined
 in this package.
 """
 abstract type SquareDanceRule <: Rule end
+
+
+"""
+    TemporalFact
+
+Abstract supertype for any facts that have a temporal dependence.
+"""
+abstract type TemporalFact end
+
 
 include("coordinate_system.jl")
 include("dancers.jl")
@@ -33,10 +44,10 @@ include("debug.jl")
     make_kb()
 
 Creates SquareDanceReasoning knowledge base with no facts, but with
-all rules installed..
+all rules installed.
 """
 function make_kb()
-    kb = ReteRootNode("SquareDanceReasoning")
+    kb = ReteRootNode("SquareDanceReasoning 1")
     install(kb, SquareDanceRule)
     # Make the knowledge base self-aware:
     ensure_memory_node(kb, typeof(kb))
@@ -44,4 +55,23 @@ function make_kb()
     kb
 end
 
+
+"""
+    make_kb(kb::ReteRootNode)
+
+Makes a copy of the knowledge base, but without any of the temporal
+facts.
+"""
+function make_kb(kb::ReteRootNode)
+    i = parse(Int, split(kb.label, " ")[2])
+    kb2 = ReteRootNode("SquareDanceReasoning $(i+1)")
+    install(kb2, SquareDanceRule)
+    ensure_memory_node(kb2, typeof(kb2))
+    receive(kb2, kb2)
+    # Copy the non-temporal facts:
+    copy_facts.([kb], [kb2],
+                [ SDSquare, Dancer, OriginalPartners ])
+    kb2
 end
+
+end  # module
