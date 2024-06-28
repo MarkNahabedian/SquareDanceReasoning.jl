@@ -1,7 +1,6 @@
-using LinearAlgebra: dot, normalize!
-
 module SquareDanceReasoning
 
+using LinearAlgebra: dot, normalize!
 using Rete
 
 export SquareDanceRule, TemporalFact, make_kb

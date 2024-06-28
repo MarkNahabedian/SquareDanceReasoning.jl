@@ -1,27 +1,33 @@
 
 @testset "test MoveApart" begin
-    dancer = Dancer(1, Unspecified())
+    square = make_square(1)
     let
-        ds = DancerState(dancer, 0, 0, 1, 2)
-        mp = MoveApart([1, 2], [1, 1])
-        @test location(mp(ds)) == [0, 0]
+        ds = DancerState(square[1], 0, 0, 1, 2)
+        mp = MoveApart([1, 2], [0, 0.5], ds)
+        @test mp(ds) == [0.0, 0.5]
     end
     let
-        ds = DancerState(dancer, 0, 0, 3, 3)
-        mp = MoveApart([1, 2], [1, 0])
-        @test location(mp(ds)) == [1, 0]
+        ds = DancerState(square[1], 0, 0, 1, 2)
+        mp = MoveApart([1, 2], [0, 0.5], ds)
+        other = DancerState(square[1], 0, 1//2, 1, 2)
+        @test mp(other) == [0.0, -0.5]
     end
     let
-        ds = DancerState(dancer, 0, 0, -1, -1)
-        mp = MoveApart([0, 0], [1, 1])
-        @test location(mp(ds)) == [-1, -1]
+        ds = DancerState(square[1], 0, 0, 2, 2)
+        mp = MoveApart([1, 2], [0.5, 0], ds)
+        @test mp(ds) == [0.5, 0.0]
+    end
+    let
+        ds = DancerState(square[1], 0, 0, -1, -1)
+        mp = MoveApart([0, 0], [0, 0.5], ds)
+        @test mp(ds) == [0.0, -0.5]
     end
 end
 
 
 @testset "breathing for FacingCouples step_to_a_wave" begin
     square = make_square(4)
-    grid = grid_arrangement(dancers(square),
+    grid = grid_arrangement(square,
                             [ 1 3 5 7; 2 4 6 8 ],
                             [ "↓↓↓↓" ; "↑↑↑↑"])
     kb = make_kb()
@@ -57,6 +63,7 @@ end
                       askc(collecting, kb2, DancerState))
     kb3 = make_kb(kb2)
     receive.([kb3], new_dss)
+    @test 0 == askc(counting, kb3, Collision)
     @debug_formations(kb3)    
 end
 

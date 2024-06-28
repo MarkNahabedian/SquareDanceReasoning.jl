@@ -18,35 +18,49 @@ elements of each inner vector are working together.
 struct MoveApart
     center::Vector
     displacement::Vector
+    # The dancer that moves by displacement rather than by
+    # -displacement:
+    positive_displacement_ds::DancerState
 
-    function MoveApart(center::Vector, displacement::Vector)
+    function MoveApart(center::Vector,
+                       displacement::Vector,
+                       positive_displacement_ds::DancerState)
         @assert length(center) == 2
         @assert length(displacement) == 2
-        new(center, displacement)
+        new(center, displacement, positive_displacement_ds)
     end
 end
 
 function MoveApart(collision::Collision, playmates)
+    # playmates is a Vector of Vector of DancerState:
     @assert all(playmates) do pms
         all(pms) do pm
             pm isa DancerState
         end
     end
-    playmates_a = playmates[findfirst(playmates) do pm
-                                collision.a in pm
-                            end]
-    playmates_b = playmates[findfirst(playmates) do pm
-                                collision.b in pm
-                            end]
-    other_a = first(setdiff(Set(playmates_a), Set([collision.a])))
-    other_b = first(setdiff(Set(playmates_b), Set([collision.b])))
+    # Find the playmate for each collident
+    other_a, other_b = let
+        playmates_a = playmates[findfirst(playmates) do pm
+                                    collision.a in pm
+                                end]
+        @assert length(playmates_a) == 2
+        playmates_b = playmates[findfirst(playmates) do pm
+                                    collision.b in pm
+                                end]
+        @assert length(playmates_b) == 2
+        (first(setdiff(Set(playmates_a), Set([collision.a]))),
+         first(setdiff(Set(playmates_b), Set([collision.b]))))
+    end
     displacement_amount = COUPLE_DISTANCE / 2
     if distance(collision.a, other_a) > distance(collision.a, other_b)
-        displacement_amount += distance(collision.a, collision.b)
+        # colliders overshot their center:
+        displacement_amount += distance(collision.a, collision.b) / 2
     end
-    uv = normalize!(location(other_b) - location(other_a))
+    # Direction to move the collision.a dancer:
+    uv = normalize!(location(other_a) - location(collision.a))
     MoveApart(center(dancer_states(collision)),
-              displacement_amount * uv)
+              displacement_amount * uv,
+              collision.a)
 end
 
 
@@ -57,8 +71,16 @@ For the given DancerState, determine how much `mp` should displace it.
 """
 function (mp::MoveApart)(ds::DancerState)
     loc = location(ds)
-    # What side of the center is the DancerState:
+    # On what side of the center is the DancerState?
     side = sign(dot(loc - mp.center, mp.displacement))
+    # It might be dead-on center.
+    if side == 0
+        if ds == mp.positive_displacement_ds
+            side = 1
+        else
+            side = -1
+        end
+    end
     side * mp.displacement
 end
 
@@ -69,7 +91,8 @@ end
 Applies all of the MoveApart displacements to the specified
 DancerState.
 """
-function move_apart(mps::Vector{MoveApart}, ds::DancerState)::DancerState
+function move_apart(mps::Vector{MoveApart},
+                    ds::DancerState)::DancerState
     new_loc = location(ds)
     for mp in mps
         new_loc += mp(ds)
