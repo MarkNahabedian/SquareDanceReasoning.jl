@@ -28,6 +28,7 @@ Base.lastindex(s::SDSquare) = lastindex(s.dancers)
 
 # SDSquare is iterable:
 Base.iterate(s::SDSquare) = iterate(s.dancers)
+Base.iterate(s::SDSquare, i::Int) = iterate(s.dancers, i)
 Base.IteratorSize(::Type{SDSquare}) = Base.HasLength()
 Base.IteratorEltype(::Type{SDSquare}) = Base.HasEltype()
 Base.eltype(::Type{SDSquare}) = Dancer
