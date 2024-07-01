@@ -1,6 +1,6 @@
 
 export forward, backward, rightward, leftward, revolve, rotate,
-    jitter, can_roll, step_to_a_wave
+    jitter, can_roll, step_to_a_wave, pass_by
 
 
 function move(p::Vector, direction, distance)
@@ -142,14 +142,19 @@ function jitter(ds::DancerState, time_delta)::DancerState
 end
 
 
+handward(::RightHanded) = rightward
+handward(::LeftHanded) = leftward
+
 """
     step_to_a_wave(f::FaceToFace, time_delta, h::Handedness)::MiniWave
 
 The face to face dancers move up to make a right or left handed
 miniwave.
+
+Breating should be done separately.
 """
 function step_to_a_wave(f::FaceToFace, time_delta,
-                        h::Handedness)::MiniWave
+                        h::Union{RightHanded, LeftHanded})::MiniWave
     # Sometimes in the square dancer shorthand for describing calls,
     # this action is referred to as "touch".  There's already a
     # function in Base with that name though.
@@ -161,14 +166,29 @@ function step_to_a_wave(f::FaceToFace, time_delta,
         DancerState(ds, ds.time + time_delta,
                     ds.direction, to...)
     end
-    sideways = if h isa RightHanded
+    if h isa RightHanded
         return RHMiniWave(move1(f.a, quarter_left),
                           move1(f.b, quarter_left))
     elseif h isa LeftHanded
         return LHMiniWave(move1(f.a, quarter_right),
                           move1(f.b, quarter_right))
-    else
-        error("touch requires either RightHanded or LeftHanded Handedness.")
     end
+end
+
+
+"""
+    pass_by(mw::MiniWave, time_delta)::BackToBack
+
+Dancers in a `MiniWave` pass by each other to end BackToBack.
+"""
+function pass_by(mw::MiniWave, time_delta)::BackToBack
+    function m(ds::DancerState)
+        ds1 = forward(ds, COUPLE_DISTANCE / 2, 0)
+        ds2 = handward(handedness(mw))(ds1, COUPLE_DISTANCE / 2, 0)
+        # Elide the intermediate motion
+        DancerState(ds, ds.time + time_delta, ds.direction,
+                    ds2.down, ds2.left)
+    end
+    BackToBack(m(mw.a), m(mw.b))
 end
 
