@@ -106,11 +106,6 @@ Assuming each unit of `time` in a `DancerState` is a single beat,
 `bpm` is used to calculate the total duration of one cycle through the
 animation.
 """
-animate(method::AnimationMethod,
-        output_file, d::Dict{Dancer, DancerState}, bpm) =
-    animate(method, output_file, collect(values(d)), bpm)
-
-
 function animate(method::CSSKeyframesAnimation,
                  output_file, dancer_states::Vector{DancerState},
                  bpm)
@@ -230,11 +225,7 @@ function animate(method::PureSVGAnimation,
                   dancer_colors_css(number_of_couples)),
               elt("g") do a
                   for ds in dancer_states
-                      hist = collecting() do c
-                          history(ds) do ds
-                              c(ds)
-                          end
-                      end
+                      hist = history(ds)
                       comment = IOBuffer()
                       history(ds) do ds
                           show(comment, MIME"text/plain"(), ds)
