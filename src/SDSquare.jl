@@ -1,4 +1,4 @@
-export SDSQuare, SquareHasDancers, make_square
+export SDSquare, SquareHasDancers, make_square
 
 
 """
