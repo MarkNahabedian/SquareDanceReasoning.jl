@@ -138,9 +138,7 @@ end
 # formations
 function write_formation_html_file(title, output_path, kb::ReteRootNode)
     symbol_uri_base = dancer_symbol_uri(output_path)
-    dancer_states = collecting() do c
-        askc(c, kb, DancerState)
-    end
+    dancer_states = askc(Collector{DancerState}(), kb, DancerState)
     bounds = bump_out(Bounds(dancer_states))
     doc =
         elt("html",

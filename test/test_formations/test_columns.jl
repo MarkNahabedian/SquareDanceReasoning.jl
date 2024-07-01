@@ -16,10 +16,7 @@
         @test length(m.memory) == 6
     end
     let
-        m = find_memory_for_type(kb, ColumnOfFour)
-        columns = collecting() do c
-            askc(c, m)
-        end
+        columns = askc(Collector{ColumnOfFour}(), kb, ColumnOfFour)
         @test length(columns) == 2
         columns = sort(columns; by = f -> f.lead.leader.direction)
         #   ←←←←   direction 1//4

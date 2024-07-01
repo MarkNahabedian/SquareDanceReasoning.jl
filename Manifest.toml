@@ -115,7 +115,7 @@ version = "1.2.2"
 
 [[deps.Rete]]
 deps = ["InteractiveUtils", "IterTools", "MacroTools", "OrderedCollections", "Printf"]
-git-tree-sha1 = "a305074668dc90680d68a493f07dee5018e742e0"
+git-tree-sha1 = "2503d7f12f8260dfddd9cbe30891619163865325"
 repo-rev = "main"
 repo-url = "https://github.com/MarkNahabedian/Rete.jl"
 uuid = "3d46c559-9b3d-4aba-9ca1-48ff7627231e"

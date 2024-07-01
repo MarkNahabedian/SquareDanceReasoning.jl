@@ -283,7 +283,7 @@ end
 
 
 function history(ds::DancerState)
-    collecting() do c
+    Collector{DancerState}()() do c
         history(c, ds)
     end
 end

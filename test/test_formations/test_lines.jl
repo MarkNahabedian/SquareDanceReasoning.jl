@@ -16,10 +16,7 @@
         @test length(m.memory) == 6
     end
     let
-        m = find_memory_for_type(kb, LineOfFour)
-        lines = collecting() do c
-            askc(c, m)
-        end
+        lines = askc(Collector{LineOfFour}(), kb, LineOfFour)
         lines = sort(lines; by = f -> direction(f))
         @test direction(lines[1]) == 0
         @test direction(lines[2]) == 1//2
@@ -66,10 +63,7 @@ end
         @test length(m.memory) == 4
     end
     let
-        m = find_memory_for_type(kb, TwoFacedLine)
-        lines = collecting() do c
-            askc(c, m)
-        end
+        lines = askc(Collector{TwoFacedLine}(), kb, TwoFacedLine)
         line_offset = 0
         for line in lines
             @test length(dancer_states(line)) == 4

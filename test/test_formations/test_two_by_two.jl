@@ -9,12 +9,8 @@
     receive(kb, DancerState(square[3], 0, 3//4, 2, 2))
     receive(kb, DancerState(square[4], 0, 3//4, 1, 2))
     @debug_formations(kb)
-    @test 2 == counting() do c
-        askc(c, kb, Couple)
-    end
-    fc = collecting() do c
-        askc(c, kb, FacingCouples)
-    end
+    @test 2 == askc(Counter(), kb, Couple)
+    fc = askc(Collector{FacingCouples}(), kb, FacingCouples)
     @test length(fc) == 1
     fc = fc[1]
     @test length(dancer_states(fc)) == 4
@@ -37,12 +33,8 @@ end
     receive(kb, DancerState(square[3], 0, 3//4, 2, 1))
     receive(kb, DancerState(square[4], 0, 3//4, 1, 1))
     @debug_formations(kb)
-    @test 2 == counting() do c
-        askc(c, kb, Couple)
-    end
-    bb = collecting() do c
-        askc(c, kb, BackToBackCouples)
-    end
+    @test 2 == askc(Counter(), kb, Couple)
+    bb = askc(Collector{BackToBackCouples}(), kb, BackToBackCouples)
     @test length(bb) == 1
     bb = bb[1]
     @test length(dancer_states(bb)) == 4
@@ -64,12 +56,8 @@ end
     receive(kb, DancerState(square[3], 0, 1//4, 1, 1)) # trailer, beau
     receive(kb, DancerState(square[4], 0, 1//4, 2, 1)) # trailer, belle
     @debug_formations(kb)
-    @test 2 == counting() do c
-        askc(c, kb, Couple)
-    end
-    tc = collecting() do c
-        askc(c, kb, TandemCouples)
-    end
+    @test 2 == askc(Counter(), kb, Couple)
+    tc = askc(Collector{TandemCouples}(), kb, TandemCouples)
     @test length(tc) == 1
     tc = tc[1]
     @test length(dancer_states(tc)) == 4
@@ -92,15 +80,9 @@ end
     receive(kb, DancerState(square[3], 0, 2//4, 2, 1)) # tandem2, trailer
     receive(kb, DancerState(square[4], 0, 2//4, 1, 1)) # tandem2, leader
     @debug_formations(kb)
-    @test 2 == counting() do c
-        askc(c, kb, Tandem)
-    end
-    @test 2 == counting() do c
-        askc(c, kb, RHMiniWave)
-    end
-    box = collecting() do c
-        askc(c, kb, RHBoxOfFour)
-    end
+    @test 2 == askc(Counter(), kb, Tandem)
+    @test 2 == askc(Counter(), kb, RHMiniWave)
+    box = askc(Collector{RHBoxOfFour}(), kb, RHBoxOfFour)
     @test length(box) == 1
     box = box[1]
     @test length(dancer_states(box)) == 4
@@ -122,15 +104,9 @@ end
     receive(kb, DancerState(square[3], 0, 2//4, 2, 2)) # tandem2, trailer
     receive(kb, DancerState(square[4], 0, 2//4, 1, 2)) # tandem2, leader
     @debug_formations(kb)
-    @test 2 == counting() do c
-        askc(c, kb, Tandem)
-    end
-    @test 2 == counting() do c
-        askc(c, kb, LHMiniWave)
-    end
-    box = collecting() do c
-        askc(c, kb, LHBoxOfFour)
-    end
+    @test 2 == askc(Counter(), kb, Tandem)
+    @test 2 == askc(Counter(), kb, LHMiniWave)
+    box = askc(Collector{LHBoxOfFour}(), kb, LHBoxOfFour)
     @test length(box) == 1
     box = box[1]
     @test length(dancer_states(box)) == 4

@@ -15,8 +15,8 @@ end
 
 @testset "test Couple" begin
     kb, dancers = two_dancer_formation_test_setup([ 2 1; ], [ "↓↓" ])
-    @test 2 == askc(counting, kb, DancerState)
-    found = askc(collecting, kb, Couple)
+    @test 2 == askc(Counter(), kb, DancerState)
+    found = askc(Collector{Couple}(), kb, Couple)
     @test 1 == length(found)
     f = found[1]
     @test length(dancer_states(f)) == 2
@@ -30,8 +30,8 @@ end
 
 @testset "test FaceToFace" begin
     kb, dancers = two_dancer_formation_test_setup([ 1 2; ], [ "→←" ])
-    @test 2 == askc(counting, kb, DancerState)
-    found = askc(collecting, kb, FaceToFace)
+    @test 2 == askc(Counter(), kb, DancerState)
+    found = askc(Collector{FaceToFace}(), kb, FaceToFace)
     @test 1 == length(found)
     f = found[1]
     @test f isa FaceToFace
@@ -45,8 +45,8 @@ end
     
 @testset "test BackToBack" begin
     kb, dancers = two_dancer_formation_test_setup([ 1 2; ], [ "←→" ])
-    @test 2 == askc(counting, kb, DancerState)
-    found = askc(collecting, kb, BackToBack)
+    @test 2 == askc(Counter(), kb, DancerState)
+    found = askc(Collector{BackToBack}(), kb, BackToBack)
     @test 1 == length(found)
     f = found[1]
     @test length(dancer_states(f)) == 2
@@ -61,8 +61,8 @@ end
 
 @testset "test Tandem" begin
     kb, dancers = two_dancer_formation_test_setup([ 1 2; ], [ "→→" ])
-    @test 2 == askc(counting, kb, DancerState)
-    found = askc(collecting, kb, Tandem)
+    @test 2 == askc(Counter(), kb, DancerState)
+    found = askc(Collector{Tandem}(), kb, Tandem)
     @test 1 == length(found)
     f = found[1]
     @test length(dancer_states(f)) == 2
@@ -76,8 +76,8 @@ end
 
 @testset "test RHMiniWave" begin
     kb, dancers = two_dancer_formation_test_setup([ 1 2; ], [ "↑↓" ])
-    @test 2 == askc(counting, kb, DancerState)
-    found = askc(collecting, kb, RHMiniWave)
+    @test 2 == askc(Counter(), kb, DancerState)
+    found = askc(Collector{RHMiniWave}(), kb, RHMiniWave)
     @test 1 == length(found)
     f = found[1]
     @test length(dancer_states(f)) == 2
@@ -91,8 +91,8 @@ end
 
 @testset "test LHMiniWave" begin
     kb, dancers = two_dancer_formation_test_setup([ 1 2; ], [ "↓↑" ])
-    @test 2 == askc(counting, kb, DancerState)
-    found = askc(collecting, kb, LHMiniWave)
+    @test 2 == askc(Counter(), kb, DancerState)
+    found = askc(Collector{LHMiniWave}(), kb, LHMiniWave)
     @test 1 == length(found)
     f = found[1]
     @test length(dancer_states(f)) == 2

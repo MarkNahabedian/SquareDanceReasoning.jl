@@ -21,9 +21,8 @@ save_formation_examples()
             for ds in daner_states
                 receive(kb, ds #= jitter(ds, 1) =#)
             end
-            found = collecting() do c
-                askc(c, kb, SquareDanceFormation)
-            end
+            found = askc(Collector{SquareDanceFormation}(),
+                         kb, SquareDanceFormation)
             println("jitter $formation")
             @test formation in map(found) do f
                 string(typeof(f))

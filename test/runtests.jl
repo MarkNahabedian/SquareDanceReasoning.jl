@@ -52,9 +52,7 @@ end
     op_node = ensure_memory_node(kb, OriginalPartners)
     square = make_square(4)
     receive(kb, square)
-    original_partners = collecting() do c
-        askc(c, op_node)
-    end
+    original_partners = askc(Collector{Any}(), op_node)
     @test length(original_partners) == 4
     for op in original_partners
         @test op.guy.couple_number == op.gal.couple_number

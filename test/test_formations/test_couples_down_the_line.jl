@@ -15,18 +15,10 @@
         end
     end
     @debug_formations(kb)
-    @test 4 == counting() do c
-        askc(c, kb, Couple)
-    end
-    @test 2 == counting() do c
-        askc(c, kb, TandemCouples)
-    end
-    @test 1 == counting() do c
-        askc(c, kb, FacingCouples)
-    end
-    f = collecting() do c
-        askc(c, kb, FacingTandemCouples)
-    end
+    @test 4 == askc(Counter(), kb, Couple)
+    @test 2 == askc(Counter(), kb, TandemCouples)
+    @test 1 == askc(Counter(), kb, FacingCouples)
+    f = askc(Collector{FacingTandemCouples}(), kb, FacingTandemCouples)
     @test length(f) == 1
     f = f[1]
     @test length(dancer_states(f)) == 8
@@ -59,18 +51,10 @@ end
         end
     end
     @debug_formations(kb)
-    @test 4 == counting() do c
-        askc(c, kb, Couple)
-    end
-    @test 2 == counting() do c
-        askc(c, kb, FacingCouples)
-    end
-    @test 1 == counting() do c
-        askc(c, kb, BackToBackCouples)
-    end
-    f = collecting() do c
-        askc(c, kb, BeforeEightChain)
-    end
+    @test 4 == askc(Counter(), kb, Couple)
+    @test 2 == askc(Counter(), kb, FacingCouples)
+    @test 1 == askc(Counter(), kb, BackToBackCouples)
+    f = askc(Collector{BeforeEightChain}(), kb, BeforeEightChain)
     @test length(f) == 1
     f = f[1]
     @test length(dancer_states(f)) == 8
@@ -103,18 +87,10 @@ end
         end
     end
     @debug_formations(kb)
-    @test 4 == counting() do c
-        askc(c, kb, Couple)
-    end
-    @test 1 == counting() do c
-        askc(c, kb, FacingCouples)
-    end
-    @test 2 == counting() do c
-        askc(c, kb, BackToBackCouples)
-    end
-    f = collecting() do c
-        askc(c, kb, AfterEightChainOne)
-    end
+    @test 4 == askc(Counter(), kb, Couple)
+    @test 1 == askc(Counter(), kb, FacingCouples)
+    @test 2 == askc(Counter(), kb, BackToBackCouples)
+    f = askc(Collector{AfterEightChainOne}(), kb, AfterEightChainOne)
     @test length(f) == 1
     f = f[1]
     @test length(dancer_states(f)) == 8
@@ -146,21 +122,12 @@ end
         end
     end
     @debug_formations(kb)
-    @test 4 == counting() do c
-        askc(c, kb, Couple)
-    end
-    @test 0 == counting() do c
-        askc(c, kb, FacingCouples)
-    end
-    @test 1 == counting() do c
-        askc(c, kb, BackToBackCouples)
-    end
-    @test 2 == counting() do c
-        askc(c, kb, TandemCouples)
-    end
-    f = collecting() do c
-        askc(c, kb, CompletedDoublePassThru)
-    end
+    @test 4 == askc(Counter(), kb, Couple)
+    @test 0 == askc(Counter(), kb, FacingCouples)
+    @test 1 == askc(Counter(), kb, BackToBackCouples)
+    @test 2 == askc(Counter(), kb, TandemCouples)
+    f = askc(Collector{CompletedDoublePassThru}(), kb,
+             CompletedDoublePassThru)
     @test length(f) == 1
     f = f[1]
     @test length(dancer_states(f)) == 8

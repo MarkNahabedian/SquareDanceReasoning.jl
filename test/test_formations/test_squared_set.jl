@@ -8,18 +8,10 @@
         receive(kb, ds)
     end
     @debug_formations(kb)
-    @test 4 == counting() do c
-        askc(c, kb, Couple)
-    end
-    @test 4 == counting() do c
-        askc(c, kb, FaceToFace)
-    end
-    @test 1 == counting() do c
-        askc(c, kb, SquaredSet)
-    end
-    @test 1 == counting() do c
-        askc(c, kb, CircleOfEight)
-    end
+    @test 4 == askc(Counter(), kb, Couple)
+    @test 4 == askc(Counter(), kb, FaceToFace)
+    @test 1 == askc(Counter(), kb, SquaredSet)
+    @test 1 == askc(Counter(), kb, CircleOfEight)
     collect_formation_examples(kb)
 end
 
@@ -34,17 +26,9 @@ end
         receive(kb, ds)
     end
     @debug_formations(kb)
-    @test 4 == counting() do c
-        askc(c, kb, Couple)
-    end
-    @test 0 == counting() do c
-        askc(c, kb, FaceToFace)
-    end
-    @test 0 == counting() do c
-        askc(c, kb, SquaredSet)
-    end
-    @test 1 == counting() do c
-        askc(c, kb, CircleOfEight)
-    end
+    @test 4 == askc(Counter(), kb, Couple)
+    @test 0 == askc(Counter(), kb, FaceToFace)
+    @test 0 == askc(Counter(), kb, SquaredSet)
+    @test 1 == askc(Counter(), kb, CircleOfEight)
 end
 

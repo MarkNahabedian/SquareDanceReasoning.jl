@@ -56,14 +56,14 @@ end
         receive.([kb2], dss)
     end
     @debug_formations(kb2)
-    @test 3 == askc(counting, kb2, Collision)
-    collisions = askc(collecting, kb2, Collision)
+    @test 3 == askc(Counter(), kb2, Collision)
+    collisions = askc(Collector{Collision}(), kb2, Collision)
     new_dss = breathe(collisions,
                       playmates,
-                      askc(collecting, kb2, DancerState))
+                      askc(Collector{DancerState}(), kb2, DancerState))
     kb3 = make_kb(kb2)
     receive.([kb3], new_dss)
-    @test 0 == askc(counting, kb3, Collision)
+    @test 0 == askc(Counter(), kb3, Collision)
     @debug_formations(kb3)    
 end
 

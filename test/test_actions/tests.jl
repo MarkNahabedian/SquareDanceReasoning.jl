@@ -176,12 +176,12 @@ end
     receive(kb, DancerState(dancers[1], 0, DIRECTION0, 1, 1))
     synchronize(kb)
     function get_latest_sync()
-        askc(collecting, latest_sync)
+        askc(Collector{Synchronized}(), latest_sync)
         @test length(syncs) == 1
         syncs[1]
     end
     function dss_at(time)
-        dss = collecting() do c
+        dss = Collector{DancerState}()() do c
             askc(kb, DancerState) do ds
                 if ds.time == time
                     c(ds)
@@ -243,12 +243,12 @@ end
                                        "Latest Synchronized")
     connect(synced, latest_sync)
     function get_latest_sync()
-        syncs = askc(collecting, latest_sync)
+        syncs = askc(Collector{Synchronized}(), latest_sync)
         @test length(syncs) == 1
         syncs[1]
     end
     function dss_at(time)
-        dss = collecting() do c
+        dss = Collector{DancerState}() do c
             askc(kb, DancerState) do ds
                 if ds.time == time
                     c(ds)
@@ -293,7 +293,7 @@ end
         synchronize(kb)
         @test get_latest_sync().time == step + 1
     end
-    @test sort(collecting() do c
+    @test sort(Collector{Synchronized}() do c
                    askc(synced) do s
                        c(s.time)
                    end
@@ -306,4 +306,6 @@ end
 =#
 
 include("test_breathing.jl")
+
+include("test_pass_thru.jl")
 
