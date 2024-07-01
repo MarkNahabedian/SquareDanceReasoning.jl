@@ -42,6 +42,6 @@ The location and facing direction of a `Dancer` are represented in a
 
 - `down` and `left`: the location of the dancer at `time`.
 
-See the [Coordinate System section](coordinate_system.html) for how
+See the [Coordinate System section](coordinate_system.md) for how
 `direction`, `down` and `left` are represented.
 
