@@ -15,8 +15,10 @@ dancer at a moment in time.
 
 `time` is a number defining a temporal ordering.  It could represent a
 number of beats, for example.
+
+DancerState is also the single dancer `SquareDanceFormation`.
 """
-struct DancerState <: TemporalFact
+struct DancerState <: SquareDanceFormation
     previous::Union{Nothing, DancerState}
     dancer::Dancer
     time

@@ -1,9 +1,11 @@
 module SquareDanceReasoning
 
-using LinearAlgebra: dot, normalize!
+using InteractiveUtils
+using Parameters
+using LinearAlgebra: dot, normalize, normalize!
 using Rete
 
-export SquareDanceRule, TemporalFact, make_kb
+export SquareDanceRule, TemporalFact, SquareDanceFormation, make_kb
 
 
 REPO_ROOT = abspath(joinpath(@__DIR__, ".."))
@@ -22,6 +24,13 @@ abstract type SquareDanceRule <: Rule end
 Abstract supertype for any facts that have a temporal dependence.
 """
 abstract type TemporalFact end
+
+
+"""
+SquareDanceFormation is the abstract supertype of all square dance
+formations.
+"""
+abstract type SquareDanceFormation <: TemporalFact end
 
 
 include("coordinate_system.jl")
