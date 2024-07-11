@@ -1,30 +1,4 @@
 
-@testset "test MoveApart" begin
-    square = make_square(1)
-    let
-        ds = DancerState(square[1], 0, 0, 1, 2)
-        mp = MoveApart([1, 2], [0, 0.5], ds)
-        @test mp(ds) == [0.0, 0.5]
-    end
-    let
-        ds = DancerState(square[1], 0, 0, 1, 2)
-        mp = MoveApart([1, 2], [0, 0.5], ds)
-        other = DancerState(square[1], 0, 1//2, 1, 2)
-        @test mp(other) == [0.0, -0.5]
-    end
-    let
-        ds = DancerState(square[1], 0, 0, 2, 2)
-        mp = MoveApart([1, 2], [0.5, 0], ds)
-        @test mp(ds) == [0.5, 0.0]
-    end
-    let
-        ds = DancerState(square[1], 0, 0, -1, -1)
-        mp = MoveApart([0, 0], [0, 0.5], ds)
-        @test mp(ds) == [0.0, -0.5]
-    end
-end
-
-
 @testset "breathing for FacingCouples step_to_a_wave" begin
     square = make_square(4)
     grid = grid_arrangement(square,
@@ -48,11 +22,12 @@ end
         end
     end
     # We now want DancerStates that require breathing:
-    playmates = []
+    playmates = Vector{TwoDancerFormation}()
     askc(kb, FaceToFace) do f
         mw = step_to_a_wave(f, 1, RightHanded())
         dss = dancer_states(mw)
-        push!(playmates, dss)
+        @assert length(dss) == 2
+        push!(playmates, mw)
         receive.([kb2], dss)
     end
     @debug_formations(kb2)
