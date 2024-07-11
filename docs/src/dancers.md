@@ -13,6 +13,8 @@ Within a square, dancers have an absolute ordering that matches their
 order in a squared set.
 
 ```@example
+Using SquareDanceReasoning
+
 sort(make_square(4).dancers)
 ```
 
