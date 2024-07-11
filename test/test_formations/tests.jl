@@ -1,4 +1,10 @@
 
+for f in readdir(@__DIR__,; join=false)
+    if occursin(r"test_[a-zA-Z_]+-[0-9]+.html", f)
+        rm(f, force=true)
+    end
+end
+
 include("test_two_dancers.jl")
 include("test_two_by_two.jl")
 include("test_bigger_waves.jl")
