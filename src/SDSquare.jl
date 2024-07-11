@@ -1,4 +1,5 @@
 export SDSquare, SquareHasDancers, make_square
+export OriginalPartnerRule, OriginalPartners
 
 
 """
@@ -76,4 +77,46 @@ function make_square(number_of_couples::Int)::SDSquare
     end
     SDSquare(dancers)
 end
+
+
+"""
+    OriginalPartners(guy::Dancer, gal::Dancer)
+
+OriginalPartners is a fact in the knowledge base that identifies the
+original partners in a square.
+"""
+struct OriginalPartners
+    guy::Dancer
+    gal::Dancer
+
+    function OriginalPartners(guy::Dancer, gal::Dancer)
+        @assert guy.gender isa Guy
+        @assert gal.gender isa Gal
+        new(guy, gal)
+    end
+end
+
+couple_number(op::OriginalPartners) = op.guy.couple_number
+
+
+@rule SquareDanceRule.OriginalPartnerRule(sq::SDSquare, guy::Dancer, gal::Dancer, ::OriginalPartners) begin
+    if guy.couple_number != gal.couple_number
+        return
+    end
+    if !isa(guy.gender, Guy)
+        return
+    end
+    if !isa(gal.gender, Gal)
+        return
+    end
+    if !(guy in sq) || !(gal in sq)
+        return
+    end
+    emit(OriginalPartners(guy, gal))
+end        
+
+@doc """
+OriginalPartnerRule is a rule that identifies the original
+partners of a square dance set.
+""" OriginalPartnerRule
 

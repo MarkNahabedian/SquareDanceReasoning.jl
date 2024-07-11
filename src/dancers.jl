@@ -1,9 +1,8 @@
 # Dancers
 
 export Gender, Guy, Gal, Unspecified, opposite
-export Dancer, OriginalPartners
+export Dancer, couple_number
 export is_original_head, is_original_side
-export OriginalPartnerRule, OriginalPartners, couple_number
 
 
 """
@@ -77,46 +76,6 @@ Base.isless(::Unspecified, ::Guy) = true
 Base.isless(::Unspecified, ::Gal) = true
 Base.isless(::Guy, ::Unspecified) = false
 Base.isless(::Gal, ::Unspecified) = false
-
-
-"""
-    OriginalPartners(guy::Dancer, gal::Dancer)
-
-OriginalPartners is a fact in the knowledge base that identifies the
-original partners in a square.
-"""
-struct OriginalPartners
-    guy::Dancer
-    gal::Dancer
-
-    function OriginalPartners(guy::Dancer, gal::Dancer)
-        @assert guy.gender isa Guy
-        @assert gal.gender isa Gal
-        new(guy, gal)
-    end
-end
-
-couple_number(op::OriginalPartners) = op.guy.couple_number
-
-
-@rule SquareDanceRule.OriginalPartnerRule(guy::Dancer, gal::Dancer,
-                                          ::OriginalPartners) begin
-    if guy.couple_number != gal.couple_number
-        return
-    end
-    if !isa(guy.gender, Guy)
-        return
-    end
-    if !isa(gal.gender, Gal)
-        return
-    end
-    emit(OriginalPartners(guy, gal))
-end        
-
-@doc """
-OriginalPartnerRule is a rule that identifies the original
-partners of a square dance set.
-""" OriginalPartnerRule
 
 
 """
