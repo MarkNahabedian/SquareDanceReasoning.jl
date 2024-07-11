@@ -1,3 +1,4 @@
+using SquareDanceReasoning: playmate
 
 function two_dancer_formation_test_setup(grid_dancer_indices,
                                          grid_dancer_directions)
@@ -25,6 +26,8 @@ end
     @test direction_equal(f.beau.direction, f.belle.direction)
     @test f.beau.dancer == dancers[1]
     @test f.belle.dancer == dancers[2]
+    @test playmate(f.beau.dancer, f) == f.belle.dancer
+    @test playmate(f.belle.dancer, f) == f.beau.dancer
     collect_formation_examples(kb)
 end
 
@@ -40,6 +43,8 @@ end
     @test f.a.direction == opposite(f.b.direction)
     @test f.a.dancer == dancers[1]
     @test f.b.dancer == dancers[2]
+    @test playmate(f.a.dancer, f) == f.b.dancer
+    @test playmate(f.b.dancer, f) == f.a.dancer
     collect_formation_examples(kb)
 end
     
@@ -56,6 +61,8 @@ end
     @test f.a.direction == opposite(f.b.direction)
     @test f.a.dancer == dancers[2]
     @test f.b.dancer == dancers[1]
+    @test playmate(f.a.dancer, f) == f.b.dancer
+    @test playmate(f.b.dancer, f) == f.a.dancer
     collect_formation_examples(kb)
 end
 
@@ -71,6 +78,8 @@ end
     @test f isa Tandem
     @test f.leader.dancer == dancers[2]
     @test f.trailer.dancer == dancers[1]
+    @test playmate(f.leader.dancer, f) == f.trailer.dancer
+    @test playmate(f.trailer.dancer, f) == f.leader.dancer
     collect_formation_examples(kb)
 end
 
@@ -86,6 +95,8 @@ end
     @test f.a.direction < f.b.direction
     @test f.a.dancer == dancers[2]
     @test f.b.dancer == dancers[1]
+    @test playmate(f.a.dancer, f) == f.b.dancer
+    @test playmate(f.b.dancer, f) == f.a.dancer
     collect_formation_examples(kb)
 end
 
@@ -101,6 +112,8 @@ end
     @test f.a.direction < f.b.direction
     @test f.a.dancer == dancers[1]
     @test f.b.dancer == dancers[2]
+    @test playmate(f.a.dancer, f) == f.b.dancer
+    @test playmate(f.b.dancer, f) == f.a.dancer
     collect_formation_examples(kb)
 end
 

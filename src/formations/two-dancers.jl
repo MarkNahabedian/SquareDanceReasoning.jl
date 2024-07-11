@@ -19,7 +19,10 @@ dancer_states(f::Couple)::Vector{DancerState} = [f.beau, f.belle]
 
 handedness(::Couple) = NoHandedness()
 
-direction(f::Couple) = direction(f.beau)
+direction(f::Couple) = direction(f.beau)    
+
+those_with_role(c::Couple, ::Beau) = [ c.beau ]
+those_with_role(c::Couple, ::Belle) = [ c.belle ]
 
 
 """
@@ -38,6 +41,8 @@ end
 dancer_states(f::FaceToFace)::Vector{DancerState} = [f.a, f.b]
 
 handedness(::FaceToFace) = NoHandedness()
+
+those_with_role(c::FaceToFace, ::Trailer) = [ c.a, c.b ]
 
 
 """
@@ -58,6 +63,8 @@ dancer_states(f::BackToBack)::Vector{DancerState} = [f.a, f.b]
 
 handedness(::BackToBack) = NoHandedness()
 
+those_with_role(c::BackToBack, ::Leader) = [ c.a, c.b ]
+
 
 """
     Tandem(leaderLLDancerState, trailer::DancerState)
@@ -75,6 +82,9 @@ dancer_states(f::Tandem)::Vector{DancerState} = [f.leader, f.trailer]
 handedness(::Tandem) = NoHandedness()
 
 direction(f::Tandem) = direction(f.leader)
+
+those_with_role(c::Tandem, ::Leader) = [ c.leader ]
+those_with_role(c::Tandem, ::Trailer) = [ c.trailer ]
 
 
 """
@@ -100,6 +110,8 @@ end
 
 handedness(::RHMiniWave) = RightHanded()
 
+those_with_role(c::RHMiniWave, ::Beau) = [ c.a, c.b ]
+
 
 """
 LHMiniWave represents a left handed wave of two dancers.
@@ -115,6 +127,8 @@ struct LHMiniWave <: MiniWave
 end
 
 handedness(::LHMiniWave) = LeftHanded()
+
+those_with_role(c::LHMiniWave, ::Belle) = [ c.a, c.b ]
 
 
 @rule SquareDanceFormationRule.TwoDancerFormationsRule(kb::ReteRootNode,
@@ -185,4 +199,52 @@ formations: [`Couple`](@ref), [`FaceToFace`](@ref),
 [`BackToBack`](@ref), [`Tandem`](@ref), [`RHMiniWave`](@ref), and
 [`LHMiniWave`](@ref).
 """ TwoDancerFormationsRule
+
+
+
+############################################################
+# playmate is used by breathe.
+
+function playmate(ds::Dancer,
+                  v::Vector{<:TwoDancerFormation})::Union{Nothing, Dancer}
+    for f in v
+        pm = playmate(ds, f)
+        if pm != nothing
+            return pm
+        end
+    end
+    nothing
+end
+
+
+"""
+    playmate(ds::Dancer, f::TwoDancerFormation)::Union{Nothing, Dancer}
+
+If the `Dancer` is part of the formation then return the other
+`Dancer` in the formation, otherwise return `nothing`.
+"""
+function playmate end
+
+let
+    function walk(t)
+        for st in subtypes(t)
+            if isconcretetype(st)
+                fn = fieldnames(st)
+                @assert length(fn) == 2
+                eval(:(function playmate(d::Dancer, f::$st)
+                           if d == f.$(fn[1]).dancer
+                               f.$(fn[2]).dancer
+                           elseif d == f.$(fn[2]).dancer
+                               f.$(fn[1]).dancer
+                           else
+                               nothing
+                           end
+                       end))
+            else
+                walk(st)
+            end
+        end
+    end
+    walk(TwoDancerFormation)
+end
 
