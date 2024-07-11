@@ -184,3 +184,4 @@ include("test_formations/tests.jl")
 
 include("test_actions/tests.jl")
 
+include("test_calls/tests.jl")

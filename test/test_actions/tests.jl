@@ -1,3 +1,8 @@
+for f in readdir(@__DIR__,; join=false)
+    if occursin(r"test_[a-zA-Z_]+-[0-9]+.html", f)
+        rm(f, force=true)
+    end
+end
 
 @testset "test forward motion" begin
     let
@@ -306,6 +311,4 @@ end
 =#
 
 include("test_breathing.jl")
-
-include("test_pass_thru.jl")
 
