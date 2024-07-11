@@ -39,6 +39,12 @@ end
     end
 end
 
+@testset "SDSquare identity" begin
+    # I wonder iof this works or if we need to add a square number to
+    # Dancer?
+    @test make_square(4) != make_square(4)
+end
+
 @testset "square up" begin
     ds = square_up(make_square(4))
     @test length(ds) == 8
@@ -49,10 +55,9 @@ end
     kb = Rete.ReteRootNode("root")
     install(kb, OriginalPartnerRule)
     install(kb, SquareHasDancers)
-    op_node = ensure_memory_node(kb, OriginalPartners)
     square = make_square(4)
     receive(kb, square)
-    original_partners = askc(Collector{Any}(), op_node)
+    original_partners = askc(Collector{Any}(), kb, OriginalPartners)
     @test length(original_partners) == 4
     for op in original_partners
         @test op.guy.couple_number == op.gal.couple_number
