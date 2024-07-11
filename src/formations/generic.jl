@@ -1,5 +1,5 @@
 
-export SquareDanceFormation, dancers, handedness
+export dancers, handedness
 export TwoDancerFormation, FourDancerFormation, EightDancerFormation
 export SquareDanceFormationRule
 export dancer_states
@@ -12,13 +12,6 @@ export handedness, Handedness, NoHandedness, RightHanded, LeftHanded
 the group for all rules relating to square dance formations.
 """
 abstract type SquareDanceFormationRule <: SquareDanceRule end
-
-
-"""
-SquareDanceFormation is the abstract supertype of all square dance
-formations.
-"""
-abstract type SquareDanceFormation <: TemporalFact end
 
 
 """
