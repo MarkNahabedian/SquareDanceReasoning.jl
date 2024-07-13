@@ -2,7 +2,7 @@
 
 julia_version = "1.10.4"
 manifest_format = "2.0"
-project_hash = "42fb78df47992e91586b59d0da5443bea5768716"
+project_hash = "ebb93dc015c10c38e18c0ad497d05b3cc62ca09a"
 
 [[deps.ANSIColoredPrinters]]
 git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
@@ -296,7 +296,7 @@ uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 version = "1.10.0"
 
 [[deps.SquareDanceReasoning]]
-deps = ["Colors", "InteractiveUtils", "JSON", "LinearAlgebra", "OrderedCollections", "Parameters", "Printf", "Rete", "XML"]
+deps = ["Colors", "InteractiveUtils", "JSON", "LinearAlgebra", "Logging", "OrderedCollections", "Parameters", "Printf", "Rete", "XML"]
 path = ".."
 uuid = "b9c7be03-8993-4d9d-899b-7f8d1d493d3a"
 version = "1.0.0-DEV"

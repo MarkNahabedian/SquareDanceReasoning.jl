@@ -2,6 +2,7 @@ module SquareDanceReasoning
 
 using InteractiveUtils
 using Parameters
+using Logging
 using LinearAlgebra: dot, normalize, normalize!
 using Rete
 
