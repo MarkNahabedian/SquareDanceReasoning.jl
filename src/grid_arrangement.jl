@@ -60,7 +60,8 @@ function grid_arrangement(dancers::Vector{Dancer},
                           dancer_indices::Array{<:Integer, 2},
                           dancer_directions::Array{Rational, 2}
                           )::Array{Union{Nothing, DancerState}, 2}
-    @assert size(dancer_indices) == size(dancer_directions)
+    # This assert s wrong.  Doesn't consider placeholder spaces.
+    # @assert size(dancer_indices) == size(dancer_directions)
     result = Array{Union{Nothing, DancerState}, 2}(nothing,
                                                    size(dancer_directions))
     for down in 1:size(dancer_indices)[1]
