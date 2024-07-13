@@ -157,9 +157,6 @@ function write_formation_html_file(title, output_path, kb::ReteRootNode)
                     elt("h2", "Dancer Location and Facing Direction"),
                     dancer_states_table(dancer_states, symbol_uri_base)),
                 elt("div",
-                    elt("h2", "Formations"),
-                    dancer_formations_html(kb)),
-                elt("div",
                     elt("svg",
                         "id" => "floor",
                         "xmlns" => SVG_NAMESPACE,
@@ -167,7 +164,10 @@ function write_formation_html_file(title, output_path, kb::ReteRootNode)
                         elt("g",
                             map(dancer_states) do ds
                                 dancer_svg(ds, symbol_uri_base)
-                            end...)))
+                            end...))),
+                elt("div",
+                    elt("h2", "Inferred Formations"),
+                    dancer_formations_html(kb))
                 ))
     XML.write(output_path, doc)
 end
