@@ -21,7 +21,7 @@ description(c::_Rest) = "$(c.role) rest for $(c.time) ticks."
 
 can_do_from(::_Rest, ::DancerState) = 1
 
-function perform(c::_Rest, ds::DancerState)
+function perform(c::_Rest, ds::DancerState, kb::ReteRootNode)
     DancerState(ds, ds.time + c.time, ds.direction,
                 ds.down, ds.left)
 end
@@ -42,7 +42,7 @@ descirption(c::_StepToAWave) = "$(c.role) Step To a Wave"
 
 can_do_from(::_StepToAWave, ::FaceToFace) = 1
 
-function perform(c::_StepToAWave, f::FaceToFace)
+function perform(c::_StepToAWave, f::FaceToFace, kb::ReteRootNode)
     step_to_a_wave(f, 1, c.handedness)
 end
 
@@ -63,7 +63,7 @@ description(c::_PassBy) = "$(c.role) pass by from MiniWave to BackToBack"
 
 can_do_from(::_PassBy, ::MiniWave) = 1
 
-function perform(c::_PassBy, mw::MiniWave)
+function perform(c::_PassBy, mw::MiniWave, kb::ReteRootNode)
     pass_by(mw, 1)
 end
 

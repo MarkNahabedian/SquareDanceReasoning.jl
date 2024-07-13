@@ -66,7 +66,7 @@ CanDoCallRule identifies which calls can be applied to which formations.
 
 
 """
-    perform(::SquareDanceCall, ::SquareDanceFormation)::SquareDanceFormation
+    perform(::SquareDanceCall, ::SquareDanceFormation, ::ReteRootNode)::SquareDanceFormation
 
 Forforms the call on the specified formation and returns the new
 formation.
@@ -132,7 +132,7 @@ function do_simple_call(kb::ReteRootNode,
     # We really only need collision detection here.
     after = map(options) do cdc
         @assert call == cdc.call
-        perform(call, cdc.formation)
+        perform(call, cdc.formation, kb)
     end
     altered = Dict{Dancer, DancerState}()
     for a in after
