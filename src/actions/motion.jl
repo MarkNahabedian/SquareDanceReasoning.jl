@@ -1,6 +1,7 @@
 
 export forward, backward, rightward, leftward, revolve, rotate,
-    jitter, can_roll, step_to_a_wave, pass_by
+    jitter, can_roll, step_to_a_wave, pass_by,
+    CanRollAmbiguityException
 
 
 function move(p::Vector, direction, distance)
@@ -100,6 +101,21 @@ rotate(ds::DancerState, rotation, time_delta)::DancerState =
             ds.direction + rotation, time_delta)
 
 
+struct CanRollAmbiguityException <: Exception
+    dancer_state::DancerState
+end
+
+function Base.showerror(io::IO, err::CanRollAmbiguityException)
+    ds = err.dancer_state
+    pdir = ds.previous.direction
+    dir = ds.direction
+    print(io, "$(typeof(err)): Can't determine roll direction "
+          * "for $(ds.dancer): direction from $pdir to $dir.  "
+          * "Maybe previous motion should have been done in "
+          * "smaller pieces.")
+end
+
+
 """
     can_roll(ds::DancerState)
 
@@ -111,13 +127,23 @@ This is not useful for "and roll as if you could".
 """
 function can_roll(ds::DancerState)
     p = ds.previous
+    if p == nothing
+        return 0
+    end
     r = ds.direction - p.direction
+    if abs(r) == 1//2
+          throw(CanRollAmbiguityException(ds))
+    end
     # Because functions like synchronize can add zero-motion
-    # DancerStates, skip those over to determine roll:
+    # DancerStates, skip over those to determine roll:
     if r == 0 && (ds.down - p.down) == 0 && (ds.left - p.left) == 0
         can_roll(p)
     else
-        r
+        if r > 1//2
+            r - 1
+        else
+            r
+        end
     end
 end
 
