@@ -58,11 +58,10 @@ end
         emit(CanDoCall(p, call, f))
     end
 end
-
     
 @doc """
 CanDoCallRule identifies which calls can be applied to which formations.
-"""
+""" CanDoCallRule
 
 
 """
