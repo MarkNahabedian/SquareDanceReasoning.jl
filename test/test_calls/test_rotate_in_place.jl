@@ -1,69 +1,173 @@
+using Logging
 
-#=
-@testset "DEBUG missing previous using single dancer" begin
-    ds = DancerState(Dancer(1, Guy()), 0, 0, 0, 0)
-    kb = make_kb()
-    receive(kb, SDSquare([ds.dancer]))
-    receive(kb, ds)
-    call = _Rest(; time=2)
-    # receive(kb, call)
-    # askc(println, kb, CanDoCall)
-    askc(println, kb, DancerState)
-    kb_stats(kb)
-    kb = do_call(kb, call)
-    dss = askc(Collector{DancerState}(), kb, DancerState)
-    @test dss[1].previous.time + 2 == dss[1].time
-    call = UTurnBack()
-    # receive(kb, call)
-    # askc(println, kb, CanDoCall)
-    kb = do_call(kb, call)
-    dss = askc(Collector{DancerState}(), kb, DancerState)
-end
-=#
-
-@testset "test rotate in place calls" begin
-    square = make_square(4)
-    kb = make_kb()
-    receive(kb, square)
-    receive.([kb], square_up(square.dancers))
-    @debug_formations(kb)
-    for ds in askc(Collector{DancerState}(), kb, DancerState)
-        @test ds.previous == nothing
-    end
-    kb = do_call(kb, _Rest(; time=2))
-    # verify there was no movement
-    for ds in askc(Collector{DancerState}(), kb, DancerState)
-        println("no previous?: $ds")
-        @test ds.time == 2
-        @test ds.direction == ds.previous.direction
-        @test ds.down == ds.previous.down
-        @test ds.left == ds.previous.left
-    end
-    kb = do_call(kb, UTurnBack())
-    # verify opposite direction
-    for ds in askc(Collector{DancerState}(), kb, DancerState)
-        @test ds.direction == opposite(ds.previous.direction)
-        @test ds.down == ds.previous.down
-        @test ds.left == ds.previous.left
-    end    
-    @debug_formations(kb)
-    kb = do_call(kb, AndRoll())
-    # verify roll
-    for ds in askc(Collector{DancerState}(), kb, DancerState)
-        roll = if ds.dancer.gender == Guy()
-            quarter_right
-        else
-            quarter_left
+function direction_history(ds::DancerState)
+    hist = []
+    function dh(ds)
+        if ds == nothing
+            return
         end
-        @test ds.direction == opposite(ds.previous.direction)
-        @test ds.down == ds.previous.down + roll
-        @test ds.left == ds.previous.left + roll
-    end    
+        dh(ds.previous)
+        push!(hist, ds.time => ds.direction)
+    end
+    dh(ds)
+    (ds.dancer, hist)
+end
+
+@testset "test AndRoll" begin
+    logger = TestLogger()
+    # No history:
+    ds1 = DancerState(Dancer(1, Guy()), 0, 0, 0, 1)
+    @test can_roll(ds1) == 0
+    # no rotation:
+    ds2 = forward(DancerState(Dancer(2, Guy()), 0, 0, 0, 2),
+                  1, 1)
+    @test can_roll(ds2) == 0
+    # quarter left:
+    ds3 = rotate(DancerState(Dancer(3, Guy()), 0, 0, 0, 3),
+                 1//4, 1)
+    @test can_roll(ds3) == 1//4
+    # quarter right:
+    ds4 = rotate(DancerState(Dancer(4, Guy()), 0, 0, 0, 4),
+                 -1//4, 1)
+    @test can_roll(ds4) == -1//4
+    # 180 turn:
+    ds5 = rotate(DancerState(Dancer(5, Guy()), 0, 0, 0, 5),
+                 1//2, 1)
+    @test_throws CanRollAmbiguityException can_roll(ds5)
+    kb = make_kb()
+    receive(kb, ds1)
+    receive(kb, ds2)
+    receive(kb, ds3)
+    receive(kb, ds4)
+    receive(kb, ds5)
     @debug_formations(kb)
-    kb = do_call(kb, _Rest(; time=2))
-    
-    animate(joinpath(@__DIR__, "UTurnBackAndRoll.svg"),
-            askc(Collector{DancerState}(), kb, DancerState),
-            40)
+    with_logger(logger) do
+        @test isempty(logger.logs)
+        kb = do_call(kb, AndRoll())
+        @test length(logger.logs) == 1
+        @test first(logger.logs).message isa CanRollAmbiguityException
+    end
+    @debug_formations(kb)
+    dss = sort!(askc(Collector{DancerState}(), kb, DancerState);
+                by = ds -> ds.dancer.couple_number)
+    @test dss[1].direction == 0
+    @test dss[2].direction == 0
+    @test dss[3].direction == 1//2
+    @test dss[4].direction == 1//2
+    @test dss[5].direction == 1//2
+    rolled_by(dss) = canonicalize(dss.direction - dss.previous.direction)
+    @test rolled_by(dss[3]) == rolled_by(dss[3].previous)
+    @test rolled_by(dss[4]) == rolled_by(dss[4].previous)
+end
+
+using SquareDanceReasoning: uturnback1
+
+@testset "test uturnback1" begin
+    ctr = [0, 1]
+    expect = [
+        (Dancer(1, Guy()), Any[0 => 0//1, 1 => 3//4, 2 => 1//2, 3 => 1//4]),
+        (Dancer(1, Guy()), Any[0 => 0//1, 1 => 0//1, 2 => 1//4, 3 => 1//2]),
+        (Dancer(1, Guy()), Any[0 => 0//1, 1 => 1//4, 2 => 1//2, 3 => 3//4]),
+        (Dancer(2, Guy()), Any[0 => 1//4, 1 => 0//1, 2 => 3//4, 3 => 1//2]),
+        (Dancer(2, Guy()), Any[0 => 1//4, 1 => 1//4, 3 => 3//4]),
+        (Dancer(2, Guy()), Any[0 => 1//4, 1 => 1//2, 2 => 3//4, 3 => 0//1]),
+        (Dancer(3, Guy()), Any[0 => 1//2, 1 => 1//4, 2 => 0//1, 3 => 3//4]),
+        (Dancer(3, Guy()), Any[0 => 1//2, 1 => 1//2, 2 => 1//4, 3 => 0//1]),
+        (Dancer(3, Guy()), Any[0 => 1//2, 1 => 3//4, 2 => 0//1, 3 => 1//4]),
+        (Dancer(4, Guy()), Any[0 => 3//4, 1 => 1//2, 2 => 1//4, 3 => 0//1]),
+        (Dancer(4, Guy()), Any[0 => 3//4, 1 => 3//4, 3 => 1//4]),
+        (Dancer(4, Guy()), Any[0 => 3//4, 1 => 0//1, 2 => 1//4, 3 => 1//2])
+    ]
+    expect_index = 1
+    for i in 1:4
+        startdir = (i-1)//4
+        for rot in [ -1//4, 0, 1//4 ]
+            ds = rotate(DancerState(Dancer(i, Guy()), 0, startdir, 0, 0),
+                        rot, 1)
+            ds2 = uturnback1(ds, ctr)
+            @test direction_history(ds2) == expect[expect_index]
+            expect_index += 1
+        end
+    end
+end
+
+@testset "test UTurnBack from Couples" begin
+    kb = make_kb()
+    square = make_square(4)
+    receive(kb, square)
+    receive.([kb], square_up(square))
+    @debug_formations(kb)
+    kb = do_call(kb, UTurnBack())
+    dss = sort!(askc(Collector{DancerState}(), kb, DancerState);
+                by = ds -> ds.dancer)
+    @test dss[1].previous.direction == 3//4
+    @test dss[1].direction == 1//2
+    @test dss[2].previous.direction == 1//4
+    @test dss[2].direction == 1//2
+    @test dss[3].previous.direction == 0//4
+    @test dss[3].direction == 3//4
+    @test dss[4].previous.direction == 1//2
+    @test dss[4].direction == 3//4
+    @test dss[5].previous.direction == 1//4
+    @test dss[5].direction == 0
+    @test dss[6].previous.direction == 3//4
+    @test dss[6].direction == 0
+    @test dss[7].previous.direction == 1//2
+    @test dss[7].direction == 1//4
+    @test dss[8].previous.direction == 0//4
+    @test dss[8].direction == 1//4
+    @debug_formations(kb)
+end
+
+@testset "tast UTurnBack, AndRoll" begin
+    logger = TestLogger()
+    kb = make_kb()
+    square = make_square(4)
+    receive(kb, square)
+    grid = grid_arrangement(
+        sort!(square.dancers),
+        [ 0 3 0 1 2;
+          5 0 0 0 6;
+          0 7 8 4 0 ],
+        [ " → ↑↓";
+          "←   ←"
+          " ↑↑← ";
+          ])
+    receive.([kb], grid)
+    dss = askc(Collector{DancerState}(), kb, DancerState)
+    receive(kb, SDSquare(map(ds -> ds.dancer, dss)))
+    receive.([kb], dss)
+    @debug_formations(kb)
+    kb = do_call(kb, UTurnBack())
+    @debug_formations(kb)
+    with_logger(logger) do
+        kb = do_call(kb, AndRoll())
+        @test length(logger.logs) == 2
+        @test logger.logs[1].message isa CanRollAmbiguityException
+        @test logger.logs[2].message isa CanRollAmbiguityException
+        @test sort!((map(logger.logs) do logrec
+                         logrec.message.dancer_state.dancer
+                     end)) == [ Dancer(3, Guy()),
+                                Dancer(3, Gal()) ]
+    end
+    @debug_formations(kb)
+    dss = sort!(askc(Collector{DancerState}(), kb, DancerState);
+                by = ds -> ds.dancer)
+    @test direction_history(dss[1]) ==
+        (Dancer(1, Guy()), [ 0 => 1//2, 1 => 1//4, 2 => 0, 4 => 3//4 ])
+    @test direction_history(dss[2]) ==
+        (Dancer(1, Gal()), [ 0 => 0, 1 => 3//4, 2 => 1//2, 4 => 1//4 ])
+    @test direction_history(dss[3]) ==
+        (Dancer(2, Guy()), [ 0 => 1//4, 1 => 0, 2 => 3//4, 4 => 1//2 ])
+    @test direction_history(dss[4]) ==
+        (Dancer(2, Gal()), [ 0 => 3//4, 1 => 1//2, 2 => 1//4, 4 => 0 ])
+    @test direction_history(dss[5]) ==
+        (Dancer(3, Guy()), [ 0 => 3//4, 2 => 1//4, 4 => 1//4 ])
+    @test direction_history(dss[6]) ==
+        (Dancer(3, Gal()), [ 0 => 3//4, 2 => 1//4, 4 => 1//4 ])
+    @test direction_history(dss[7]) ==
+        (Dancer(4, Guy()), [ 0 => 1//2, 1 => 1//4, 2 => 0, 4 => 3//4 ])
+    @test direction_history(dss[8]) ==
+        (Dancer(4, Gal()), [ 0 => 1//2, 1 => 3//4, 2 => 0, 4 => 1//4 ])
 end
 
