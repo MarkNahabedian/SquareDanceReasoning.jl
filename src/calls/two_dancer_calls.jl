@@ -36,3 +36,28 @@ expand_parts(c::PassThru) = [
     _PassBy()
 ]
 
+#=
+
+For PassThru from facing lines of 4, expand_parts returns
+_StepToAWave, _PassBy.  After _StepToAWave there are two right handed
+and one left handed miniwaves. get_call_options detects the overlap
+between the center LHMiniWave and the two RHMiniWaves.  How do we
+exclude the center LHMiniWave from consideration.
+
+This is also an issue for SquareThru, where we want to identify the
+groups of participating dancers doing the SquareThru, possibly using
+the DesignatedDancers role.
+
+From facing lines of 4, PassThru should make a DesignatedDancers group
+for each FaceToFace formation and propagate those as the role for each
+part in expand_call.
+
+What we'd have is 4 FaceToFace formations that need to
+"simultaneously" do _StepToAWave and then simultaneously do _PassBy.
+
+Another approach might be to specificallly implement PassThru for
+FacingCouples and FacingLinesOfFour with higher priorities than
+FaceToFace.
+
+=#
+
