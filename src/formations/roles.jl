@@ -1,9 +1,12 @@
 # Dancer roles.
 
-export Role, Guys, Gals, OriginalHead, OriginalSide,
+export Everyone, Role, Guys, Gals,
+    OriginalHead, OriginalSide,
     CurrentHead, CurrentSide,
     Beau, Belle, Center, End,
-    Leader, Trailer, Point, CoupleNumbers
+    Leader, Trailer,
+    Point,
+    CoupleNumbers, DesignatedDancers
 
 export those_with_role
 
@@ -74,12 +77,26 @@ those_with_role(ds::DancerState, ::CurrentSide) =
 struct CoupleNumbers <: Role
     numbers::Vector{Integer}
 
-    CoupleNumbers(numbers...) =
+    CoupleNumbers(numbers::Integer...) =
+        new(numbers)
+    CoupleNumbers(numbers::Vector) =
         new(numbers)
 end
 
 those_with_role(ds::DancerState, cn::CoupleNumbers) =
     if ds.dancer.couple_number in cn.numbers
+        ds
+    else
+        []
+    end
+
+
+struct DesignatedDancers <: Role
+    dancers::Vector{Dancer}
+end
+
+those_with_role(ds::DancerState, r::DesignatedDancers) =
+    if ds.dancer in r.dancers
         ds
     else
         []
