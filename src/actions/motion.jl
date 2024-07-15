@@ -121,7 +121,7 @@ end
 
 Determine whether the modifier "and roll" can be applied to the
 DancerState.  If the dancer can roll then `can_roll` returns a
-non-zero rotation value.
+signed rotation value.
 
 This is not useful for "and roll as if you could".
 """
@@ -139,11 +139,7 @@ function can_roll(ds::DancerState)
     if r == 0 && (ds.down - p.down) == 0 && (ds.left - p.left) == 0
         can_roll(p)
     else
-        if r > 1//2
-            r - 1
-        else
-            r
-        end
+        canonicalize_signed(r)
     end
 end
 

@@ -1,6 +1,7 @@
 
 export COUPLE_DISTANCE
-export canonicalize, FULL_CIRCLE, DIRECTION0, DIRECTION1,
+export canonicalize, canonicalize_signed
+export FULL_CIRCLE, DIRECTION0, DIRECTION1,
     DIRECTION2, DIRECTION3, direction_equal
 export opposite, quarter_left, quarter_right
 export distance
@@ -15,9 +16,29 @@ const FULL_CIRCLE = 1
 """
     canonicalize(direction)
 
-canonicalizes the direction to be between 0.0 and 1.0.
+canonicalizes the direction to be between 0 and 1.
 """
-canonicalize(direction) = mod(direction, FULL_CIRCLE)
+function canonicalize(direction)
+    # Allowing floating point error makes it impossible to distinguish
+    # a direction of 0 as an arithmetic result.
+    resolution = 256
+    round(Int, resolution * mod(direction, FULL_CIRCLE)) // resolution
+end
+
+
+"""
+    canonicalize_signed(direction)
+
+canonicalizes the direction to be between -1//2 and 1//2.
+"""
+function canonicalize_signed(direction)
+    c = canonicalize(direction)
+    if c > 1//2
+        c - FULL_CIRCLE
+    else
+        c
+    end
+end
 
 
 # Actually , these will be different if dancing hexagons.
