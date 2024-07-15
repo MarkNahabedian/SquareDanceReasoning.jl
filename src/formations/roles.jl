@@ -1,14 +1,16 @@
 # Dancer roles.
 
-export Role, OriginalHead, OriginalSide,
+export Role, Guys, Gals, OriginalHead, OriginalSide,
     CurrentHead, CurrentSide,
     Beau, Belle, Center, End,
-    Leader, Trailer, Point
+    Leader, Trailer, Point, CoupleNumbers
 
 export those_with_role
 
 abstract type Role end
 struct Everyone <: Role end
+struct Guys <: Role end
+struct Gals <: Role end    
 struct OriginalHead <: Role end
 struct OriginalSide <: Role end
 struct CurrentHead <: Role end
@@ -40,6 +42,20 @@ those_with_role(f::SquareDanceFormation, ::Everyone) = f
 those_with_role(::DancerState, ::Role) = []
 those_with_role(f::DancerState, ::Everyone) = f
 
+those_with_role(f::DancerState, ::Guys) =
+    if f.dancer.gender isa Guy
+        f
+    else
+        []
+    end
+
+those_with_role(f::DancerState, ::Gals) =
+    if f.dancer.gender isa Gal
+        f
+    else
+        []
+    end
+
 those_with_role(ds::DancerState, ::OriginalHead) =
     is_original_head(ds) ? [ds] : []
 
@@ -53,4 +69,19 @@ those_with_role(ds::DancerState, ::CurrentHead) =
 those_with_role(ds::DancerState, ::CurrentSide) =
     (direction_equal(ds.direction, 1//4) ||
     direction_equal(ds.direction, 3//4)) ? [ds] : []
+
+
+struct CoupleNumbers <: Role
+    numbers::Vector{Integer}
+
+    CoupleNumbers(numbers...) =
+        new(numbers)
+end
+
+those_with_role(ds::DancerState, cn::CoupleNumbers) =
+    if ds.dancer.couple_number in cn.numbers
+        ds
+    else
+        []
+    end
 
