@@ -1,4 +1,4 @@
-export Rest, UTurnBack, AndRoll
+export UTurnBack, AndRoll
 
 # QuarterRight, QuarterLeft aren't on a CallerLab list, but maybe we
 # want them anyway, maybe as primitives.
