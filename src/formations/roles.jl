@@ -39,55 +39,55 @@ struct Point <: Role end
 For the specified formation returns `DancerState`s or subformations
 whose dancers fill the specified role.
 """
-those_with_role(::SquareDanceFormation, ::Role) = []
-those_with_role(f::SquareDanceFormation, ::Everyone) = f
+those_with_role(::SquareDanceFormation, ::Role) = DancerState[]
+those_with_role(f::SquareDanceFormation, ::Everyone) = dancer_states(f)
 
-those_with_role(::DancerState, ::Role) = []
-those_with_role(f::DancerState, ::Everyone) = f
+those_with_role(::DancerState, ::Role) = DancerState[]
+those_with_role(f::DancerState, ::Everyone) = dancer_states(f)
 
 those_with_role(f::DancerState, ::Guys) =
     if f.dancer.gender isa Guy
-        f
+        dancer_states(f)
     else
-        []
+        DancerState[]
     end
 
 those_with_role(f::DancerState, ::Gals) =
     if f.dancer.gender isa Gal
-        f
+        dancer_states(f)
     else
-        []
+        DancerState[]
     end
 
 those_with_role(ds::DancerState, ::OriginalHead) =
-    is_original_head(ds) ? [ds] : []
+    is_original_head(ds) ? [ds] : DancerState[]
 
 those_with_role(ds::DancerState, ::OriginalSide) =
-    is_original_side(ds) ? [ds] : []
+    is_original_side(ds) ? [ds] : DancerState[]
 
 those_with_role(ds::DancerState, ::CurrentHead) =
     (direction_equal(ds.direction, 0) ||
-    direction_equal(ds.direction, 1//2)) ? [ds] : []
+    direction_equal(ds.direction, 1//2)) ? [ds] : DancerState[]
 
 those_with_role(ds::DancerState, ::CurrentSide) =
     (direction_equal(ds.direction, 1//4) ||
-    direction_equal(ds.direction, 3//4)) ? [ds] : []
+    direction_equal(ds.direction, 3//4)) ? [ds] : DancerState[]
 
 
 struct CoupleNumbers <: Role
     numbers::Vector{Integer}
 
     CoupleNumbers(numbers::Integer...) =
-        new(numbers)
-    CoupleNumbers(numbers::Vector) =
+        new([numbers...])
+    CoupleNumbers(numbers::Vector{<:Integer}) =
         new(numbers)
 end
 
 those_with_role(ds::DancerState, cn::CoupleNumbers) =
     if ds.dancer.couple_number in cn.numbers
-        ds
+        [ds]
     else
-        []
+        DancerState[]
     end
 
 
@@ -97,8 +97,8 @@ end
 
 those_with_role(ds::DancerState, r::DesignatedDancers) =
     if ds.dancer in r.dancers
-        ds
+        [ds]
     else
-        []
+        DancerState[]
     end
 
