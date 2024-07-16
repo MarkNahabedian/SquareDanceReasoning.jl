@@ -134,8 +134,8 @@ function can_roll(ds::DancerState)
     if abs(r) == 1//2
           throw(CanRollAmbiguityException(ds))
     end
-    # Because functions like synchronize can add zero-motion
-    # DancerStates, skip over those to determine roll:
+    # Because some functions can add zero-motion DancerStates, skip
+    # over those to determine roll:
     if r == 0 && (ds.down - p.down) == 0 && (ds.left - p.left) == 0
         can_roll(p)
     else
