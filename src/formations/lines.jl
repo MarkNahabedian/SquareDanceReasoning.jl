@@ -1,5 +1,5 @@
 
-export LineOfFour, TwoFacedLine, LineOfFourRule
+export LineOfFour, TwoFacedLine
 export LineOfFourRule, TwoFacedLineRule
 
 
