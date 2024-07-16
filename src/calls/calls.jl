@@ -116,7 +116,7 @@ function get_call_options(call::SquareDanceCall,
     options = filter!(options) do cdc
         # Every dancer in the formation satisfies the role
         # restriction:
-        length(dancer_states(those_with_role(cdc.formation, call.role))) ==
+        length(those_with_role(cdc.formation, call.role)) ==
             length(dancer_states(cdc.formation))
     end
     # Find highest preference option for each dancer:
