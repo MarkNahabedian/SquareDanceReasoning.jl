@@ -8,6 +8,14 @@ function file_name_for_source_location(source::LineNumberNode)
     "$path-$(source.line).html"
 end
 
+function cleanup_debug_formations(dir)
+    for f in readdir(dir; join=false)
+        if occursin(r"test_[a-zA-Z_]+-[0-9]+.html", f)
+            rm(joinpath(dir, f); force=true)
+        end
+    end
+end
+
 
 """
     @debug_formations(kb)

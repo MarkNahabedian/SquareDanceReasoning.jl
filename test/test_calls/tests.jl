@@ -2,11 +2,7 @@
 using SquareDanceReasoning: Basic1, Basic2, Mainstream, Plus,
     Advanced1, Challenge3B
 
-for f in readdir(@__DIR__,; join=false)
-    if occursin(r"test_[a-zA-Z_]+-[0-9]+.html", f)
-        rm(f, force=true)
-    end
-end
+cleanup_debug_formations(@__DIR__)
 
 @testset "Callerlab programs" begin
     @test isless(Basic2(), Advanced1())
