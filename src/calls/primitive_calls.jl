@@ -3,7 +3,7 @@
 # so that they won't conflict with the names of other calls, whether
 # already or eventually to be defined.
 
-export _Rest, _StepToAWave, _PassBy
+export _Rest, _QuarterRight, _QuarterLeft, _StepToAWave, _PassBy
 
 
 """
@@ -12,8 +12,10 @@ export _Rest, _StepToAWave, _PassBy
 Primitive square dance call causing dancers to rest in place for the
 specified time.
 """
-@with_kw struct _Rest <: SquareDanceCall     # primitive
+@with_kw struct _Rest <: SquareDanceCall
     role::Role = Everyone()
+    # Allow timing to be specified since this primitive might be used
+    # in other calls, like SquareThru
     time::Int
 end
 
@@ -24,6 +26,48 @@ can_do_from(::_Rest, ::DancerState) = 1
 function perform(c::_Rest, ds::DancerState, kb::ReteRootNode)
     DancerState(ds, ds.time + c.time, ds.direction,
                 ds.down, ds.left)
+end
+
+
+"""
+    _QuarterRight()
+
+Primitive square dance call causing dancers to turn 1/4 to their
+right.  The timing defaults to 2 since, according to Taminations, two
+beats is the duration for QuarterIn and QuarterOut.
+"""
+@with_kw struct _QuarterRight <: SquareDanceCall
+    role::Role = Everyone()
+    time::Int = 2
+end
+
+description(c::_QuarterRight) = "$(c.role) quarter right, $(c.time) ticks."
+
+can_do_from(::_QuarterRight, ::DancerState) = 1
+
+function perform(c::_QuarterRight, ds::DancerState, kb::ReteRootNode)
+    rotate(ds, -1//4, c.time)
+end
+
+
+"""
+    _QuarterLeft()
+
+Primitive square dance call causing dancers to turn 1/4 to their
+left.  The timing defaults to 2 since, according to Taminations, two
+beats is the duration for QuarterIn and QuarterOut.
+"""
+@with_kw struct _QuarterLeft <: SquareDanceCall
+    role::Role = Everyone()
+    time::Int = 2
+end
+
+description(c::_QuarterLeft) = "$(c.role) quarter right, $(c.time) ticks."
+
+can_do_from(::_QuarterLeft, ::DancerState) = 1
+
+function perform(c::_QuarterLeft, ds::DancerState, kb::ReteRootNode)
+    rotate(ds, -1//4, c.time)
 end
 
 
