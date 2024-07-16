@@ -13,6 +13,35 @@ function direction_history(ds::DancerState)
     (ds.dancer, hist)
 end
 
+@testset "test quarter turns" begin
+    dss = [ DancerState(Dancer(1, Guy()), 0, 0, 0, 0),
+            DancerState(Dancer(2, Gal()), 0, 0, 0, 1),
+            DancerState(Dancer(3, Unspecified()), 0, 0, 0, 2)
+            ]
+    kb = make_kb()
+    receive.([kb], dss)
+    kb = do_call(kb, _QuarterRight())
+    kb = do_call(kb, _QuarterLeft())
+    kb = do_call(kb, _GenderedRoll())
+    dss = sort!(askc(Collector{DancerState}(), kb, DancerState);
+                by = ds -> ds.dancer)
+    hist = map(direction_history, dss)
+    @test hist == [
+        (Dancer(1, Guy()), [
+            0 => 0, 2 => 3//4, 4 => 0, 6 => 3//4]),
+        (Dancer(2, Gal()), [
+            0 => 0, 2 => 3//4, 4 => 0, 6 => 1//4 ]),
+        (Dancer(3, Unspecified()), [
+            0 => 0, 2 => 3//4, 4 => 0, 6 => 0 ])
+    ]
+    for ds in dss
+        @test ds.down == 0
+    end
+    @test dss[1].left == 0
+    @test dss[2].left == 1
+    @test dss[3].left == 2
+end
+
 @testset "test AndRoll" begin
     logger = TestLogger()
     # No history:

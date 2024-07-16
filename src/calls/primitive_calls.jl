@@ -3,7 +3,8 @@
 # so that they won't conflict with the names of other calls, whether
 # already or eventually to be defined.
 
-export _Rest, _QuarterRight, _QuarterLeft, _StepToAWave, _PassBy
+export _Rest, _QuarterRight, _QuarterLeft, _GenderedRoll,
+    _StepToAWave, _PassBy
 
 
 """
@@ -67,7 +68,35 @@ description(c::_QuarterLeft) = "$(c.role) quarter right, $(c.time) ticks."
 can_do_from(::_QuarterLeft, ::DancerState) = 1
 
 function perform(c::_QuarterLeft, ds::DancerState, kb::ReteRootNode)
-    rotate(ds, -1//4, c.time)
+    rotate(ds, 1//4, c.time)
+end
+
+
+"""
+    _GenderedRoll
+
+The second part of calls like StarThru and SlideThru.  Guy turn one
+quarter to the right, Gal turn one quarter to the left.
+"""
+@with_kw struct _GenderedRoll <: SquareDanceCall
+    role::Role = Everyone()
+    time::Int = 2
+end
+
+description(c::_GenderedRoll) = "$(c.role) Guy quarter right, Gal quarter left."
+
+can_do_from(::_GenderedRoll, ::DancerState) = 1
+
+function perform(c::_GenderedRoll, ds::DancerState, kb::ReteRootNode)
+    # The timing of QuarterIn is 2.  Since this is combined with other
+    # calls we leave the timing as a parameter.
+    if ds.dancer.gender isa Guy
+        rotate(ds, -1//4, c.time)
+    elseif ds.dancer.gender isa Gal
+        rotate(ds, 1//4, c.time)
+    else
+        ds
+    end
 end
 
 
