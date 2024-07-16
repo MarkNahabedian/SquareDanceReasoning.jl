@@ -1,6 +1,6 @@
 export StepToAWave, PassThru
 
-#= SOme two daner calls to implement:
+#= Some two dancer calls to implement:
 
 HalfSashay, RollawayWithAHalfSashay
 Primitive FaceYourPartner
