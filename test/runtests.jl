@@ -1,6 +1,7 @@
 using SquareDanceReasoning
 using Test
 using Rete
+using InteractiveUtils
 
 
 include("debug_formations.jl")
