@@ -1,18 +1,5 @@
 using Logging
 
-function direction_history(ds::DancerState)
-    hist = []
-    function dh(ds)
-        if ds == nothing
-            return
-        end
-        dh(ds.previous)
-        push!(hist, ds.time => ds.direction)
-    end
-    dh(ds)
-    (ds.dancer, hist)
-end
-
 @testset "test quarter turns" begin
     dss = [ DancerState(Dancer(1, Guy()), 0, 0, 0, 0),
             DancerState(Dancer(2, Gal()), 0, 0, 0, 1),

@@ -1,17 +1,4 @@
 
-function location_history(ds::DancerState)
-    hist = []
-    function lh(ds)
-        if ds == nothing
-            return
-        end
-        lh(ds.previous)
-        push!(hist, ds.time => location(ds))
-    end
-    lh(ds)
-    (ds.dancer, hist)
-end
-
 #=
 @testset "test PassThru" begin
     # Make a square of four couples, 8 Dancers:
