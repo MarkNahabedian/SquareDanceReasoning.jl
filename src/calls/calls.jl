@@ -67,7 +67,7 @@ CanDoCallRule identifies which calls can be applied to which formations.
 """
     perform(::SquareDanceCall, ::SquareDanceFormation, ::ReteRootNode)::SquareDanceFormation
 
-Forforms the call on the specified formation and returns the new
+Performs the call on the specified formation and returns the new
 formation.
 """
 function perform end
