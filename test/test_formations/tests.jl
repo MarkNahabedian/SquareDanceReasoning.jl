@@ -8,7 +8,7 @@ include("test_lines.jl")
 include("test_columns.jl")
 include("test_couples_down_the_line.jl")
 include("test_squared_set.jl")
-
+include("test_roles.jl")
 
 save_formation_examples()
 
