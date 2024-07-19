@@ -35,8 +35,12 @@ To facilitate recognizing formations, the relative position predicates
 [`right_of`](@ref) are provided.
 
 
+
+## Index
 ```@index
 ```
+
+## Definitions
 
 ```@autodocs
 Modules = [SquareDanceReasoning]
