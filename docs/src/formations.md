@@ -31,7 +31,7 @@ there is a single rule for recognizing two dancer formations.
 For [`Couple`](@ref) and [`Tandem`](@ref) the two dancers can be
 clearly distinguished by beau/belle or leader/trailer.
 
-For [`Miniwave`](@ref) , [`FaceToFace`](@ref) or [`BackToBack`](@ref)
+For [`MiniWave`](@ref) , [`FaceToFace`](@ref) or [`BackToBack`](@ref)
 though, the dancers are symmetric.  We don't want the rule to assert
 two different instances of the same formation type for the same pair
 of dancers, so we break symmetry by putting the dancer with the lowest
