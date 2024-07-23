@@ -10,7 +10,9 @@ using JSON
 
 export COLLECTED_FORMATIONS, collect_formation_examples,
     save_formation_examples, load_formation_examples,
+    formation_example_dancer_states,
     generate_example_formation_diagrams
+
 
 COLLECTED_FORMATIONS = Vector{SquareDanceFormation}()
 
@@ -63,7 +65,13 @@ function save_formation_examples()
     end
 end
 
+CACHED_FORMATION_EXAMPLES = nothing
+
 function load_formation_examples()
+    global CACHED_FORMATION_EXAMPLES
+    if CACHED_FORMATION_EXAMPLES != nothing
+        return CACHED_FORMATION_EXAMPLES
+    end
     parsed = JSON.parsefile(FORMATIONS_EXAMPLE_FILE)
     formation_examples = Dict{String, Vector{DancerState}}()
     for formation in parsed[2:end]
@@ -77,8 +85,20 @@ function load_formation_examples()
                             pds["left"])
             end
     end
+    CACHED_FORMATION_EXAMPLES = formation_examples
     formation_examples
 end
+
+"""
+   formation_example_dancer_states(formation_name)
+
+Returns a vector of `DanerState`s that are an example of the requested
+formation.  These can be injected into the knowledge base to get the
+formation.
+"""
+formation_example_dancer_states(formation_name) =
+    load_formation_examples()[string(formation_name)]
+
 
 function generate_example_formation_diagrams(dir)
     for (name, dancer_states) in load_formation_examples()
