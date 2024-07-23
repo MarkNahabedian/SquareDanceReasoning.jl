@@ -1,5 +1,4 @@
 
-#=
 @testset "test PassThru" begin
     # Make a square of four couples, 8 Dancers:
     square = make_square(4)
@@ -19,12 +18,7 @@
     @debug_formations(kb)
     lines = askc(Collector{LineOfFour}(), kb, LineOfFour)
     @test length(lines) == 2
-    # We currently have a hairy bug.  See the long comment at the end
-    # of src/calls/two_dancer_calls.jl.  As a workaround so that this
-    # testset will pass, we try role restrictions.
-    # Alas, Neither Center nor End are implemented yet.
-    kb = do_call(kb, PassThru(role = CoupleNumbers(1, 2)))
-    kb = do_call(kb, PassThru(role = CoupleNumbers([3, 4])))
+    kb = do_call(kb, PassThru())
     function original_ds(ds)
         if ds.previous == nothing
             ds
@@ -33,18 +27,15 @@
         end
     end
     for ds in askc(Collector{DancerState}(), kb, DancerState)
-        println(location_history(ds))
-        #=
         ods = original_ds(ds)
         @test ods.direction == ds.direction
-        @test ods.left == ds.left
+        # @test ods.left == ds.left     BREATHING!
         odsf = forward(ods, COUPLE_DISTANCE, 0)
         @test odsf.down == ds.down
-        =#
     end
     @debug_formations(kb)
     animate(joinpath(@__DIR__, "pass_thru.svg"),
             askc(Collector{DancerState}(), kb, DancerState),
             40)
 end
-=#
+
