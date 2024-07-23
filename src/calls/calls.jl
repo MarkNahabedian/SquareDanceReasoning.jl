@@ -112,6 +112,10 @@ function get_call_options(call::SquareDanceCall,
     options = filter!(options) do cdc
         cdc.call == call
     end
+    if length(options) == 0
+        kb_stats(kb)
+        error("No options for $call")
+    end
     # Restrict by role:
     options = filter!(options) do cdc
         # Every dancer in the formation satisfies the role
@@ -120,35 +124,40 @@ function get_call_options(call::SquareDanceCall,
             length(dancer_states(cdc.formation))
     end
     # Find highest preference option for each dancer:
-    preferred = Dict{DancerState, CanDoCall}()
+    preferred = Dict{DancerState, Vector{CanDoCall}}()
     for opt in options
         for ds in dancer_states(opt.formation)
-            if haskey(preferred, ds)
-                if opt.preference == preferred[ds].preference
-                    error("$opt and $(preferred[ds]) conflict.")
-                elseif opt.preference > preferred[ds].preference
-                    preferred[ds] = opt
-                end
-            else
-                preferred[ds] = opt
+            if !haskey(preferred, ds)
+                preferred[ds] = CanDoCall[]
+            end
+            if isempty(preferred[ds])
+                push!(preferred[ds], opt)
+            elseif opt.preference > preferred[ds][1].preference
+                preferred[ds] = CanDoCall[opt]
+            elseif opt.preference == preferred[ds][1].preference
+                push!(preferred[ds], opt)
             end
         end
     end
     # Consolidate the options, making sure that there are no two
-    # options that concern the same dancer:
-    do_these = Vector{CanDoCall}()
-    for (ds, opt) in preferred
-        if in(opt, do_these)
-            for dto in do_these
-                if dto == opt
-                    continue
-                end
-                if ds in dancer_states(dto.formation)
-                    error("$(ds.dancer) in both $opt and $dto")
-                end
+    # options that concern the same dancer.  We map each Dancer to
+    # each CanDoCall whose formation contains that dancer.
+    do_these = CanDoCall[]
+    used_ds = DancerState[]
+    while any(v -> !isempty(v), values(preferred))
+        # Keep a CanDoCall if it's the only one that concerns a given
+        # dancer:
+        for opts in values(preferred)
+            if length(opts) == 1
+                push!(do_these, opts[1])
+                push!(used_ds, dancer_states(opts[1].formation)...)
             end
-        else
-            push!(do_these, opt)
+        end
+        for opts in values(preferred)
+            filter!(opts) do opt
+                isempty(intersect(used_ds,
+                                  dancer_states(opt.formation)))
+            end
         end
     end
     do_these
