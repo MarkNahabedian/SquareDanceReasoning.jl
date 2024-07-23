@@ -1,4 +1,4 @@
-export StepToAWave, PassThru
+export StepToAWave, PassThru, Dosados
 
 #= Some two dancer calls to implement:
 
@@ -10,9 +10,6 @@ SlideThru
 StarThru expands to SlideThru
 PartnerTrade
 Primitive FinishPartnerTrade
-Dosados expands to StepToAWave, _PassBy, Dosados!3,  UnStepToAWave
-Dosados!3. handedness
-Primitive UnStepToAWave
 Run
 BoxTheGnat espands to StepToAWave, revolve around the your center -1/4, AndRoll
 =#
@@ -36,28 +33,23 @@ expand_parts(c::PassThru) = [
     _PassBy()
 ]
 
-#=
 
-For PassThru from facing lines of 4, expand_parts returns
-_StepToAWave, _PassBy.  After _StepToAWave there are two right handed
-and one left handed miniwaves. get_call_options detects the overlap
-between the center LHMiniWave and the two RHMiniWaves.  How do we
-exclude the center LHMiniWave from consideration.
+"""
+    Dosados(; role=Everyone(), handedness=RightHanded())
 
-This is also an issue for SquareThru, where we want to identify the
-groups of participating dancers doing the SquareThru, possibly using
-the DesignatedDancers role.
+CallerLab Basic1 call.
+"""
+@with_kw struct Dosados <: SquareDanceCall
+    role::Role = Everyone()
+    handedness::Union{RightHanded, LeftHanded} = RightHanded()
+end
 
-From facing lines of 4, PassThru should make a DesignatedDancers group
-for each FaceToFace formation and propagate those as the role for each
-part in expand_call.
+can_do_from(::Dosados, ::FaceToFace) = 1
 
-What we'd have is 4 FaceToFace formations that need to
-"simultaneously" do _StepToAWave and then simultaneously do _PassBy.
-
-Another approach might be to specificallly implement PassThru for
-FacingCouples and FacingLinesOfFour with higher priorities than
-FaceToFace.
-
-=#
-
+expand_parts(c::Dosados) = [
+    _StepToAWave(; role = c.role,
+                 handedness = c.handedness),
+    _PassBy(),
+    _BackToAWave(; handedness = opposite(c.handedness)),
+    _UnStepToAWave()
+]

@@ -160,6 +160,45 @@ end
     end        
 end
 
+@testset "test back_to_a_wave" begin
+    square = make_square(1)
+    grid = grid_arrangement(square, [ 1 2; ], [ "←→" ])
+    b2b = BackToBack(grid[1, 2], grid[1, 1])
+    let   # right
+        mw = back_to_a_wave(b2b, 1, RightHanded())
+        @test handedness(mw) isa RightHanded
+        @test mw.a.direction < mw.b.direction
+        @test mw.a.left == mw.b.left
+        @test mw.a.down < mw.b.down
+    end
+    let   # left
+        mw = back_to_a_wave(b2b, 1, LeftHanded())
+        @test handedness(mw) isa LeftHanded
+        @test mw.a.direction < mw.b.direction
+        @test mw.a.left == mw.b.left
+        @test mw.a.down > mw.b.down
+    end
+end
+
+@testset "test un_step_to_a_wave" begin
+    square = make_square(2)
+    grid = grid_arrangement(square,
+                            [ 1 2 3 4; ], [ "↑↓↓↑" ])
+    rhmw = RHMiniWave(grid[1, 2], grid[1, 1])
+    lhmw = LHMiniWave(grid[1, 3], grid[1, 4])
+    let
+        ftf = un_step_to_a_wave(rhmw, 1)
+        @test ftf.a.direction < ftf.b.direction
+        @test ftf.a.left == ftf.b.left
+        @test ftf.a.down < ftf.b.down
+    end
+    let
+        ftf = un_step_to_a_wave(lhmw, 1)
+        @test ftf.a.direction < ftf.b.direction
+        @test ftf.a.left == ftf.b.left
+        @test ftf.a.down < ftf.b.down
+    end
+end
 
 include("test_breathing.jl")
 

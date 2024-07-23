@@ -1,7 +1,7 @@
 
 export forward, backward, rightward, leftward, revolve, rotate,
-    jitter, can_roll, step_to_a_wave, pass_by,
-    CanRollAmbiguityException
+    jitter, can_roll, step_to_a_wave, back_to_a_wave,
+    un_step_to_a_wave, pass_by, CanRollAmbiguityException
 
 
 function move(p::Vector, direction, distance)
@@ -183,6 +183,60 @@ function step_to_a_wave(f::FaceToFace, time_delta,
     d = distance(dancer_states(f)...)/2
     function move1(ds, sideways)
         to = move(move(location(ds), ds.direction, d),
+                  sideways(ds.direction),
+                  COUPLE_DISTANCE / 2)
+        DancerState(ds, ds.time + time_delta,
+                    ds.direction, to...)
+    end
+    if h isa RightHanded
+        return RHMiniWave(move1(f.a, quarter_left),
+                          move1(f.b, quarter_left))
+    elseif h isa LeftHanded
+        return LHMiniWave(move1(f.a, quarter_right),
+                          move1(f.b, quarter_right))
+    end
+end
+
+
+"""
+    un_step_to_a_wave(f::MiniWave, time_delta)::FaceToFace
+
+The face to face dancers move up to make a right or left handed
+miniwave.
+
+Breating should be done separately.
+"""
+function un_step_to_a_wave(f::MiniWave, time_delta)::FaceToFace
+    d = COUPLE_DISTANCE / 2
+    function move1(ds, sideways)
+        to = move(move(location(ds), opposite(ds.direction), d),
+                  sideways(ds.direction),
+                  COUPLE_DISTANCE / 2)
+        DancerState(ds, ds.time + time_delta,
+                    ds.direction, to...)
+    end
+    if f isa RHMiniWave
+        return FaceToFace(move1(f.a, quarter_right),
+                          move1(f.b, quarter_right))
+    elseif f isa LHMiniWave
+        return FaceToFace(move1(f.a, quarter_left),
+                          move1(f.b, quarter_left))
+    end
+end
+
+"""
+    back_to_a_wave(f::BackToBack, time_delta, h::Union{RightHanded, LeftHanded})::FaceToFace
+
+The back to back dancers back up to firm a miniwave of the specified
+handedness.
+
+Breating should be done separately.
+"""
+function back_to_a_wave(f::BackToBack, time_delta,
+                        h::Union{RightHanded, LeftHanded})::MiniWave
+    d = COUPLE_DISTANCE / 2
+    function move1(ds, sideways)
+        to = move(move(location(ds), opposite(ds.direction), d),
                   sideways(ds.direction),
                   COUPLE_DISTANCE / 2)
         DancerState(ds, ds.time + time_delta,

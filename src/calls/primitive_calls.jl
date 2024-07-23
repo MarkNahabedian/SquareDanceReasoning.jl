@@ -121,6 +121,47 @@ end
 
 
 """
+    _UnStepToAWave(; role=Everyone())
+
+Primitive square dance call that goes from a MiniWave to FaceToFace.
+The first half of [`PassThru`](@ref).
+"""
+@with_kw struct _UnStepToAWave <: SquareDanceCall
+    role::Role = Everyone()
+end
+
+descirption(c::_UnStepToAWave) = "$(c.role) Un Step To a Wave"
+
+can_do_from(::_UnStepToAWave, ::MiniWave) = 1
+
+function perform(c::_UnStepToAWave, f::MiniWave, kb::ReteRootNode)
+    un_step_to_a_wave(f, 1)
+end
+
+
+"""
+    _BackToAWave, handedness(; role=Everyone(), handedness=RightHanded())
+
+Primitive square dance call that goes from BackToBack to a MiniWave of
+the specified handedness.
+The third quarter of [`Dosados`](@ref).
+"""
+@with_kw struct _BackToAWave <: SquareDanceCall
+    role::Role = Everyone()
+    handedness::Union{RightHanded, LeftHanded} = RightHanded()    
+end
+
+descirption(c::_BackToAWave) = "$(c.role) Backup to a Wave"
+
+can_do_from(::_BackToAWave, ::BackToBack) = 1
+
+function perform(c::_BackToAWave, f::BackToBack, kb::ReteRootNode)
+    back_to_a_wave(f, 1, c.handedness)
+end
+
+
+
+"""
     _PassBy(; role=Everyone())
 
 Primitive square dance call that goes from MiniWave to BackToBack.
