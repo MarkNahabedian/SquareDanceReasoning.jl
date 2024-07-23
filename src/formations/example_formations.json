@@ -65,18 +65,18 @@
     "name": "BackToBack",
     "dancer_states": [
       {
-        "couple_number": 3,
+        "couple_number": 1,
         "gender": "Gal",
         "direction": 0.25,
-        "down": 4.0,
-        "left": 8.0
+        "down": 1.0,
+        "left": 2.0
       },
       {
-        "couple_number": 3,
+        "couple_number": 1,
         "gender": "Guy",
         "direction": 0.75,
-        "down": 4.0,
-        "left": 7.0
+        "down": 1.0,
+        "left": 1.0
       }
     ]
   },
@@ -171,6 +171,67 @@
         "direction": 0.75,
         "down": 1.0,
         "left": 4.0
+      }
+    ]
+  },
+  {
+    "name": "CircleOfEight",
+    "dancer_states": [
+      {
+        "couple_number": 3,
+        "gender": "Gal",
+        "direction": 0.5,
+        "down": 1.5,
+        "left": 0.5
+      },
+      {
+        "couple_number": 4,
+        "gender": "Guy",
+        "direction": 0.75,
+        "down": 0.5,
+        "left": 1.5
+      },
+      {
+        "couple_number": 4,
+        "gender": "Gal",
+        "direction": 0.75,
+        "down": -0.5,
+        "left": 1.5
+      },
+      {
+        "couple_number": 1,
+        "gender": "Guy",
+        "direction": 0.0,
+        "down": -1.5,
+        "left": 0.5
+      },
+      {
+        "couple_number": 1,
+        "gender": "Gal",
+        "direction": 0.0,
+        "down": -1.5,
+        "left": -0.5
+      },
+      {
+        "couple_number": 2,
+        "gender": "Guy",
+        "direction": 0.25,
+        "down": -0.5,
+        "left": -1.5
+      },
+      {
+        "couple_number": 2,
+        "gender": "Gal",
+        "direction": 0.25,
+        "down": 0.5,
+        "left": -1.5
+      },
+      {
+        "couple_number": 3,
+        "gender": "Guy",
+        "direction": 0.5,
+        "down": 1.5,
+        "left": -0.5
       }
     ]
   },
@@ -273,16 +334,16 @@
     "dancer_states": [
       {
         "couple_number": 1,
-        "gender": "Gal",
-        "direction": 0,
-        "down": 0.0,
+        "gender": "Guy",
+        "direction": 0.0,
+        "down": 1.0,
         "left": 2.0
       },
       {
         "couple_number": 1,
-        "gender": "Guy",
-        "direction": 0,
-        "down": 0.0,
+        "gender": "Gal",
+        "direction": 0.0,
+        "down": 1.0,
         "left": 1.0
       }
     ]
@@ -291,18 +352,18 @@
     "name": "FaceToFace",
     "dancer_states": [
       {
-        "couple_number": 2,
+        "couple_number": 1,
         "gender": "Guy",
         "direction": 0.25,
-        "down": 2.0,
-        "left": 4.0
+        "down": 1.0,
+        "left": 1.0
       },
       {
-        "couple_number": 2,
+        "couple_number": 1,
         "gender": "Gal",
         "direction": 0.75,
-        "down": 2.0,
-        "left": 5.0
+        "down": 1.0,
+        "left": 2.0
       }
     ]
   },
@@ -437,18 +498,18 @@
     "name": "LHMiniWave",
     "dancer_states": [
       {
-        "couple_number": 6,
+        "couple_number": 1,
         "gender": "Guy",
-        "direction": 0,
-        "down": 10.0,
-        "left": 16.0
+        "direction": 0.0,
+        "down": 1.0,
+        "left": 1.0
       },
       {
-        "couple_number": 6,
+        "couple_number": 1,
         "gender": "Gal",
         "direction": 0.5,
-        "down": 10.0,
-        "left": 17.0
+        "down": 1.0,
+        "left": 2.0
       }
     ]
   },
@@ -457,13 +518,13 @@
     "dancer_states": [
       {
         "couple_number": 2,
-        "gender": "Gal",
+        "gender": "Guy",
         "direction": 0.0,
         "down": 0.0,
         "left": 3.0
       },
       {
-        "couple_number": 1,
+        "couple_number": 2,
         "gender": "Gal",
         "direction": 0.5,
         "down": 0.0,
@@ -472,13 +533,13 @@
       {
         "couple_number": 1,
         "gender": "Guy",
-        "direction": 0,
+        "direction": 0.0,
         "down": 0.0,
         "left": 1.0
       },
       {
-        "couple_number": 2,
-        "gender": "Guy",
+        "couple_number": 1,
+        "gender": "Gal",
         "direction": 0.5,
         "down": 0.0,
         "left": 2.0
@@ -491,28 +552,28 @@
       {
         "couple_number": 1,
         "gender": "Gal",
-        "direction": 0,
+        "direction": 0.0,
         "down": 0.0,
         "left": 2.0
       },
       {
         "couple_number": 1,
         "gender": "Guy",
-        "direction": 0,
+        "direction": 0.0,
         "down": 0.0,
         "left": 1.0
       },
       {
         "couple_number": 2,
         "gender": "Gal",
-        "direction": 0,
+        "direction": 0.0,
         "down": 0.0,
         "left": 4.0
       },
       {
         "couple_number": 2,
         "gender": "Guy",
-        "direction": 0,
+        "direction": 0.0,
         "down": 0.0,
         "left": 3.0
       }
@@ -555,18 +616,18 @@
     "name": "RHMiniWave",
     "dancer_states": [
       {
-        "couple_number": 5,
+        "couple_number": 1,
         "gender": "Gal",
-        "direction": 0,
-        "down": 8.0,
-        "left": 14.0
+        "direction": 0.0,
+        "down": 1.0,
+        "left": 2.0
       },
       {
-        "couple_number": 5,
+        "couple_number": 1,
         "gender": "Guy",
         "direction": 0.5,
-        "down": 8.0,
-        "left": 13.0
+        "down": 1.0,
+        "left": 1.0
       }
     ]
   },
@@ -635,8 +696,8 @@
     "name": "RHWaveOfFour",
     "dancer_states": [
       {
-        "couple_number": 2,
-        "gender": "Guy",
+        "couple_number": 1,
+        "gender": "Gal",
         "direction": 0.0,
         "down": 0.0,
         "left": 2.0
@@ -649,7 +710,7 @@
         "left": 1.0
       },
       {
-        "couple_number": 1,
+        "couple_number": 2,
         "gender": "Gal",
         "direction": 0.0,
         "down": 0.0,
@@ -657,7 +718,7 @@
       },
       {
         "couple_number": 2,
-        "gender": "Gal",
+        "gender": "Guy",
         "direction": 0.5,
         "down": 0.0,
         "left": 3.0
@@ -729,18 +790,18 @@
     "name": "Tandem",
     "dancer_states": [
       {
-        "couple_number": 4,
+        "couple_number": 1,
         "gender": "Gal",
         "direction": 0.25,
-        "down": 6.0,
-        "left": 11.0
+        "down": 1.0,
+        "left": 2.0
       },
       {
-        "couple_number": 4,
+        "couple_number": 1,
         "gender": "Guy",
         "direction": 0.25,
-        "down": 6.0,
-        "left": 10.0
+        "down": 1.0,
+        "left": 1.0
       }
     ]
   },
@@ -781,16 +842,16 @@
     "name": "TwoFacedLine",
     "dancer_states": [
       {
-        "couple_number": 4,
+        "couple_number": 2,
         "gender": "Gal",
-        "direction": 0,
+        "direction": 0.0,
         "down": 0.0,
         "left": 4.0
       },
       {
-        "couple_number": 4,
+        "couple_number": 2,
         "gender": "Guy",
-        "direction": 0,
+        "direction": 0.0,
         "down": 0.0,
         "left": 3.0
       },
@@ -802,8 +863,8 @@
         "left": 1.0
       },
       {
-        "couple_number": 2,
-        "gender": "Guy",
+        "couple_number": 1,
+        "gender": "Gal",
         "direction": 0.5,
         "down": 0.0,
         "left": 2.0
