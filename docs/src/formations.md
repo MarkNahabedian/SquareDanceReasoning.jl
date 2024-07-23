@@ -15,7 +15,7 @@ might also divide its dancers into roles, for example, *beaus* and
 A formation might have a [`direction`](@ref) if all of its dancers are
 facing the same way.
 
-Some formations might also have a [`Handedness'](@ref).
+Some formations might also have a [`Handedness`](@ref).
 
 
 ### Recognizing Formations

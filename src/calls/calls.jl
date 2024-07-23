@@ -1,4 +1,5 @@
-export SquareDanceCall, can_do_from, do_call, CanDoCall, perform
+export SquareDanceCall, can_do_from, do_call, expand_parts,
+    CanDoCall, CanDoCallRule, perform
 
 # Should SquareDanceCall <: TemporalFact
 # so that they don't persist across successive knowledge bases?
@@ -40,7 +41,7 @@ can_do_from(::SquareDanceCall, ::SquareDanceFormation) = 0
 """
     CanDoCall(preference, call::SquareDanceCall, formation::SquareDanceFormation)
 
-is concluded by CanDoCallRule when `call` can be performed from
+is concluded by [`CanDoCallRule`](@ref) when `call` can be performed from
 `formation`.
 """
 struct CanDoCall
