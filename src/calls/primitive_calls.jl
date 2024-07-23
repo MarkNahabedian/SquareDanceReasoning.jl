@@ -8,7 +8,7 @@ export _Rest, _QuarterRight, _QuarterLeft, _GenderedRoll,
 
 
 """
-    _Rest()
+    _Rest(; role=Everyone(), time)
 
 Primitive square dance call causing dancers to rest in place for the
 specified time.
@@ -31,7 +31,7 @@ end
 
 
 """
-    _QuarterRight()
+    _QuarterRight(; role=Everyone(), time=2)
 
 Primitive square dance call causing dancers to turn 1/4 to their
 right.  The timing defaults to 2 since, according to Taminations, two
@@ -52,7 +52,7 @@ end
 
 
 """
-    _QuarterLeft()
+    _QuarterLeft(; role=Everyone(), time=2)
 
 Primitive square dance call causing dancers to turn 1/4 to their
 left.  The timing defaults to 2 since, according to Taminations, two
@@ -73,7 +73,7 @@ end
 
 
 """
-    _GenderedRoll
+    _GenderedRoll(; role=Everyone(), time=2)
 
 The second part of calls like StarThru and SlideThru.  Guy turn one
 quarter to the right, Gal turn one quarter to the left.
@@ -101,7 +101,7 @@ end
 
 
 """
-    _StepToAWave(handedness::Handedness)
+    _StepToAWave(; role=Everyone(), handedness=RightHanded())
 
 Primitive square dance call that goes from FaceToFace to a MiniWave of
 the specified handedness.  The first half of [`PassThru`](@ref).
@@ -121,7 +121,7 @@ end
 
 
 """
-    _PassBy()
+    _PassBy(; role=Everyone())
 
 Primitive square dance call that goes from MiniWave to BackToBack.
 The second half of [`PassThru`](@ref).

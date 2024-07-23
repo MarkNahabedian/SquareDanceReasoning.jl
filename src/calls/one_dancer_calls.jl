@@ -2,6 +2,12 @@ using Random
 
 export Balance
 
+"""
+    Balance(; role=Everyone(), time=2)
+
+Implements the Balance square dance call, except that dancers just
+jiggle in place.  Maybe it should be renamed _Identify.
+"""
 @with_kw struct Balance <: SquareDanceCall
     role::Role = Everyone()
     time::Int = 2

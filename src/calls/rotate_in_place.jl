@@ -9,7 +9,7 @@ export UTurnBack, AndRoll
 
 
 """
-    UTurnBack()
+    UTurnBack(; role=Everyone())
 
 CallerLab Basic1 call.
 """
@@ -74,7 +74,7 @@ end
 
 
 """
-    AndRoll()
+    AndRoll(; role=EveryOne())
 
 CallerLab Plus call.
 """

@@ -19,7 +19,7 @@ BoxTheGnat espands to StepToAWave, revolve around the your center -1/4, AndRoll
 
 
 """
-    PassThru()
+    PassThru(; role=Everyone(), handedness=RightHanded())
 
 CallerLab Basic 1 call.
 """
