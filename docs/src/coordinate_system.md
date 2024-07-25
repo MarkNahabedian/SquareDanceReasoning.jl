@@ -34,7 +34,6 @@ couple number three: 1/2, and that of couple number four: 3/4.
 
 - [`FULL_CIRCLE`](@ref)
 - [`canonicalize`](@ref)
-- [`direction_equal`](@ref)
 - [`opposite`](@ref)
 - [`quarter_left`](@ref)
 - [`quarter_right`](@ref)
