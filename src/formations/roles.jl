@@ -122,12 +122,12 @@ those_with_role(ds::DancerState, ::OriginalSide) =
     is_original_side(ds) ? [ds] : DancerState[]
 
 those_with_role(ds::DancerState, ::CurrentHead) =
-    (direction_equal(ds.direction, 0) ||
-    direction_equal(ds.direction, 1//2)) ? [ds] : DancerState[]
+    ((ds.direction == 0) ||
+    ((ds.direction == 1//2) ? [ds] : DancerState[]))
 
 those_with_role(ds::DancerState, ::CurrentSide) =
-    (direction_equal(ds.direction, 1//4) ||
-    direction_equal(ds.direction, 3//4)) ? [ds] : DancerState[]
+    ((ds.direction == 1//4) ||
+    ((ds.direction == 3//4)) ? [ds] : DancerState[])
 
 
 struct CoupleNumbers <: Role

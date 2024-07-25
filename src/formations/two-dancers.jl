@@ -158,7 +158,7 @@ those_with_role(c::LHMiniWave, ::Belle) = [ c.a, c.b ]
     if encroached_on([ds1, ds2], kb)
         return
     end
-    if direction_equal(direction(ds1), direction(ds2))
+    if direction(ds1) == direction(ds2)
         # Couple or Tandem?
         if right_of(ds1, ds2) && left_of(ds2, ds1)
             emit(Couple(ds1, ds2))
@@ -168,7 +168,7 @@ those_with_role(c::LHMiniWave, ::Belle) = [ c.a, c.b ]
             emit(Tandem(ds2, ds1))
             return
         end
-    elseif direction_equal(direction(ds1), opposite(direction(ds2)))
+    elseif direction(ds1) == opposite(direction(ds2))
         # FaceToFace, BackToBack or MiniWave We break symetry using
         # dancer facing direction instead of dancer order.
         if direction(ds2) < direction(ds1)

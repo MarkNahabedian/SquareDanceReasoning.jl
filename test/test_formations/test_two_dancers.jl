@@ -23,7 +23,7 @@ end
     @test length(dancer_states(f)) == 2
     @test f isa Couple
     @test direction(f) == 0
-    @test direction_equal(f.beau.direction, f.belle.direction)
+    @test f.beau.direction == f.belle.direction
     @test f.beau.dancer == dancers[1]
     @test f.belle.dancer == dancers[2]
     @test playmate(f.beau.dancer, f) == f.belle.dancer

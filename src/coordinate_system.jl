@@ -1,8 +1,7 @@
 
 export COUPLE_DISTANCE
 export canonicalize, canonicalize_signed
-export FULL_CIRCLE, DIRECTION0, DIRECTION1,
-    DIRECTION2, DIRECTION3, direction_equal
+export FULL_CIRCLE, DIRECTION0, DIRECTION1, DIRECTION2, DIRECTION3
 export opposite, quarter_left, quarter_right
 export distance
 
@@ -46,17 +45,6 @@ const DIRECTION0 = 0
 const DIRECTION1 = DIRECTION0 + 1 * FULL_CIRCLE // 4
 const DIRECTION2 = DIRECTION0 + 2 * FULL_CIRCLE // 4
 const DIRECTION3 = DIRECTION0 + 3 * FULL_CIRCLE // 4
-
-
-"""
-    direction_equal(direction1, direction2)::Bool =
-
-returns true if direction1 and direction2 are roughly equal.
-"""
-direction_equal(direction1, direction2)::Bool =
-    isapprox(canonicalize(direction1),
-             canonicalize(direction2);
-             atol = 0.05)
 
 
 """

@@ -73,13 +73,11 @@ direction(f::TandemCouples) = direction(f.leaders)
     if encroached_on([ couple1, couple2 ], kb)
         return
     end
-    if (direction_equal(direction(couple1),
-                        direction(couple2)) &&
+    if ((direction(couple1) == direction(couple2)) &&
         in_front_of(couple2.beau, couple1.beau) &&
         in_front_of(couple2.belle, couple1.belle))
         emit(TandemCouples(couple1, couple2))
-    elseif direction_equal(direction(couple1),
-                           opposite(direction(couple2)))
+    elseif direction(couple1) == opposite(direction(couple2))
         if (in_front_of(couple1.beau, couple2.belle) &&
             in_front_of(couple2.belle, couple1.beau) &&
             in_front_of(couple1.belle, couple2.beau) &&

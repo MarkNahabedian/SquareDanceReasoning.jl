@@ -26,10 +26,10 @@ direction(f::ColumnOfFour) = direction(f.lead)
 @rule SquareDanceFormationRule.ColumnOfFourRule(lead::Tandem, tail::Tandem,
                                                 centers::Tandem,
                                                 ::ColumnOfFour) begin
-    if !direction_equal(direction(lead), direction(tail))
+    if direction(lead) != direction(tail)
         return
     end
-    if !direction_equal(direction(lead), direction(centers))
+    if direction(lead) != direction(centers)
         return
     end
     if lead.trailer != centers.leader

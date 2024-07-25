@@ -20,8 +20,7 @@ handedness(::SquaredSet) = NoHandedness()
 
 
 @rule SquareDanceFormationRule.SquaredSetFormationRule(fc1::FacingCouples, fc2::FacingCouples, ::SquaredSet) begin
-    if !direction_equal(direction(fc1.couple1) + 1//4,
-                        direction(fc2.couple1))
+    if (direction(fc1.couple1) + 1//4) != direction(fc2.couple1)
         return
     end
     emit(SquaredSet(fc1, fc2))
