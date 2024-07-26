@@ -2,6 +2,23 @@
 @testset "test Star" begin
     offset = 0.6
     square = make_square(2)
+    let  #Not a star, they dont overlap
+        kb = make_kb()
+        receive(kb, square)
+        dss = [
+            DancerState(square[1], 0, 0,     2,      offset),
+            DancerState(square[3], 0, 1//2,  2,     -offset),
+            DancerState(square[2], 0, 1//4, -offset, 2),
+            DancerState(square[4], 0, 3//4,  offset, 2),
+        ]
+        receive.([kb], dss)
+        @debug_formations(kb)
+        @test 2 == askc(Counter(), kb, RHMiniWave)
+        @test 0 == askc(Counter(), kb, LHMiniWave)
+        @test 0 == askc(Counter(), kb, Collision)
+        stars = askc(Collector{Star}(), kb, Star)
+        @test length(stars) == 0
+    end
     let  #right handed
         kb = make_kb()
         receive(kb, square)

@@ -35,6 +35,9 @@ those_with_role(f::Star, role::Union{Beau, Belle}) =
     if handedness(mw1) != handedness(mw2)
         return
     end
+    if distance(center(mw1), center(mw2)) > COUPLE_DISTANCE/4
+        return
+    end
     if mw1.a.direction + DIRECTION1 == mw2.a.direction
         emit(Star(mw1, mw2))
     end

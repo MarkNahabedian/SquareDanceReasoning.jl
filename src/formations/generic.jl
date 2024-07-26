@@ -83,3 +83,5 @@ function direction end
 Base.in(ds::DancerState, f::SquareDanceFormation)::Bool =
     in(ds, dancer_states(f))
 
+center(f::SquareDanceFormation) = center(dancer_states(f))
+
