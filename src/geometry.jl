@@ -154,8 +154,8 @@ end
 """
     direction(focus, other)
 
-returns the direction that `other` is from the point of view of
-`focus`.  Either argument can be a DancerState or a localtion
+returns the absolute direction that `other` is from the point of view
+of `focus`.  Either argument can be a DancerState or a localtion
 represented as a two element Vector.
 """
 function direction(focus, other)
