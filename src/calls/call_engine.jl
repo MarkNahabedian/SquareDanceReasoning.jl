@@ -5,38 +5,6 @@ export SquareDanceCall, can_do_from, do_call, expand_parts,
 # so that they don't persist across successive knowledge bases?
 abstract type SquareDanceCall end
 
-include("callerlab_programs.jl")
-
-
-"""
-    expand_parts(::SquareDanceCall)
-
-Returns a sequence of the call itself if it has no separate parts, or a
-sequence of "calls" representing itys parts. 
-"""
-expand_parts(c::SquareDanceCall) = [ c ]
-
-function expand_parts(s)
-    result = []
-    for c in s
-        push!(result, expand_parts(c)...)
-    end
-    result
-end
-
-
-"""
-can_do_from(::SquareDanceCall, ::SquareDanceFormation)::Int
-
-Determins if the specified call can be performed from the specified
-formation.  A return value of 0 means the call is not appropriate (or
-currently supported).  Otherwise the return value is a preference
-level with a higher value indicating more preferable.  For example
-UTurnBack from Couple is more preferable to UTurnBack from
-DancerState, even though both would be applicable.
-"""
-can_do_from(::SquareDanceCall, ::SquareDanceFormation) = 0
-
 
 """
     CanDoCall(preference, call::SquareDanceCall, formation::SquareDanceFormation)
@@ -63,6 +31,38 @@ end
 @doc """
 CanDoCallRule identifies which calls can be applied to which formations.
 """ CanDoCallRule
+
+
+"""
+    expand_parts(::SquareDanceCall, options::Vector{CanDoCall})
+
+Returns a sequence of the call itself if it has no separate parts, or a
+sequence of "calls" representing itys parts.
+
+`options` is the result of `get_call_options`.
+"""
+expand_parts(c::SquareDanceCall, ::Vector{CanDoCall}) = [ c ]
+
+function expand_parts(s, options::Vector{CanDoCall})
+    result = []
+    for c in s
+        push!(result, expand_parts(c, options)...)
+    end
+    result
+end
+
+
+"""
+can_do_from(::SquareDanceCall, ::SquareDanceFormation)::Int
+
+Determins if the specified call can be performed from the specified
+formation.  A return value of 0 means the call is not appropriate (or
+currently supported).  Otherwise the return value is a preference
+level with a higher value indicating more preferable.  For example
+UTurnBack from Couple is more preferable to UTurnBack from
+DancerState, even though both would be applicable.
+"""
+can_do_from(::SquareDanceCall, ::SquareDanceFormation) = 0
 
 
 """
@@ -93,9 +93,11 @@ end
 
 
 function do_call(kb::ReteRootNode, call::SquareDanceCall)::ReteRootNode
-    e = expand_parts(call)
+    receive(kb, call)
+    options = get_call_options(call, kb)
+    e = expand_parts(call, options)
     if length(e) == 1
-        dss = do_simple_call(kb, e[1])
+        dss = do_simple_call(kb, e[1], options)
         kb = make_kb(kb)
         receive.([kb], dss)
     else
@@ -165,9 +167,8 @@ function get_call_options(call::SquareDanceCall,
 end
 
 function do_simple_call(kb::ReteRootNode,
-                        call::SquareDanceCall)::Vector{DancerState}
-    receive(kb, call)
-    options = get_call_options(call, kb)
+                        call::SquareDanceCall,
+                        options::Vector{CanDoCall})::Vector{DancerState}
     # Should we make sure that the formations in the remaining options
     # are disjoint?
     everyone = askc(Collector{DancerState}(), kb, DancerState)

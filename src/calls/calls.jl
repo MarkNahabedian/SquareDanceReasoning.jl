@@ -1,4 +1,5 @@
 
+include("callerlab_programs.jl")
 include("call_engine.jl")
 
 include("primitive_calls.jl")

@@ -27,7 +27,7 @@ end
 
 can_do_from(::PassThru, ::FaceToFace) = 1
 
-expand_parts(c::PassThru) = [
+expand_parts(c::PassThru, options::Vector{CanDoCall}) = [
     _StepToAWave(role = c.role,
                  handedness = c.handedness),
     _PassBy()
@@ -46,7 +46,7 @@ end
 
 can_do_from(::Dosados, ::FaceToFace) = 1
 
-expand_parts(c::Dosados) = [
+expand_parts(c::Dosados, options::Vector{CanDoCall}) = [
     _StepToAWave(; role = c.role,
                  handedness = c.handedness),
     _PassBy(),
