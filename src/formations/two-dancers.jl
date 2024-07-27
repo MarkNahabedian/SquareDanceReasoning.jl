@@ -33,8 +33,11 @@ struct FaceToFace <: TwoDancerFormation
     b::DancerState
 
     function FaceToFace(a, b)
-        @assert a.direction < b.direction
-        new(a, b)
+        if a.direction < b.direction
+            new(a, b)
+        else
+            new(b, a)
+        end
     end
 end
 
@@ -54,8 +57,11 @@ struct BackToBack <: TwoDancerFormation
     b::DancerState
 
     function BackToBack(a, b)
-        @assert a.direction < b.direction
-        new(a, b)
+        if a.direction < b.direction
+            new(a, b)
+        else
+            new(b, a)
+        end
     end
 end
 
@@ -103,8 +109,11 @@ struct RHMiniWave <: MiniWave
     b::DancerState
 
     function RHMiniWave(a, b)
-        @assert a.direction < b.direction
-        new(a, b)
+        if a.direction < b.direction
+            new(a, b)
+        else
+            new(b, a)
+        end
     end
 end
 
@@ -121,8 +130,11 @@ struct LHMiniWave <: MiniWave
     b::DancerState
 
     function LHMiniWave(a, b)
-        @assert a.direction < b.direction
-        new(a, b)
+        if a.direction < b.direction
+            new(a, b)
+        else
+            new(b, a)
+        end
     end
 end
 
