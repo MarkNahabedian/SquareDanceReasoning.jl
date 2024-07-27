@@ -23,22 +23,28 @@
     end
     # We now want DancerStates that require breathing:
     playmates = Vector{TwoDancerFormation}()
+    mws = RHMiniWave[]
     askc(kb, FaceToFace) do f
         mw = step_to_a_wave(f, 1, RightHanded())
+        push!(mws, mw)
         dss = dancer_states(mw)
         @assert length(dss) == 2
         push!(playmates, mw)
         receive.([kb2], dss)
     end
     @debug_formations(kb2)
-    @test 3 == askc(Counter(), kb2, Collision)
     collisions = askc(Collector{Collision}(), kb2, Collision)
+    @test 3 == length(collisions)
     new_dss = breathe(collisions,
                       playmates,
                       askc(Collector{DancerState}(), kb2, DancerState))
+    updated_mws = sort!(update_from(mws, new_dss);
+                        by = mw -> mw.a.dancer)
     kb3 = make_kb(kb2)
     receive.([kb3], new_dss)
     @test 0 == askc(Counter(), kb3, Collision)
+    @test updated_mws ==sort!(askc(Collector{RHMiniWave}(), kb3, RHMiniWave);
+                              by = mw -> mw.a.dancer)
     @debug_formations(kb3)    
 end
 

@@ -4,6 +4,7 @@ export TwoDancerFormation, FourDancerFormation, EightDancerFormation
 export SquareDanceFormationRule
 export dancer_states
 export handedness, Handedness, NoHandedness, RightHanded, LeftHanded
+export update_from
 
 
 """
@@ -84,4 +85,35 @@ Base.in(ds::DancerState, f::SquareDanceFormation)::Bool =
     in(ds, dancer_states(f))
 
 center(f::SquareDanceFormation) = center(dancer_states(f))
+
+
+"""
+   update_from(formation::SquareDanceFormation, newest::Vector{DancerState})
+
+Return a new formation of the same type as `formation` but with its
+component `DancerState`s taken from `newest`, matching by `Dancer`.
+"""
+function update_from end
+
+function update_from(formation, dss::Vector{DancerState})
+    d = Dict{Dancer, DancerState}()
+    for ds in dss
+        d[ds.dancer] = ds
+    end
+    update_from(formation, d)
+end
+
+update_from(f::DancerState, dict::Dict{Dancer, DancerState}) =
+    dict[f.dancer]
+
+update_from(f::SquareDanceFormation, dict::Dict{Dancer, DancerState}) =
+    typeof(f)(map(fieldnames(typeof(f))) do fieldname
+                  update_from(getfield(f, fieldname), dict)
+              end...)
+
+update_from(f::Vector{<:SquareDanceFormation},
+            dict::Dict{Dancer, DancerState}) =
+                map(f) do elt
+                    update_from(elt, dict)
+                end
 
