@@ -1,4 +1,4 @@
-export StepToAWave, PassThru, PullBy, Dosados
+export StepThru, StepToAWave, PassThru, PullBy, Dosados
 
 #= Some two dancer calls to implement:
 
@@ -13,6 +13,27 @@ Primitive FinishPartnerTrade
 Run
 BoxTheGnat espands to StepToAWave, revolve around the your center -1/4, AndRoll
 =#
+
+
+"""
+    StepThru(; role=Everyone())
+
+CallerLab Basic 1 square dance call that goes from MiniWave to
+BackToBack.
+"""
+@with_kw struct StepThru <: SquareDanceCall
+    role::Role = Everyone()
+end
+
+# Should we rename PassBy to Dosados!2?
+
+description(c::StepThru) = "$(c.role) pass by from MiniWave to BackToBack"
+
+can_do_from(::StepThru, ::MiniWave) = 1
+
+function perform(c::StepThru, mw::MiniWave, kb::ReteRootNode)
+    pass_by(mw, 1)
+end
 
 
 """

@@ -3,8 +3,8 @@
 # so that they won't conflict with the names of other calls, whether
 # already or eventually to be defined.
 
-export _Rest, FaceRight, FaceLeft, _GenderedRoll,
-    _StepToAWave, _UnStepToAWave, _BackToAWave, StepThru
+export _Rest, _GenderedRoll, _StepToAWave, _UnStepToAWave,
+    _BackToAWave
 
 
 """
@@ -27,48 +27,6 @@ can_do_from(::_Rest, ::DancerState) = 1
 function perform(c::_Rest, ds::DancerState, kb::ReteRootNode)
     DancerState(ds, ds.time + c.time, ds.direction,
                 ds.down, ds.left)
-end
-
-
-"""
-    FaceRight(; role=Everyone(), time=2)
-
-CallerLab Basic 1 square dance call causing dancers to turn 1/4 to their
-right.  The timing defaults to 2 since, according to Taminations, two
-beats is the duration for QuarterIn and QuarterOut.
-"""
-@with_kw struct FaceRight <: SquareDanceCall
-    role::Role = Everyone()
-    time::Int = 2
-end
-
-description(c::FaceRight) = "$(c.role) quarter right, $(c.time) ticks."
-
-can_do_from(::FaceRight, ::DancerState) = 1
-
-function perform(c::FaceRight, ds::DancerState, kb::ReteRootNode)
-    rotate(ds, -1//4, c.time)
-end
-
-
-"""
-    FaceLeft(; role=Everyone(), time=2)
-
-CallerLab Basic 1 square dance call causing dancers to turn 1/4 to their
-left.  The timing defaults to 2 since, according to Taminations, two
-beats is the duration for QuarterIn and QuarterOut.
-"""
-@with_kw struct FaceLeft <: SquareDanceCall
-    role::Role = Everyone()
-    time::Int = 2
-end
-
-description(c::FaceLeft) = "$(c.role) quarter right, $(c.time) ticks."
-
-can_do_from(::FaceLeft, ::DancerState) = 1
-
-function perform(c::FaceLeft, ds::DancerState, kb::ReteRootNode)
-    rotate(ds, 1//4, c.time)
 end
 
 
@@ -157,27 +115,5 @@ can_do_from(::_BackToAWave, ::BackToBack) = 1
 
 function perform(c::_BackToAWave, f::BackToBack, kb::ReteRootNode)
     back_to_a_wave(f, 1, c.handedness)
-end
-
-
-
-"""
-    StepThru(; role=Everyone())
-
-CallerLab Basic 1 square dance call that goes from MiniWave to
-BackToBack.
-"""
-@with_kw struct StepThru <: SquareDanceCall
-    role::Role = Everyone()
-end
-
-# Should we rename PassBy to Dosados!2?
-
-description(c::StepThru) = "$(c.role) pass by from MiniWave to BackToBack"
-
-can_do_from(::StepThru, ::MiniWave) = 1
-
-function perform(c::StepThru, mw::MiniWave, kb::ReteRootNode)
-    pass_by(mw, 1)
 end
 

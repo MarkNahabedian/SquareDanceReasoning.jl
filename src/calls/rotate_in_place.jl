@@ -1,11 +1,50 @@
-export UTurnBack, AndRoll
-
-# QuarterRight, QuarterLeft aren't on a CallerLab list, but maybe we
-# want them anyway, maybe as primitives.
+export FaceRight, FaceLeft, UTurnBack, AndRoll
 
 # QuarterIn and QuarterOut are Advanced1. Taminations says the timing
 # is 2 beats.  We might want to have timing as a parameter though
 # since they are parts of other calls, like SquareThru.
+
+
+"""
+    FaceRight(; role=Everyone(), time=2)
+
+CallerLab Basic 1 square dance call causing dancers to turn 1/4 to their
+right.  The timing defaults to 2 since, according to Taminations, two
+beats is the duration for QuarterIn and QuarterOut.
+"""
+@with_kw struct FaceRight <: SquareDanceCall
+    role::Role = Everyone()
+    time::Int = 2
+end
+
+description(c::FaceRight) = "$(c.role) quarter right, $(c.time) ticks."
+
+can_do_from(::FaceRight, ::DancerState) = 1
+
+function perform(c::FaceRight, ds::DancerState, kb::ReteRootNode)
+    rotate(ds, -1//4, c.time)
+end
+
+
+"""
+    FaceLeft(; role=Everyone(), time=2)
+
+CallerLab Basic 1 square dance call causing dancers to turn 1/4 to their
+left.  The timing defaults to 2 since, according to Taminations, two
+beats is the duration for QuarterIn and QuarterOut.
+"""
+@with_kw struct FaceLeft <: SquareDanceCall
+    role::Role = Everyone()
+    time::Int = 2
+end
+
+description(c::FaceLeft) = "$(c.role) quarter right, $(c.time) ticks."
+
+can_do_from(::FaceLeft, ::DancerState) = 1
+
+function perform(c::FaceLeft, ds::DancerState, kb::ReteRootNode)
+    rotate(ds, 1//4, c.time)
+end
 
 
 """
