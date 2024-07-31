@@ -16,22 +16,34 @@ BoxTheGnat espands to StepToAWave, revolve around the your center -1/4, AndRoll
 
 
 """
-    PassThru(; role=Everyone(), handedness=RightHanded())
+    PassThru(; role=Everyone())
 
 CallerLab Basic 1 call.
+
+`PassThru` is only proper from `FaceToFace` or from `RHMiniWave`
+(because of the "Icean Wave Rule").  For `LHMiniWave`, use
+[`StepThru`](@ref).
 """
 @with_kw struct PassThru <: SquareDanceCall
     role::Role = Everyone()
-    handedness::Union{RightHanded, LeftHanded} = RightHanded()
 end
 
 can_do_from(::PassThru, ::FaceToFace) = 1
 
-can_do_from(::PassThru, mw::MiniWave) = 1
+can_do_from(::PassThru, mw::RHMiniWave) = 1
+
+#=
+TODO:
+Caller lab: From a Squared Set, Heads Pass Thru is proper. It ends
+with the Heads back on Squared Set spots. See Squared Set Convention.
+
+We might not be able to implement this until expand_parts knows the
+formation and initial daner locations.
+=#
 
 expand_parts(c::PassThru, options::Vector{CanDoCall}) = [
     _StepToAWave(role = c.role,
-                 handedness = c.handedness),
+                 handedness = RightHanded()),
     StepThru()
 ]
 
