@@ -7,8 +7,8 @@ using Logging
             ]
     kb = make_kb()
     receive.([kb], dss)
-    kb = do_call(kb, _QuarterRight())
-    kb = do_call(kb, _QuarterLeft())
+    kb = do_call(kb, FaceRight())
+    kb = do_call(kb, FaceLeft())
     kb = do_call(kb, _GenderedRoll())
     dss = sort!(askc(Collector{DancerState}(), kb, DancerState);
                 by = ds -> ds.dancer)

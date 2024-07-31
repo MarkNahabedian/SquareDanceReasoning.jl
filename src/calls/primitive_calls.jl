@@ -3,7 +3,7 @@
 # so that they won't conflict with the names of other calls, whether
 # already or eventually to be defined.
 
-export _Rest, _QuarterRight, _QuarterLeft, _GenderedRoll,
+export _Rest, FaceRight, FaceLeft, _GenderedRoll,
     _StepToAWave, _UnStepToAWave, _BackToAWave, StepThru
 
 
@@ -31,43 +31,43 @@ end
 
 
 """
-    _QuarterRight(; role=Everyone(), time=2)
+    FaceRight(; role=Everyone(), time=2)
 
-Primitive square dance call causing dancers to turn 1/4 to their
+CallerLab Basic 1 square dance call causing dancers to turn 1/4 to their
 right.  The timing defaults to 2 since, according to Taminations, two
 beats is the duration for QuarterIn and QuarterOut.
 """
-@with_kw struct _QuarterRight <: SquareDanceCall
+@with_kw struct FaceRight <: SquareDanceCall
     role::Role = Everyone()
     time::Int = 2
 end
 
-description(c::_QuarterRight) = "$(c.role) quarter right, $(c.time) ticks."
+description(c::FaceRight) = "$(c.role) quarter right, $(c.time) ticks."
 
-can_do_from(::_QuarterRight, ::DancerState) = 1
+can_do_from(::FaceRight, ::DancerState) = 1
 
-function perform(c::_QuarterRight, ds::DancerState, kb::ReteRootNode)
+function perform(c::FaceRight, ds::DancerState, kb::ReteRootNode)
     rotate(ds, -1//4, c.time)
 end
 
 
 """
-    _QuarterLeft(; role=Everyone(), time=2)
+    FaceLeft(; role=Everyone(), time=2)
 
-Primitive square dance call causing dancers to turn 1/4 to their
+CallerLab Basic 1 square dance call causing dancers to turn 1/4 to their
 left.  The timing defaults to 2 since, according to Taminations, two
 beats is the duration for QuarterIn and QuarterOut.
 """
-@with_kw struct _QuarterLeft <: SquareDanceCall
+@with_kw struct FaceLeft <: SquareDanceCall
     role::Role = Everyone()
     time::Int = 2
 end
 
-description(c::_QuarterLeft) = "$(c.role) quarter right, $(c.time) ticks."
+description(c::FaceLeft) = "$(c.role) quarter right, $(c.time) ticks."
 
-can_do_from(::_QuarterLeft, ::DancerState) = 1
+can_do_from(::FaceLeft, ::DancerState) = 1
 
-function perform(c::_QuarterLeft, ds::DancerState, kb::ReteRootNode)
+function perform(c::FaceLeft, ds::DancerState, kb::ReteRootNode)
     rotate(ds, 1//4, c.time)
 end
 
