@@ -1,4 +1,4 @@
-export StepToAWave, PassThru, Dosados
+export StepToAWave, PassThru, PullBy, Dosados
 
 #= Some two dancer calls to implement:
 

@@ -4,7 +4,7 @@
 # already or eventually to be defined.
 
 export _Rest, _QuarterRight, _QuarterLeft, _GenderedRoll,
-    _StepToAWave, StepThru
+    _StepToAWave, _UnStepToAWave, _BackToAWave, StepThru
 
 
 """
