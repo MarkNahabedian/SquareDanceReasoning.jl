@@ -35,6 +35,7 @@ abstract type SquareDanceFormation <: TemporalFact end
 
 
 include("coordinate_system.jl")
+include("handedness.jl")
 include("dancers.jl")
 include("SDSquare.jl")
 include("timeline.jl")
