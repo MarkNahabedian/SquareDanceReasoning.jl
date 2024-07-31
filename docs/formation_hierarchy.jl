@@ -47,3 +47,28 @@ function generate_rule_hierarchy()
          end
 end
 
+
+function calls_and_formations_dict()
+    result = Dict{Type, Vector{Type}}()
+    for m in methods(can_do_from)
+        if m.nargs != 3
+            continue
+        end
+        (_, call, formation) = m.sig.parameters
+        if !isconcretetype(call)
+            continue
+        end
+        if !(call <: SquareDanceCall)
+            continue
+        end
+        if !(formation <: SquareDanceFormation)
+            continue
+        end
+        if !haskey(result, call)
+            result[call] = Type[]
+        end
+        push!(result[call], formation)
+    end
+    result
+end
+

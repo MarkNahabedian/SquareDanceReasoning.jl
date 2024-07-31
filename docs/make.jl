@@ -36,28 +36,19 @@ end
 
 # Generate a list of supported square dance calls:
 let
-    calls = []
-    function walk(c)
-        if isconcretetype(c)
-            push!(calls, c)
-        else
-            for st in subtypes(c)
-                walk(st)
-            end
-        end
-    end
-    walk(SquareDanceCall)
-    sort!(calls; by = string)
-
+    d = calls_and_formations_dict()
     open(joinpath(@__DIR__, "src", "supported_square_dance_calls.md"),
          "w") do io
              println(io, "## Supported Square Dance Calls\n")
              println(io, "These are the calls that are currently implemented.")
              println(io, "They might not be implemented from all formations or all CallerLab programs.")
              println(io, "")
-             for call in calls
+             for call in sort(collect(keys(d)); by = string)
                  fn = join(fieldnames(call), ", ")
                  println(io, "- **$call**: $fn")
+                 for f in sort(d[call]; by = string)
+                     println(io, "    - $f")
+                 end
              end
          end
 end
