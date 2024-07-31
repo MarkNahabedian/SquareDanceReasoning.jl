@@ -4,7 +4,7 @@
 # already or eventually to be defined.
 
 export _Rest, _QuarterRight, _QuarterLeft, _GenderedRoll,
-    _StepToAWave, _PassBy
+    _StepToAWave, StepThru
 
 
 """
@@ -162,22 +162,22 @@ end
 
 
 """
-    _PassBy(; role=Everyone())
+    StepThru(; role=Everyone())
 
-Primitive square dance call that goes from MiniWave to BackToBack.
-The second half of [`PassThru`](@ref).
+CallerLab Basic 1 square dance call that goes from MiniWave to
+BackToBack.
 """
-@with_kw struct _PassBy <: SquareDanceCall
+@with_kw struct StepThru <: SquareDanceCall
     role::Role = Everyone()
 end
 
 # Should we rename PassBy to Dosados!2?
 
-description(c::_PassBy) = "$(c.role) pass by from MiniWave to BackToBack"
+description(c::StepThru) = "$(c.role) pass by from MiniWave to BackToBack"
 
-can_do_from(::_PassBy, ::MiniWave) = 1
+can_do_from(::StepThru, ::MiniWave) = 1
 
-function perform(c::_PassBy, mw::MiniWave, kb::ReteRootNode)
+function perform(c::StepThru, mw::MiniWave, kb::ReteRootNode)
     pass_by(mw, 1)
 end
 

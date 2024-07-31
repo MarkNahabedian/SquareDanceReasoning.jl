@@ -49,8 +49,8 @@ end
     @test 4 == askc(Counter(), kb, RHMiniWave)
     @test 3 == askc(Counter(), kb, LHMiniWave)
     @test 1 == askc(Counter(), kb, RHWaveOfEight)
-    receive(kb, _PassBy())
-    options = SquareDanceReasoning.get_call_options(_PassBy(), kb)
+    receive(kb, StepThru())
+    options = SquareDanceReasoning.get_call_options(StepThru(), kb)
     @test 4 == length(options)
     @test all(options) do cdc
         cdc.formation isa RHMiniWave
