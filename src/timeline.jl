@@ -18,13 +18,14 @@ number of beats, for example.
 
 DancerState is also the single dancer `SquareDanceFormation`.
 """
-struct DancerState <: SquareDanceFormation
+@with_kw struct DancerState <: SquareDanceFormation
     previous::Union{Nothing, DancerState}
     dancer::Dancer
     time
     direction
     down::Float32
     left::Float32
+    hand::Handedness = NoHandedness()
 
     DancerState(dancer::Dancer, time, direction,
                 down, left) = new(nothing, dancer, time,
@@ -32,9 +33,10 @@ struct DancerState <: SquareDanceFormation
                                   Float32(down), Float32(left))
 
     DancerState(previous::DancerState, time, direction,
-                down, left) = new(previous, previous.dancer,
-                                  time, canonicalize(direction),
-                                  Float32(down), Float32(left))
+                down, left; hand=NoHandedness()) =
+                    new(previous, previous.dancer,
+                        time, canonicalize(direction),
+                        Float32(down), Float32(left), hand)
 end
 
 
