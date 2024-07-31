@@ -18,8 +18,46 @@ equal.
 Use [`opposite`](@ref) to get the opposite gender.
 """
 abstract type Gender end
+
+
+"""
+    Guy()
+
+The *guy* gender, represented by a square in our SVG diagrams.
+"""
 struct Guy <: Gender end
+
+
+"""
+    Gal()
+
+The *gal* gender, represented by a circle in our SVG diagrams.
+"""
 struct Gal <: Gender end
+
+
+"""
+    Unspecified
+
+Unspecified gender is provided just for gender neutral diagraming,
+where it appears as a square with rounded corners.  It is not
+supported widely through this codebase.  For example original partner
+and original corner are do not support it.
+
+Note that 
+
+```
+Unspecified() != Unspecified()
+```
+
+and
+
+```
+opposite(Unspecified())
+```
+
+returns `Unspecified()`.
+"""
 struct Unspecified <: Gender end
 
 Base.:(==)(::Gender, ::Gender) = false
