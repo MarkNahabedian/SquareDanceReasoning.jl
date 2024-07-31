@@ -10,3 +10,4 @@
 /docs/src/dancer_symbols.svg
 /test/test_formations/*.html
 /test/test_actions/*.html
+test/test_calls/*.html
