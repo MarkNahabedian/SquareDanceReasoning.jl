@@ -45,9 +45,9 @@ let
              println(io, "")
              for call in sort(collect(keys(d)); by = string)
                  fn = join(fieldnames(call), ", ")
-                 println(io, "- **$call**: $fn")
+                 println(io, "- **[`$call`](@ref)**: $fn")
                  for f in sort(d[call]; by = string)
-                     println(io, "    - $f")
+                     println(io, "    - [`$f`](@ref)")
                  end
              end
          end
