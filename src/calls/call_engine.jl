@@ -112,7 +112,7 @@ function do_call(kb::ReteRootNode, call::SquareDanceCall)::ReteRootNode
     options = get_call_options(call, kb)
     e = expand_parts(call, options)
     if length(e) == 1
-        dss = do_simple_call(kb, e[1], options)
+        (formations, dss) = do_simple_call(kb, e[1], options)
         kb = make_kb(kb)
         receive.([kb], dss)
     else
@@ -181,16 +181,36 @@ function get_call_options(call::SquareDanceCall,
     do_these
 end
 
+
+"""
+    do_simple_call(kb::ReteRootNode, call::SquareDanceCall, options::Vector{CanDoCall})
+
+calls `perform` on the call and each applicable member of options,
+breathes and then synchronizes.
+
+Returns the formations returned by `perform` after applying
+`update_from`.
+
+Maybe breathing and synchronization should be defered until
+`do_simple_call` returns to `do_call` in support of
+concurrent parts.
+"""
 function do_simple_call(kb::ReteRootNode,
                         call::SquareDanceCall,
-                        options::Vector{CanDoCall})::Vector{DancerState}
+                        options::Vector{CanDoCall}
+                        )::Tuple{Vector{SquareDanceFormation},
+                                 Vector{DancerState}}
     # Should we make sure that the formations in the remaining options
     # are disjoint?
     everyone = askc(Collector{DancerState}(), kb, DancerState)
     # We really only need collision detection here.
+    formations = SquareDanceFormation[]
     after = map(options) do cdc
         @assert call == cdc.call
-        perform(call, cdc.formation, kb)
+        f = perform(call, cdc.formation, kb)
+        @assert f isa SquareDanceFormation
+        push!(formations, f)
+        f
     end
     altered = Dict{Dancer, DancerState}()
     for a in after
@@ -223,6 +243,9 @@ function do_simple_call(kb::ReteRootNode,
             ds
         end
     end
-    everyone
+    formations = map(formations) do formation
+        update_from(formation, everyone)
+    end
+    (formations, everyone)
 end
 
