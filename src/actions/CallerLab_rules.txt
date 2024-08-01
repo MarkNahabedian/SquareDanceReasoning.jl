@@ -1,0 +1,107 @@
+Common rules from the CallerLab "Basic and Mainstream Definitions"
+document
+
+
+Passing Rule
+
+If the definition of a call has two dancers on the same path and
+requires them to walk past each other, they should pass right
+shoulders (unless otherwise specified) and continue. The mirror image
+version of a call has dancers pass left shoulders and continue (for
+example, Left Double Pass Thru).
+
+
+Same Position Rule
+
+If two dancers are required to occupy the same position at the end of
+a call, and are facing in opposite directions from each other, they
+form a Right-Hand Mini-Wave. If an adjustment is necessary (since they
+are now two dancers side-by-side in a formation that expected one
+dancer), the adjustment is sideways, towards the outside of the group
+in which they were working.
+
+Callers should not use a call that would result in two dancers who are
+facing the same direction, or at right angles, trying to occupy the
+same position.
+
+
+Facing Couples Rule
+
+A few specific calls that are defined to start from an Ocean Wave are
+also proper starting from Facing Couples. Examples include Swing Thru
+and Spin The Top. In these cases, the dancers first step into a
+momentary Right-Hand Ocean Wave and complete the call.
+
+If the caller directs a left hand call (e.g., Left Swing Thru), the
+dancers first step into a momentary Left-Hand Ocean Wave.
+
+If the Facing Couples rule is applicable, the call's definition will
+have a comment to that effect. If there is no such comment, then the
+Facing Couples rule may not be used.
+
+While the rule is called the Facing Couples Rule, it is generalized to
+include Facing Dancers stepping to a Right- Hand Mini-Wave and Facing
+Lines step to a Right-Hand Tidal Wave, etc.
+
+The following types of mixed Mini-Wave and Facing Dancer starting
+formations, while unusual, are also proper:
+
+<DIAGRAM>
+
+Application of the Facing Couple Rule does not change the timing of
+the call.
+
+
+Ocean Wave Rule
+
+Some calls that are defined to start from Facing Couples are also
+proper starting from a Right-Hand Ocean Wave. Examples include Right
+And Left Thru and Square Thru. In these cases, the dancers have
+already stepped forward toward the facing dancer and are ready to
+complete the remaining action of the directed call.
+
+For the sake of dancer comprehension and teaching purposes, it may be
+necessary initially to have the dancers back up into facing couples,
+then step back into the wave and complete the call.
+
+While the rule is called the Ocean Wave Rule, it is generalized to
+include Mini-Wave (Facing Dancers) and Tidal Wave (Facing Lines),
+etc. Examples include Pass Thru, Slide Thru, Box The Gnat, and Double
+Pass Thru (from a Right-Hand 1/4 Tag), and Pass To The Center (from
+Right-Hand Ocean Waves).
+
+In order for the Ocean Wave Rule to apply, the initial dance action of
+the call must start with a Box The Gnat, Pass Thru, or Right Pull
+By. In addition, the call must not be defined to have a different
+dance action from an Ocean Wave. For example, the call Circulate is
+defined from Eight Chain Thru and from Ocean Waves. It would be
+improper to call Circulate from Ocean Waves and expect dancers to
+dance it as a Step Thru based on the Ocean Wave Rule because they
+would naturally apply the definition of Circulate from Ocean Waves.
+
+The following mixed Mini-Wave and Facing Dancer starting formation,
+while unusual, is also proper:
+
+<DIAGRAM>
+
+The adjustment that is part of the Ocean Wave Rule does not change the
+effect of the call. It neither adds nor subtracts parts or changes the
+use of fractions. It is as if any dancer in a mini-wave had first
+stepped back into facing dancers and then all did the call. For
+example, from a Right-Hand Mini-Wave Dosado ends in Facing Dancers,
+not in a Right-Hand Mini-Wave.
+
+The Ocean Wave Rule also applies to calls that normally start from
+Facing Couples when the dancers are in a Left Hand Ocean Wave. In
+these cases, the caller must direct a left hand call (e.g., Left
+Square Thru). See "Additional Detail: Commands: Extensions like
+Reverse Wheel Around".
+
+When half of the dancers are in a Mini-Wave, and the other half of the
+dancers are Facing Dancers, and the call is a 2-dancer call (e.g., Box
+The Gnat, Slide Thru, Pass Thru) the caller should make clear who is
+to do the call (e.g., Everyone or Those Facing).
+
+Timing: Application of the Ocean Wave Rule does not change the timing
+of the call.
+
