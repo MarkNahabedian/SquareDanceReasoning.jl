@@ -27,16 +27,25 @@ DancerState is also the single dancer `SquareDanceFormation`.
     left::Float32
     hand::Handedness = NoHandedness()
 
-    DancerState(dancer::Dancer, time, direction,
-                down, left) = new(nothing, dancer, time,
-                                  canonicalize(direction),
-                                  Float32(down), Float32(left))
-
-    DancerState(previous::DancerState, time, direction,
-                down, left; hand=NoHandedness()) =
-                    new(previous, previous.dancer,
-                        time, canonicalize(direction),
-                        Float32(down), Float32(left), hand)
+    function DancerState(dancer::Dancer, time, direction,
+                         down, left;
+                         handedness = NoHandedness())
+        @assert !isnan(down)
+        @assert !isnan(left)
+        new(nothing, dancer, time,
+            canonicalize(direction),
+            Float32(down), Float32(left),
+            handedness)
+    end
+    
+    function DancerState(previous::DancerState, time, direction,
+                down, left; hand=NoHandedness())
+        @assert !isnan(down)
+        @assert !isnan(left)
+        new(previous, previous.dancer,
+            time, canonicalize(direction),
+            Float32(down), Float32(left), hand)
+    end
 end
 
 
