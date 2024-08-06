@@ -4,6 +4,14 @@ using XML
 using Colors
 using Printf
 
+export dbgprint
+
+# NOTE that for $ string substitution, that is not done with this
+# IOContext and is not compact.
+function dbgprint(things...)
+    println(IOContext(stdout, :compact => true), things...)
+end
+
 
 const FORMATION_STYLESHEET = """
 svg {
