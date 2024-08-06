@@ -95,7 +95,7 @@ end
     elseif handedness(wave1) == LeftHanded()
         constructor = LHWaveOfFour
     else
-        error("Non-handed MiniWave!")
+        @assert !isa(handedness(wave1), NoHandedness)
     end
     emit(constructor(wave1, wave2, centers))
 end
@@ -134,7 +134,7 @@ dancers: [`RHWaveOfFour`](@ref) and [`LHWaveOfFour`](@ref).
     elseif handedness(wave1) == LeftHanded()
         constructor = LHWaveOfEight
     else
-        error("Non-handed MiniWave!")
+        @assert !isa(handedness(wave1), NoHandedness)
     end
     emit(constructor(wave1, wave2, centers))
 end
