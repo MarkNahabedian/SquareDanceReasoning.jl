@@ -163,19 +163,38 @@ function get_call_options(call::SquareDanceCall,
     do_these = CanDoCall[]
     used_ds = DancerState[]
     while any(v -> !isempty(v), values(preferred))
+        # Guard against formations like Alamo ring.  What should we do
+        # in that case?  Everyone can SwingThru, but the handed
+        # definition of SwingThru fixes that.  Hinge or Trade would
+        # need further direction.  Role restriction might fix some
+        # cases.  Maybe the user just needs to be told to add
+        # restrictions because the call is ambiguous.
+        found_one = false
         # Keep a CanDoCall if it's the only one that concerns a given
         # dancer:
-        for opts in values(preferred)
+        for (_, opts) in preferred
             if length(opts) == 1
-                push!(do_these, opts[1])
-                push!(used_ds, dancer_states(opts[1].formation)...)
+                this_opt = opts[1]
+                push!(do_these, this_opt)
+                push!(used_ds, dancer_states(this_opt.formation)...)
+                found_one = true
+                for (ds, opts) in preferred
+                    preferred[ds] = filter(opts) do opt
+                        (opt != this_opt
+                         && isempty(intersect(used_ds,
+                                              dancer_states(opt.formation))))
+                    end
+                end
             end
         end
-        for opts in values(preferred)
-            filter!(opts) do opt
-                isempty(intersect(used_ds,
-                                  dancer_states(opt.formation)))
+        if !found_one
+            # Could just break and return noting and have a higher
+            # context deal with it.  It's probably good to have the
+            # issue noticed as soon as possible in case there's a bug.
+            if isempty(do_these)
+                error("Ambiguous call: $options")
             end
+            break
         end
     end
     do_these
@@ -200,6 +219,7 @@ function do_simple_call(kb::ReteRootNode,
                         options::Vector{CanDoCall}
                         )::Tuple{Vector{SquareDanceFormation},
                                  Vector{DancerState}}
+    dbgprint("\ndo_simple_call\n", options, "\n")
     # Should we make sure that the formations in the remaining options
     # are disjoint?
     everyone = askc(Collector{DancerState}(), kb, DancerState)
