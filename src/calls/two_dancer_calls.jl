@@ -1,11 +1,10 @@
-export StepThru, StepToAWave, PassThru, PullBy, Dosados
+export StepThru, StepToAWave, PassThru, PullBy, Dosados, Hinge
 
 #= Some two dancer calls to implement:
 
 HalfSashay, RollawayWithAHalfSashay
 Primitive FaceYourPartner
 primitive FaceYourCorner
-PartnerHinge from couple or miniwave
 SlideThru
 StarThru expands to SlideThru
 PartnerTrade
@@ -74,8 +73,6 @@ expand_parts(c::PassThru, options::Vector{CanDoCall}) = [
 
 CallerLab Basic 1 call.
 
-Since SquareDanceReasoning doesn't model hand styling, this is the
-same as [`PassThru`](@ref).
 """
 @with_kw struct PullBy <: SquareDanceCall
     role::Role = Everyone()
@@ -84,6 +81,9 @@ end
 
 can_do_from(::PullBy, ::FaceToFace) = 1
 
+# Can't do this yet because expand_parts doesn't know the formation.
+# I suppose we could make _StepToAWave a no-op from MiniWave.
+# MAybe expand_parts should get a single CanDoCall rather than a vector?
 # can_do_from(c::PullBy, mw::MiniWave) =
 #     (c.handedness == mw.handedness) ? 1 : 0
 
@@ -113,3 +113,52 @@ expand_parts(c::Dosados, options::Vector{CanDoCall}) = [
     _BackToAWave(; handedness = opposite(c.handedness)),
     _UnStepToAWave()
 ]
+
+
+"""
+    Hinge(; role=Everyone(), tile=2)
+
+CallerLab Mainstream call.
+"""
+@with_kw struct Hinge <: SquareDanceCall
+    role::Role = Everyone()
+    # Taminations says timing is 2, but for Trade from a MiniWave the
+    # total timing is 3 rather than 4.
+    time::Int = 2
+end
+
+can_do_from(::Hinge, ::MiniWave) = 1
+can_do_from(::Hinge, ::Couple) = 1
+
+function perform(c::Hinge, mw::MiniWave, kb::ReteRootNode)
+    c = center(mw)
+    rot = begin
+        if handedness(mw) isa RightHanded
+            - 1//4
+        elseif handedness(mw) isa LeftHanded
+            1//4
+        end
+    end
+    r = typeof(mw)(revolve(mw.a, c, mw.a.direction + rot, 2),
+                   revolve(mw.b, c, mw.b.direction + rot, 2))
+    r
+end
+
+function perform(c::Hinge, couple::Couple, kb::ReteRootNode)
+    # Taminations says timing is 2.
+    c = center(couple)
+    cpl = RHMiniWave(let
+                         dir = couple.beau.direction - 1//4
+                         (d, l) = revolve(location(couple.beau),
+                                          c, -1//4,
+                                          COUPLE_DISTANCE)
+                         DancerState(couple.beau, couple.beau.time + 2,
+                                     couple.beau.direction - 1//4,
+                                     d, l)
+                     end,
+                     DancerState(couple.belle, couple.belle.time + 2,
+                                 couple.belle.direction + 1//4,
+                                 c...))
+    cpl
+end
+

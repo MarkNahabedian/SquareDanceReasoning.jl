@@ -58,6 +58,7 @@ end
 
 include("test_rotate_in_place.jl")
 include("test_one_dancer_calls.jl")
+include("test_two_dancer_calls.jl")
 include("test_pass_thru.jl")
 include("test_quarter_in_out.jl")
 
