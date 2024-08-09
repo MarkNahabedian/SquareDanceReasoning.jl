@@ -9,7 +9,10 @@ export dbgprint
 # NOTE that for $ string substitution, that is not done with this
 # IOContext and is not compact.
 function dbgprint(things...)
-    println(IOContext(stdout, :compact => true), things...)
+    println(IOContext(stdout,
+                      # :limit => 5,
+                      :compact => true),
+            things...)
 end
 
 
