@@ -219,7 +219,6 @@ function do_simple_call(kb::ReteRootNode,
                         options::Vector{CanDoCall}
                         )::Tuple{Vector{SquareDanceFormation},
                                  Vector{DancerState}}
-    dbgprint("\ndo_simple_call\n", options, "\n")
     # Should we make sure that the formations in the remaining options
     # are disjoint?
     everyone = askc(Collector{DancerState}(), kb, DancerState)
