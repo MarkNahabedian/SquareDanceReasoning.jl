@@ -6,28 +6,26 @@ cleanup_debug_formations(@__DIR__)
 
 function direction_history(ds::DancerState)
     hist = []
-    function dh(ds)
-        if ds == nothing
-            return
-        end
-        dh(ds.previous)
-        push!(hist, ds.time => ds.direction)
+    SquareDanceReasoning.history(ds) do ds1
+        push!(hist, ds1.time => ds1.direction)
     end
-    dh(ds)
     (ds.dancer, hist)
 end
 
 function location_history(ds::DancerState)
     hist = []
-    function lh(ds)
-        if ds == nothing
-            return
-        end
-        lh(ds.previous)
-        push!(hist, ds.time => location(ds))
+    SquareDanceReasoning.history(ds) do ds1
+        push!(hist, ds1.time => location(ds1))
     end
-    lh(ds)
     (ds.dancer, hist)
+end
+
+function history(ds::DancerState)
+    hist = []
+    SquareDanceReasoning.history(ds) do ds1
+        push!(hist, ds1.time => (ds1.direction, location(ds1)...))
+    end
+    (ds.dancer, hist)    
 end
 
 
