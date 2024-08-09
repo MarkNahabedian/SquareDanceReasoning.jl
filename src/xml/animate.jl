@@ -201,7 +201,7 @@ function history_for_animation(ds)
     hist = DancerState[]
     history(ds) do ds1
         len = length(hist)
-        # If two of ds1 have the same time, prefder
+        # If two of ds1 have the same time, prefer
         # the one that is later in the chain:
         if len > 0 && hist[len].time == ds1.time
             hist[len] = ds1
