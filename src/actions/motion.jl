@@ -80,13 +80,22 @@ function revolve(ds::DancerState, center,
                  new_direction, time_delta)::DancerState
     # radius from center:
     d = distance(location(ds), center)
-    vStart = location(ds) - center
-    thetaStart = atan(vStart[2], vStart[1])
-    thetaEnd = thetaStart + 2 * pi * (new_direction - ds.direction)
-    downEnd = center[1] + d * cos(thetaEnd)
-    leftEnd = center[2] + d * sin(thetaEnd)
+    (downEnd, leftEnd) = revolve(location(ds),
+                                 center,
+                                 (new_direction - ds.direction),
+                                 d)
     DancerState(ds, ds.time + time_delta,
                 new_direction, downEnd, leftEnd)
+end
+
+function revolve(location, center, sweep, distance_from_center)
+    # absdirection is the direction from center
+    vStart = location - center
+    thetaStart = atan(vStart[2], vStart[1])
+    thetaEnd = thetaStart + 2 * pi * sweep
+    downEnd = center[1] + distance_from_center * cos(thetaEnd)
+    leftEnd = center[2] + distance_from_center * sin(thetaEnd)
+    return downEnd, leftEnd
 end
 
 

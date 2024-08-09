@@ -103,7 +103,19 @@ end
 
 @testset "test revolve" begin
     let
-        # turn in place:
+        # rotate
+        ds0 = DancerState(Dancer(1, Unspecified()),
+                          0, DIRECTION1, 1, 1)
+        ds1 = rotate(ds0, DIRECTION1, 1)
+        @test ds0.dancer == ds1.dancer
+        @test ds0.time + 1 == ds1.time
+        @test ds1.direction == DIRECTION2
+        @test ds1.down == ds0.down
+        @test ds1.left == ds0.left
+        @test can_roll(ds1) == DIRECTION2 - DIRECTION1
+    end
+    let
+        # revolve in place:
         ds0 = DancerState(Dancer(1, Unspecified()),
                           0, DIRECTION1, 1, 1)
         ds1 = revolve(ds0, [1, 1], DIRECTION2, 1)
@@ -115,7 +127,12 @@ end
         @test can_roll(ds1) == DIRECTION2 - DIRECTION1
     end
     let
-        # Revolve around a another point:
+        d, l = revolve([0, 0], [1, 1], 1//8, 2)
+        @test isapprox(d, 1; atol=0.0001)
+        @test isapprox(l, -1; atol=0.0001)
+    end
+    let
+        # Revolve around another point:
         ds0 = DancerState(Dancer(1, Unspecified()),
                           0, DIRECTION1, 1, 0)
         ds1 = revolve(ds0, [0, 0], DIRECTION2, 1)
