@@ -18,7 +18,7 @@ number of beats, for example.
 
 DancerState is also the single dancer `SquareDanceFormation`.
 """
-@with_kw struct DancerState <: SquareDanceFormation
+@with_kw_noshow struct DancerState <: SquareDanceFormation
     previous::Union{Nothing, DancerState}
     dancer::Dancer
     time
@@ -62,8 +62,12 @@ distance(s1::DancerState, s2::DancerState) =
 dancer_states(ds::DancerState) = [ ds ]
 
 
+Base.show(io::IO, ds::DancerState) =
+    Base.show(io, MIME"text/plain"(), ds)
+
 function Base.show(io::IO, ::MIME"text/plain", ds::DancerState)
     # Definition cribbed from Base._show_default(io::IO, @nospecialize(x))
+    io = IOContext(io, :compact => true)
     need_comma = false
     print(io, "DancerState(")
     for f in fieldnames(typeof(ds))
@@ -75,7 +79,7 @@ function Base.show(io::IO, ::MIME"text/plain", ds::DancerState)
             if !isdefined(ds, f)
                 print(io, Base.undef_ref_str)
             else
-                show(io, getfield(ds, f))
+                print(io, getfield(ds, f))
             end
         end
     end
