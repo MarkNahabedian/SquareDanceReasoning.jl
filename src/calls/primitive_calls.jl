@@ -14,6 +14,7 @@ Primitive square dance call causing dancers to rest in place for the
 specified time.
 """
 @with_kw struct _Rest <: SquareDanceCall
+    uid = next_call_id()
     role::Role = Everyone()
     # Allow timing to be specified since this primitive might be used
     # in other calls, like SquareThru
@@ -37,6 +38,7 @@ The second part of calls like StarThru and SlideThru.  Guy turn one
 quarter to the right, Gal turn one quarter to the left.
 """
 @with_kw struct _GenderedRoll <: SquareDanceCall
+    uid = next_call_id()
     role::Role = Everyone()
     time::Int = 2
 end
@@ -65,8 +67,10 @@ Primitive square dance call that goes from FaceToFace to a MiniWave of
 the specified handedness.  The first half of [`PassThru`](@ref).
 """
 @with_kw struct _StepToAWave <: SquareDanceCall
+    uid = next_call_id()
     role::Role = Everyone()
     handedness::Union{RightHanded, LeftHanded} = RightHanded()
+    handholds::Bool = false
 end
 
 descirption(c::_StepToAWave) = "$(c.role) Step To a Wave"
@@ -85,6 +89,7 @@ Primitive square dance call that goes from a MiniWave to FaceToFace.
 The first half of [`PassThru`](@ref).
 """
 @with_kw struct _UnStepToAWave <: SquareDanceCall
+    uid = next_call_id()
     role::Role = Everyone()
 end
 
@@ -105,6 +110,7 @@ the specified handedness.
 The third quarter of [`Dosados`](@ref).
 """
 @with_kw struct _BackToAWave <: SquareDanceCall
+    uid = next_call_id()
     role::Role = Everyone()
     handedness::Union{RightHanded, LeftHanded} = RightHanded()    
 end

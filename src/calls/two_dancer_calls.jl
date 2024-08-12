@@ -1,4 +1,4 @@
-export StepThru, StepToAWave, PassThru, PullBy, Dosados, Hinge
+export StepThru, StepToAWave, PassThru, PullBy, Dosados, Hinge, Trade
 
 #= Some two dancer calls to implement:
 
@@ -21,6 +21,7 @@ CallerLab Basic 1 square dance call that goes from MiniWave to
 BackToBack.
 """
 @with_kw struct StepThru <: SquareDanceCall
+    uid = next_call_id()
     role::Role = Everyone()
 end
 
@@ -45,6 +46,7 @@ CallerLab Basic 1 call.
 [`StepThru`](@ref).
 """
 @with_kw struct PassThru <: SquareDanceCall
+    uid = next_call_id()
     role::Role = Everyone()
 end
 
@@ -75,6 +77,7 @@ CallerLab Basic 1 call.
 
 """
 @with_kw struct PullBy <: SquareDanceCall
+    uid = next_call_id()
     role::Role = Everyone()
     handedness::Union{RightHanded, LeftHanded} = RightHanded()
 end
@@ -100,6 +103,7 @@ expand_parts(c::PullBy, options::Vector{CanDoCall}) = [
 CallerLab Basic1 call.
 """
 @with_kw struct Dosados <: SquareDanceCall
+    uid = next_call_id()
     role::Role = Everyone()
     handedness::Union{RightHanded, LeftHanded} = RightHanded()
 end
@@ -121,6 +125,7 @@ expand_parts(c::Dosados, options::Vector{CanDoCall}) = [
 CallerLab Mainstream call.
 """
 @with_kw struct Hinge <: SquareDanceCall
+    uid = next_call_id()
     role::Role = Everyone()
     # Taminations says timing is 2, but for Trade from a MiniWave the
     # total timing is 3 rather than 4.

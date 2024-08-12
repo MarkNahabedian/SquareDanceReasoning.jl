@@ -13,6 +13,7 @@ right.  The timing defaults to 2 since, according to Taminations, two
 beats is the duration for QuarterIn and QuarterOut.
 """
 @with_kw struct FaceRight <: SquareDanceCall
+    uid = next_call_id()
     role::Role = Everyone()
     time::Int = 2
 end
@@ -34,6 +35,7 @@ left.  The timing defaults to 2 since, according to Taminations, two
 beats is the duration for QuarterIn and QuarterOut.
 """
 @with_kw struct FaceLeft <: SquareDanceCall
+    uid = next_call_id()
     role::Role = Everyone()
     time::Int = 2
 end
@@ -53,6 +55,7 @@ end
 CallerLab Basic1 call.
 """
 @with_kw struct UTurnBack <: SquareDanceCall
+    uid = next_call_id()
     role::Role = Everyone()
 end
 
@@ -118,6 +121,7 @@ end
 CallerLab Plus call.
 """
 @with_kw struct AndRoll <: SquareDanceCall
+    uid = next_call_id()
     role::Role = Everyone()
     # maybe eventually add "as if you could" flag
 end
