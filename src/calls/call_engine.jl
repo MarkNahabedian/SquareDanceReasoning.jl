@@ -1,5 +1,5 @@
 export SquareDanceCall, can_do_from, do_call, expand_parts,
-    CanDoCall, CanDoCallRule, perform
+    CanDoCall, perform
 
 # Should SquareDanceCall <: TemporalFact
 # so that they don't persist across successive knowledge bases?
@@ -24,28 +24,14 @@ abstract type SquareDanceCall end
 """
     CanDoCall(preference, call::SquareDanceCall, formation::SquareDanceFormation)
 
-is concluded by [`CanDoCallRule`](@ref) when `call` can be performed from
-`formation`.
+CanDoCall represents that `call` can be performed from `formation`,
+and doing so has the specified preference.
 """
 struct CanDoCall
     preference::Int
     call::SquareDanceCall
     formation::SquareDanceFormation
 end
-
-
-@rule SquareDanceRule.CanDoCallRule(call::SquareDanceCall,
-                                    f::SquareDanceFormation,
-                                    ::CanDoCall) begin
-    p = can_do_from(call, f)
-    if p > 0
-        emit(CanDoCall(p, call, f))
-    end
-end
-    
-@doc """
-CanDoCallRule identifies which calls can be applied to which formations.
-""" CanDoCallRule
 
 
 """
@@ -125,7 +111,6 @@ end
 
 
 function do_call(kb::ReteRootNode, call::SquareDanceCall)::ReteRootNode
-    receive(kb, call)
     options = get_call_options(call, kb)
     e = expand_parts(call, options)
     if length(e) == 1
@@ -142,10 +127,20 @@ end
 
 function get_call_options(call::SquareDanceCall,
                           kb::ReteRootNode)::Vector{CanDoCall}
+    # This needs to be a set to avoid the duplicates we would get from
+    # querying for SquareDanceFormation sand it subtypes.  Maybe this
+    # should be fixed in Rete.Collector.
+    formations = Set{SquareDanceFormation}()
+    askc(kb, SquareDanceFormation) do f
+        push!(formations, f)
+    end
     # What calls can we do from where?
-    options = askc(Collector{CanDoCall}(), kb, CanDoCall)
-    options = filter!(options) do cdc
-        cdc.call == call
+    options = CanDoCall[]
+    for f in formations
+        p = can_do_from(call, f)
+        if p > 0
+            push!(options, CanDoCall(p, call, f))
+        end
     end
     if length(options) == 0
         kb_stats(kb)
