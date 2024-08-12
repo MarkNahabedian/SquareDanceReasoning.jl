@@ -49,6 +49,23 @@ CanDoCallRule identifies which calls can be applied to which formations.
 
 
 """
+    restricted_to(call)::Role
+
+Returns the role that `call` has been restricted to.
+
+Each subtype of SquareDanceCall must have either a `role` field or a
+`restricted_to` method.
+"""
+function restricted_to(call::SquareDanceCall)::Role
+    if hasfield(typeof(call), :role)
+        call.role
+    else
+        error("Each subtype of  SquareDanceCall must have either a `role` field or a `restricted_to` method.")
+    end
+end
+
+
+"""
     expand_parts(::SquareDanceCall, options::Vector{CanDoCall})
 
 Returns a sequence of the call itself if it has no separate parts, or a
@@ -138,7 +155,7 @@ function get_call_options(call::SquareDanceCall,
     options = filter!(options) do cdc
         # Every dancer in the formation satisfies the role
         # restriction:
-        length(those_with_role(cdc.formation, call.role)) ==
+        length(those_with_role(cdc.formation, restricted_to(call))) ==
             length(dancer_states(cdc.formation))
     end
     # Find highest preference option for each dancer:
