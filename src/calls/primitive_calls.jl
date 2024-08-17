@@ -55,7 +55,9 @@ function perform(c::_GenderedRoll, ds::DancerState, kb::ReteRootNode)
     elseif ds.dancer.gender isa Gal
         rotate(ds, 1//4, c.time)
     else
-        ds
+        # The call engine (do_schedule) expects all dancers affected
+        # by perform to experience the passage of time.
+        DancerState(ds, ds.time + c.time, ds.direction, ds.down, ds.left)
     end
 end
 
@@ -70,7 +72,6 @@ the specified handedness.  The first half of [`PassThru`](@ref).
     uid = next_call_id()
     role::Role = Everyone()
     handedness::Union{RightHanded, LeftHanded} = RightHanded()
-    handholds::Bool = false
 end
 
 descirption(c::_StepToAWave) = "$(c.role) Step To a Wave"
@@ -91,6 +92,10 @@ The first half of [`PassThru`](@ref).
 @with_kw struct _UnStepToAWave <: SquareDanceCall
     uid = next_call_id()
     role::Role = Everyone()
+    # Might we want to add
+    # handedness::Union{RightHanded, LeftHanded} = RightHanded()
+    # in case we need to disambiguate which MiniWave to step back
+    # from>
 end
 
 descirption(c::_UnStepToAWave) = "$(c.role) Un Step To a Wave"

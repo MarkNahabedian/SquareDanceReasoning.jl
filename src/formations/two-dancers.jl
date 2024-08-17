@@ -170,14 +170,17 @@ those_with_role(c::LHMiniWave, ::Belle) = [ c.a, c.b ]
     if encroached_on([ds1, ds2], kb)
         return
     end
+    function dbgemit(f)
+        emit(f)
+    end
     if direction(ds1) == direction(ds2)
         # Couple or Tandem?
         if right_of(ds1, ds2) && left_of(ds2, ds1)
-            emit(Couple(ds1, ds2))
+            dbgemit(Couple(ds1, ds2))
             return
         end
         if in_front_of(ds1, ds2) && behind(ds2, ds1)
-            emit(Tandem(ds2, ds1))
+            dbgemit(Tandem(ds2, ds1))
             return
         end
     elseif direction(ds1) == opposite(direction(ds2))
@@ -187,19 +190,19 @@ those_with_role(c::LHMiniWave, ::Belle) = [ c.a, c.b ]
             return
         end
         if in_front_of(ds1, ds2) && in_front_of(ds2, ds1)
-            emit(FaceToFace(ds1, ds2))
+            dbgemit(FaceToFace(ds1, ds2))
             return
         end
         if behind(ds1, ds2) && behind(ds2, ds1)
-            emit(BackToBack(ds1, ds2))
+            dbgemit(BackToBack(ds1, ds2))
             return
         end
         if right_of(ds1, ds2) && right_of(ds2, ds1)
-            emit(RHMiniWave(ds1, ds2))
+            dbgemit(RHMiniWave(ds1, ds2))
             return
         end
         if left_of(ds1, ds2) && left_of(ds2, ds1)
-            emit(LHMiniWave(ds1, ds2))
+            dbgemit(LHMiniWave(ds1, ds2))
             return
         end
     end
@@ -218,7 +221,7 @@ formations: [`Couple`](@ref), [`FaceToFace`](@ref),
 # playmate is used by breathe.
 
 function playmate(ds::Dancer,
-                  v::Vector{<:TwoDancerFormation})::Union{Nothing, Dancer}
+                  v::Vector{TwoDancerFormation})::Union{Nothing, Dancer}
     for f in v
         pm = playmate(ds, f)
         if pm != nothing

@@ -1,24 +1,4 @@
-export SquareDanceCall, can_do_from, do_call, expand_parts,
-    CanDoCall, perform
-
-# Should SquareDanceCall <: TemporalFact
-# so that they don't persist across successive knowledge bases?
-
-"""
-    SquareDanceCall
-
-For each call, a struct is defined that is a subtype of
-`SquareDanceCall`.
-
-For each call and each formation it can be done from, a
-[`can_do_from`](@ref) method should be defined.  If the "Ocean Wave
-Rule" applies, then a `can_do_from` method should be defined for that
-case.
-
-For each call and each formation it can be performed from, either a
-`perform` or an `expand_parts` method should be defined.
-"""
-abstract type SquareDanceCall end
+export can_do_from, do_call, expand_parts, CanDoCall, perform
 
 
 """
@@ -52,22 +32,14 @@ end
 
 
 """
-    expand_parts(::SquareDanceCall, options::Vector{CanDoCall})
+    expand_parts(::SquareDanceCall, ::SquareDanceFormation)
 
-Returns a sequence of the call itself if it has no separate parts, or a
-sequence of "calls" representing itys parts.
-
-`options` is the result of `get_call_options`.
+Returns either the call itself, if it has no expansion, or a vector of
+`Pair{part, relative_time}` containing Pair for each part.
+`relative_time` is the time (relative to the start of the call) at
+which the corresonding part should start.
 """
-expand_parts(c::SquareDanceCall, ::Vector{CanDoCall}) = [ c ]
-
-function expand_parts(s, options::Vector{CanDoCall})
-    result = []
-    for c in s
-        push!(result, expand_parts(c, options)...)
-    end
-    result
-end
+expand_parts(c::SquareDanceCall, ::SquareDanceFormation) = c
 
 
 """
@@ -111,15 +83,137 @@ end
 
 
 function do_call(kb::ReteRootNode, call::SquareDanceCall)::ReteRootNode
-    options = get_call_options(call, kb)
-    e = expand_parts(call, options)
-    if length(e) == 1
-        (formations, dss) = do_simple_call(kb, e[1], options)
-        kb = make_kb(kb)
-        receive.([kb], dss)
-    else
-        for c in e
-            kb = do_call(kb, c)
+    sched = let
+        dss = askc(Collector{DancerState}(), kb, DancerState)
+        if allequal(map(ds -> ds.time, dss))
+            CallSchedule(dss[1].time)
+        else
+            error("DancerStates do not have same time: $dss")
+        end
+    end
+    schedule(sched, call, sched.now)
+    do_schedule(sched, kb)
+end
+
+function do_schedule(sched::CallSchedule, kb::ReteRootNode)
+    newest_dancer_states = Dict{Dancer, DancerState}()
+    askc(kb, DancerState) do ds
+        newest_dancer_states[ds.dancer] = ds
+    end
+    playmates = TwoDancerFormation[]
+    while !isempty(sched)
+        # dbgprint("\n# outer loop")
+        # Process a queue entry, performing it if it's "atomic" or
+        # requeueing its parts.
+
+        call = dequeue!(sched) 
+        options = get_call_options(call, kb)
+        # dbgprint("# get_call_options returned\n$options")
+
+        # When we expand a call, it might apply to multiple formations
+        # and we expand it multiple times because there might be
+        # variations in those formations that interact with the
+        # parameters of the call.  The parameters of the call don't
+        # change though.
+
+        # when we perform each part, we once again match multiple
+        # formations to each part.
+
+        # Maybe expand_parts should explicitly use the
+        # DesignatedDancers role in the expansion so that it's clear
+        # which scheduled part should act on which dancers?
+
+        # If this is the problem, why has it only affected Dosados so
+        # far and why does it seemingly randomly aftect different
+        # dancers on each test run?
+
+        # dbgprint("# length options: $(length(options))")
+        while !isempty(options)
+            # dbgprint("# options loop, $(length(options)) remaining.")
+            cdc = pop!(options)
+            e = expand_parts(call, cdc.formation)
+            if e == call
+                if let
+                    # disregarding uid, we might see the same call
+                    # several times for a given schedule time.  we
+                    # should only perform the call for a given
+                    # CanDoCall only once.
+                    ds = first(dancer_states(cdc.formation))
+                    ds.time < newest_dancer_states[ds.dancer].time
+                end
+                    # dbgprint("\n# skipping\n$(cdc.formation)")
+                    continue
+                end
+                f = perform(call, cdc.formation, kb)
+                # dbgprint("\n# performing\n$call on $(cdc.formation) gives $f")
+                @assert f isa SquareDanceFormation
+                if f isa TwoDancerFormation
+                    push!(playmates, f)
+                end
+                for ds in dancer_states(f)
+                    # Ensure that the dancers that performed the call
+                    # experienced the passage opf time:
+                    @assert newest_dancer_states[ds.dancer].time <= ds.time "$(newest_dancer_states[ds.dancer].time) <= $(ds.time), $call, $f"
+                    newest_dancer_states[ds.dancer] = ds
+                end
+            else
+                for part_pair in e
+                    schedule(sched, part_pair.first,
+                             part_pair.second + sched.now)
+                end
+                # dbgprint("\n# schedule:\n$sched")
+            end
+        end
+        # Is the earliest entry in the schedule greater than
+        # sched.now?  If so then we need to breathe, update the
+        # knowledgebase, etc. first.  We also need to do these once
+        # the schedule is empty.
+        if isempty(sched) || peek(sched).second > sched.now
+            # Breathe:
+            let
+                collisions = find_collisions(collect(values(newest_dancer_states)))
+                if length(collisions) > 0
+                    # Time doesn't elapse during breathing.
+                    for ds in breathe(collisions, playmates,
+                                      collect(values(newest_dancer_states)))
+                        newest_dancer_states[ds.dancer] = ds
+                    end
+                end
+                empty!(playmates)
+            end
+            # Synchronize: catch the dancers up to the next schedule
+            # entry.
+            let
+                latest = maximum(ds -> ds.time,
+                                 values(newest_dancer_states))
+                if isempty(sched)
+                    sched.now = latest
+                else
+                    sched.now = peek(sched).second
+                end
+                # What if a dancer has progressed beyond the next
+                # schedule entry because the last part it performed in
+                # was longer?  Deal with it when it becomes a problem.
+                @assert latest <= sched.now
+                for ds in values(newest_dancer_states)
+                    if ds.time < sched.now
+                        newest_dancer_states[ds.dancer] =
+                            DancerState(ds,
+                                        sched.now,
+                                        ds.direction,
+                                        ds.down, ds.left)
+                    end
+                end
+                @assert allequal(map(ds -> ds.time,
+                                     values(newest_dancer_states)))
+            end
+            # Update the knowledgebase:
+            kb = make_kb(kb)
+            # dbgprint("# Adding to new kb:")
+            for ds in values(newest_dancer_states)
+                # dbgprint(ds)
+                receive(kb, ds)
+            end
         end
     end
     return kb
@@ -210,73 +304,5 @@ function get_call_options(call::SquareDanceCall,
         end
     end
     do_these
-end
-
-
-"""
-    do_simple_call(kb::ReteRootNode, call::SquareDanceCall, options::Vector{CanDoCall})
-
-calls `perform` on the call and each applicable member of options,
-breathes and then synchronizes.
-
-Returns the formations returned by `perform` after applying
-`update_from`.
-
-Maybe breathing and synchronization should be defered until
-`do_simple_call` returns to `do_call` in support of
-concurrent parts.
-"""
-function do_simple_call(kb::ReteRootNode,
-                        call::SquareDanceCall,
-                        options::Vector{CanDoCall}
-                        )::Tuple{Vector{SquareDanceFormation},
-                                 Vector{DancerState}}
-    # Should we make sure that the formations in the remaining options
-    # are disjoint?
-    everyone = askc(Collector{DancerState}(), kb, DancerState)
-    # We really only need collision detection here.
-    formations = SquareDanceFormation[]
-    after = map(options) do cdc
-        @assert call == cdc.call
-        f = perform(call, cdc.formation, kb)
-        @assert f isa SquareDanceFormation
-        push!(formations, f)
-        f
-    end
-    altered = Dict{Dancer, DancerState}()
-    for a in after
-        for ds in dancer_states(a)
-            altered[ds.dancer] = ds
-        end
-    end
-    # Merge DancerStates from altered into everyone:
-    everyone = map(everyone) do ds
-        get(altered, ds.dancer, ds)
-    end
-    collisions = find_collisions(everyone)
-    if length(collisions) > 0
-        everyone = breathe(collisions,
-                           filter(after) do f
-                               f isa TwoDancerFormation
-                           end,
-                           everyone)
-    end
-    # Synchronize everyone:
-    latest = maximum(ds -> ds.time, everyone)
-    everyone = map(everyone) do ds
-        if ds.time < latest
-            DancerState(ds,
-                        latest,
-                        ds.direction,
-                        ds.down,
-                        ds.left)
-        else
-            ds
-        end
-    end
-    formations = map(formations) do formation
-        update_from(formation, everyone)
-    end
-    (formations, everyone)
 end
 

@@ -33,7 +33,7 @@ end
 @testset "test AndRoll" begin
     logger = TestLogger()
     # No history:
-    ds1 = DancerState(Dancer(1, Guy()), 0, 0, 0, 1)
+    ds1 = DancerState(Dancer(1, Guy()), 1, 0, 0, 1)
     @test can_roll(ds1) == 0
     # no rotation:
     ds2 = forward(DancerState(Dancer(2, Guy()), 0, 0, 0, 2),

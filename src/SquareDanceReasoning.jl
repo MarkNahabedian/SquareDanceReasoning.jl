@@ -1,6 +1,7 @@
 module SquareDanceReasoning
 
 using InteractiveUtils
+using DataStructures
 using Parameters
 using Logging
 using LinearAlgebra: dot, normalize, normalize!

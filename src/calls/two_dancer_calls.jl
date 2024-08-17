@@ -60,14 +60,19 @@ Caller lab: From a Squared Set, Heads Pass Thru is proper. It ends
 with the Heads back on Squared Set spots. See Squared Set Convention.
 
 We might not be able to implement this until expand_parts knows the
-formation and initial daner locations.
+formation and initial dancer locations.
 =#
 
-expand_parts(c::PassThru, options::Vector{CanDoCall}) = [
+expand_parts(c::PassThru, f::FaceToFace) = [
     _StepToAWave(role = c.role,
-                 handedness = RightHanded()),
-    StepThru()
+                 handedness = RightHanded()) => 0,
+    StepThru() => 1
 ]
+
+expand_parts(c::PassThru, f::RHMiniWave) = [
+    StepThru() => 1
+]
+
 
 
 """
@@ -82,18 +87,19 @@ CallerLab Basic 1 call.
     handedness::Union{RightHanded, LeftHanded} = RightHanded()
 end
 
+can_do_from(c::PullBy, mw::MiniWave) =
+    (c.handedness == mw.handedness) ? 1 : 0
+
 can_do_from(::PullBy, ::FaceToFace) = 1
 
-# Can't do this yet because expand_parts doesn't know the formation.
-# I suppose we could make _StepToAWave a no-op from MiniWave.
-# MAybe expand_parts should get a single CanDoCall rather than a vector?
-# can_do_from(c::PullBy, mw::MiniWave) =
-#     (c.handedness == mw.handedness) ? 1 : 0
+expand_parts(c::PullBy, f::MiniWave) = [
+    StepThru() => 0
+]
 
-expand_parts(c::PullBy, options::Vector{CanDoCall}) = [
+expand_parts(c::PullBy, f::FaceToFace) = [
     _StepToAWave(role = c.role,
-                 handedness = c.handedness),
-    StepThru()
+                 handedness = c.handedness) => 0,
+    StepThru() => 1
 ]
 
 
@@ -110,12 +116,21 @@ end
 
 can_do_from(::Dosados, ::FaceToFace) = 1
 
-expand_parts(c::Dosados, options::Vector{CanDoCall}) = [
+can_do_from(c::Dosados, mw::MiniWave) =
+    (c.handedness == mw.handedness) ? 1 : 0    
+
+expand_parts(c::Dosados, f::FaceToFace) = [
     _StepToAWave(; role = c.role,
-                 handedness = c.handedness),
-    StepThru(),
-    _BackToAWave(; handedness = opposite(c.handedness)),
-    _UnStepToAWave()
+                 handedness = c.handedness) => 0,
+    StepThru() => 1,
+    _BackToAWave(; handedness = opposite(c.handedness)) => 2,
+    _UnStepToAWave() => 3
+]
+
+expand_parts(c::Dosados, mw::MiniWave) = [
+    StepThru() => 0,
+    _BackToAWave(; handedness = opposite(c.handedness)) => 1,
+    _UnStepToAWave() => 2
 ]
 
 

@@ -12,7 +12,7 @@ should be moved in such that playmates are not separated.
 `everyone` includes all DancerStates that are to be affected.
 """
 function breathe(collisions::Vector{Collision},
-                 playmates::Vector{<:TwoDancerFormation},
+                 playmates::Vector{TwoDancerFormation},
                  everyone::Vector{DancerState}
                  )::Vector{DancerState}
     let
