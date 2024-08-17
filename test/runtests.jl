@@ -130,6 +130,18 @@ end
     end
 end
 
+@testset "test encrooached_on" begin
+    kb = make_kb()
+    ds1 = DancerState(Dancer(1, Unspecified()), 0, 0, 1, 1)
+    ds2 = DancerState(Dancer(2, Unspecified()), 0, 0, 1, 2)
+    ds3 = DancerState(Dancer(3, Unspecified()), 0, 0, 1, 3)
+    receive(kb, ds1)
+    receive(kb, ds2)
+    receive(kb, ds3)
+    @test encroached_on([ds1, ds3], kb)
+    @test !encroached_on([ds1, ds2], kb)
+end
+
 @testset "center" begin
     square = make_square(4)
     dss = square_up(square)

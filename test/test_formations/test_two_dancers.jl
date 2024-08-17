@@ -117,3 +117,13 @@ end
     collect_formation_examples(kb)
 end
 
+@testset "test two dancer encroaching" begin
+    square = make_square(2)
+    kb = make_kb()
+    receive(kb, square)
+    grid = grid_arrangement(square, [ 1 2 3 4; ], [ "↓↓↓↓" ])
+    receive.([kb], grid)
+    found = askc(Collector{Couple}(), kb, Couple)    
+    @test length(found) == 3
+end
+
