@@ -70,8 +70,8 @@ end
 """
     make_kb(kb::ReteRootNode)
 
-Makes a copy of the knowledge base, but without any of the temporal
-facts.
+Makes a copy of the knowledge base, but without any
+[`TemporalFact`](@ref)s.
 """
 function make_kb(kb::ReteRootNode)
     i = parse(Int, split(kb.label, " ")[2])
