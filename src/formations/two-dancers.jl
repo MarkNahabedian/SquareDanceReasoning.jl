@@ -144,7 +144,7 @@ those_with_role(c::LHMiniWave, ::Belle) = [ c.a, c.b ]
 
 
 @rule SquareDanceFormationRule.TwoDancerFormationsRule(kb::ReteRootNode,
-                                                       sq::SDSquare,
+                                                       sq::AllPresent,
                                                        ds1::DancerState,
                                                        ds2::DancerState,
                                                        ::Couple,
@@ -153,6 +153,7 @@ those_with_role(c::LHMiniWave, ::Belle) = [ c.a, c.b ]
                                                        ::Tandem,
                                                        ::RHMiniWave,
                                                        ::LHMiniWave) begin
+    RULE_DECLARATIONS(FORWARD_TRIGGERS(sq))
     # Not the same dancer:
     if ds1.dancer == ds2.dancer
         return
@@ -162,7 +163,7 @@ those_with_role(c::LHMiniWave, ::Belle) = [ c.a, c.b ]
         return
     end
     # In the same square:
-    if !in(ds1, sq) || !in(ds2, sq)
+    if !in(ds1, sq.expected) || !in(ds2, sq.expected)
         return
     end
     # Rather than using near, make sure there are no other dancers
@@ -209,6 +210,8 @@ those_with_role(c::LHMiniWave, ::Belle) = [ c.a, c.b ]
 end
 
 @doc """
+    TwoDancerFormationsRule
+
 TwoDancerFormationsRule is the rule for identifying all two dancer
 formations: [`Couple`](@ref), [`FaceToFace`](@ref),
 [`BackToBack`](@ref), [`Tandem`](@ref), [`RHMiniWave`](@ref), and

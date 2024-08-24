@@ -1,6 +1,7 @@
 
 
 include("generic.jl")
+include("attendance.jl")
 include("roles.jl")
 include("examples.jl")
 include("two-dancers.jl")
