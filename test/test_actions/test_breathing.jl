@@ -15,7 +15,11 @@
     counts2 = kb_counts(kb2)
     # Check that only the right facts are copied:
     for (t, count) in kb_counts(kb)
-        if t <: TemporalFact
+        # Attendance will have already been concluded from SDSquare.
+        if t <: Attendance
+            @test count == 1
+            @test counts2[t] == 1
+        elseif t <: TemporalFact
             @test counts2[t] == 0
         else
             @test counts2[t] == count
