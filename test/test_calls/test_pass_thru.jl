@@ -54,7 +54,7 @@ end
     @debug_formations(kb)
     lines = askc(Collector{LineOfFour}(), kb, LineOfFour)
     @test length(lines) == 2
-    kb = do_call(kb, Dosados())
+    kb = do_call(kb, Dosado())
     @debug_formations(kb)
     for ds in askc(Collector{DancerState}(), kb, DancerState)
         ods = original_ds(ds)

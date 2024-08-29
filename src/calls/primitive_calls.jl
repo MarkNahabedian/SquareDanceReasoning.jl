@@ -119,7 +119,7 @@ end
 
 Primitive square dance call that goes from BackToBack to a MiniWave of
 the specified handedness.
-The third quarter of [`Dosados`](@ref).
+The third quarter of [`Dosado`](@ref).
 
 Timing: 1.
 

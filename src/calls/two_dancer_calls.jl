@@ -1,4 +1,4 @@
-export StepThru, StepToAWave, PassThru, PullBy, Dosados, Hinge, Trade
+export StepThru, StepToAWave, PassThru, PullBy, Dosado, Hinge, Trade
 
 #= Some two dancer calls to implement:
 
@@ -28,7 +28,7 @@ assume 1.
     role::Role = Everyone()
 end
 
-# Should we rename PassBy to Dosados!2?
+# Should we rename PassBy to Dosado!2?
 
 description(c::StepThru) = "$(c.role) pass by from MiniWave to BackToBack"
 
@@ -121,24 +121,24 @@ end
 
 
 """
-    Dosados(; role=Everyone(), handedness=RightHanded())
+    Dosado(; role=Everyone(), handedness=RightHanded())
 
 CallerLab Basic1 call.
 
 Timing: Callerlab: 6, unless coming from and returnuing to a squared
 set, in which case 8.
 """
-@with_kw_noshow struct Dosados <: SquareDanceCall
+@with_kw_noshow struct Dosado <: SquareDanceCall
     role::Role = Everyone()
     handedness::Union{RightHanded, LeftHanded} = RightHanded()
 end
 
-can_do_from(::Dosados, ::FaceToFace) = 1
+can_do_from(::Dosado, ::FaceToFace) = 1
 
-can_do_from(c::Dosados, mw::MiniWave) =
+can_do_from(c::Dosado, mw::MiniWave) =
     (c.handedness == mw.handedness) ? 1 : 0    
 
-function expand_parts(c::Dosados, f::FaceToFace)
+function expand_parts(c::Dosado, f::FaceToFace)
     dancers = map(ds -> ds.dancer, dancer_states(f))
     [
         # The timing budget is at leat 6.  Where should we spread out
@@ -152,7 +152,7 @@ function expand_parts(c::Dosados, f::FaceToFace)
     ]
 end
 
-function expand_parts(c::Dosados, mw::MiniWave)
+function expand_parts(c::Dosado, mw::MiniWave)
     dancers = map(ds -> ds.dancer, dancer_states(mw))
     [
         # The timing budget is at leat 6.  Where should we spread out
