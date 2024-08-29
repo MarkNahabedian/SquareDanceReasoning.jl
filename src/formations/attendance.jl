@@ -32,7 +32,7 @@ end
 
 `AllPresent` is a fact that is asserted to the knowledgebase by
 [`SDSquareHasAttendanceRule`](@ref) when all of the [`Dancer`](@ref)s
-in an [`SQSquare`](@ref) are present.
+in an [`SDSquare`](@ref) are present.
 
 It can be used as a trigger for rules that depend on all `Dancer`s
 having an associated `DancerState`.
