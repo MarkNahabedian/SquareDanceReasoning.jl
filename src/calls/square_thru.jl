@@ -1,6 +1,13 @@
 
 export SquareThru
 
+"""
+    SquareThru(; role, handedness, count)
+
+CallerLab Basic 1 square dance call.
+
+Timing: count=1: 2, count=2: 5, count=3: 7 or 8, count=4: 10.
+"""
 @with_kw_noshow struct SquareThru <: SquareDanceCall
     role::Role = Everyone()
     handedness::Union{RightHanded, LeftHanded} = RightHanded()
