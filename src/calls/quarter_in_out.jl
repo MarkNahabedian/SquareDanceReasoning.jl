@@ -25,7 +25,6 @@ CalllerLab Advanced 1 call.
 Timing: CallerLab: 2.
 """
 @with_kw_noshow struct QuarterIn <: SquareDanceCall
-    uid = next_call_id()
     role::Role = Everyone()
 end
 
@@ -47,7 +46,6 @@ CalllerLab Advanced 1 call.
 Timing: CallerLab: 2.
 """
 @with_kw_noshow struct QuarterOut <: SquareDanceCall
-    uid = next_call_id()
     role::Role = Everyone()
 end
 

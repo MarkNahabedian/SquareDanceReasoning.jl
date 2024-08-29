@@ -25,7 +25,6 @@ timing for [`PassThru`](@ref) is 2 and `StepThro` must be smpler,
 assume 1.
 """
 @with_kw_noshow struct StepThru <: SquareDanceCall
-    uid = next_call_id()
     role::Role = Everyone()
 end
 
@@ -52,7 +51,6 @@ Timing: CallerLab: 2.
 [`StepThru`](@ref).
 """
 @with_kw_noshow struct PassThru <: SquareDanceCall
-    uid = next_call_id()
     role::Role = Everyone()
 end
 
@@ -96,7 +94,6 @@ Timing: CallerLab doesn't specify timing, but since the timing for
 [`PassThru`](@ref) is 2, assume the same for `PullBy`.
 """
 @with_kw_noshow struct PullBy <: SquareDanceCall
-    uid = next_call_id()
     role::Role = Everyone()
     handedness::Union{RightHanded, LeftHanded} = RightHanded()
 end
@@ -132,7 +129,6 @@ Timing: Callerlab: 6, unless coming from and returnuing to a squared
 set, in which case 8.
 """
 @with_kw_noshow struct Dosados <: SquareDanceCall
-    uid = next_call_id()
     role::Role = Everyone()
     handedness::Union{RightHanded, LeftHanded} = RightHanded()
 end
@@ -177,7 +173,6 @@ CallerLab Mainstream call.
 Timing: CallerLab: 2.
 """
 @with_kw_noshow struct Hinge <: SquareDanceCall
-    uid = next_call_id()
     role::Role = Everyone()
     # Taminations says timing is 2, but for Trade from a MiniWave the
     # total timing is 3 rather than 4.

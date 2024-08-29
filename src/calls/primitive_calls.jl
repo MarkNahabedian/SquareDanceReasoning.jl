@@ -16,7 +16,6 @@ specified time.
 Timing: as specified in the parameter.
 """
 @with_kw_noshow struct _Rest <: SquareDanceCall
-    uid = next_call_id()
     role::Role = Everyone()
     # Allow timing to be specified since this primitive might be used
     # in other calls, like SquareThru
@@ -43,7 +42,6 @@ Timing: as specified in the parameter.  Defaults to 2.  CallerLab says
 the timing for StarThru is 4, so thisseems reasonable.
 """
 @with_kw_noshow struct _GenderedRoll <: SquareDanceCall
-    uid = next_call_id()
     role::Role = Everyone()
     time::Int = 2
 end
@@ -77,7 +75,6 @@ Timing: 2.
 
 """
 @with_kw_noshow struct _StepToAWave <: SquareDanceCall
-    uid = next_call_id()
     role::Role = Everyone()
     handedness::Union{RightHanded, LeftHanded} = RightHanded()
 end
@@ -101,7 +98,6 @@ Timing: 2.
 Persimably should have the same timing as [`StepToAWave'](@ref)
 """
 @with_kw_noshow struct _UnStepToAWave <: SquareDanceCall
-    uid = next_call_id()
     role::Role = Everyone()
     # Might we want to add
     # handedness::Union{RightHanded, LeftHanded} = RightHanded()
@@ -129,7 +125,6 @@ Timing: 1.
 
 """
 @with_kw_noshow struct _BackToAWave <: SquareDanceCall
-    uid = next_call_id()
     role::Role = Everyone()
     handedness::Union{RightHanded, LeftHanded} = RightHanded()    
 end
