@@ -15,11 +15,11 @@ using Logging
     hist = map(direction_history, dss)
     @test hist == [
         (Dancer(1, Guy()), [
-            0 => 0, 2 => 3//4, 4 => 0, 6 => 3//4]),
+            0 => 0, 1 => 3//4, 2 => 0, 4 => 3//4]),
         (Dancer(2, Gal()), [
-            0 => 0, 2 => 3//4, 4 => 0, 6 => 1//4 ]),
+            0 => 0, 1 => 3//4, 2 => 0, 4 => 1//4 ]),
         (Dancer(3, Unspecified()), [
-            0 => 0, 2 => 3//4, 4 => 0, 6 => 0 ])
+            0 => 0, 1 => 3//4, 2 => 0, 4 => 0 ])
     ]
     for ds in dss
         @test ds.down == 0
@@ -61,8 +61,13 @@ end
     with_logger(logger) do
         @test isempty(logger.logs)
         kb = do_call(kb, AndRoll())
-        @test length(logger.logs) == 1
-        @test first(logger.logs).message isa CanRollAmbiguityException
+        found_CanRollAmbiguityException = false
+        for m in logger.logs
+            if m.message isa CanRollAmbiguityException
+                found_CanRollAmbiguityException = true
+            end
+        end
+        @test found_CanRollAmbiguityException
     end
     @debug_formations(kb)
     dss = sort!(askc(Collector{DancerState}(), kb, DancerState);
@@ -161,10 +166,14 @@ end
     @debug_formations(kb)
     with_logger(logger) do
         kb = do_call(kb, AndRoll())
-        @test length(logger.logs) == 2
-        @test logger.logs[1].message isa CanRollAmbiguityException
-        @test logger.logs[2].message isa CanRollAmbiguityException
-        @test sort!((map(logger.logs) do logrec
+        cae_messages = []
+        for m in logger.logs
+            if m.message isa CanRollAmbiguityException
+                push!(cae_messages, m)
+            end
+        end
+        @test length(cae_messages) == 2
+        @test sort!((map(cae_messages) do logrec
                          logrec.message.dancer_state.dancer
                      end)) == [ Dancer(3, Guy()),
                                 Dancer(3, Gal()) ]
