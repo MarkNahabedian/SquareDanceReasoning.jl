@@ -3,7 +3,7 @@
 # so that they won't conflict with the names of other calls, whether
 # already or eventually to be defined.
 
-export _Rest, _GenderedRoll, _StepToAWave, _UnStepToAWave,
+export _Rest, _GenderedRoll, StepToAWave, _UnStepToAWave,
     _BackToAWave
 
 
@@ -66,24 +66,25 @@ end
 
 
 """
-    _StepToAWave(; role=Everyone(), handedness=RightHanded())
+    StepToAWave(; role=Everyone(), handedness=RightHanded())
 
-Primitive square dance call that goes from FaceToFace to a MiniWave of
-the specified handedness.  The first half of [`PassThru`](@ref).
+CallerLab Basic 2 square dance call that goes from FaceToFace to a
+MiniWave of the specified handedness.  The first half of
+[`PassThru`](@ref).
 
 Timing: 2.
 
 """
-@with_kw_noshow struct _StepToAWave <: SquareDanceCall
+@with_kw_noshow struct StepToAWave <: SquareDanceCall
     role::Role = Everyone()
     handedness::Union{RightHanded, LeftHanded} = RightHanded()
 end
 
-descirption(c::_StepToAWave) = "$(c.role) Step To a Wave"
+descirption(c::StepToAWave) = "$(c.role) Step To a Wave"
 
-can_do_from(::_StepToAWave, ::FaceToFace) = 1
+can_do_from(::StepToAWave, ::FaceToFace) = 1
 
-function perform(c::_StepToAWave, f::FaceToFace, kb::ReteRootNode)
+function perform(c::StepToAWave, f::FaceToFace, kb::ReteRootNode)
     step_to_a_wave(f, 2, c.handedness)
 end
 

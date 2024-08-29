@@ -71,8 +71,8 @@ function expand_parts(c::PassThru, f::FaceToFace)
         # ??? The CallerLab timing for PassThru is 2, but the timing
         # for StepToAWave is 2 and the timing for StepThru is
         # presumably greater than zero.
-        (0, _StepToAWave(role = dd,
-                         handedness = RightHanded())),
+        (0, StepToAWave(role = dd,
+                        handedness = RightHanded())),
         (2, StepThru(role = dd))
     ]
 end
@@ -113,8 +113,8 @@ end
 function expand_parts(c::PullBy, f::FaceToFace)
     dd = DesignatedDancers(map(ds -> ds.dancer, dancer_states(f)))
     [
-        (0, _StepToAWave(role = dd,
-                         handedness = c.handedness)),
+        (0, StepToAWave(role = dd,
+                        handedness = c.handedness)),
         (1, StepThru(role = dd))
     ]
 end
@@ -143,8 +143,8 @@ function expand_parts(c::Dosado, f::FaceToFace)
     [
         # The timing budget is at leat 6.  Where should we spread out
         # the extra time?
-        (0, _StepToAWave(role = DesignatedDancers(dancers),
-                         handedness = c.handedness)),
+        (0, StepToAWave(role = DesignatedDancers(dancers),
+                        handedness = c.handedness)),
         (2, StepThru(role = DesignatedDancers(dancers))),
         (3, _BackToAWave(role = DesignatedDancers(dancers),
                          handedness = opposite(c.handedness))),
