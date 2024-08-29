@@ -21,6 +21,8 @@ end
     QuarterIn(; role=Everyone())
 
 CalllerLab Advanced 1 call.
+
+Timing: CallerLab: 2.
 """
 @with_kw struct QuarterIn <: SquareDanceCall
     uid = next_call_id()
@@ -41,6 +43,8 @@ perform(c::QuarterIn, f::MiniWave, kb::ReteRootNode) =
     QuarterOut(; role=Everyone())
 
 CalllerLab Advanced 1 call.
+
+Timing: CallerLab: 2.
 """
 @with_kw struct QuarterOut <: SquareDanceCall
     uid = next_call_id()

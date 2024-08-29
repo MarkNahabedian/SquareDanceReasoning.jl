@@ -12,6 +12,8 @@ export _Rest, _GenderedRoll, _StepToAWave, _UnStepToAWave,
 
 Primitive square dance call causing dancers to rest in place for the
 specified time.
+
+Timing: as specified in the parameter.
 """
 @with_kw struct _Rest <: SquareDanceCall
     uid = next_call_id()
@@ -36,6 +38,9 @@ end
 
 The second part of calls like StarThru and SlideThru.  Guy turn one
 quarter to the right, Gal turn one quarter to the left.
+
+Timing: as specified in the parameter.  Defaults to 2.  CallerLab says
+the timing for StarThru is 4, so thisseems reasonable.
 """
 @with_kw struct _GenderedRoll <: SquareDanceCall
     uid = next_call_id()
@@ -67,6 +72,9 @@ end
 
 Primitive square dance call that goes from FaceToFace to a MiniWave of
 the specified handedness.  The first half of [`PassThru`](@ref).
+
+Timing: 2.
+
 """
 @with_kw struct _StepToAWave <: SquareDanceCall
     uid = next_call_id()
@@ -79,7 +87,7 @@ descirption(c::_StepToAWave) = "$(c.role) Step To a Wave"
 can_do_from(::_StepToAWave, ::FaceToFace) = 1
 
 function perform(c::_StepToAWave, f::FaceToFace, kb::ReteRootNode)
-    step_to_a_wave(f, 1, c.handedness)
+    step_to_a_wave(f, 2, c.handedness)
 end
 
 
@@ -88,6 +96,9 @@ end
 
 Primitive square dance call that goes from a MiniWave to FaceToFace.
 The first half of [`PassThru`](@ref).
+
+Timing: 2.
+Persimably should have the same timing as [`StepToAWave'](@ref)
 """
 @with_kw struct _UnStepToAWave <: SquareDanceCall
     uid = next_call_id()
@@ -113,6 +124,9 @@ end
 Primitive square dance call that goes from BackToBack to a MiniWave of
 the specified handedness.
 The third quarter of [`Dosados`](@ref).
+
+Timing: 1.
+
 """
 @with_kw struct _BackToAWave <: SquareDanceCall
     uid = next_call_id()
