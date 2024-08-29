@@ -24,7 +24,7 @@ Timing: CallerLab doesn't spoecify a timing, but since the specified
 timing for [`PassThru`](@ref) is 2 and `StepThro` must be smpler,
 assume 1.
 """
-@with_kw struct StepThru <: SquareDanceCall
+@with_kw_noshow struct StepThru <: SquareDanceCall
     uid = next_call_id()
     role::Role = Everyone()
 end
@@ -51,7 +51,7 @@ Timing: CallerLab: 2.
 (because of the "Icean Wave Rule").  For `LHMiniWave`, use
 [`StepThru`](@ref).
 """
-@with_kw struct PassThru <: SquareDanceCall
+@with_kw_noshow struct PassThru <: SquareDanceCall
     uid = next_call_id()
     role::Role = Everyone()
 end
@@ -95,7 +95,7 @@ CallerLab Basic 1 call.
 Timing: CallerLab doesn't specify timing, but since the timing for
 [`PassThru`](@ref) is 2, assume the same for `PullBy`.
 """
-@with_kw struct PullBy <: SquareDanceCall
+@with_kw_noshow struct PullBy <: SquareDanceCall
     uid = next_call_id()
     role::Role = Everyone()
     handedness::Union{RightHanded, LeftHanded} = RightHanded()
@@ -131,7 +131,7 @@ CallerLab Basic1 call.
 Timing: Callerlab: 6, unless coming from and returnuing to a squared
 set, in which case 8.
 """
-@with_kw struct Dosados <: SquareDanceCall
+@with_kw_noshow struct Dosados <: SquareDanceCall
     uid = next_call_id()
     role::Role = Everyone()
     handedness::Union{RightHanded, LeftHanded} = RightHanded()
@@ -176,7 +176,7 @@ CallerLab Mainstream call.
 
 Timing: CallerLab: 2.
 """
-@with_kw struct Hinge <: SquareDanceCall
+@with_kw_noshow struct Hinge <: SquareDanceCall
     uid = next_call_id()
     role::Role = Everyone()
     # Taminations says timing is 2, but for Trade from a MiniWave the

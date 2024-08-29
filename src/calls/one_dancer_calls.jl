@@ -8,7 +8,7 @@ export Balance
 Implements the Balance square dance call, except that dancers just
 jiggle in place.  Maybe it should be renamed _Identify.
 """
-@with_kw struct Balance <: SquareDanceCall
+@with_kw_noshow struct Balance <: SquareDanceCall
     uid = next_call_id()
     role::Role = Everyone()
     time::Int = 2

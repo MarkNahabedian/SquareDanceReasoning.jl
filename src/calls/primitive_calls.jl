@@ -15,7 +15,7 @@ specified time.
 
 Timing: as specified in the parameter.
 """
-@with_kw struct _Rest <: SquareDanceCall
+@with_kw_noshow struct _Rest <: SquareDanceCall
     uid = next_call_id()
     role::Role = Everyone()
     # Allow timing to be specified since this primitive might be used
@@ -42,7 +42,7 @@ quarter to the right, Gal turn one quarter to the left.
 Timing: as specified in the parameter.  Defaults to 2.  CallerLab says
 the timing for StarThru is 4, so thisseems reasonable.
 """
-@with_kw struct _GenderedRoll <: SquareDanceCall
+@with_kw_noshow struct _GenderedRoll <: SquareDanceCall
     uid = next_call_id()
     role::Role = Everyone()
     time::Int = 2
@@ -76,7 +76,7 @@ the specified handedness.  The first half of [`PassThru`](@ref).
 Timing: 2.
 
 """
-@with_kw struct _StepToAWave <: SquareDanceCall
+@with_kw_noshow struct _StepToAWave <: SquareDanceCall
     uid = next_call_id()
     role::Role = Everyone()
     handedness::Union{RightHanded, LeftHanded} = RightHanded()
@@ -100,7 +100,7 @@ The first half of [`PassThru`](@ref).
 Timing: 2.
 Persimably should have the same timing as [`StepToAWave'](@ref)
 """
-@with_kw struct _UnStepToAWave <: SquareDanceCall
+@with_kw_noshow struct _UnStepToAWave <: SquareDanceCall
     uid = next_call_id()
     role::Role = Everyone()
     # Might we want to add
@@ -128,7 +128,7 @@ The third quarter of [`Dosados`](@ref).
 Timing: 1.
 
 """
-@with_kw struct _BackToAWave <: SquareDanceCall
+@with_kw_noshow struct _BackToAWave <: SquareDanceCall
     uid = next_call_id()
     role::Role = Everyone()
     handedness::Union{RightHanded, LeftHanded} = RightHanded()    

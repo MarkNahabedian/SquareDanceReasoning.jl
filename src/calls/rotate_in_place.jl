@@ -15,7 +15,7 @@ beats is the duration for QuarterIn and QuarterOut.
 Timing: CallerLab does not soecify timing.  Assume 1.  Can be
 specified as a parameter.
 """
-@with_kw struct FaceRight <: SquareDanceCall
+@with_kw_noshow struct FaceRight <: SquareDanceCall
     uid = next_call_id()
     role::Role = Everyone()
     time::Int = 1
@@ -40,7 +40,7 @@ beats is the duration for QuarterIn and QuarterOut.
 Timing: CallerLab does not soecify timing.  Assume 1.  Can be
 specified as a parameter.
 """
-@with_kw struct FaceLeft <: SquareDanceCall
+@with_kw_noshow struct FaceLeft <: SquareDanceCall
     uid = next_call_id()
     role::Role = Everyone()
     time::Int = 1
@@ -62,7 +62,7 @@ CallerLab Basic1 call.
 
 Timing: CallerLab: 2.
 """
-@with_kw struct UTurnBack <: SquareDanceCall
+@with_kw_noshow struct UTurnBack <: SquareDanceCall
     uid = next_call_id()
     role::Role = Everyone()
 end
@@ -128,7 +128,7 @@ CallerLab Plus call.
 
 Timing: CallerLab: 2.
 """
-@with_kw struct AndRoll <: SquareDanceCall
+@with_kw_noshow struct AndRoll <: SquareDanceCall
     uid = next_call_id()
     role::Role = Everyone()
     # maybe eventually add "as if you could" flag

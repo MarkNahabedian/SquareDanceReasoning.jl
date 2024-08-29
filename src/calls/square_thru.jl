@@ -1,7 +1,7 @@
 
 export SquareThru
 
-@with_kw struct SquareThru <: SquareDanceCall
+@with_kw_noshow struct SquareThru <: SquareDanceCall
     uid = next_call_id()
     role::Role = Everyone()
     handedness::Union{RightHanded, LeftHanded} = RightHanded()
