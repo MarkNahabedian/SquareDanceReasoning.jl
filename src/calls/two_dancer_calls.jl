@@ -19,6 +19,10 @@ BoxTheGnat espands to StepToAWave, revolve around the your center -1/4, AndRoll
 
 CallerLab Basic 1 square dance call that goes from MiniWave to
 BackToBack.
+
+Timing: CallerLab doesn't spoecify a timing, but since the specified
+timing for [`PassThru`](@ref) is 2 and `StepThro` must be smpler,
+assume 1.
 """
 @with_kw struct StepThru <: SquareDanceCall
     uid = next_call_id()
@@ -41,6 +45,8 @@ end
 
 CallerLab Basic 1 call.
 
+Timing: CallerLab: 2.
+
 `PassThru` is only proper from `FaceToFace` or from `RHMiniWave`
 (because of the "Icean Wave Rule").  For `LHMiniWave`, use
 [`StepThru`](@ref).
@@ -59,20 +65,26 @@ TODO:
 Caller lab: From a Squared Set, Heads Pass Thru is proper. It ends
 with the Heads back on Squared Set spots. See Squared Set Convention.
 
-We might not be able to implement this until expand_parts knows the
-formation and initial dancer locations.
 =#
 
-expand_parts(c::PassThru, f::FaceToFace) = [
-    _StepToAWave(role = c.role,
-                 handedness = RightHanded()) => 0,
-    StepThru() => 1
-]
+function expand_parts(c::PassThru, f::FaceToFace)
+    dd = DesignatedDancers(map(ds -> ds.dancer, dancer_states(f)))
+    [
+        # ??? The CallerLab timing for PassThru is 2, but the timing
+        # for StepToAWave is 2 and the timing for StepThru is
+        # presumably greater than zero.
+        (0, _StepToAWave(role = dd,
+                         handedness = RightHanded())),
+        (2, StepThru(role = dd))
+    ]
+end
 
-expand_parts(c::PassThru, f::RHMiniWave) = [
-    StepThru() => 1
-]
-
+function expand_parts(c::PassThru, f::RHMiniWave)
+    dd = DesignatedDancers(map(ds -> ds.dancer, dancer_states(f)))
+    [
+        (0, StepThru(role = dd))
+    ]
+end
 
 
 """
@@ -80,6 +92,8 @@ expand_parts(c::PassThru, f::RHMiniWave) = [
 
 CallerLab Basic 1 call.
 
+Timing: CallerLab doesn't specify timing, but since the timing for
+[`PassThru`](@ref) is 2, assume the same for `PullBy`.
 """
 @with_kw struct PullBy <: SquareDanceCall
     uid = next_call_id()
@@ -92,21 +106,30 @@ can_do_from(c::PullBy, mw::MiniWave) =
 
 can_do_from(::PullBy, ::FaceToFace) = 1
 
-expand_parts(c::PullBy, f::MiniWave) = [
-    StepThru() => 0
-]
+function expand_parts(c::PullBy, f::MiniWave)
+    dd = DesignatedDancers(map(ds -> ds.dancer, dancer_states(mw)))
+    [
+        (0, StepThru(role = dd))
+    ]
+end
 
-expand_parts(c::PullBy, f::FaceToFace) = [
-    _StepToAWave(role = c.role,
-                 handedness = c.handedness) => 0,
-    StepThru() => 1
-]
+function expand_parts(c::PullBy, f::FaceToFace)
+    dd = DesignatedDancers(map(ds -> ds.dancer, dancer_states(f)))
+    [
+        (0, _StepToAWave(role = dd,
+                         handedness = c.handedness)),
+        (1, StepThru(role = dd))
+    ]
+end
 
 
 """
     Dosados(; role=Everyone(), handedness=RightHanded())
 
 CallerLab Basic1 call.
+
+Timing: Callerlab: 6, unless coming from and returnuing to a squared
+set, in which case 8.
 """
 @with_kw struct Dosados <: SquareDanceCall
     uid = next_call_id()
@@ -119,25 +142,39 @@ can_do_from(::Dosados, ::FaceToFace) = 1
 can_do_from(c::Dosados, mw::MiniWave) =
     (c.handedness == mw.handedness) ? 1 : 0    
 
-expand_parts(c::Dosados, f::FaceToFace) = [
-    _StepToAWave(; role = c.role,
-                 handedness = c.handedness) => 0,
-    StepThru() => 1,
-    _BackToAWave(; handedness = opposite(c.handedness)) => 2,
-    _UnStepToAWave() => 3
-]
+function expand_parts(c::Dosados, f::FaceToFace)
+    dancers = map(ds -> ds.dancer, dancer_states(f))
+    [
+        # The timing budget is at leat 6.  Where should we spread out
+        # the extra time?
+        (0, _StepToAWave(role = DesignatedDancers(dancers),
+                         handedness = c.handedness)),
+        (2, StepThru(role = DesignatedDancers(dancers))),
+        (3, _BackToAWave(role = DesignatedDancers(dancers),
+                         handedness = opposite(c.handedness))),
+        (4, _UnStepToAWave(role = DesignatedDancers(dancers)))
+    ]
+end
 
-expand_parts(c::Dosados, mw::MiniWave) = [
-    StepThru() => 0,
-    _BackToAWave(; handedness = opposite(c.handedness)) => 1,
-    _UnStepToAWave() => 2
-]
+function expand_parts(c::Dosados, mw::MiniWave)
+    dancers = map(ds -> ds.dancer, dancer_states(mw))
+    [
+        # The timing budget is at leat 6.  Where should we spread out
+        # the extra time?
+        (0, StepThru(role = DesignatedDancers(dancers))),
+        (1, _BackToAWave(role = DesignatedDancers(dancers),
+                         handedness = opposite(c.handedness))),
+        (2, _UnStepToAWave(role = DesignatedDancers(dancers)))
+    ]
+end
 
 
 """
     Hinge(; role=Everyone(), tile=2)
 
 CallerLab Mainstream call.
+
+Timing: CallerLab: 2.
 """
 @with_kw struct Hinge <: SquareDanceCall
     uid = next_call_id()
@@ -165,7 +202,6 @@ function perform(c::Hinge, mw::MiniWave, kb::ReteRootNode)
 end
 
 function perform(c::Hinge, couple::Couple, kb::ReteRootNode)
-    # Taminations says timing is 2.
     c = center(couple)
     cpl = RHMiniWave(let
                          dir = couple.beau.direction - 1//4

@@ -1,4 +1,4 @@
-export SquareDanceCall
+export SquareDanceCall, CanDoCall
 
 
 """
@@ -15,7 +15,8 @@ once in a [`CallSchedule`](@ref), each call must be given a unique id.
 next_call_id = let
     id_counter = 0
     function next_call_id()
-        id_counter += 1
+        # id_counter += 1
+        0
     end
 end
 
@@ -38,4 +39,18 @@ For each call and each formation it can be performed from, either a
 `perform` or an `expand_parts` method should be defined.
 """
 abstract type SquareDanceCall end
+
+
+"""
+    CanDoCall(preference, call::SquareDanceCall, formation::SquareDanceFormation)
+
+CanDoCall represents that `call` can be performed from `formation`,
+and doing so has the specified preference.
+"""
+struct CanDoCall
+    preference::Int
+    call::SquareDanceCall
+    formation::SquareDanceFormation
+end
+
 

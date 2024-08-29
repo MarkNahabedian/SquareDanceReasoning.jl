@@ -1,4 +1,11 @@
 
+
+struct ScheduledCall
+    when::Real
+    call::SquareDanceCall
+end
+
+
 """
     CallSchedule()
     CallSchedule(now)
@@ -33,21 +40,23 @@ mutable struct CallSchedule
     # What mechanism provides the easiest approach to part
     # manipulation?
     now::Real
-    queue::PriorityQueue{SquareDanceCall, Real}
+    queue::PriorityQueue{ScheduledCall, Real}
     
     CallSchedule() =
-        new(0, PriorityQueue{SquareDanceCall, Real}())
+        new(0, PriorityQueue{ScheduledCall, Real}())
 
     CallSchedule(now::Real) =
-        new(now, PriorityQueue{SquareDanceCall, Real}())
+        new(now, PriorityQueue{ScheduledCall, Real}())
 end
 
 
 Base.isempty(sched::CallSchedule) = isempty(sched.queue)
 
-DataStructures.peek(sched::CallSchedule) = peek(sched.queue)
+DataStructures.peek(sched::CallSchedule) =
+    peek(sched.queue)
 
-DataStructures.dequeue!(sched::CallSchedule) = dequeue!(sched.queue)
+DataStructures.dequeue!(sched::CallSchedule) =
+    dequeue!(sched.queue).call
 
 
 """
@@ -58,10 +67,28 @@ specified time `at`.
 """
 function schedule(sched::CallSchedule, call::SquareDanceCall, at)
     @assert at >= sched.now
-    if (!isempty(sched.queue)) && at < peek(sched.queue).second
-        error("$at is too early.")
-    end
     @assert !haskey(sched.queue, call)
-    sched.queue[call] = at
+    sched.queue[ScheduledCall(at, call)] = at
+end
+
+
+function schedule(sched::CallSchedule,
+                  t::Tuple{Real, SquareDanceCall})
+    schedule(sched, t.second, t.first + sched.now)
+end
+
+
+"""
+    advance_schedule_by(sched::CallSchedule, delta)
+
+Move every entry in the schedule forward by `delta`.
+"""
+function advance_schedule_by(sched::CallSchedule, delta)
+    for key in keys(sched.queue)
+        delete!(sched.queue, key)
+        schedule(sched, key.call, key.when + delta)
+    end
+    sched.now += delta
+    sched
 end
 
