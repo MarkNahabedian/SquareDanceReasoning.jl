@@ -10,7 +10,7 @@ export dbgprint
 # IOContext and is not compact.
 function dbgprint(things...)
     println(IOContext(stdout,
-                      # :limit => 5,
+                      :limit => false,
                       :compact => true),
             things...)
 end
