@@ -11,11 +11,14 @@ export FaceRight, FaceLeft, UTurnBack, AndRoll
 CallerLab Basic 1 square dance call causing dancers to turn 1/4 to their
 right.  The timing defaults to 2 since, according to Taminations, two
 beats is the duration for QuarterIn and QuarterOut.
+
+Timing: CallerLab does not soecify timing.  Assume 1.  Can be
+specified as a parameter.
 """
 @with_kw struct FaceRight <: SquareDanceCall
     uid = next_call_id()
     role::Role = Everyone()
-    time::Int = 2
+    time::Int = 1
 end
 
 description(c::FaceRight) = "$(c.role) quarter right, $(c.time) ticks."
@@ -33,11 +36,14 @@ end
 CallerLab Basic 1 square dance call causing dancers to turn 1/4 to their
 left.  The timing defaults to 2 since, according to Taminations, two
 beats is the duration for QuarterIn and QuarterOut.
+
+Timing: CallerLab does not soecify timing.  Assume 1.  Can be
+specified as a parameter.
 """
 @with_kw struct FaceLeft <: SquareDanceCall
     uid = next_call_id()
     role::Role = Everyone()
-    time::Int = 2
+    time::Int = 1
 end
 
 description(c::FaceLeft) = "$(c.role) quarter right, $(c.time) ticks."
@@ -53,6 +59,8 @@ end
     UTurnBack(; role=Everyone())
 
 CallerLab Basic1 call.
+
+Timing: CallerLab: 2.
 """
 @with_kw struct UTurnBack <: SquareDanceCall
     uid = next_call_id()
@@ -89,8 +97,6 @@ function uturnback1(ds::DancerState, turn_toward::Vector{<:Real})
 end
 
 function perform(c::UTurnBack, ds::DancerState, kb::ReteRootNode)
-    # Taminations says that the timing is 2.
-    #
     # If we knew the rotational flow here we could avoid the askc in
     # most cases.
     everyone = askc(Collector{DancerState}(), kb, DancerState)
@@ -119,6 +125,8 @@ end
     AndRoll(; role=EveryOne())
 
 CallerLab Plus call.
+
+Timing: CallerLab: 2.
 """
 @with_kw struct AndRoll <: SquareDanceCall
     uid = next_call_id()
@@ -128,7 +136,12 @@ end
 
 description(c::AndRoll) = "$(c.role) roll"
 
-can_do_from(::AndRoll, ::DancerState) = 1
+can_do_from(::AndRoll, ds::DancerState) =
+    # This would require a try/catch guard in or above
+    # get_call_options, which doesn't expect can_do_from to throw an
+    # exception.
+    # can_roll(ds) == 0 ? 0 : 1
+    1
 
 function perform(r::AndRoll, ds::DancerState, kb::ReteRootNode)
     # Taminations says that the timing for And Roll is 2.
@@ -138,15 +151,18 @@ function perform(r::AndRoll, ds::DancerState, kb::ReteRootNode)
         if e isa CanRollAmbiguityException
             # Don't roll, just warn:
             @warn e
-            return ds
+            return DancerState(ds, ds.time + 2, ds.direction,
+                               ds.down, ds.left)
+        else
+            rethrow(e)
         end
     end
-    if r == 0 || r == 1//2
-        # ISSUE: For 1//2 the roll direction is ambiguous.  Should
-        # this throw an error instead of not rolling?
-        ds
+    # For the r == 1//2 case can_roll will have already thrown
+    # CanRollAmbiguityException.
+    if r == 0
+        DancerState(ds, ds.time + 2, ds.direction, ds.down, ds.left)
     else
-        rotate(ds, 1//4 * sign(r), 2)
+        rotate(ds, 1//4 * r, 2)
     end
 end
 
