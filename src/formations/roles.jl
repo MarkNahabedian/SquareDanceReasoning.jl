@@ -91,14 +91,14 @@ those_with_role(f::SquareDanceFormation, o::ObverseRole) =
 """
     those_with_role(::SquareDanceFormation, ::Role)
 
-For the specified formation returns `DancerState`s or subformations
+For the specified formation, returns `DancerState`s or subformations
 whose dancers fill the specified role.
 """
 those_with_role(::SquareDanceFormation, ::Role) = DancerState[]
 those_with_role(f::SquareDanceFormation, ::Everyone) = dancer_states(f)
 those_with_role(f::Noone) = DancerState[]
 
-those_with_role(::DancerState, ::Role) = DancerState[]
+# those_with_role(::DancerState, ::Role) = DancerState[]
 those_with_role(f::DancerState, ::Everyone) = dancer_states(f)
 
 those_with_role(f::DancerState, ::Guys) =
@@ -157,10 +157,14 @@ struct DesignatedDancers <: Role
         new(map(ds -> ds.dancer, dss))
 end
 
-those_with_role(ds::DancerState, r::DesignatedDancers) =
-    if ds.dancer in r.dancers
-        [ds]
-    else
-        DancerState[]
+function those_with_role(f::SquareDanceFormation,
+                         r::DesignatedDancers)
+    result = DancerState[]
+    for ds in dancer_states(f)
+        if ds.dancer in r.dancers
+            push!(result, ds)
+        end
     end
+    result
+end
 
