@@ -1,6 +1,6 @@
 
 @testset "test QuarterIn, QuarterOut" begin
-    square = make_square(3)
+    square = make_square(2)
     kb = make_kb()
     receive(kb, square)
     grid = grid_arrangement(square.dancers,
@@ -9,6 +9,8 @@
                             [ "↓↓";
                               "↑↓" ])
     receive.([kb], grid)
+    @test 1 == askc(Counter(), kb, Attendance)
+    @test 1 == askc(Counter(), kb, AllPresent)
     @debug_formations(kb)
     dss1 = sort!(askc(Collector{DancerState}(), kb, DancerState);
                  by = ds -> ds.dancer)
