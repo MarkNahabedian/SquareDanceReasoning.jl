@@ -96,7 +96,7 @@ Primitive square dance call that goes from a MiniWave to FaceToFace.
 The first half of [`PassThru`](@ref).
 
 Timing: 2.
-Persimably should have the same timing as [`StepToAWave'](@ref)
+Persimably should have the same timing as [`StepToAWave`](@ref)
 """
 @with_kw_noshow struct _UnStepToAWave <: SquareDanceCall
     role::Role = Everyone()
