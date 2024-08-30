@@ -3,7 +3,7 @@
 Every square dance call is represented by an instance of a subtype of
 [`SquareDanceCall](@ref)`.  Every instance has a [`role`](@ref)` field
 which can be used to restrict the call to only some dancers, for
-example [`OriginalHead`](@ref) or `[`Center`](@ref).  Some calls might
+example `OriginalHead` or `Center`.  Some calls might
 have additional fields that inform a handedness
 (e.g. [`PullBy`](@ref)) or a count ([`SquareThru`](@ref)).
 
@@ -20,7 +20,7 @@ schedule and the knowledge base.
 `do_schedule` dequeues calls from the schedule.  It calls
 [`get_call_options`] to identify formations in the knowledge base that
 match the call's `role` filed and the result of calling
-[`can_do_call'](@ref).  `do_schedule` calls [`expand_parts`](@ref)
+[`can_do_from`](@ref).  `do_schedule` calls [`expand_parts`](@ref)
 with the call and the appropriate formation.  If there is an
 expansion, those parts are placed in the schedule.  Otherwise
 [`perform`](@ref) is called to perform the call.
