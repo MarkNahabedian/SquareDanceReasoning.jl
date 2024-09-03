@@ -47,6 +47,7 @@ include("grid_arrangement.jl")
 include("actions/actions.jl")
 include("calls/calls.jl")
 include("xml/load.jl")
+include("showcase.jl")
 
 include("debug.jl")
 
