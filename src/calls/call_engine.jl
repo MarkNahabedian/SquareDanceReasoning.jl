@@ -148,6 +148,7 @@ function do_schedule(sched::CallSchedule, kb::ReteRootNode)
                 let
                     done = 0
                     options = get_call_options(now_do_this, kb)
+                    @info("do_schedule get_call_options returned", options)
                     for cdc in options
                         e = expand_cdc(cdc)
                         # No further expansion.  Perform the call:
@@ -173,6 +174,7 @@ function do_schedule(sched::CallSchedule, kb::ReteRootNode)
             let
                 collisions = find_collisions(collect(values(newest_dancer_states)))
                 if length(collisions) > 0
+                    @info("do_schedule playmates", playmates)
                     # Time doesn't elapse during breathing.
                     for ds in breathe(collisions, playmates,
                                       collect(values(newest_dancer_states)))
