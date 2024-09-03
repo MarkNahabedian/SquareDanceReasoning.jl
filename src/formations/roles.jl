@@ -96,38 +96,37 @@ whose dancers fill the specified role.
 """
 those_with_role(::SquareDanceFormation, ::Role) = DancerState[]
 those_with_role(f::SquareDanceFormation, ::Everyone) = dancer_states(f)
-those_with_role(f::Noone) = DancerState[]
+those_with_role(f::SquareDanceFormation, ::Noone) = DancerState[]
 
-# those_with_role(::DancerState, ::Role) = DancerState[]
-those_with_role(f::DancerState, ::Everyone) = dancer_states(f)
-
-those_with_role(f::DancerState, ::Guys) =
-    if f.dancer.gender isa Guy
-        dancer_states(f)
-    else
-        DancerState[]
+those_with_role(f::SquareDanceFormation, ::Guys) =
+    filter(dancer_states(f)) do ds
+        ds.dancer.gender isa Guy
     end
 
-those_with_role(f::DancerState, ::Gals) =
-    if f.dancer.gender isa Gal
-        dancer_states(f)
-    else
-        DancerState[]
+those_with_role(f::SquareDanceFormation, ::Gals) =
+    filter(dancer_states(f)) do ds
+        ds.dancer.gender isa Gal
     end
 
-those_with_role(ds::DancerState, ::OriginalHead) =
-    is_original_head(ds) ? [ds] : DancerState[]
+those_with_role(f::SquareDanceFormation, ::OriginalHead) =
+    filter(ds -> is_original_head(ds.dancer),
+           dancer_states(f))
 
-those_with_role(ds::DancerState, ::OriginalSide) =
-    is_original_side(ds) ? [ds] : DancerState[]
+those_with_role(f::SquareDanceFormation, ::OriginalSide) =
+    filter(ds -> is_original_side(ds.dancer),
+           dancer_states(f))
 
-those_with_role(ds::DancerState, ::CurrentHead) =
-    ((ds.direction == 0) ||
-    ((ds.direction == 1//2) ? [ds] : DancerState[]))
+those_with_role(f::SquareDanceFormation, ::CurrentHead) =
+    filter(dancer_states(f)) do ds
+        ((ds.direction == 0) ||
+            ((ds.direction == 1//2) ? [ds] : DancerState[]))
+    end
 
-those_with_role(ds::DancerState, ::CurrentSide) =
-    ((ds.direction == 1//4) ||
-    ((ds.direction == 3//4)) ? [ds] : DancerState[])
+those_with_role(f::SquareDanceFormation, ::CurrentSide) =
+    filter(dancer_states(f)) do ds
+        ((ds.direction == 1//4) ||
+            ((ds.direction == 3//4)) ? [ds] : DancerState[])
+    end
 
 
 struct CoupleNumbers <: Role
@@ -141,13 +140,10 @@ struct CoupleNumbers <: Role
         new(unique(map(ds -> ds.dancer.couple_number, dss)))
 end
 
-those_with_role(ds::DancerState, cn::CoupleNumbers) =
-    if ds.dancer.couple_number in cn.numbers
-        [ds]
-    else
-        DancerState[]
+those_with_role(f::SquareDanceFormation, cn::CoupleNumbers) =
+    filter(dancer_states(f)) do ds
+        ds.dancer.couple_number in cn.numbers
     end
-
 
 struct DesignatedDancers <: Role
     dancers::Vector{Dancer}
@@ -157,14 +153,8 @@ struct DesignatedDancers <: Role
         new(map(ds -> ds.dancer, dss))
 end
 
-function those_with_role(f::SquareDanceFormation,
-                         r::DesignatedDancers)
-    result = DancerState[]
-    for ds in dancer_states(f)
-        if ds.dancer in r.dancers
-            push!(result, ds)
-        end
+those_with_role(f::SquareDanceFormation, r::DesignatedDancers) =
+    filter(dancer_states(f)) do ds
+        ds.dancer in r.dancers
     end
-    result
-end
 
