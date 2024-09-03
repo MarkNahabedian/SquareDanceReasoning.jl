@@ -7,6 +7,6 @@
 [![CompatHelper](https://github.com/MarkNahabedian/SquareDanceReasoning.jl/actions/workflows/CompatHelper.yml/badge.svg)](https://github.com/MarkNahabedian/SquareDanceReasoning.jl/actions/workflows/CompatHelper.yml)
 
 
-SquareDanceReasoning is a package for modeling Modern Western Square Dancing.
+SquareDanceReasoning is a package for modeling Modern Western Square Dancing in software.
 
-It is very mucha work in progress.
+It is very much a work in progress.
