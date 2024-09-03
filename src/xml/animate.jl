@@ -92,10 +92,23 @@ function animation_properties(dancer::Dancer, duration_seconds)
 end
 
 
+function animate_finish(output_file, doc)
+    if endswith(output_file, ".svg")
+        XML.write(output_file, doc)
+    end
+    doc
+end
+
+
 """
     animate(method::AnimationMethod, output_file, dancer_states, bpm)
 
-Write an SVG animation of the `dancer_states` to `output_file`.
+Returns an SVG document fragment that animates the motion of the
+`Dancer`s in `dancer_states`.
+
+If `output_file` ends in ".svg" then the document fragment is written
+to that file. `output_file` is still needed so that the relative path
+to the dancer symbols file canbe determined.
 
 `dancer_states` should have the most recent `DancerState` for each
 `Dancer`.  the `previous` property of each `DancerState` is used to
@@ -159,7 +172,7 @@ function animate(method::CSSKeyframesAnimation,
                   end
               end
               )
-    XML.write(output_file, doc)
+    animate_finish(output_file, doc)
 end
 
 
@@ -278,7 +291,7 @@ function animate(method::PureSVGAnimation,
                             ))
                   end
               end)
-    XML.write(output_file, doc)
+    animate_finish(output_file, doc)
 end
 
 const DEFAULT_ANIMATION_METHOD = PureSVGAnimation()

@@ -8,30 +8,34 @@ SHOWCASE_DIR = joinpath(@__DIR__, "src", "Showcase")
 
 SHOWCASE_HTML_FILES = []
 
+function markdown_raw_html(html)
+    if html isa XML.AbstractXMLNode
+        html = XML.write(html)
+    end
+    "```@raw html\n$html\n```"
+end
+
 function showcase(filename::String, title::String,
                   initial_kb,
                   choreography::Vector{SquareDanceCall})
     mkpath(SHOWCASE_DIR)
-    animation_file = joinpath(SHOWCASE_DIR,
-                              filename * ".svg")
     md_file = joinpath(SHOWCASE_DIR,
                        filename * ".md")
-    let
+    svg = let
         kb = initial_kb
         with_logger(NullLogger()) do
             for call in choreography
                 kb = do_call(kb, call)
             end
         end
-        animate(animation_file,
+        animate(md_file,
                 askc(Collector{DancerState}(), kb, DancerState),
                 80)
     end
     open(md_file, "w") do io
         println(io, "# $title")
         println(io)
-        _, ap = splitdir(animation_file)
-        println(io, """```@raw html\n<img src="$ap" alt="animation of $title" />\n```""")
+        println(io, markdown_raw_html(svg))
         println(io)
         println(io, "```")
         for call in choreography
