@@ -1,6 +1,6 @@
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.10.4"
+julia_version = "1.10.5"
 manifest_format = "2.0"
 project_hash = "eef25b9eb2ada414c8b6b538e4d1f2fbc26e7a53"
 
@@ -364,9 +364,9 @@ uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 
 [[deps.XML]]
 deps = ["Mmap", "OrderedCollections"]
-git-tree-sha1 = "bd0d8b24147b5b69b8a5f8a3222a3ff1718a3ac6"
+git-tree-sha1 = "360c178fdee6816bcc9d436c6f324d582e84f1d1"
 uuid = "72c71f33-b9b6-44de-8c94-c961784809e2"
-version = "0.3.3"
+version = "0.3.4"
 
 [[deps.Zlib_jll]]
 deps = ["Libdl"]
@@ -376,7 +376,7 @@ version = "1.2.13+1"
 [[deps.libblastrampoline_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "8e850b90-86db-534c-a0d3-1478176c7d93"
-version = "5.8.0+1"
+version = "5.11.0+0"
 
 [[deps.nghttp2_jll]]
 deps = ["Artifacts", "Libdl"]
