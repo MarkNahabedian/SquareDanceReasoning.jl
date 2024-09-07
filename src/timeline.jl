@@ -6,6 +6,12 @@ export Collision, CollisionRule
 export latest_dancer_states, history, earliest
 
 
+function canonicalize_coordinate(c)
+    resolution = 256
+    round(resolution * c) / resolution
+end
+
+
 """
     DancerState(dancer, time, direction, down, left)
     DancerState(previoous::DancerSTate, time, direction, down, left)
@@ -32,7 +38,8 @@ DancerState is also the single dancer `SquareDanceFormation`.
         @assert !isnan(left)
         new(nothing, dancer, time,
             canonicalize(direction),
-            Float32(down), Float32(left))
+            canonicalize_coordinate(down),
+            canonicalize_coordinate(left))
     end
     
     function DancerState(previous::DancerState, time, direction,
@@ -41,7 +48,8 @@ DancerState is also the single dancer `SquareDanceFormation`.
         @assert !isnan(left)
         new(previous, previous.dancer,
             time, canonicalize(direction),
-            Float32(down), Float32(left))
+            canonicalize_coordinate(down),
+            canonicalize_coordinate(left))
     end
 end
 
