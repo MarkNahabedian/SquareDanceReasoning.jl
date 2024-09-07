@@ -4,7 +4,9 @@ using InteractiveUtils
 using DataStructures
 using Parameters
 using Logging
+using LoggingExtras
 using LinearAlgebra: dot, normalize, normalize!
+using Base.Iterators: flatten
 using Rete
 
 export SquareDanceRule, TemporalFact, SquareDanceFormation, make_kb
