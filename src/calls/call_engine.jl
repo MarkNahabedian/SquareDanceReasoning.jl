@@ -131,9 +131,14 @@ function do_schedule(sched::CallSchedule, kb::ReteRootNode)
                     newest_dancer_states[ds.dancer] = ds
                 end
             end
+            formations = askc(Collector{SquareDanceFormation}(),
+                              kb, SquareDanceFormation)
             @info("do_schedule formations",
-                  formations=askc(Collector{SquareDanceFormation}(),
-                                  kb, SquareDanceFormation))
+                  formations)
+            ur_playmates = filter(formations) do f
+                f isa TwoDancerFormation &&
+                    near(dancer_states(f)...)
+            end
             while (!isempty(sched)) && sched.now == peek(sched).second
                 # Process a queue entry, performing it if it's "atomic" or
                 # requeueing its parts.
@@ -170,20 +175,8 @@ function do_schedule(sched::CallSchedule, kb::ReteRootNode)
             @info("do_schedule schedule", sched)
             # We have finished all of the calls that were scheduled for a
             # given time.
-            # Breathe:
-            let
-                collisions = find_collisions(collect(values(newest_dancer_states)))
-                if length(collisions) > 0
-                    @info("do_schedule playmates", playmates)
-                    # Time doesn't elapse during breathing.
-                    for ds in breathe(collisions, playmates,
-                                      collect(values(newest_dancer_states)))
-                        newest_dancer_states[ds.dancer] = ds
-                    end
-                end
-            end
             # Synchronize: catch the dancers up to the next schedule
-            # entry.
+            # entry:
             let
                 # Advance the schedule forward to the next time:
                 latest = maximum(ds -> ds.time,
@@ -200,6 +193,30 @@ function do_schedule(sched::CallSchedule, kb::ReteRootNode)
                                   sched_now = sched.now)
                             advance_schedule_by(sched, delta)
                         end
+                    end
+                end
+            end
+            # Breathe:
+            let
+                collisions = find_collisions(
+                    collect(values(newest_dancer_states)))
+                if length(collisions) > 0
+                    let
+                        # Ensure that the inactive dancers also have
+                        # playmates:
+                        exclude = map(ds -> ds.dancer,
+                                      flatten(map(dancer_states, playmates)))
+                        ur_playmates = filter!(ur_playmates) do f
+                            isempty(intersect(exclude,
+                                              map(ds -> ds.dancer,
+                                                  dancer_states(f))))
+                        end
+                        push!(playmates, ur_playmates...)
+                    end
+                    # Time doesn't elapse during breathing.
+                    for ds in breathe(playmates,
+                                      collect(values(newest_dancer_states)))
+                        newest_dancer_states[ds.dancer] = ds
                     end
                 end
             end
