@@ -1,7 +1,7 @@
 
 using SquareDanceReasoning: formation_debug_html
-using XML
-
+using Logging: with_logger
+using LoggingExtras: FileLogger
 
 function file_name_for_source_location(source::LineNumberNode)
     path, _ = splitext(string(source.file))
@@ -31,5 +31,14 @@ macro debug_formations(kb)
                                  $(file_name_for_source_location(__source__)),
                                  $kb)
         end)
+end
+
+
+function log_file_name_for_testset(testset)
+    replace(testset.description, " " => "-") * ".log"
+end
+
+function log_to_file(body, dir, filename)
+    with_logger(body, FileLogger(joinpath( dir, filename)))
 end
 

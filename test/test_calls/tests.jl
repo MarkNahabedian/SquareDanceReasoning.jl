@@ -36,22 +36,24 @@ end
 end
 
 @testset "test get_call_options with WaveOfEight" begin
-    square = make_square(4)
-    kb = make_kb()
-    receive(kb, square)
-    grid = grid_arrangement(square.dancers,
-                            [ 1 2 3 4 5 6 7 8 ],
-                            [ "↑↓↑↓↑↓↑↓" ])
-    receive.([kb], grid)
-    @debug_formations(kb)
-    @test 4 == askc(Counter(), kb, RHMiniWave)
-    @test 3 == askc(Counter(), kb, LHMiniWave)
-    @test 1 == askc(Counter(), kb, RHWaveOfEight)
-    call = StepThru()
-    options = SquareDanceReasoning.get_call_options(call, kb)
-    @test 4 == length(options)
-    @test all(options) do cdc
-        cdc.formation isa RHMiniWave
+    log_to_file(@__DIR__, log_file_name_for_testset(Test.get_testset())) do
+        square = make_square(4)
+        kb = make_kb()
+        receive(kb, square)
+        grid = grid_arrangement(square.dancers,
+                                [ 1 2 3 4 5 6 7 8 ],
+                                [ "↑↓↑↓↑↓↑↓" ])
+        receive.([kb], grid)
+        @debug_formations(kb)
+        @test 4 == askc(Counter(), kb, RHMiniWave)
+        @test 3 == askc(Counter(), kb, LHMiniWave)
+        @test 1 == askc(Counter(), kb, RHWaveOfEight)
+        call = StepThru()
+        options = SquareDanceReasoning.get_call_options(call, kb)
+        @test 4 == length(options)
+        @test all(options) do cdc
+            cdc.formation isa RHMiniWave
+        end
     end
 end
 
