@@ -1,6 +1,7 @@
 *.jl.*.cov
 *.jl.cov
 *.jl.mem
+*.log
 /Manifest.toml
 /docs/Manifest.toml
 /docs/build/
@@ -11,4 +12,4 @@
 /docs/src/supported_square_dance_calls.md
 /test/test_formations/*.html
 /test/test_actions/*.html
-test/test_calls/*.html
+/test/test_calls/*.html
