@@ -2,7 +2,7 @@
 
 julia_version = "1.10.5"
 manifest_format = "2.0"
-project_hash = "eef25b9eb2ada414c8b6b538e4d1f2fbc26e7a53"
+project_hash = "f5b07b92823e3974a03c436a9256bb8cf0975ff5"
 
 [[deps.ANSIColoredPrinters]]
 git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
@@ -183,6 +183,12 @@ uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 [[deps.Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
 
+[[deps.LoggingExtras]]
+deps = ["Dates", "Logging"]
+git-tree-sha1 = "c1dd6d7978c12545b4179fb6153b9250c96b0075"
+uuid = "e6f89c97-d47a-5376-807f-9c37f3926c36"
+version = "1.0.3"
+
 [[deps.MacroTools]]
 deps = ["Markdown", "Random"]
 git-tree-sha1 = "2fa9ee3e63fd3a4f7a9a4f4744a52f4856de82df"
@@ -312,7 +318,7 @@ uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 version = "1.10.0"
 
 [[deps.SquareDanceReasoning]]
-deps = ["Colors", "DataStructures", "InteractiveUtils", "JSON", "LinearAlgebra", "Logging", "OrderedCollections", "Parameters", "Printf", "Random", "Rete", "XML"]
+deps = ["Colors", "DataStructures", "InteractiveUtils", "JSON", "LinearAlgebra", "Logging", "LoggingExtras", "OrderedCollections", "Parameters", "Printf", "Random", "Rete", "XML"]
 path = ".."
 uuid = "b9c7be03-8993-4d9d-899b-7f8d1d493d3a"
 version = "1.0.0-DEV"
