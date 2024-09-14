@@ -15,7 +15,7 @@ function markdown_raw_html(html)
 end
 
 """
-    showcase(filename::String, title::String, initial_kb, choreography::Vector{SquareDanceCall}; inhibit_call_engine_logging = true)
+    showcase(filename::String, title::String, initial_kb, choreography::Vector{SquareDanceCall}; inhibit_call_engine_logging = true; dbgctx = nothing)
 
 Writes a markdown file named `filename` in the choreography Showcase
 documentation directory.
@@ -26,11 +26,19 @@ documentation directory.
 `choreography` starts from.
 
 `choreography` is a vector of the calls to be performed.
+
+If `inhibit_call_engine_logging` is true then teh usual call engine
+logging will be suppressed.
+
+If provided, `dbgctx` should be a [`CallEngineDebugContext`](@ref).
+
 """
 function showcase(filename::String, title::String,
                   initial_kb,
                   choreography::Vector{SquareDanceCall};
-                  inhibit_call_engine_logging = true)
+                  inhibit_call_engine_logging = true,
+                  dbgctx = nothing)
+    println("showcase\t$dbgctx")
     mkpath(SHOWCASE_DIR)
     md_file = joinpath(SHOWCASE_DIR,
                        filename * ".md")
@@ -43,7 +51,7 @@ function showcase(filename::String, title::String,
                     end
                     ) do
             for call in choreography
-                kb = do_call(kb, call)
+                kb = do_call(kb, call; dbgctx = dbgctx)
             end
         end
         animate(md_file,

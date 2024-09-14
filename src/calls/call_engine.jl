@@ -70,12 +70,14 @@ end
 
 
 """
-    do_call(kb::ReteRootNode, call::SquareDanceCall)::ReteRootNode
+    do_call(kb::ReteRootNode, call::SquareDanceCall; dbgctx = nothing)::ReteRootNode
 
 Perform the specified square dance call and retrn an updated
 knowledgebase.
 """
-function do_call(kb::ReteRootNode, call::SquareDanceCall)::ReteRootNode
+function do_call(kb::ReteRootNode, call::SquareDanceCall;
+                 dbgctx = nothing)::ReteRootNode
+    println("do_call\t$dbgctx")
     sched = let
         dss = askc(Collector{DancerState}(), kb, DancerState)
         if allequal(map(ds -> ds.time, dss))
@@ -85,10 +87,12 @@ function do_call(kb::ReteRootNode, call::SquareDanceCall)::ReteRootNode
         end
     end
     schedule(sched, call, sched.now)
-    do_schedule(sched, kb)
+    do_schedule(sched, kb; dbgctx = dbgctx)
 end
 
-function do_schedule(sched::CallSchedule, kb::ReteRootNode)
+function do_schedule(sched::CallSchedule, kb::ReteRootNode;
+                     dbgctx = nothing)
+    println("do_schedule\t", dbgctx)
     call_history = []
     newest_dancer_states = Dict{Dancer, DancerState}()
     askc(kb, DancerState) do ds
@@ -139,6 +143,7 @@ function do_schedule(sched::CallSchedule, kb::ReteRootNode)
                 f isa TwoDancerFormation &&
                     near(dancer_states(f)...)
             end
+            write_debug_formation_file(dbgctx, kb, sched.now)
             while (!isempty(sched)) && sched.now == peek(sched).second
                 # Process a queue entry, performing it if it's "atomic" or
                 # requeueing its parts.

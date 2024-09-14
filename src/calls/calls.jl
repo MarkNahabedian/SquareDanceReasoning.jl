@@ -5,6 +5,7 @@ include("call_schedule.jl")
 include("call_engine.jl")
 
 # Actual call definitions:
+include("call_debugging_tools.jl")
 include("primitive_calls.jl")
 include("rotate_in_place.jl")
 include("one_dancer_calls.jl")

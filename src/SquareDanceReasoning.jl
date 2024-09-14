@@ -3,6 +3,7 @@ module SquareDanceReasoning
 using InteractiveUtils
 using DataStructures
 using Parameters
+using Printf
 using Logging
 using LoggingExtras
 using LinearAlgebra: dot, normalize, normalize!
