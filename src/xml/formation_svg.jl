@@ -31,7 +31,7 @@ of the dancer SVG symbols file.
 written.
 """
 function dancer_symbol_uri(html_destination)
-    dest = splitpath(relpath(dirname(html_destination),
+    dest = splitpath(relpath(dirname(abspath(html_destination)),
                              REPO_ROOT))
     if !haskey(DANCER_SYMBOLS_URI, dest)
         error("No DANCER_SYMBOLS_URI for $html_destination, $dest")
