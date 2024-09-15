@@ -6,6 +6,11 @@ CurrentModule = SquareDanceReasoning
 
 Documentation for [SquareDanceReasoning](https://github.com/MarkNahabedian/SquareDanceReasoning.jl).
 
+This document is intended as a guide to programmers and theory of
+operation.  Once it is working well enough and made sufficiently
+usable, I might write a users' guide for square dance choreographers.
+
+
 ## Overview
 
 [`Dancer`](@ref) represents a dancer.  A dancer is identified by its
