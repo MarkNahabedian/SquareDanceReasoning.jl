@@ -229,23 +229,6 @@ end
 dancer_states(c::Collision)::Vector{DancerState} = [c.a, c.b]
 
 
-@rule SquareDanceRule.CollisionRule(a::DancerState, b::DancerState,
-                                    ::Collision) begin
-    if b.dancer <= a.dancer
-        return
-    end
-    if distance(a, b) < DANCER_COLLISION_DISTANCE
-        emit(Collision(a, b))
-    end
-end
-
-@doc """
-CollisionRule is a rule for detecting when two `DancerState`s
-occupy the same space.  It asserts [`Collision`](@ref).
-""" CollisionRule
-
-
-
 function latest_dancer_states(root::ReteRootNode)::Dict{Dancer, DancerState}
     latest_dss = Dict{Dancer, DancerState}()
     askc(root, DancerState) do ds

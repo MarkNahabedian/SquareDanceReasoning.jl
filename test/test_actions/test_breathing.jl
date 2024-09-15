@@ -37,14 +37,16 @@
             receive.([kb2], dss)
         end
         @debug_formations(kb2)
-        @test 3 == askc(Counter(), kb2, Collision)
+        @test 3 == length(find_collisions(
+            askc(Collector{DancerState}(), kb2, DancerState)))
         new_dss = breathe(playmates,
                           askc(Collector{DancerState}(), kb2, DancerState))
         updated_mws = sort!(update_from(mws, new_dss);
                             by = mw -> mw.a.dancer)
         kb3 = make_kb(kb2)
         receive.([kb3], new_dss)
-        @test 0 == askc(Counter(), kb3, Collision)
+        @test 0 == length(find_collisions(
+            askc(Collector{DancerState}(), kb3, DancerState)))
         @test updated_mws ==sort!(askc(Collector{RHMiniWave}(), kb3, RHMiniWave);
                                   by = mw -> mw.a.dancer)
         @debug_formations(kb3)
@@ -83,7 +85,8 @@ end
         @debug_formations(kb2)
         # Centers of the RHWaveOfFour collide, ends of the wave collide
         # with sids Couples:
-        @test 5 == askc(Counter(), kb2, Collision)
+        @test 5 == length(find_collisions(
+            askc(Collector{DancerState}(), kb2, DancerState)))
         new_dss = breathe(playmates,
                           askc(Collector{DancerState}(), kb2, DancerState))
         updated_mws = sort!(update_from(mws, new_dss);
@@ -91,7 +94,8 @@ end
         kb3 = make_kb(kb2)
         receive.([kb3], new_dss)
         @debug_formations(kb3)
-        @test 0 == askc(Counter(), kb3, Collision)
+        @test 0 == length(find_collisions(
+            askc(Collector{DancerState}(), kb3, DancerState)))
         @test updated_mws ==sort!(askc(Collector{RHMiniWave}(), kb3, RHMiniWave);
                                   by = mw -> mw.a.dancer)
         @debug_formations(kb3)

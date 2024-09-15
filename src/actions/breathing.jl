@@ -1,6 +1,51 @@
 using LinearAlgebra: dot, normalize!
 
-export breathe
+export find_collisions, sort_collisions, breathe
+
+
+"""
+   find_collisions(dss::Vector{DancerState})::Vector{Collision}
+
+Find the `DanerState`s that have collided with each other. 
+"""
+function find_collisions(dss::Vector{DancerState})::Vector{Collision}
+    found = Vector{Collision}()
+    for i in 1:(length(dss) - 1)
+        for j in i:length(dss)
+            a = dss[i]
+            b = dss[j]
+            if a == b    # Why would this be?
+                continue
+            end
+            if distance(a, b) < DANCER_COLLISION_DISTANCE
+                push!(found, Collision(a, b))
+            end
+        end
+    end
+    found
+end
+
+
+"""
+    sort_collisions(flagpole, location_function, collisions::Vector{Collision})::Vector{Collision}
+
+Sorts the collisions in order of decreasing distance from the flagpole
+center.
+
+`flagpole` is a Vector of the *down* and *left* coordinates of the
+flagpole center of the set.
+
+`location_function` maps a `Dancer` to its current location.
+"""
+function sort_collisions(flagpole,
+                         collisions::Vector{Collision})::Vector{Collision}
+    center(c::Collision) = center(location_function(c.a.dancer),
+                                  location_function(c.b.dancer))
+    sort(collisions;
+         by = c -> distance(flagpole, center(c)),
+         rev = true)
+end
+
 
 """
     breathe(playmates::Vector{TwoDancerFormation}, everyone::Vector{DancerState})::Vector{DancerState}

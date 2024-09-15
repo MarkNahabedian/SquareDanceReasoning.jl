@@ -32,7 +32,8 @@
         mw
     end
     # That will result in collisions, find and fix them:
-    collisions = askc(Collector{Collision}(), kb2, Collision)
+    collisions = length(find_collisions(
+        askc(Collector{DancerState}(), kb2, DancerState)))
     @test 3 == length(collisions)
     dss = breathe(collisions,
                   map(dancer_states, mws),

@@ -15,11 +15,12 @@
         @debug_formations(kb)
         @test 2 == askc(Counter(), kb, RHMiniWave)
         @test 0 == askc(Counter(), kb, LHMiniWave)
-        @test 0 == askc(Counter(), kb, Collision)
+        @test 0 == length(find_collisions(
+            askc(Collector{DancerState}(), kb, DancerState)))
         stars = askc(Collector{Star}(), kb, Star)
         @test length(stars) == 0
     end
-    let  #right handed
+    let  # right handed
         kb = make_kb()
         receive(kb, square)
         dss = [
@@ -32,7 +33,8 @@
         @debug_formations(kb)
         @test 2 == askc(Counter(), kb, RHMiniWave)
         @test 0 == askc(Counter(), kb, LHMiniWave)
-        @test 0 == askc(Counter(), kb, Collision)
+        @test 0 == length(find_collisions(
+            askc(Collector{DancerState}(), kb, DancerState)))
         stars = askc(Collector{Star}(), kb, Star)
         @test length(stars) == 1
         star = stars[1]
@@ -55,7 +57,8 @@
         @debug_formations(kb)
         @test 0 == askc(Counter(), kb, RHMiniWave)
         @test 2 == askc(Counter(), kb, LHMiniWave)
-        @test 0 == askc(Counter(), kb, Collision)
+        @test 0 == length(find_collisions(
+            askc(Collector{DancerState}(), kb, DancerState)))
         stars = askc(Collector{Star}(), kb, Star)
         @test length(stars) == 1
         star = stars[1]
