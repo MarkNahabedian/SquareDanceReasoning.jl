@@ -20,7 +20,7 @@ function dancer_colors_css(number_of_couples)
 .couple$(couple_number) {
     stroke: black;
     fill: $color
-}"""                 
+}"""
     end
     join(rules, "\n")
 end
