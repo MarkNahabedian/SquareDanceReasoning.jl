@@ -11,7 +11,8 @@ using JSON
 export COLLECTED_FORMATIONS, collect_formation_examples,
     save_formation_examples, load_formation_examples,
     formation_example_dancer_states,
-    generate_example_formation_diagrams
+    generate_example_formation_diagrams,
+    get_formation_example
 
 
 COLLECTED_FORMATIONS = Vector{SquareDanceFormation}()
@@ -69,12 +70,12 @@ function save_formation_examples()
     end
 end
 
-CACHED_FORMATION_EXAMPLES = nothing
+CACHED_FORMATION_EXAMPLE_DANCER_STATES = nothing
 
 function load_formation_examples()
-    global CACHED_FORMATION_EXAMPLES
-    if CACHED_FORMATION_EXAMPLES != nothing
-        return CACHED_FORMATION_EXAMPLES
+    global CACHED_FORMATION_EXAMPLE_DANCER_STATES
+    if CACHED_FORMATION_EXAMPLE_DANCER_STATES != nothing
+        return CACHED_FORMATION_EXAMPLE_DANCER_STATES
     end
     parsed = JSON.parsefile(FORMATIONS_EXAMPLE_FILE)
     formation_examples = Dict{String, Vector{DancerState}}()
@@ -89,7 +90,7 @@ function load_formation_examples()
                             pds["left"])
             end
     end
-    CACHED_FORMATION_EXAMPLES = formation_examples
+    CACHED_FORMATION_EXAMPLE_DANCER_STATES = formation_examples
     formation_examples
 end
 
@@ -118,3 +119,24 @@ function generate_example_formation_diagrams(dir)
     end
 end
 
+CACHED_FORMATION_EXAMPLES = Dict{String, SquareDanceFormation}()
+
+function get_formation_example(name::String)
+    if !haskey(CACHED_FORMATION_EXAMPLES, name)
+        kb = make_kb()
+        dss = load_formation_examples()[name]
+        receive(kb, SquareDanceReasoning.SDSquare(
+            map(ds -> ds.dancer, dss)))
+        for ds in dss
+            receive(kb, ds)
+        end
+        for f in askc(Collector{SquareDanceFormation}(),
+                      kb, SquareDanceFormation)
+            n = string(typeof(f))
+            if !haskey(CACHED_FORMATION_EXAMPLES, n)
+                CACHED_FORMATION_EXAMPLES[n] = f
+            end
+        end
+    end
+    CACHED_FORMATION_EXAMPLES[name]
+end
