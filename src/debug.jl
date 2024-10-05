@@ -43,7 +43,8 @@ table {
 function dancer_states_table(dancer_states, symbol_uri_base)
     dancer_state_row(ds::DancerState) =
         elt("tr",
-            elt("td", formation_id_string(ds)),
+            elt("td", formation_id_string(ds),
+                "onclick" => formation_onclick(ds)),
             elt("td", string(ds.dancer)),
             elt("td", ds.time),
             elt("td", ds.direction),
@@ -89,6 +90,16 @@ formation_id_string(f::SquareDanceFormation) =
     *(string(typeof(f)), "-",
       join(map(formation_id_string, dancer_states(f)), "-"))
 
+### NOTE THAT SVG DANCERS DON'T HAVE IDS YET!!!
+
+function formation_onclick(f)
+    selection_ids = map(formation_id_string, dancer_states(f))
+    selection_ids_js = "[" *
+        join(map(sid -> "\"$sid\"", selection_ids),
+             ", ") *
+        "]"
+    """console.log(\"click on DancerState \", $selection_ids_js)"""
+end
 
 function dancer_formations_html(kb::ReteRootNode)
     formations_by_type = Dict{Type, Vector}()
@@ -110,7 +121,9 @@ function dancer_formations_html(kb::ReteRootNode)
                   elt("ul") do a
                       for f in sort(formations_by_type[key];
                                     by = formation_id_string)
-                          a(elt("li", formation_id_string(f)))
+                          a(elt("li",
+                                formation_id_string(f),
+                                "onclick" => formation_onclick(f)))
                       end
                   end))
         end
