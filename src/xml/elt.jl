@@ -13,7 +13,7 @@ function elt(f::Function, tagname::AbstractString, things...)
     children = Vector{Union{String, XML.AbstractXMLNode}}()
     function add_thing(s)
         if s isa Pair
-            attributes[Symbol(s.first)] = string(s.second)
+            attributes[Symbol(s.first)] = XML.escape(string(s.second))
         elseif s isa AbstractString
             push!(children, s)
         elseif s isa Number
