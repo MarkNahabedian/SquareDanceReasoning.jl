@@ -79,11 +79,11 @@ end
 """
     make_showcase_index_file()
 
-Writes an index.md file for the choreography Showcase docs directory.
+Writes an index file for the choreography Showcase docs directory.
 """
 function make_showcase_index_file()
     # Build an index file
-    open(joinpath(SHOWCASE_DIR, "index.md"), "w") do io
+    open(joinpath(SHOWCASE_DIR, "showcase.md"), "w") do io
         println(io, "# Showcase of Animated Choreography")
         println(io)
         println(io,
