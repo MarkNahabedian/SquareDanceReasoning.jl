@@ -61,7 +61,7 @@ function dancer_svg(ds::DancerState, symbol_uri_base; id=nothing)
 
     elt("use",
         if id == nothing
-            []
+            [ "id" => formation_id_string(ds) ]
         else
             [ "id" => id ]
             end...,
