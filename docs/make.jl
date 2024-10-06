@@ -40,9 +40,7 @@ let
             println(io, "- [$f]($f.md)")
         end
     end
-    cp(joinpath(@__DIR__, "../src/xml/dancer_symbols.svg"),
-       joinpath(@__DIR__, "src/dancer_symbols.svg");
-       force=true)
+    copy_html_collateral_files()
 end
 
 # Generate a list of supported square dance calls:
