@@ -20,6 +20,7 @@ function bounds_to_viewbox(bounds::Bounds)
 end
 
 
+include("collateral_files.jl")
 include("elt.jl")
 include("dancer_symbols.jl")
 include("dancer_colors.jl")
