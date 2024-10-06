@@ -135,7 +135,8 @@ function animate(method::CSSKeyframesAnimation,
     bounds = bump_out(bounds)
     duration_seconds = (tbounds.max - tbounds.min) / (bpm / 60)
     rot(ds) = "$(svg_angle(ds)) $(svg_x(ds)) $(svg_y(ds))"
-    symbol_uri_base = dancer_symbol_uri(output_file)
+    symbol_uri_base = collateral_file_relpath("dancer_symbols.svg",
+                                              output_file)
     doc = elt("svg",
               "xmlns" => SVG_NAMESPACE,
               bounds_to_viewbox(bounds)...,
@@ -241,7 +242,8 @@ function animate(method::PureSVGAnimation,
     duration_seconds = (tbounds.max - tbounds.min) / (bpm / 60)
 
     rot(ds) = "$(svg_angle(ds)) $(svg_x(ds)) $(svg_y(ds))"
-    symbol_uri_base = dancer_symbol_uri(output_file)
+    symbol_uri_base = collateral_file_relpath("dancer_symbols.svg",
+                                              output_file)
     doc = elt("svg",
               "xmlns" => SVG_NAMESPACE,
               bounds_to_viewbox(bounds)...,

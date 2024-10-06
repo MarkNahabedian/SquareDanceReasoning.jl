@@ -161,7 +161,8 @@ end
 # Write an HTML file that describes the DancerStates and concluded
 # formations
 function write_formation_html_file(title, output_path, kb::ReteRootNode)
-    symbol_uri_base = dancer_symbol_uri(output_path)
+    symbol_uri_base = collateral_file_relpath("dancer_symbols.svg",
+                                              output_path)
     dancer_states = askc(Collector{DancerState}(), kb, DancerState)
     bounds = bump_out(Bounds(dancer_states))
     doc =
