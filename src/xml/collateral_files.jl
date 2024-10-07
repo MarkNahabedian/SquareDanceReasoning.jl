@@ -8,7 +8,8 @@ export copy_html_collateral_files, collateral_file_relpath
 HTML_COLLATERAL_FILES = Dict(
     "dancer_symbols.svg" =>
         joinpath(@__DIR__, "dancer_symbols.svg"),
-    # selection.js
+    "dancer_selection.js" =>
+        joinpath(@__DIR__, "dancer_selection.js")
 )
 
 TARGET_LOCATIONS = [
@@ -50,7 +51,7 @@ function copy_html_collateral_files()
         end
         for file in values(HTML_COLLATERAL_FILES)
             _, fname = splitdir(file)
-            cp(file, joinpath(target, fname))
+            cp(file, joinpath(target, fname); force=true)
         end
     end
 end

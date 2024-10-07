@@ -28,7 +28,7 @@ function dancer_svg(ds::DancerState, symbol_uri_base; id=nothing)
         "y" => y,
         "width" => DANCER_SVG_SIZE,
         "height" => DANCER_SVG_SIZE,
-        "class" => dancer_color(ds))
+        "class" => "dancer $(dancer_color(ds))")
 end
 
 

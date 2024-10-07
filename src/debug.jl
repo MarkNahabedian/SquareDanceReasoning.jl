@@ -45,7 +45,8 @@ function dancer_states_table(dancer_states, symbol_uri_base)
         elt("tr",
             elt("td", formation_id_string(ds),
                 "onclick" => formation_onclick(ds)),
-            elt("td", string(ds.dancer)),
+            elt("td", string(ds.dancer),
+                "onclick" => formation_onclick),
             elt("td", ds.time),
             elt("td", ds.direction),
             elt("td", ds.down),
@@ -98,7 +99,7 @@ function formation_onclick(f)
         join(map(sid -> "\"$sid\"", selection_ids),
              ", ") *
         "]"
-    """console.log(\"click on DancerState \", $selection_ids_js)"""
+    """select_dancers($selection_ids_js)"""
 end
 
 function dancer_formations_html(kb::ReteRootNode)
@@ -165,6 +166,8 @@ function write_formation_html_file(title, output_path, kb::ReteRootNode)
                                               output_path)
     dancer_states = askc(Collector{DancerState}(), kb, DancerState)
     bounds = bump_out(Bounds(dancer_states))
+    selection_script = collateral_file_relpath("dancer_selection.js",
+                                               output_path)
     doc =
         elt("html",
             elt("head",
@@ -172,6 +175,10 @@ function write_formation_html_file(title, output_path, kb::ReteRootNode)
                 # Adding a base element seems to break the Documenter
                 # navigation links.  elt("base", "href" => docbase),
                 elt("title", title),
+                elt("script",
+                    "",                           # force close tag.
+                    "type" => "text/javascript",
+                    "src" => "$selection_script"),
                 elt("style", "\n",
                     FORMATION_STYLESHEET,
                     dancer_colors_css(ceil(length(dancer_states) / 2)),
