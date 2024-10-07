@@ -16,12 +16,12 @@ save_formation_examples()
 #=
 @testset "Formation jitter tests" begin
     examples = load_formation_examples()
-    for (formation, daner_states) in examples
+    for (formation, dancer_states) in examples
         let
             kb = make_kb()
             receive(kb, SquareDanceReasoning.SDSquare(
-                map(ds -> ds.dancer, daner_states)))
-            for ds in daner_states
+                map(ds -> ds.dancer, dancer_states)))
+            for ds in dancer_states
                 receive(kb, ds #= jitter(ds, 1) =#)
             end
             found = askc(Collector{SquareDanceFormation}(),
