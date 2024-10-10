@@ -1,15 +1,26 @@
 
+function remove_selected(elt) {
+    elt.setAttribute(
+        "class", elt.getAttribute("class").replace(" selected", ""));
+}
+
+function add_selected(elt) {
+    elt.setAttribute(
+        "class", elt.getAttribute("class") + " selected");
+}
+
 function deselect_all() {
-    for (e of document.querySelectorAll("svg .dancer")) {
-        console.log("deselect ", e);
+    for (elt of document.querySelectorAll(".selected")) {
+        remove_selected(elt);
     }
 }
 
-function select_dancers(dancer_ids) {
+function select_dancers(event, dancer_ids) {
     deselect_all();
+    add_selected(event.target);
     for (id of dancer_ids) {
-        d = document.getElementById(id);
-        console.log("select ", id, d);
+        elt = document.getElementById(id);
+        add_selected(elt);
     }
 }
 
