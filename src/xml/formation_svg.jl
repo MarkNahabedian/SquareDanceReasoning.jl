@@ -6,7 +6,7 @@ gender_fragment(::Guy) = "Guy"
 gender_fragment(::Gal) = "Gal"
 gender_fragment(::Unspecified) = "Neutral"
 
-function dancer_svg(ds::DancerState, symbol_uri_base; id=nothing)
+function dancer_svg(ds::DancerState, symbol_uri_base; id=missing)
     # We arrage the coordinates so that increasing down corresponds
     # with increasing SVG Y, and increasing left corresponds with
     # increasing SVG X.  This is no longer a right handed cartesioan
@@ -16,11 +16,13 @@ function dancer_svg(ds::DancerState, symbol_uri_base; id=nothing)
     y = DANCER_SVG_SIZE * ds.down
 
     elt("use",
-        if id == nothing
+        if id isa Missing
             [ "id" => formation_id_string(ds) ]
-        else
+        elseif !(id isa Nothing)
             [ "id" => id ]
-            end...,
+        else
+            []
+        end...,
         "href" => "$symbol_uri_base#$(gender_fragment(ds.dancer.gender))",
         "transform" => @sprintf("rotate(%3.0f %3.2f %3.2f)",
                                 90 - 360 * ds.direction, x, y),
@@ -55,7 +57,7 @@ function formation_svg(f, symbol_uri_base; id=nothing,
         bounds_to_viewbox(bounds)...,
         elt("g",
             map(dss) do ds
-                dancer_svg(ds, symbol_uri_base)
+                dancer_svg(ds, symbol_uri_base; id=id)
             end...))
 end
 
