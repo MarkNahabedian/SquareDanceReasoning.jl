@@ -5,11 +5,13 @@
 /Manifest.toml
 /docs/Manifest.toml
 /docs/build/
+/docs/src/Showcase/
+/docs/src/dancer_selection.js
+/docs/src/dancer_symbols.svg
 /docs/src/formation_drawings/
 /docs/src/formation_hierarchy.md
 /docs/src/rule_hierarchy.md
-/docs/src/dancer_symbols.svg
 /docs/src/supported_square_dance_calls.md
-/test/test_formations/*.html
 /test/test_actions/*.html
 /test/test_calls/*.html
+/test/test_formations/*.html
