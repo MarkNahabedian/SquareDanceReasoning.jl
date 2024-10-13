@@ -1,0 +1,8 @@
+
+
+## Definitions
+
+```@autodocs
+Modules = [SquareDanceReasoning]
+```
+
