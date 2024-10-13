@@ -39,14 +39,3 @@ To facilitate recognizing formations, the relative position predicates
 [`in_front_of`](@ref), [`behind`](@ref), [`left_of`](@ref), and
 [`right_of`](@ref) are provided.
 
-
-
-## Index
-```@index
-```
-
-## Definitions
-
-```@autodocs
-Modules = [SquareDanceReasoning]
-```
