@@ -6,6 +6,7 @@ using Parameters
 using Printf
 using Logging
 using LoggingExtras
+using ResumableFunctions
 using LinearAlgebra: dot, normalize, normalize!
 using Base.Iterators: flatten
 using Rete
