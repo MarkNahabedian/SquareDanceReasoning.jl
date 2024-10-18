@@ -10,6 +10,7 @@ using JSON
 
 export COLLECTED_FORMATIONS, collect_formation_examples,
     save_formation_examples, load_formation_examples,
+    json_to_formation,
     formation_example_dancer_states,
     generate_example_formation_diagrams,
     get_formation_example
@@ -31,18 +32,31 @@ end
 struct FormationExamplesSerialization <: JSON.CommonSerialization
 end
 
+struct AbbreviatedDancerStateSerialization <: JSON.CommonSerialization
+end
+
 function JSON.show_json(io::JSON.StructuralContext,
-                        s::FormationExamplesSerialization,
+                        s::Union{FormationExamplesSerialization,
+                                 AbbreviatedDancerStateSerialization},
                         f::SquareDanceFormation)
     JSON.Writer.begin_object(io)
-    JSON.show_pair(io, s, "name", string(typeof(f)))
-    JSON.show_pair(io, s, "dancer_states", dancer_states(f))
+    JSON.show_pair(io, s, "_TYPE_", string(nameof(typeof(f))))
+    if !isa(s, AbbreviatedDancerStateSerialization)
+        JSON.show_pair(io, s, "DancerStates",
+                       Dict(map(dancer_states(f)) do ds
+                                formation_id_string(ds) => ds
+                            end))
+    end
+    for field in fieldnames(typeof(f))
+        JSON.show_pair(io, AbbreviatedDancerStateSerialization(),
+                       field, getproperty(f, field))
+    end
     JSON.Writer.end_object(io)
 end
 
 function JSON.show_json(io::JSON.StructuralContext,
                         s::FormationExamplesSerialization,
-                        ds::DancerState) 
+                        ds::DancerState)
     JSON.Writer.begin_object(io)
     JSON.show_pair(io, s, "couple_number", ds.dancer.couple_number)
     JSON.show_pair(io, s, "gender", string(typeof(ds.dancer.gender)))
@@ -50,6 +64,12 @@ function JSON.show_json(io::JSON.StructuralContext,
     JSON.show_pair(io, s, "down", ds.down)
     JSON.show_pair(io, s, "left", ds.left)
     JSON.Writer.end_object(io)
+end
+
+function JSON.show_json(io::JSON.StructuralContext,
+                        s::AbbreviatedDancerStateSerialization,
+                        ds::DancerState)
+    write(io, "\"$(formation_id_string(ds))\"")
 end
 
 FORMATIONS_EXAMPLE_FILE = joinpath(@__DIR__, "example_formations.json")
@@ -65,78 +85,87 @@ function save_formation_examples()
               # file.
               sort(filter(f -> !isa(f, DancerState),
                           COLLECTED_FORMATIONS);
-                   by=(f -> string(typeof(f))))...
+                   by=(f -> string(nameof(typeof(f)))))...
                        ])
     end
 end
 
-CACHED_FORMATION_EXAMPLE_DANCER_STATES = nothing
-
-function load_formation_examples()
-    global CACHED_FORMATION_EXAMPLE_DANCER_STATES
-    if CACHED_FORMATION_EXAMPLE_DANCER_STATES != nothing
-        return CACHED_FORMATION_EXAMPLE_DANCER_STATES
+function json_to_formation(json)
+    t = formation_name_to_type(json["_TYPE_"])
+    dancer_states = Dict()
+    for (k, ds) in json["DancerStates"]
+        dancer_states[k] = DancerState(
+            Dancer(ds["couple_number"],
+                   GENDER_FROM_STRING[ds["gender"]]),
+            0,
+            ds["direction"],
+            ds["down"],
+            ds["left"])
     end
-    parsed = JSON.parsefile(FORMATIONS_EXAMPLE_FILE)
-    formation_examples = Dict{String, Vector{DancerState}}()
-    for formation in parsed[2:end]
-        formation_examples[formation["name"]] =
-            map(formation["dancer_states"]) do pds
-                DancerState(Dancer(pds["couple_number"],
-                                   GENDER_FROM_STRING[pds["gender"]]),
-                            -1,
-                            pds["direction"],
-                            pds["down"],
-                            pds["left"])
-            end
+    for (k, ds) in json["DancerStates"]
+        dancer_states[k] = DancerState(
+            Dancer(ds["couple_number"],
+                   GENDER_FROM_STRING[ds["gender"]]),
+            0,
+            ds["direction"],
+            ds["down"],
+            ds["left"])
     end
-    CACHED_FORMATION_EXAMPLE_DANCER_STATES = formation_examples
-    formation_examples
+    function json_to_formation1(json)
+        if json in keys(dancer_states)
+            return dancer_states[json]
+        end
+        t = formation_name_to_type(json["_TYPE_"])
+        t(map(fieldnames(t)) do fn
+              json_to_formation1(json[string(fn)])
+          end...)
+    end
+    json_to_formation1(json)
 end
 
-"""
-   formation_example_dancer_states(formation_name)
+CACHED_FORMATION_EXAMPLES = Dict{String, SquareDanceFormation}()
 
-Returns a vector of `DancerState`s that are an example of the requested
-formation.  These can be injected into the knowledge base to get the
-formation.
-"""
-formation_example_dancer_states(formation_name) =
-    load_formation_examples()[string(formation_name)]
-
+function load_formation_examples(; force=false)
+    if !force && !isempty(CACHED_FORMATION_EXAMPLES)
+        return CACHED_FORMATION_EXAMPLES
+    end
+    parsed = JSON.parsefile(FORMATIONS_EXAMPLE_FILE)
+    for formation in parsed
+        if formation isa AbstractString
+            continue
+        end
+        f = json_to_formation(formation)
+        CACHED_FORMATION_EXAMPLES[string(nameof(typeof(f)))] = f
+    end
+    CACHED_FORMATION_EXAMPLES
+end
 
 function generate_example_formation_diagrams(dir)
-    for (name, dancer_states) in load_formation_examples()
+    for formation in values(load_formation_examples())
+        dss = dancer_states(formation)
         kb = make_kb()
         receive(kb, SquareDanceReasoning.SDSquare(
-            map(ds -> ds.dancer, dancer_states)))
-        for ds in dancer_states
+            map(ds -> ds.dancer, dss)))
+        for ds in dss
             receive(kb, ds)
         end
+        name = string(nameof(typeof(formation)))
         write_formation_html_file(name,
                                   joinpath(dir, "$name.html"),
                                   kb)
     end
 end
 
-CACHED_FORMATION_EXAMPLES = Dict{String, SquareDanceFormation}()
+get_formation_example(ft::Type{<:SquareDanceFormation}) =
+    get_formation_example(nameof(ft))
+
+get_formation_example(name::Symbol) =
+    get_formation_example(string(name))
 
 function get_formation_example(name::String)
     if !haskey(CACHED_FORMATION_EXAMPLES, name)
-        kb = make_kb()
-        dss = load_formation_examples()[name]
-        receive(kb, SquareDanceReasoning.SDSquare(
-            map(ds -> ds.dancer, dss)))
-        for ds in dss
-            receive(kb, ds)
-        end
-        for f in askc(Collector{SquareDanceFormation}(),
-                      kb, SquareDanceFormation)
-            n = string(typeof(f))
-            if !haskey(CACHED_FORMATION_EXAMPLES, n)
-                CACHED_FORMATION_EXAMPLES[n] = f
-            end
-        end
+        load_formation_examples()
     end
     CACHED_FORMATION_EXAMPLES[name]
 end
+
