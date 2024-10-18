@@ -92,6 +92,30 @@ end
 
 
 """
+    collisions(::Respirator)
+
+Returns an iterator over the current collisions in the `Respirator`.
+"""
+@resumable function collisions(rsp::Respirator)
+    n = length(rsp.dancers)
+    for i in 1:(n-1)
+        for j in (i+1):n
+            a = current_location(rsp, i)
+            b = current_location(rsp, j)
+            if distance(a, b) < DANCER_COLLISION_DISTANCE
+                collision = [ rsp.dancers[i],
+                              rsp.dancers[j] ]
+                @info("breathing collision",
+                      collision, a, b)
+                @yield collision
+            end
+        end
+    end
+    @yield nothing
+end
+
+
+"""
     breathe(playmates::Vector{TwoDancerFormation}, everyone::Vector{DancerState})::Vector{DancerState}
 
 Moves the dancers apart such that those that have collided no longer
@@ -121,26 +145,9 @@ function breathe(playmates::Vector{TwoDancerFormation},
     rsp = Respirator(everyone)
 
     flagpole = center(map(location, everyone))
-    function next_collision()
-        n = length(rsp.dancers)
-        for i in 1:(n-1)
-            for j in (i+1):n
-                a = current_location(rsp, i)
-                b = current_location(rsp, j)
-                if distance(a, b) < DANCER_COLLISION_DISTANCE
-                    collision = [ rsp.dancers[i],
-                                  rsp.dancers[j] ]
-                    @info("breathing collision",
-                          collision, a, b)
-                    return collision
-                end
-            end
-        end
-        nothing
-    end
     limit = 20
     while (begin
-               collision = next_collision()
+               collision = first(collisions(rsp))
                collision != nothing
            end)
         if limit <= 0
