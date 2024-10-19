@@ -6,12 +6,21 @@ using LoggingExtras: FileLogger
 # For debugging:
 using SquareDanceReasoning: write_formation_html_file
 
+function safe_logger(filename)
+    # We apparently can't write to a FileLogger in a GitHub action.
+    if isdefined(ENV, :GIT_BRANCH)
+        SimpleLogger()
+    else
+        FileLogger(joinpath( @__DIR__,
+                             "src", "Showcase",
+                             filename * ".log"))
+    end
+end
+
 let
     filename = "SquareThru_from_FacingCouples"
     start_time = time()
-    with_logger(FileLogger(joinpath( @__DIR__,
-                                     "src", "Showcase",
-                                     filename * ".log"))) do
+    with_logger(safe_logger(filename)) do
         square = make_square(2)
         kb = make_kb()
         receive(kb, square)
@@ -38,9 +47,7 @@ end
 let
     filename = "SquareThru_from_SquaredSet"
     start_time = time()
-    with_logger(FileLogger(joinpath( @__DIR__,
-                                     "src", "Showcase",
-                                     filename * ".log"))) do
+    with_logger(safe_logger(filename)) do
         square = make_square(4)
         kb = make_kb()
         receive(kb, square)
