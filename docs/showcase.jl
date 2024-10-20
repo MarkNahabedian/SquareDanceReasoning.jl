@@ -8,7 +8,7 @@ using SquareDanceReasoning: write_formation_html_file
 
 function safe_logger(filename)
     # We apparently can't write to a FileLogger in a GitHub action.
-    if isdefined(ENV, :GIT_BRANCH)
+    if isdefined(ENV, :GITHUB_WORKFLOW)
         SimpleLogger()
     else
         FileLogger(joinpath( @__DIR__,
