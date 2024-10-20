@@ -7,6 +7,7 @@ using LoggingExtras: FileLogger
 using SquareDanceReasoning: write_formation_html_file
 
 function safe_logger(filename)
+    println(ENV)
     # We apparently can't write to a FileLogger in a GitHub action.
     if isdefined(ENV, :GITHUB_WORKFLOW)
         SimpleLogger()
