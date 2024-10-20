@@ -1,6 +1,6 @@
 using Rete
 using SquareDanceReasoning
-using Logging: with_logger
+using Logging: with_logger, SimpleLogger
 using LoggingExtras: FileLogger
 
 # For debugging:
