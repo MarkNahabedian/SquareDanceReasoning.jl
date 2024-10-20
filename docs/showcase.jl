@@ -7,10 +7,13 @@ using LoggingExtras: FileLogger
 using SquareDanceReasoning: write_formation_html_file
 
 function safe_logger(filename)
-    println("environment:\n", ENV)
-    println("test:\t", isdefined(ENV, :GITHUB_ACTION))
+    # println("environment:\n", ENV)
     # We apparently can't write to a FileLogger in a GitHub action.
-    if isdefined(ENV, :GITHUB_ACTION)
+    #
+    # Thanks a whole fucking lot Google Gemeni: isdefined only works
+    # for Symbol keys and the keys in ENV are Strings, so isdefined
+    # was always returning false.
+    if haskey(ENV, "GITHUB_ACTION")
         SimpleLogger()
     else
         FileLogger(joinpath( @__DIR__,
