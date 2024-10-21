@@ -44,7 +44,7 @@ jobs:
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          slug: MarkNahabedian/Rete.jl
+          slug: MarkNahabedian/SquareDanceReasoning.jl
           files: lcov.info
   docs:
     name: Documentation
