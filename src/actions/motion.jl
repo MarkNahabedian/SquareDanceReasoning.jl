@@ -140,7 +140,7 @@ function can_roll(ds::DancerState)
         return 0
     end
     r = ds.direction - p.direction
-    if abs(r) == 1//2
+    if canonicalize(r) == 1//2
           throw(CanRollAmbiguityException(ds))
     end
     # Because some functions can add zero-motion DancerStates, skip
