@@ -118,14 +118,12 @@ those_with_role(f::SquareDanceFormation, ::OriginalSide) =
 
 those_with_role(f::SquareDanceFormation, ::CurrentHead) =
     filter(dancer_states(f)) do ds
-        ((ds.direction == 0) ||
-            ((ds.direction == 1//2) ? [ds] : DancerState[]))
+        (ds.direction == 0) || (ds.direction == 1//2)
     end
 
 those_with_role(f::SquareDanceFormation, ::CurrentSide) =
     filter(dancer_states(f)) do ds
-        ((ds.direction == 1//4) ||
-            ((ds.direction == 3//4)) ? [ds] : DancerState[])
+        (ds.direction == 1//4) || (ds.direction == 3//4)
     end
 
 
