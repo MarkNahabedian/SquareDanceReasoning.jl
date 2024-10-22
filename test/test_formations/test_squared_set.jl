@@ -12,6 +12,15 @@
     @test 4 == askc(Counter(), kb, FaceToFace)
     @test 1 == askc(Counter(), kb, SquaredSet)
     @test 1 == askc(Counter(), kb, CircleOfEight)
+    f = only(askc(Collector{SquaredSet}(), kb, SquaredSet))
+    @test Set(those_with_role(f, OriginalHead())) ==
+        Set(those_with_role(f, CurrentHead()))
+    @test Set(those_with_role(f, OriginalSide())) ==
+        Set(those_with_role(f, CurrentSide()))
+    @test all(ds -> ds.dancer.gender isa Guy,
+              those_with_role(f, Guys()))
+    @test all(ds -> ds.dancer.gender isa Gal,
+              those_with_role(f, Gals()))
     collect_formation_examples(kb)
 end
 
