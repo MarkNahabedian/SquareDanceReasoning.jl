@@ -49,6 +49,7 @@ end
         @test 3 == askc(Counter(), kb, LHMiniWave)
         @test 1 == askc(Counter(), kb, RHWaveOfEight)
         call = StepThru()
+        @test as_text(call) == "Everyone StepThru"
         options = SquareDanceReasoning.get_call_options(call, kb)
         @test 4 == length(options)
         @test all(options) do cdc

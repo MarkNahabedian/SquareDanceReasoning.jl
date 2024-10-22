@@ -30,7 +30,7 @@ end
 
 # Should we rename PassBy to Dosado!2?
 
-description(c::StepThru) = "$(c.role) pass by from MiniWave to BackToBack"
+as_text(c::StepThru) = "$(as_text(c.role)) StepThru"
 
 can_do_from(::StepThru, ::MiniWave) = 1
 

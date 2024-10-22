@@ -22,7 +22,7 @@ Timing: as specified in the parameter.
     time::Int
 end
 
-description(c::_Rest) = "$(c.role) rest for $(c.time) ticks."
+as_text(c::_Rest) = "$(as_text(c.role)) rest for $(c.time) ticks."
 
 can_do_from(::_Rest, ::DancerState) = 1
 
@@ -46,7 +46,8 @@ the timing for StarThru is 4, so thisseems reasonable.
     time::Int = 2
 end
 
-description(c::_GenderedRoll) = "$(c.role) Guy quarter right, Gal quarter left."
+as_text(c::_GenderedRoll) =
+    "$(as_text(c.role)) Guy quarter right, Gal quarter left."
 
 can_do_from(::_GenderedRoll, ::DancerState) = 1
 

@@ -1,11 +1,11 @@
 # Dancer roles.
 
-export Everyone, Role, Guys, Gals,
+export Everyone, Noone, Role, Guys, Gals,
     OriginalHead, OriginalSide,
     CurrentHead, CurrentSide,
     Beau, Belle, Center, End,
     Leader, Trailer,
-    Point,
+    DiamondCenter, Point,
     ObverseRole, CoupleNumbers, DesignatedDancers
 
 export obverse, those_with_role
@@ -83,6 +83,8 @@ end
 obverse(r::Role) = ObverseRole(r)
 obverse(o::ObverseRole) = o.role
 
+as_text(r::ObverseRole) = as_text(obverse(r.role))
+
 those_with_role(f::SquareDanceFormation, o::ObverseRole) =
     typeof(o.role)(setdiff(those_with_role(f, Everyone()),
                            those_with_role(f, o.role)))
@@ -143,16 +145,42 @@ those_with_role(f::SquareDanceFormation, cn::CoupleNumbers) =
         ds.dancer.couple_number in cn.numbers
     end
 
+as_text(r::CoupleNumbers) =
+    """CoupleNumbers $(join(r.numbers, ", "))"""
+
 struct DesignatedDancers <: Role
     dancers::Vector{Dancer}
 
-    DesignatedDancers(dancers::Vector{Dancer}) = new(dancers)
+    DesignatedDancers(dancers::Vector{Dancer}) = new(sort(dancers))
     DesignatedDancers(dss::Vector{DancerState}) =
-        new(map(ds -> ds.dancer, dss))
+        DesignatedDancers(map(ds -> ds.dancer, dss))
 end
 
 those_with_role(f::SquareDanceFormation, r::DesignatedDancers) =
     filter(dancer_states(f)) do ds
         ds.dancer in r.dancers
     end
+
+as_text(d::Dancer) = "$(nameof(typeof(d.gender)))#$(d.couple_number)"
+
+as_text(r::DesignatedDancers) =
+    """Dancers $(join(map(as_text, r.dancers), ", "))"""
+
+
+as_text(::Everyone) = "Everyone"
+as_text(::Noone) = "Noone"
+as_text(::Guys) = "Guys"
+as_text(::Gals) = "Gals"
+as_text(::OriginalHead) = "OriginalHead"
+as_text(::OriginalSide) = "OriginalSides"
+as_text(::CurrentHead) = "CurrentHead"
+as_text(::CurrentSide) = "CurrentSide"
+as_text(::Beau) = "Beaus"
+as_text(::Belle) = "Belles"
+as_text(::Center) = "Centers"
+as_text(::End) = "Ends"
+as_text(::Leader) = "Leaders"
+as_text(::Trailer) = "Trailers"
+as_text(::DiamondCenter) = "Centers of your diamonds"
+as_text(::Point) = "Points"
 

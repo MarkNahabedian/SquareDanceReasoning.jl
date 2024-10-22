@@ -13,7 +13,7 @@ jiggle in place.  Maybe it should be renamed _Identify.
     time::Int = 2
 end
 
-description(c::Balance) = "$(c.role) Balance"
+as_text(c::Balance) = "$(as_text(c.role)) Balance"
 
 can_do_from(::Balance, ::DancerState) = 1
 

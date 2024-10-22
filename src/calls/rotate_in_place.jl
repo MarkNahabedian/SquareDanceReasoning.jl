@@ -20,7 +20,7 @@ specified as a parameter.
     time::Int = 1
 end
 
-description(c::FaceRight) = "$(c.role) quarter right, $(c.time) ticks."
+as_text(c::FaceRight) = "$(as_text(c.role)) quarter right, $(c.time) ticks."
 
 can_do_from(::FaceRight, ::DancerState) = 1
 
@@ -44,7 +44,8 @@ specified as a parameter.
     time::Int = 1
 end
 
-description(c::FaceLeft) = "$(c.role) quarter right, $(c.time) ticks."
+as_text(c::FaceLeft) =
+    "$(as_text(c.role)) quarter left, $(c.time) ticks."
 
 can_do_from(::FaceLeft, ::DancerState) = 1
 
@@ -64,7 +65,7 @@ Timing: CallerLab: 2.
     role::Role = Everyone()
 end
 
-description(c::UTurnBack) = "$(c.role) U Turn Back"
+as_text(c::UTurnBack) = "$(as_text(c.role)) U Turn Back"
 
 can_do_from(::UTurnBack, ::Couple) = 2
 can_do_from(::UTurnBack, ::MiniWave) = 2
@@ -130,7 +131,7 @@ Timing: CallerLab: 2.
     # maybe eventually add "as if you could" flag
 end
 
-description(c::AndRoll) = "$(c.role) roll"
+as_text(c::AndRoll) = "$(as_text(c.role)) roll."
 
 can_do_from(::AndRoll, ds::DancerState) =
     # This would require a try/catch guard in or above

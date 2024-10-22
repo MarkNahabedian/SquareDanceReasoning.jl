@@ -1,4 +1,4 @@
-export SquareDanceCall, CanDoCall
+export SquareDanceCall, CanDoCall, as_text
 
 
 # Should SquareDanceCall <: TemporalFact
@@ -19,6 +19,14 @@ For each call and each formation it can be performed from, either a
 `perform` or an `expand_parts` method should be defined.
 """
 abstract type SquareDanceCall end
+
+
+"""
+    as_text(call)
+
+Return a textual description of the call as a String.
+"""
+function as_text end
 
 
 """

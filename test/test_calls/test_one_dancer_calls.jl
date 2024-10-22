@@ -1,6 +1,7 @@
 
 @testset "test Balance" begin
     log_to_file(@__DIR__, log_file_name_for_testset(Test.get_testset())) do
+        @test as_text(Balance()) == "Everyone Balance"
         kb = make_kb()
         square = make_square(2)
         receive(kb, square)
