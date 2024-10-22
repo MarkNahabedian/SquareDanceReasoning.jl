@@ -27,10 +27,17 @@ end
     @test opposite(Unspecified()) isa Unspecified
     @test Unspecified() < Guy()
     @test Guy() < Gal()
+    @test Unspecified() < Gal()
 end
 
 @testset "dancers" begin
     square = make_square(4)
+    @test all(broadcast(==, square, [
+        Dancer(1, Guy()), Dancer(1, Gal()),
+        Dancer(2, Guy()), Dancer(2, Gal()),
+        Dancer(3, Guy()), Dancer(3, Gal()),
+        Dancer(4, Guy()), Dancer(4, Gal()),
+    ]))
     @test length(square.dancers) == 8
     @test all(filter(is_original_head, square.dancers)) do dancer
         isodd(dancer.couple_number)
@@ -38,6 +45,7 @@ end
     @test all(filter(is_original_side, square.dancers)) do dancer
         iseven(dancer.couple_number)
     end
+    sort
 end
 
 @testset "SDSquare identity" begin
@@ -191,7 +199,6 @@ end
         end
     end
 end
-
 
 include("test_formations/tests.jl")
 
