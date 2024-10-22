@@ -6,11 +6,11 @@ export CallEngineDebugContext, @CallEngineDebugContext
 """
     CallEngineDebugContext(source_location, relpath, token)
 
-A CallEngineDebugContext can be bassed to some functions via the
+A CallEngineDebugContext can be passed to some functions via the
 `dbgctx` keyword argument to provide debugging support.
 
 Do not use the constructor directly, instead use
-[`@CallEngineDebugContext`](@ref), which wil automatically provide a
+[`@CallEngineDebugContext`](@ref), which will automatically provide a
 source location.
 """
 struct CallEngineDebugContext
