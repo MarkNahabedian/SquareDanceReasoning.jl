@@ -12,6 +12,8 @@ cleanup_debug_formations(@__DIR__)
         @test ds0.down == ds1.down
         @test ds0.left + 2 == ds1.left
         @test can_roll(ds1) == 0
+        @test earliest(ds0) == ds0
+        @test earliest(ds1) == ds0
     end
     let
         ds0 = DancerState(Dancer(1, Unspecified()),
