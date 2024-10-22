@@ -59,7 +59,6 @@ knowledgebase.
 """
 function do_call(kb::ReteRootNode, call::SquareDanceCall;
                  dbgctx = nothing)::ReteRootNode
-    println("do_call\t$dbgctx")
     sched = let
         dss = askc(Collector{DancerState}(), kb, DancerState)
         if allequal(map(ds -> ds.time, dss))
@@ -74,7 +73,6 @@ end
 
 function do_schedule(sched::CallSchedule, kb::ReteRootNode;
                      dbgctx = nothing)
-    println("do_schedule\t", dbgctx)
     call_history = []
     newest_dancer_states = Dict{Dancer, DancerState}()
     askc(kb, DancerState) do ds
