@@ -1,6 +1,8 @@
 
 cleanup_debug_formations(@__DIR__)
 
+TEXT_EXAMPLE_FORMATIONS = []
+
 include("test_two_dancers.jl")
 include("test_two_by_two.jl")
 include("test_bigger_waves.jl")
@@ -12,6 +14,14 @@ include("test_squared_set.jl")
 include("test_roles.jl")
 
 save_formation_examples()
+
+@testset "example formations" begin
+    for formation in TEXT_EXAMPLE_FORMATIONS
+        f = get_formation_example(typeof(formation))
+        @test f == formation
+    end
+end
+
 
 #=
 @testset "Formation jitter tests" begin

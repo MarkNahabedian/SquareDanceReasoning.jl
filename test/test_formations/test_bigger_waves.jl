@@ -97,6 +97,7 @@ end
         m = find_memory_for_type(kb, RHWaveOfEight)
         @test length(m.memory) == 1
         f = first(m.memory)
+        push!(TEXT_EXAMPLE_FORMATIONS, f)
         @test handedness(f) == RightHanded()
         @test f.wave1.wave1.a.dancer == square[2]
         @test f.wave1.wave1.b.dancer == square[1]
