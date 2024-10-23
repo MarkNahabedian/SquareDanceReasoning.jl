@@ -10,6 +10,7 @@ include("test_lines.jl")
 include("test_stars.jl")
 include("test_columns.jl")
 include("test_couples_down_the_line.jl")
+include("n_quarter_tag.jl")
 include("test_squared_set.jl")
 include("test_roles.jl")
 

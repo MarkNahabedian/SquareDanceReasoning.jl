@@ -11,6 +11,7 @@ include("star_like.jl")
 include("two-by-two.jl")
 include("squared_set.jl")
 include("couples_down_the_line.jl")
+include("n_quarter_tag.jl")
 
 
 FORMATION_NAME_TO_TYPE = Dict()
