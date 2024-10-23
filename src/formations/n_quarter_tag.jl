@@ -14,7 +14,12 @@ struct QTWCT
     tandem2::Tandem
 end    
 
-@rule SquareDanceFormationRule.QTWCTRule(wave::WaveOfFour, couple1::Couple, couple2::Couple, tandem1::Tandem, tandem2::Tandem, ::QTWCT) begin
+@rule SquareDanceFormationRule.QTWCTRule(wave::WaveOfFour,
+                                         couple1::Couple,
+                                         couple2::Couple,
+                                         tandem1::Tandem,
+                                         tandem2::Tandem,
+                                         ::QTWCT) begin
     if couple1 == couple2; return; end
     if tandem1 == tandem2; return; end
     # Break Couple symetry:
@@ -34,6 +39,13 @@ end
     end
     emit(QTWCT(wave, couple1, couple2, tandem1, tandem2))
 end
+
+@doc """
+QTWCTRule is a rule that provides a precursor fact for
+QuarterTagRule and ThreeQuarterTagRule.
+""" QTWCTRule
+
+
 
 
 """
