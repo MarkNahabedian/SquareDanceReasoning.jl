@@ -837,6 +837,115 @@
     }
   },
   {
+    "_TYPE_": "QuarterTag",
+    "DancerStates": {
+      "3f": {
+        "couple_number": 3,
+        "gender": "Gal",
+        "direction": 0.5,
+        "down": 2.0,
+        "left": 3.0
+      },
+      "4m": {
+        "couple_number": 4,
+        "gender": "Guy",
+        "direction": 0.5,
+        "down": 3.0,
+        "left": 2.0
+      },
+      "1f": {
+        "couple_number": 1,
+        "gender": "Gal",
+        "direction": 0.0,
+        "down": 2.0,
+        "left": 2.0
+      },
+      "3m": {
+        "couple_number": 3,
+        "gender": "Guy",
+        "direction": 0.5,
+        "down": 2.0,
+        "left": 1.0
+      },
+      "2m": {
+        "couple_number": 2,
+        "gender": "Guy",
+        "direction": 0.0,
+        "down": 1.0,
+        "left": 3.0
+      },
+      "1m": {
+        "couple_number": 1,
+        "gender": "Guy",
+        "direction": 0.0,
+        "down": 2.0,
+        "left": 4.0
+      },
+      "4f": {
+        "couple_number": 4,
+        "gender": "Gal",
+        "direction": 0.5,
+        "down": 3.0,
+        "left": 3.0
+      },
+      "2f": {
+        "couple_number": 2,
+        "gender": "Gal",
+        "direction": 0.0,
+        "down": 1.0,
+        "left": 2.0
+      }
+    },
+    "wave": {
+      "_TYPE_": "RHWaveOfFour",
+      "wave1": {
+        "_TYPE_": "RHMiniWave",
+        "a": "1f",
+        "b": "3m"
+      },
+      "wave2": {
+        "_TYPE_": "RHMiniWave",
+        "a": "1m",
+        "b": "3f"
+      },
+      "centers": {
+        "_TYPE_": "LHMiniWave",
+        "a": "1f",
+        "b": "3f"
+      }
+    },
+    "couple1": {
+      "_TYPE_": "Couple",
+      "beau": "2m",
+      "belle": "2f"
+    },
+    "couple2": {
+      "_TYPE_": "Couple",
+      "beau": "4m",
+      "belle": "4f"
+    },
+    "tandem1": {
+      "_TYPE_": "Tandem",
+      "leader": "1f",
+      "trailer": "2f"
+    },
+    "tandem2": {
+      "_TYPE_": "Tandem",
+      "leader": "3f",
+      "trailer": "4f"
+    },
+    "f2f1": {
+      "_TYPE_": "FaceToFace",
+      "a": "1f",
+      "b": "4m"
+    },
+    "f2f2": {
+      "_TYPE_": "FaceToFace",
+      "a": "2m",
+      "b": "3f"
+    }
+  },
+  {
     "_TYPE_": "RHBoxOfFour",
     "DancerStates": {
       "1f": {
@@ -1209,6 +1318,115 @@
       "_TYPE_": "Couple",
       "beau": "2m",
       "belle": "2f"
+    }
+  },
+  {
+    "_TYPE_": "ThreeQuarterTag",
+    "DancerStates": {
+      "3f": {
+        "couple_number": 3,
+        "gender": "Gal",
+        "direction": 0.5,
+        "down": 1.0,
+        "left": 3.0
+      },
+      "4m": {
+        "couple_number": 4,
+        "gender": "Guy",
+        "direction": 0.5,
+        "down": 2.0,
+        "left": 1.0
+      },
+      "1m": {
+        "couple_number": 1,
+        "gender": "Guy",
+        "direction": 0.0,
+        "down": 3.0,
+        "left": 3.0
+      },
+      "1f": {
+        "couple_number": 1,
+        "gender": "Gal",
+        "direction": 0.0,
+        "down": 3.0,
+        "left": 2.0
+      },
+      "2m": {
+        "couple_number": 2,
+        "gender": "Guy",
+        "direction": 0.0,
+        "down": 2.0,
+        "left": 4.0
+      },
+      "4f": {
+        "couple_number": 4,
+        "gender": "Gal",
+        "direction": 0.5,
+        "down": 2.0,
+        "left": 3.0
+      },
+      "3m": {
+        "couple_number": 3,
+        "gender": "Guy",
+        "direction": 0.5,
+        "down": 1.0,
+        "left": 2.0
+      },
+      "2f": {
+        "couple_number": 2,
+        "gender": "Gal",
+        "direction": 0.0,
+        "down": 2.0,
+        "left": 2.0
+      }
+    },
+    "wave": {
+      "_TYPE_": "RHWaveOfFour",
+      "wave1": {
+        "_TYPE_": "RHMiniWave",
+        "a": "2f",
+        "b": "4m"
+      },
+      "wave2": {
+        "_TYPE_": "RHMiniWave",
+        "a": "2m",
+        "b": "4f"
+      },
+      "centers": {
+        "_TYPE_": "LHMiniWave",
+        "a": "2f",
+        "b": "4f"
+      }
+    },
+    "couple1": {
+      "_TYPE_": "Couple",
+      "beau": "1m",
+      "belle": "1f"
+    },
+    "couple2": {
+      "_TYPE_": "Couple",
+      "beau": "3m",
+      "belle": "3f"
+    },
+    "tandem1": {
+      "_TYPE_": "Tandem",
+      "leader": "1f",
+      "trailer": "2f"
+    },
+    "tandem2": {
+      "_TYPE_": "Tandem",
+      "leader": "3f",
+      "trailer": "4f"
+    },
+    "b2b1": {
+      "_TYPE_": "BackToBack",
+      "a": "2f",
+      "b": "3m"
+    },
+    "b2b2": {
+      "_TYPE_": "BackToBack",
+      "a": "1m",
+      "b": "4f"
     }
   },
   {
