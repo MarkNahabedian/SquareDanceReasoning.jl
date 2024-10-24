@@ -43,6 +43,7 @@
     @test f.f2f2.b == f.tandem2.leader
     @test f.f2f1.b == f.couple2.beau
     @test f.f2f2.a == f.couple1.beau
+    collect_formation_examples(kb)
 end
 
                  
@@ -90,5 +91,6 @@ end
     @test f.b2b2.b == f.tandem2.trailer
     @test f.b2b1.b == f.couple2.beau
     @test f.b2b2.a == f.couple1.beau
+    collect_formation_examples(kb)
 end
 
