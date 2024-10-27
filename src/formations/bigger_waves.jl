@@ -38,6 +38,17 @@ end
 handedness(f::WaveOfFour) = handedness(f.wave1)
 handedness(f::WaveOfEight) = handedness(f.wave1)
 
+those_with_role(f::WaveOfFour, ::Center) = dancer_states(f.centers)
+those_with_role(f::WaveOfFour, ::End) =
+    setdiff(dancer_states(f), f.centers())
+
+those_with_role(f::WaveOfEight, ::VeryCenter) = dancer_states(f.centers)
+those_with_role(f::WaveOfEight, r::AllButVeryCenter) =
+    setdiff(dancer_states(f), those_with_role(f, obverse(r)))
+those_with_role(f::WaveOfEight, r::Union{Center, End}) = [
+    those_with_role(f.wave1, r)...,
+    those_with_role(f.wave2, r)... ]
+
 
 """
 RHWaveOfFour represents a right handed wave of four dancers.

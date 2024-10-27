@@ -3,14 +3,27 @@
 export Everyone, Noone, Role, Guys, Gals,
     OriginalHead, OriginalSide,
     CurrentHead, CurrentSide,
-    Beau, Belle, Center, End,
+    Beau, Belle, Center, End, VeryCenter, AllButVeryCenter,
     Leader, Trailer,
     DiamondCenter, Point,
     ObverseRole, CoupleNumbers, DesignatedDancers
 
-export obverse, those_with_role
+export obverse, those_with_role, supported_roles
 
+
+"""
+Role is the abstract supertype for all square dance role types.
+"""
 abstract type Role end
+
+
+"""
+FormationContextRole is the abstract supertype for square dance roles
+which are defined by a dancer's context in a particular formation.
+"""
+abstract type FormationContextRole <: Role end
+
+
 struct Everyone <: Role end
 struct Noone <: Role end
 struct Guys <: Role end
@@ -19,14 +32,16 @@ struct OriginalHead <: Role end
 struct OriginalSide <: Role end
 struct CurrentHead <: Role end
 struct CurrentSide <: Role end
-struct Beau <: Role end
-struct Belle <: Role end
-struct Center <: Role end
-struct End <: Role end
-struct Leader <: Role end
-struct Trailer <: Role end
-struct DiamondCenter <: Role end
-struct Point <: Role end
+struct Beau <: FormationContextRole end
+struct Belle <: FormationContextRole end
+struct Center <: FormationContextRole end
+struct VeryCenter <: FormationContextRole end
+struct AllButVeryCenter <: FormationContextRole end
+struct End <: FormationContextRole end
+struct Leader <: FormationContextRole end
+struct Trailer <: FormationContextRole end
+struct DiamondCenter <: FormationContextRole end
+struct Point <: FormationContextRole end
 
 # NOTE that sometimes roles are used to restrict which formations are
 # participating and sometimes they are used to designate which dancer
@@ -59,6 +74,9 @@ obverse(::CurrentSide) = CurrentHead()
 obverse(::Beau) = Belle()
 obverse(::Belle) = Beau()
 
+obverse(::VeryCenter) = AllButVeryCenter()
+obverse(::AllButVeryCenter) = VeryCenter()
+
 obverse(::Center) = End()
 obverse(::End) = Center()
 
@@ -72,7 +90,7 @@ obverse(::Point) = DiamondCenter()
     ObverseRole(::role)
 
 For roles like CoupleNumbers or DesignatedDancers we can't determine
-the obverse until we know all of the dancers involved.  TRhis servesd
+the obverse until we know all of the dancers involved.  This serves
 as a "place holder" until we can determine which dancers have the role
 that is obverse to the specified `Role`.
 """
@@ -85,6 +103,32 @@ obverse(o::ObverseRole) = o.role
 
 as_text(r::ObverseRole) = as_text(obverse(r.role))
 
+
+"""
+    supported_roles(formation)
+
+Returns a list of the [`Role`](@!ref)s that are supported by `formation`.
+"""
+function supported_roles(f::Type{<:SquareDanceFormation})
+    supported = []
+    default_method = which(those_with_role, (SquareDanceFormation, Role))
+    if isconcretetype(f)
+        function walk(role)
+            if isconcretetype(role)
+                if which(those_with_role, (f, role)) != default_method
+                    push!(supported, role)
+                end
+            else
+                for st in subtypes(role)
+                    walk(st)
+                end
+            end
+        end
+        walk(FormationContextRole)
+    end
+    supported
+end
+
 those_with_role(f::SquareDanceFormation, o::ObverseRole) =
     typeof(o.role)(setdiff(those_with_role(f, Everyone()),
                            those_with_role(f, o.role)))
@@ -93,8 +137,8 @@ those_with_role(f::SquareDanceFormation, o::ObverseRole) =
 """
     those_with_role(::SquareDanceFormation, ::Role)
 
-For the specified formation, returns `DancerState`s or subformations
-whose dancers fill the specified role.
+For the specified formation, returns `DancerState`s whose dancers fill
+the specified role.
 """
 those_with_role(::SquareDanceFormation, ::Role) = DancerState[]
 those_with_role(f::SquareDanceFormation, ::Everyone) = dancer_states(f)
