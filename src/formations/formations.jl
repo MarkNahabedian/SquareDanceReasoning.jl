@@ -1,5 +1,6 @@
 
 include("generic.jl")
+include("catch_conflicting_dancer_states.jl")
 include("attendance.jl")
 include("roles.jl")
 include("examples.jl")
