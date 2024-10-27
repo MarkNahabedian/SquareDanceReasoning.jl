@@ -35,6 +35,9 @@ abstract type TemporalFact end
 """
 SquareDanceFormation is the abstract supertype of all square dance
 formations.
+
+Each concrete subtype can be callled to get an iterator over all of
+the [`DancerState`](@ref)s of the formation.
 """
 abstract type SquareDanceFormation <: TemporalFact end
 

@@ -22,9 +22,14 @@ struct FacingTandemCouples <: EightDancerFormation
     centers::FacingCouples
 end
 
-dancer_states(f::FacingTandemCouples) = [
-    dancer_states(f.tandem_couples1)...,
-    dancer_states(f.tandem_couples2)... ]
+@resumable function(f::FacingTandemCouples)()
+    for ds in f.tandem_couples1()
+        @yield ds
+    end
+    for ds in f.tandem_couples2()
+        @yield ds
+    end
+end
 
 handedness(::FacingTandemCouples) = NoHandedness()
 
@@ -69,9 +74,14 @@ struct BeforeEightChain <: EightDancerFormation
     centers::BackToBackCouples
 end
 
-dancer_states(f::BeforeEightChain) = [
-    dancer_states(f.facing_couples1)...,
-    dancer_states(f.facing_couples2)... ]
+@resumable function(f::BeforeEightChain)()
+    for ds in f.facing_couples1()
+        @yield ds
+    end
+    for ds in f.facing_couples2()
+        @yield ds
+    end
+end
 
 handedness(::BeforeEightChain) = NoHandedness()
 
@@ -110,9 +120,14 @@ struct AfterEightChainOne <: EightDancerFormation
     centers::FacingCouples
 end
 
-dancer_states(f::AfterEightChainOne) = [
-    dancer_states(f.bbcouples1)...,
-    dancer_states(f.bbcouples2)... ]
+@resumable function(f::AfterEightChainOne)()
+    for ds in f.bbcouples1()
+        @yield ds
+    end
+    for ds in f.bbcouples2()
+        @yield ds
+    end
+end
 
 handedness(::AfterEightChainOne) = NoHandedness()
 
@@ -151,9 +166,14 @@ struct CompletedDoublePassThru <: EightDancerFormation
     centers::BackToBackCouples
 end
 
-dancer_states(f::CompletedDoublePassThru) = [
-    dancer_states(f.tandem_couples1)...,
-    dancer_states(f.tandem_couples2)... ]
+@resumable function(f::CompletedDoublePassThru)()
+    for ds in f.tandem_couples1()
+        @yield ds
+    end
+    for ds in f.tandem_couples2()
+        @yield ds
+    end
+end
 
 handedness(::CompletedDoublePassThru) = NoHandedness()
 

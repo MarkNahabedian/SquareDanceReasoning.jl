@@ -41,7 +41,7 @@ abstract type EightDancerFormation <: SquareDanceFormation end
 Returns a list of the `DancerState`s in the formation, in no
 particular order.
 """
-function dancer_states end
+dancer_states(f::SquareDanceFormation) = [f()...]
 
 
 """

@@ -13,9 +13,14 @@ struct FacingCouples <: FourDancerFormation
     couple2::Couple
 end
 
-dancer_states(f::FacingCouples)::Vector{DancerState} =
-    [ dancer_states(f.couple1)...,
-      dancer_states(f.couple2)... ]
+@resumable function(f::FacingCouples)()
+    for f2 in f.couple1()
+        @yield f2
+    end
+    for f2 in f.couple2()
+        @yield f2
+    end
+end
 
 handedness(::FacingCouples) = NoHandedness()
 
@@ -29,9 +34,14 @@ struct BackToBackCouples <: FourDancerFormation
     couple2::Couple
 end
 
-dancer_states(f::BackToBackCouples)::Vector{DancerState} =
-    [ dancer_states(f.couple1)...,
-      dancer_states(f.couple2)... ]
+@resumable function(f::BackToBackCouples)()
+    for f2 in f.couple1()
+        @yield f2
+    end
+    for f2 in f.couple2()
+        @yield f2
+    end
+end
 
 handedness(::BackToBackCouples) = NoHandedness()
     
@@ -44,9 +54,14 @@ struct TandemCouples <: FourDancerFormation
     trailers::Couple
 end
 
-dancer_states(f::TandemCouples)::Vector{DancerState} =
-    [ dancer_states(f.leaders)...,
-      dancer_states(f.trailers)... ]
+@resumable function(f::TandemCouples)()
+    for f2 in f.leaders()
+        @yield f2
+    end
+    for f2 in f.trailers()
+        @yield f2
+    end
+end
 
 handedness(::TandemCouples) = NoHandedness()
 
@@ -103,8 +118,14 @@ BoxOfFour is the abstract supertype for RHBoxOfFour and LHBoxOfFour.
 """
 abstract type BoxOfFour <: FourDancerFormation end
 
-dancer_states(b::BoxOfFour) = [ dancer_states(b.miniwave1)...,
-                                dancer_states(b.miniwave2)... ]
+@resumable function(f::BoxOfFour)()
+    for f2 in f.miniwave1()
+        @yield f2
+    end
+    for f2 in f.miniwave2()
+        @yield f2
+    end
+end
 
 handedness(b::BoxOfFour) = handedness(b.miniwave1)
 
@@ -150,10 +171,10 @@ end
     if direction(t1) > direction(t2)
         return
     end
-    if (t1.leader in dancer_states(mw1) &&
-        t1.trailer in dancer_states(mw2) &&
-        t2.leader in dancer_states(mw2) &&
-        t2.trailer in dancer_states(mw1))
+    if (t1.leader in mw1() &&
+        t1.trailer in mw2() &&
+        t2.leader in mw2() &&
+        t2.trailer in mw1())
         if handedness(mw1) == RightHanded()
             emit(RHBoxOfFour(mw1, mw2, t1, t2))
         else

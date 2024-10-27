@@ -13,10 +13,14 @@ struct Star <: FourDancerFormation
     mw2::MiniWave
 end
 
-dancer_states(f::Star)::Vector{DancerState} = [
-    dancer_states(f.mw1)...,
-    dancer_states(f.mw2)...
-]
+@resumable function(f::Star)()
+    for ds in f.mw1()
+        @yield ds
+    end
+    for ds in f.mw2()
+        @yield ds
+    end
+end
 
 handedness(f::Star) = handedness(f.mw1)
 

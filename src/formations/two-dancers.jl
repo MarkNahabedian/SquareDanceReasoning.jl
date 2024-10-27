@@ -15,7 +15,10 @@ struct Couple <: TwoDancerFormation
     belle::DancerState
 end
 
-dancer_states(f::Couple)::Vector{DancerState} = [f.beau, f.belle]
+@resumable function(f::Couple)()
+    @yield f.beau
+    @yield f.belle
+end
 
 handedness(::Couple) = NoHandedness()
 
@@ -41,7 +44,10 @@ struct FaceToFace <: TwoDancerFormation
     end
 end
 
-dancer_states(f::FaceToFace)::Vector{DancerState} = [f.a, f.b]
+@resumable function(f::FaceToFace)()
+    @yield f.a
+    @yield f.b
+end
 
 handedness(::FaceToFace) = NoHandedness()
 
@@ -65,7 +71,10 @@ struct BackToBack <: TwoDancerFormation
     end
 end
 
-dancer_states(f::BackToBack)::Vector{DancerState} = [f.a, f.b]
+@resumable function(f::BackToBack)()
+    @yield f.a
+    @yield f.b
+end
 
 handedness(::BackToBack) = NoHandedness()
 
@@ -83,7 +92,10 @@ struct Tandem <: TwoDancerFormation
     trailer::DancerState
 end
 
-dancer_states(f::Tandem)::Vector{DancerState} = [f.leader, f.trailer]
+@resumable function(f::Tandem)()
+    @yield f.leader
+    @yield f.trailer
+end
 
 handedness(::Tandem) = NoHandedness()
 
@@ -98,7 +110,10 @@ MiniWave is the abstract supertype for all two dancer waves.
 """
 abstract type MiniWave <: TwoDancerFormation end
 
-dancer_states(f::MiniWave)::Vector{DancerState} = [f.a, f.b]
+@resumable function(f::MiniWave)()
+    @yield f.a
+    @yield f.b
+end
 
 
 """

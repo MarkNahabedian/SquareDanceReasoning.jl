@@ -17,13 +17,23 @@ waves of eight dancers.
 """
 abstract type WaveOfEight <: EightDancerFormation end
 
-dancer_states(f::WaveOfFour)::Vector{DancerState} =
-    [ dancer_states(f.wave1)...,
-      dancer_states(f.wave2)... ]
+@resumable function(f::WaveOfFour)()
+    for ds in f.wave1()
+        @yield ds
+    end
+    for ds in f.wave2()
+        @yield ds
+    end
+end
 
-dancer_states(f::WaveOfEight)::Vector{DancerState} =
-    [ dancer_states(f.wave1)...,
-      dancer_states(f.wave2)... ]
+@resumable function(f::WaveOfEight)()
+    for ds in f.wave1()
+        @yield ds
+    end
+    for ds in f.wave2()
+        @yield ds
+    end
+end
 
 handedness(f::WaveOfFour) = handedness(f.wave1)
 handedness(f::WaveOfEight) = handedness(f.wave1)

@@ -12,9 +12,14 @@ struct SquaredSet <: EightDancerFormation
     couples2::FacingCouples
 end
 
-dancer_states(f::SquaredSet)::Vector{DancerState} =
-    [ dancer_states(f.couples1)...,
-      dancer_states(f.couples2)... ]
+@resumable function(f::SquaredSet)()
+    for ds in f.couples1()
+        @yield ds
+    end
+    for ds in f.couples2()
+        @yield ds
+    end
+end
 
 handedness(::SquaredSet) = NoHandedness()
 
@@ -46,9 +51,16 @@ struct CircleOfEight <: EightDancerFormation
     ds8::DancerState
 end
 
-dancer_states(f::CircleOfEight)::Vector{DancerState} =
-    [ f.ds1, f.ds2, f.ds3, f.ds4,
-      f.ds5, f.ds6, f.ds7, f.ds8 ]
+@resumable function(f::CircleOfEight)()
+    @yield f.ds1
+    @yield f.ds2
+    @yield f.ds3
+    @yield f.ds4
+    @yield f.ds5
+    @yield f.ds6
+    @yield f.ds7
+    @yield f.ds8
+end
 
 
 # 8! invocations of this rule, YIKES!

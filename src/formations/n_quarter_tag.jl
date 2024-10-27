@@ -30,11 +30,13 @@ end
     if direction(tandem2) < direction(tandem1)
         return
     end
-    centers = dancer_states(wave.centers)
-    if length(intersect(centers, dancer_states(tandem1))) != 1
+    # The first argument of intersect can't be an iterator:
+    if length(intersect(dancer_states(wave.centers),
+                        tandem1())) != 1
         return
     end
-    if length(intersect(centers, dancer_states(tandem2))) != 1
+    if length(intersect(dancer_states(wave.centers),
+                        tandem2())) != 1
         return
     end
     emit(QTWCT(wave, couple1, couple2, tandem1, tandem2))
@@ -56,9 +58,17 @@ abstract type NQuarterTag <: EightDancerFormation end
 
 handedness(f::NQuarterTag) = handedness(f.wave)
 
-dancer_states(f::NQuarterTag) = [ dancer_states(f.couple1)...,
-                                  dancer_states(f.wave)...,
-                                  dancer_states(f.couple2)... ]
+@resumable function(f::NQuarterTag)()
+    for ds in f.couple1()
+        @yield ds
+    end
+    for ds in f.wave()
+        @yield ds
+    end
+    for ds in f.couple2()
+        @yield ds
+    end
+end
 
 
 """
@@ -82,7 +92,7 @@ end
 
     if f2f1 == f2f2; return; end
     # The leader of each tandem is in the center of the wave
-    centers = dancer_states(q.wave.centers)
+    centers = q.wave.centers()
     if !(q.tandem1.leader in centers)
         return
     end
@@ -90,10 +100,10 @@ end
         return
     end
     # Match the FaceToFace subformations with their related tandems:
-    if !(q.tandem1.leader in dancer_states(f2f1))
+    if !(q.tandem1.leader in f2f1())
         return
     end
-    if !(q.tandem2.leader in dancer_states(f2f2))
+    if !(q.tandem2.leader in f2f2())
         return
     end
     emit(QuarterTag(q.wave, q.couple1, q.couple2,
@@ -136,10 +146,10 @@ end
         return
     end
     # Match the BackToBack subformations with their related tandems:
-    if !(q.tandem1.trailer in dancer_states(b2b1))
+    if !(q.tandem1.trailer in b2b1())
         return
     end
-    if !(q.tandem2.trailer in dancer_states(b2b2))
+    if !(q.tandem2.trailer in b2b2())
         return
     end
     emit(ThreeQuarterTag(q.wave, q.couple1, q.couple2,

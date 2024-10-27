@@ -60,12 +60,13 @@ direction(ds::DancerState) = ds.direction
 distance(s1::DancerState, s2::DancerState) =
     distance(location(s1), location(s2))
 
-# Should DancerState be a subtype of Formation?  Whenwe query for
+# Should DancerState be a subtype of Formation?  When we query for
 # Formations we probably don't want the clutter of individual dancers,
 # but it's convenient for formation_svg to wrap a single DancerState
 # in SVG.
-dancer_states(ds::DancerState) = [ ds ]
-
+@resumable function(ds::DancerState)()
+    @yield ds
+end
 
 Base.show(io::IO, ds::DancerState) =
     Base.show(io, MIME"text/plain"(), ds)
@@ -226,8 +227,10 @@ struct Collision
     b::DancerState
 end
 
-dancer_states(c::Collision)::Vector{DancerState} = [c.a, c.b]
-
+@resumable function(f::Collision)()
+    @yield f.a
+    @yield f.b
+end
 
 function latest_dancer_states(root::ReteRootNode)::Dict{Dancer, DancerState}
     latest_dss = Dict{Dancer, DancerState}()
