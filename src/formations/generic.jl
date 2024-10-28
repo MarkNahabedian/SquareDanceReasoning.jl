@@ -1,6 +1,7 @@
 
 export dancers, handedness
-export TwoDancerFormation, FourDancerFormation, EightDancerFormation
+export TwoDancerFormation, FourDancerFormation,
+    OneByFourFormation, EightDancerFormation
 export SquareDanceFormationRule
 export dancer_states
 export update_from
@@ -26,6 +27,13 @@ FourDancerFormation is the abstract supertype of all square dance
 formations involving four dancers.
 """
 abstract type FourDancerFormation <: SquareDanceFormation end
+
+
+"""
+OneByFourFormation is the abstract supertype for 1 by 4 "lines".
+Concrete supertypes are expected to have a `centers` field.
+"""
+abstract type OneByFourFormation <: FourDancerFormation end
 
 
 """

@@ -27,6 +27,13 @@
         @test columns[1].tail.leader.dancer == square[2]
         @test columns[1].lead.trailer.dancer == square[3]
         @test columns[1].lead.leader.dancer == square[4]
+        let
+            f = columns[1]
+            @test Set(those_with_role(f, Center())) ==
+                Set([ f.tail.leader, f.lead.trailer ])
+            @test Set(those_with_role(f, End())) ==
+                Set([ f.tail.trailer, f.lead.leader ])
+        end
         #   →→→→   direction 3/4
         @test length(dancer_states(columns[2])) == 4
         @test direction(columns[2]) == 3/4

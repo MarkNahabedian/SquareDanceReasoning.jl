@@ -33,11 +33,16 @@
         @test lines[2].b.belle.dancer == square[6]
         @test lines[2].a.beau.dancer == square[7]
         @test lines[2].a.belle.dancer == square[8]
-        # We should also have four FaceToFace formations
         let
-            m = find_memory_for_type(kb, FaceToFace)
-            @test length(m.memory) == 4
+            f = lines[1]
+            @test Set(dancer.(those_with_role(f, Center()))) ==
+                Set([ square[2], square[3] ])
+            @test Set(dancer.(those_with_role(f, End()))) ==
+                Set([ square[1], square[4] ])
         end
+
+        # We should also have four FaceToFace formations
+        @test askc(Counter(), kb, FaceToFace) == 4
     end
     collect_formation_examples(kb)
 end

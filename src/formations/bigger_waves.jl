@@ -8,7 +8,7 @@ export WaveOfFourRule, WaveOfEightRule
 WaveOfFour is the abstract supertype for right and left handed
 waves of four dancers.
 """
-abstract type WaveOfFour <: FourDancerFormation end
+abstract type WaveOfFour <: OneByFourFormation end
 
 
 """
@@ -37,10 +37,6 @@ end
 
 handedness(f::WaveOfFour) = handedness(f.wave1)
 handedness(f::WaveOfEight) = handedness(f.wave1)
-
-those_with_role(f::WaveOfFour, ::Center) = dancer_states(f.centers)
-those_with_role(f::WaveOfFour, ::End) =
-    setdiff(dancer_states(f), f.centers())
 
 those_with_role(f::WaveOfEight, ::VeryCenter) = dancer_states(f.centers)
 those_with_role(f::WaveOfEight, r::AllButVeryCenter) =

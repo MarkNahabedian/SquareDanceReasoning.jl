@@ -7,7 +7,7 @@ export LineOfFourRule, TwoFacedLineRule
 LineOfFour represents a line of four dancerrs all facing
 in the same direction.
 """
-struct LineOfFour <: FourDancerFormation
+struct LineOfFour <: OneByFourFormation
     a::Couple
     b::Couple
     centers::Couple
@@ -30,7 +30,7 @@ direction(f::LineOfFour) = direction(f.a)
 """
 TwoFacedLine represents a two faced line formation.
 """
-struct TwoFacedLine <: FourDancerFormation
+struct TwoFacedLine <: OneByFourFormation
     a::Couple
     b::Couple
     centers::MiniWave

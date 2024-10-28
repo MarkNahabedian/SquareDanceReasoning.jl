@@ -8,7 +8,7 @@ export ColumnOfFour, ColumnOfFourRule
 Represents a column of four dancers, each facing the back of the
 dancer in front of them.
 """
-struct ColumnOfFour <: FourDancerFormation
+struct ColumnOfFour <: OneByFourFormation
     lead::Tandem
     tail::Tandem
     centers::Tandem

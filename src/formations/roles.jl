@@ -12,14 +12,18 @@ export obverse, those_with_role, supported_roles
 
 
 """
-Role is the abstract supertype for all square dance role types.
+    Role
+
+is the abstract supertype for all square dance role types.
 """
 abstract type Role end
 
 
 """
-FormationContextRole is the abstract supertype for square dance roles
-which are defined by a dancer's context in a particular formation.
+FormationContextRole
+
+is the abstract supertype for square dance roles which are defined by
+a dancer's context in a particular formation.
 """
 abstract type FormationContextRole <: Role end
 
@@ -227,4 +231,9 @@ as_text(::Leader) = "Leaders"
 as_text(::Trailer) = "Trailers"
 as_text(::DiamondCenter) = "Centers of your diamonds"
 as_text(::Point) = "Points"
+
+
+those_with_role(f::OneByFourFormation, ::Center) = dancer_states(f.centers)
+those_with_role(f::OneByFourFormation, ::End) =
+    setdiff(dancer_states(f), f.centers())
 
