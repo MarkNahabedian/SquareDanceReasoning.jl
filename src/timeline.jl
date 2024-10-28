@@ -1,5 +1,5 @@
 
-export DancerState, TimeBounds, expand
+export DancerState, dancer, TimeBounds, expand
 export location, direction, square_up
 export DANCER_NEAR_DISTANCE, near, direction
 export Collision, CollisionRule
@@ -53,6 +53,7 @@ DancerState is also the single dancer `SquareDanceFormation`.
     end
 end
 
+dancer(ds::DancerState) = ds.dancer
 
 location(ds::DancerState) = [ds.down, ds.left]
 direction(ds::DancerState) = ds.direction
