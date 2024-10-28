@@ -67,6 +67,7 @@ makedocs(;
     authors="MarkNahabedian <naha@mit.edu> and contributors",
     repo="https://github.com/MarkNahabedian/SquareDanceReasoning.jl/blob/{commit}{path}#{line}",
     sitename="SquareDanceReasoning.jl",
+    warnonly=[ :cross_references ],
     format=Documenter.HTML(;
         prettyurls=false,
         canonical="https://MarkNahabedian.github.io/SquareDanceReasoning.jl",
