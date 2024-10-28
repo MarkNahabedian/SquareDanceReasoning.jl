@@ -1,8 +1,11 @@
 
 @testset "every role has an obverse whose obverse is the role" begin
-    for roletype in subtypes(Role)
+    function walk(roletype)
+        if !isconcretetype(roletype)
+            return
+        end
         if roletype == ObverseRole
-            continue
+            return
         end
         fnc = length(fieldnames(roletype))
         if fnc == 0
@@ -15,6 +18,7 @@
             error("$roletype has an untestable number of fields")
         end
     end
+    walk(Role)
 end
 
 @testset "Test as_text for Roles" begin
