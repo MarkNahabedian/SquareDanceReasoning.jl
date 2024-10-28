@@ -10,10 +10,19 @@ function generate_formation_hierarchy()
          "w") do io
              println(io, "# Hierarchy of Supported Square Dance Formations")
              println(io,
-                     "\nThese are the formations that are currently supported:\n")
+                     "\nThese are the formations that are currently supported, and the roles supported for those formations:\n")
              function walk(f, level)
+                 roles = supported_roles(f)
+                 roletext = if isempty(roles)
+                     ""
+                 else
+                     ": " * join(map(roles) do role
+                                     "`$role`"
+                                 end, ", ")
+                 end
                  println(io, repeat(INDENT, level),
-                         " - [`$f`](@ref)")
+                         " - [`$f`](@ref)",
+                         roletext)
                  for st in sort(subtypes(f); by=string)
                      walk(st, level + 1)
                  end
