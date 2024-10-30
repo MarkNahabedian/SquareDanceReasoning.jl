@@ -7,7 +7,9 @@
     <style>
       
 
-      svg {
+      /* FORMATION_STYLESHEET */
+
+svg {
     background-color: "gray";
 }
 table {
@@ -23,10 +25,51 @@ table {
     margin-left: 8em;
     margin-right: 8em;
 }
+
+#floor {
+    margin-top: 0.3in;
+    margin-bottom: 0.3in;
+    margin-left: 0.3in;
+}
+
 .DirectionDot {
     stroke: black;
     fill: black;
 }
+
+      /* DANCER_SELECTION_STYLESHEET */
+
+@namespace svgns http://www.w3.org/2000/svg;
+
+li.formation {
+    border-width: 2;
+    border-style: none;
+}
+
+.formation:hover {
+    border-style: solid;
+    border-color: blue;
+}
+
+.formation.selected {
+    border-width: 2px;
+    border-style: solid;
+    border-color: yellow;
+}
+
+@keyframes blink-selected-dancer {
+    50% {
+        fill-opacity: 0.1;
+    }
+}
+
+#floor .dancer.selected {
+    animation-name: blink-selected-dancer;
+    animation-duration: 0.7s;
+    animation-fill-mode: none;
+    animation-iteration-count: infinite;
+}
+
 
       
 .couple1swatch {
@@ -66,8 +109,8 @@ table {
             </tr>
             <tbody>
               <tr>
-                <td onclick="select_dancers([&quot;1m&quot;])">1m</td>
-                <td onclick="formation_onclick">Dancer(1, Guy())</td>
+                <td class="formation" onclick="select_dancers(event, [&quot;1m&quot;])">1m</td>
+                <td class="formation" onclick="select_dancers(event, [&quot;1m&quot;])">Dancer(1, Guy())</td>
                 <td>0</td>
                 <td>0//1</td>
                 <td>0.0</td>
@@ -81,8 +124,8 @@ table {
                 </td>
               </tr>
               <tr>
-                <td onclick="select_dancers([&quot;1f&quot;])">1f</td>
-                <td onclick="formation_onclick">Dancer(1, Gal())</td>
+                <td class="formation" onclick="select_dancers(event, [&quot;1f&quot;])">1f</td>
+                <td class="formation" onclick="select_dancers(event, [&quot;1f&quot;])">Dancer(1, Gal())</td>
                 <td>0</td>
                 <td>1//2</td>
                 <td>0.0</td>
@@ -96,8 +139,8 @@ table {
                 </td>
               </tr>
               <tr>
-                <td onclick="select_dancers([&quot;2m&quot;])">2m</td>
-                <td onclick="formation_onclick">Dancer(2, Guy())</td>
+                <td class="formation" onclick="select_dancers(event, [&quot;2m&quot;])">2m</td>
+                <td class="formation" onclick="select_dancers(event, [&quot;2m&quot;])">Dancer(2, Guy())</td>
                 <td>0</td>
                 <td>0//1</td>
                 <td>0.0</td>
@@ -111,8 +154,8 @@ table {
                 </td>
               </tr>
               <tr>
-                <td onclick="select_dancers([&quot;2f&quot;])">2f</td>
-                <td onclick="formation_onclick">Dancer(2, Gal())</td>
+                <td class="formation" onclick="select_dancers(event, [&quot;2f&quot;])">2f</td>
+                <td class="formation" onclick="select_dancers(event, [&quot;2f&quot;])">Dancer(2, Gal())</td>
                 <td>0</td>
                 <td>1//2</td>
                 <td>0.0</td>
@@ -146,32 +189,32 @@ table {
         <li>
           DancerState
           <ul>
-            <li onclick="select_dancers([&quot;1f&quot;])">1f</li>
-            <li onclick="select_dancers([&quot;1m&quot;])">1m</li>
-            <li onclick="select_dancers([&quot;2f&quot;])">2f</li>
-            <li onclick="select_dancers([&quot;2m&quot;])">2m</li>
+            <li class="formation" onclick="select_dancers(event, [&quot;1f&quot;])">1f</li>
+            <li class="formation" onclick="select_dancers(event, [&quot;1m&quot;])">1m</li>
+            <li class="formation" onclick="select_dancers(event, [&quot;2f&quot;])">2f</li>
+            <li class="formation" onclick="select_dancers(event, [&quot;2m&quot;])">2m</li>
           </ul>
         </li>
         <li>
           LHMiniWave
           <ul>
-            <li onclick="select_dancers([&quot;1m&quot;, &quot;1f&quot;])">LHMiniWave-1m-1f</li>
-            <li onclick="select_dancers([&quot;2m&quot;, &quot;2f&quot;])">LHMiniWave-2m-2f</li>
+            <li class="formation" onclick="select_dancers(event, [&quot;1m&quot;, &quot;1f&quot;])">LHMiniWave-1m-1f</li>
+            <li class="formation" onclick="select_dancers(event, [&quot;2m&quot;, &quot;2f&quot;])">LHMiniWave-2m-2f</li>
           </ul>
         </li>
         <li>
           LHWaveOfFour
           <ul>
-            <li onclick="select_dancers([&quot;2m&quot;, &quot;2f&quot;, &quot;1m&quot;, &quot;1f&quot;])">LHWaveOfFour-2m-2f-1m-1f</li>
+            <li class="formation" onclick="select_dancers(event, [&quot;2m&quot;, &quot;2f&quot;, &quot;1m&quot;, &quot;1f&quot;])">LHWaveOfFour-2m-2f-1m-1f</li>
           </ul>
         </li>
         <li>
           RHMiniWave
           <ul>
-            <li onclick="select_dancers([&quot;2m&quot;, &quot;1f&quot;])">RHMiniWave-2m-1f</li>
+            <li class="formation" onclick="select_dancers(event, [&quot;2m&quot;, &quot;1f&quot;])">RHMiniWave-2m-1f</li>
           </ul>
         </li>
       </ul>
     </div>
   </body>
-</html></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.7.0 on <span class="colophon-date" title="Monday 28 October 2024 22:22">Monday 28 October 2024</span>. Using Julia version 1.11.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+</html></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.7.0 on <span class="colophon-date" title="Wednesday 30 October 2024 20:45">Wednesday 30 October 2024</span>. Using Julia version 1.11.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
