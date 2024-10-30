@@ -4,7 +4,7 @@ using XML
 using Colors
 using Printf
 
-export dbgprint
+export dbgprint, write_formation_html_file
 
 # NOTE that for $ string substitution, that is not done with this
 # IOContext and is not compact.
@@ -17,6 +17,8 @@ end
 
 
 const FORMATION_STYLESHEET = """
+/* FORMATION_STYLESHEET */
+
 svg {
     background-color: "gray";
 }
@@ -33,20 +35,82 @@ table {
     margin-left: 8em;
     margin-right: 8em;
 }
+
+#floor {
+    margin-top: 0.3in;
+    margin-bottom: 0.3in;
+    margin-left: 0.3in;
+}
+
 .DirectionDot {
     stroke: black;
     fill: black;
 }
 """
 
+const DANCER_SELECTION_STYLESHEET = """
+/* DANCER_SELECTION_STYLESHEET */
+
+@namespace svgns $SVG_NAMESPACE;
+
+li.formation {
+    border-width: 2;
+    border-style: none;
+}
+
+.formation:hover {
+    border-style: solid;
+    border-color: blue;
+}
+
+.formation.selected {
+    border-width: 2px;
+    border-style: solid;
+    border-color: yellow;
+}
+
+@keyframes blink-selected-dancer {
+    50% {
+        fill-opacity: 0.1;
+    }
+}
+
+#floor .dancer.selected {
+    animation-name: blink-selected-dancer;
+    animation-duration: 0.7s;
+    animation-fill-mode: none;
+    animation-iteration-count: infinite;
+}
+
+"""
+#=
+         border-width: thick/thin;
+
+https://stackoverflow.com/questions/51764992/blink-border-3-times-1-second-per-loop-in-css
+
+https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes
+
+@keyframes selection {
+    from {
+        border-style: solid;
+    }
+    50% {
+        border-style: dashed;
+    }
+}
+
+=#
+
 
 function dancer_states_table(dancer_states, symbol_uri_base)
     dancer_state_row(ds::DancerState) =
         elt("tr",
             elt("td", formation_id_string(ds),
+                "class" => "formation",
                 "onclick" => formation_onclick(ds)),
             elt("td", string(ds.dancer),
-                "onclick" => formation_onclick),
+                "class" => "formation",
+                "onclick" => formation_onclick(ds)),
             elt("td", ds.time),
             elt("td", ds.direction),
             elt("td", ds.down),
@@ -57,6 +121,7 @@ function dancer_states_table(dancer_states, symbol_uri_base)
                 "\u2588\u2588\u2588")
             =#
             elt("td", formation_svg(ds, symbol_uri_base;
+                                    id = nothing,
                                     margin=COUPLE_DISTANCE/2))
             )
     elt("div", 
@@ -85,11 +150,11 @@ formation_id_string(ds::DancerState) =
 
 formation_id_string(f::Collision) =
     *(string(typeof(f)), "-",
-      join(map(formation_id_string, dancer_states(f)), "-"))
+      join(map(formation_id_string, f()), "-"))
 
 formation_id_string(f::SquareDanceFormation) =
     *(string(typeof(f)), "-",
-      join(map(formation_id_string, dancer_states(f)), "-"))
+      join(map(formation_id_string, f()), "-"))
 
 ### NOTE THAT SVG DANCERS DON'T HAVE IDS YET!!!
 
@@ -99,7 +164,7 @@ function formation_onclick(f)
         join(map(sid -> "\"$sid\"", selection_ids),
              ", ") *
         "]"
-    """select_dancers($selection_ids_js)"""
+    """select_dancers(event, $selection_ids_js)"""
 end
 
 function dancer_formations_html(kb::ReteRootNode)
@@ -123,6 +188,7 @@ function dancer_formations_html(kb::ReteRootNode)
                       for f in sort(formations_by_type[key];
                                     by = formation_id_string)
                           a(elt("li",
+                                "class" => "formation",
                                 formation_id_string(f),
                                 "onclick" => formation_onclick(f)))
                       end
@@ -181,6 +247,7 @@ function write_formation_html_file(title, output_path, kb::ReteRootNode)
                     "src" => "$selection_script"),
                 elt("style", "\n",
                     FORMATION_STYLESHEET,
+                    DANCER_SELECTION_STYLESHEET,
                     dancer_colors_css(ceil(length(dancer_states) / 2)),
                     "\n")),
             elt("body",
