@@ -83,23 +83,6 @@ li.formation {
 }
 
 """
-#=
-         border-width: thick/thin;
-
-https://stackoverflow.com/questions/51764992/blink-border-3-times-1-second-per-loop-in-css
-
-https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes
-
-@keyframes selection {
-    from {
-        border-style: solid;
-    }
-    50% {
-        border-style: dashed;
-    }
-}
-
-=#
 
 
 function dancer_states_table(dancer_states, symbol_uri_base)
