@@ -6,7 +6,7 @@ function dancer_colors_css(number_of_couples)
             map(incr * (0:(number_of_couples - 1))) do hue
                 # I couldn't get CSS hsl() colors to work properly in
                 # Chrome, so convert to RGB:
-                hsi = HSI(hue, 1.0, 1.)
+                hsi = HSI(hue, 0.7, 0.5)
                 rgb = convert(RGB, hsi)
                 fix(x) = round(255 * x)
                 @sprintf("rgb(%d %d %d)",
