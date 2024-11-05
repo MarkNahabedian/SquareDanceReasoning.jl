@@ -150,19 +150,7 @@ function formation_onclick(f)
     """select_dancers(event, $selection_ids_js)"""
 end
 
-function dancer_formations_html(kb::ReteRootNode)
-    formations_by_type = Dict{Type, Vector}()
-    askc(kb, Union{SquareDanceFormation,
-                   Collision}) do fact
-        if !haskey(formations_by_type, typeof(fact))
-            formations_by_type[typeof(fact)] = []
-        end
-        # Some formations are stored in memory nodes for their
-        # supertypes as well.  Avoid duplicates:
-        if !in(fact, formations_by_type[typeof(fact)])
-             push!(formations_by_type[typeof(fact)], fact)
-        end
-    end
+function dancer_formations_html(formations_by_type::Dict{Type, Vector})
     ks = sort(collect(keys(formations_by_type)); by = string)
     elt("ul") do a
         for key in ks
@@ -204,16 +192,57 @@ function formation_debug_html(source,   # ::LineNumberNode,
                               testset,  # Test.AbstractTestSet
                               output_path,
                               kb::ReteRootNode)
-    write_formation_html_file(testset.description, output_path, kb)
+    formations_by_type = Dict{Type, Vector}()
+    askc(kb, Union{SquareDanceFormation,
+                   Collision}) do fact
+        if !haskey(formations_by_type, typeof(fact))
+            formations_by_type[typeof(fact)] = []
+        end
+        # Some formations are stored in memory nodes for their
+        # supertypes as well.  Avoid duplicates:
+        if !in(fact, formations_by_type[typeof(fact)])
+             push!(formations_by_type[typeof(fact)], fact)
+        end
+    end
+    formation_debug_html(source,
+                         testset,
+                         output_path,
+                         formations_by_type)
+end    
+
+function formation_debug_html(source,   # ::LineNumberNode,
+                              testset,  # Test.AbstractTestSet
+                              output_path,
+                              formations::Vector{<:SquareDanceFormation})
+    formations_by_type = Dict{Type, Vector}()
+    for f in formations
+        if !haskey(formations_by_type, typeof(f))
+            formations_by_type[typeof(f)] = []
+        end
+        push!(formations_by_type[typeof(f)], f)
+    end
+    formation_debug_html(source,
+                         testset,
+                         output_path,
+                         formations_by_type)    
+end
+
+function formation_debug_html(source,   # ::LineNumberNode,
+                              testset,  # Test.AbstractTestSet
+                              output_path,
+                              formations::Dict{Type, Vector})
+    write_formation_html_file(testset.description, output_path,
+                              formations)
 end
 
 
 # Write an HTML file that describes the DancerStates and concluded
 # formations
-function write_formation_html_file(title, output_path, kb::ReteRootNode)
+function write_formation_html_file(title, output_path,
+                                   formations::Dict{Type, Vector})
     symbol_uri_base = collateral_file_relpath("dancer_symbols.svg",
                                               output_path)
-    dancer_states = askc(Collector{DancerState}(), kb, DancerState)
+    dancer_states = formations[DancerState]
     bounds = bump_out(Bounds(dancer_states))
     selection_script = collateral_file_relpath("dancer_selection.js",
                                                output_path)
@@ -249,7 +278,7 @@ function write_formation_html_file(title, output_path, kb::ReteRootNode)
                             end...))),
                 elt("div",
                     elt("h2", "Inferred Formations"),
-                    dancer_formations_html(kb))
+                    dancer_formations_html(formations))
                 ))
     XML.write(output_path, doc)
 end
