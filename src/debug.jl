@@ -240,6 +240,12 @@ end
 # formations
 function write_formation_html_file(title, output_path,
                                    formations::Dict{Type, Vector})
+    let
+        collisions = find_collisions(DancerState[formations[DancerState]...])
+        if !isempty(collisions)
+            formations[Collision] = collisions
+        end
+    end
     symbol_uri_base = collateral_file_relpath("dancer_symbols.svg",
                                               output_path)
     dancer_states = formations[DancerState]
@@ -278,6 +284,8 @@ function write_formation_html_file(title, output_path,
                             end...))),
                 elt("div",
                     elt("h2", "Inferred Formations"),
+                    # Should say if KB was available to inferr
+                    # fromatiosn from.
                     dancer_formations_html(formations))
                 ))
     XML.write(output_path, doc)
