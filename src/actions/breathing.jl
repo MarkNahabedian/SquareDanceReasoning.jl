@@ -11,7 +11,7 @@ Find the `DancerState`s that have collided with each other.
 function find_collisions(dss::Vector{DancerState})::Vector{Collision}
     found = Vector{Collision}()
     for i in 1:(length(dss) - 1)
-        for j in i:length(dss)
+        for j in (i+1):length(dss)
             a = dss[i]
             b = dss[j]
             if a == b    # Why would this be?
@@ -58,11 +58,15 @@ as adjusted by the breathing algorithm without creating new
 `DancerState`s.
 """
 struct Respirator
+    flagpole
     dancers::Vector{Dancer}
     d2ds::Dict{Dancer, DancerState}
     accumulated_movement::Dict{Dancer, Vector}
+    playmates::Vector{<:TwoDancerFormation}
 
-    function Respirator(dss::Vector{DancerState})
+    function Respirator(dss::Vector{DancerState},
+                        playmates::Vector{<:TwoDancerFormation})
+        flagpole = center(dss)
         dancers = Vector{Dancer}()
         d2ds = Dict{Dancer, DancerState}()
         accumulated_movement = Dict{Dancer, Vector}()
@@ -71,7 +75,8 @@ struct Respirator
             d2ds[ds.dancer] = ds
             accumulated_movement[ds.dancer] = [0, 0]
         end
-        new(dancers, d2ds, accumulated_movement)
+        dancers = sort(dancers)
+        new(flagpole, dancers, d2ds, accumulated_movement, playmates)
     end
 end
 
@@ -92,6 +97,24 @@ end
 
 
 """
+    move(r::Respirator, d::Dancer, down, left)
+
+Applies the relative `down` and `left` motion to the `Dancer`.
+"""
+function move(r::Respirator, d::Dancer, down, left)
+    r.accumulated_movement[d] += [down, left]
+end
+
+function playmates_center(rsp::Respirator, d::Dancer)
+    playmates = only(filter(rsp.playmates) do f
+                         any(ds -> d == ds.dancer,
+                             dancer_states(f))
+                     end)
+    center(playmates)
+end
+
+
+"""
     collisions(::Respirator)
 
 Returns an iterator over the current collisions in the `Respirator`.
@@ -105,18 +128,108 @@ Returns an iterator over the current collisions in the `Respirator`.
             if distance(a, b) < DANCER_COLLISION_DISTANCE
                 collision = [ rsp.dancers[i],
                               rsp.dancers[j] ]
-                @info("breathing collision",
-                      collision, a, b)
+                @info("breathing collisions",
+                      collision = collision,
+                      location1 = a,
+                      location2 = b)
                 @yield collision
             end
         end
     end
-    @yield nothing
 end
 
 
 """
-    breathe(playmates::Vector{TwoDancerFormation}, everyone::Vector{DancerState})::Vector{DancerState}
+    motion_for_collision(rsp::Respirator, collision, movement::Dict{Dancer, Vector})
+
+Compute the motions required to resolve the specified collision and
+add it to `movement`.  Does not apply those motions yet.  `movement`
+is a Dict mapping Dancer to motion vector.
+"""
+function motion_for_collision(rsp::Respirator, collision,
+                              movement::Dict{Dancer, Vector})
+    (d1, d2) = collision
+#    @assert !(d1 in keys(movement))
+#    @assert !(d2 in keys(movement))
+    # We arrange that d1 is the dancer that should be further from
+    # flagpole.  We use the center of the dancer and its playmate
+    # because d1 and d2 might have moved past each other when
+    # colliding.
+    if (distance(playmates_center(rsp, d2), rsp.flagpole) >
+        distance(playmates_center(rsp, d1), rsp.flagpole))
+        (d1, d2) = (d2, d1)
+    end
+    # We believe d1 is the dancer that should be moved.
+    @info("motion_for_collision: playmate for", d1, playmate(d1, rsp.playmates))
+    @info("motion_for_collision: playmate for", d2, playmate(d2, rsp.playmates))
+    @assert current_location(rsp, playmate(d1, rsp.playmates)) !=
+        current_location(rsp, d1)
+    ctr = center([current_location(rsp, d1),
+                  current_location(rsp, d2)])
+    move_d1_u = normalize(playmates_center(rsp, d1)
+                          - rsp.flagpole)
+    move_d1 = move_d1_u * COUPLE_DISTANCE
+    overlap = (current_location(rsp, d2)
+               - current_location(rsp, d1))
+    overlap_fix = dot(current_location(rsp, d2)
+                      - current_location(rsp, d1),
+                      move_d1_u) * move_d1_u
+    move_d1 += overlap_fix    
+    @info("motion_for_collision:", overlap, overlap_fix, move_d1)
+#    @assert !haskey(movement, d1)
+    if distance(ctr, rsp.flagpole) < 0.1 * COUPLE_DISTANCE
+        # Collision near flagpole, move both of the colliders, and
+        # their playmates
+        let
+            @assert !haskey(movement, d2)
+            m = move_d1 / 2
+            movement[d1] = m
+            movement[d2] = - m
+            movement[playmate(d1, rsp.playmates)] = m
+            movement[playmate(d2, rsp.playmates)] = - m
+        end
+    else
+        # The center of the collision is noticably different from the
+        # flagpole center, so just move the further playmates:
+        movement[d1] = move_d1
+        movement[playmate(d1, rsp.playmates)] = move_d1
+    end
+    @info("motion_for_collision:", movement)
+    movement    
+end
+
+
+"""
+    apply_motion(rsp::Respirator, movement::Dict{Dancer, Vector})
+
+Update `rsp` to reflect the Dancer movement specified in `movement`.
+"""
+function apply_motion(rsp::Respirator, movement::Dict{Dancer, Vector})
+    for (dancer, motion) in movement
+        move(rsp, dancer, motion...)
+    end
+    @info("breathing apply_motion",
+          current_locations = map(rsp.dancers) do dancer
+              dancer => current_location(rsp, dancer)
+          end)
+end
+
+
+"""
+    resultingDancerStates(rsp::Respirator)
+
+Returns new `DancerState`s which have had the computed breathing
+applied to them.
+"""
+resultingDancerStates(rsp::Respirator) =
+    map(values(rts.d2ds)) do ds
+        DancerState(ds, ds.time, ds.direction,
+                    current_location(rsp, ds.dancer)...)
+    end
+
+
+"""
+    breathe(playmates::Vector{<:TwoDancerFormation}, everyone::Vector{DancerState})::Vector{DancerState}
 
 Moves the dancers apart such that those that have collided no longer
 overlap.
@@ -126,7 +239,7 @@ in such that playmates are not separated.
 
 `everyone` includes all DancerStates that are to be affected.
 """
-function breathe(playmates::Vector{TwoDancerFormation},
+function breathe(playmates::Vector{<:TwoDancerFormation},
                  everyone::Vector{DancerState}
                  )::Vector{DancerState}
     @info("breathe", playmates, everyone)
@@ -142,88 +255,22 @@ function breathe(playmates::Vector{TwoDancerFormation},
             error("breathe: playmates too close: $too_close.  Fix the instigating square dance call.")
         end
     end
-    rsp = Respirator(everyone)
-
+    rsp = Respirator(everyone, playmates)
     flagpole = center(map(location, everyone))
     limit = 20
-    while (begin
-               collision = first(collisions(rsp))
-               collision != nothing
-           end)
+    while true
         if limit <= 0
-            error("limit exceeded")
+            error("Breating iteration limit exceeded.")
         end
         limit -= 1
-        (d1, d2) = collision
-        # We arrange that d1 is the dancer whose playmate is further
-        # from flagpole.  We use their playmates because d1 and d2
-        # might have moved past each other when colliding.
-        if playmate(d2, playmates) == nothing
-            error("no playmate for $d2")
+        movement = Dict{Dancer, Vector}()
+        for collision in collisions(rsp)
+            motion_for_collision(rsp, collision, movement)
         end
-        if playmate(d1, playmates) == nothing
-            error("no playmate for $d1")
+        if isempty(movement)
+            break
         end
-        if (distance(current_location(rsp, playmate(d2, playmates)),
-                     flagpole) >
-                distance(current_location(rsp, playmate(d1, playmates)),
-                         flagpole))
-            (d1, d2) = (d2, d1)
-        end
-        # d1's playmate is further from the flagpole center than d2's
-        # playmate.
-        @info("breathe: playmate for", d1, playmate(d1, playmates))
-        @info("breathe: playmate for", d2, playmate(d2, playmates))
-        @assert current_location(rsp, playmate(d1, playmates)) !=
-            current_location(rsp, d1)
-        ctr = center([current_location(rsp, d1),
-                      current_location(rsp, d2)])
-        pm = playmate(d1, playmates)
-        # What if we should move both d1 and d2?  This would be the
-        # case if the line from flagpole to ctr is perpendicular to
-        # the direction of motion.
-        center_axis = normalize(ctr - flagpole)
-        playmate_axis =
-            normalize((current_location(rsp, playmate(d1, playmates))
-                       - current_location(rsp, playmate(d2, playmates))))
-        if abs(dot(center_axis, playmate_axis)) < 0.01
-        else
-        end
-        # Move d1 and playmate away from flagpole in the direction of
-        # midpoint between d1 and his playmate:
-        move_d1_u = normalize!(center([current_location(rsp, d1), 
-                                       current_location(rsp, pm)])
-                               - flagpole)
-        move_d1 = move_d1_u * COUPLE_DISTANCE
-        @info("breathe: collision center", ctr, move_d1)
-        # Consider amount of collision overlap:
-        move_d1 += dot(current_location(rsp, d2) - current_location(rsp, d1),
-                       move_d1_u) * move_d1_u
-        moved = []
-        for d in [d1, pm]   # dancers
-            # Never move d2 -- it might be at the same location as d1:
-            if d == d2
-                continue
-            end
-            # Only move the dancers who are in the move_d1 direction
-            # from ctr:
-            if dot(current_location(rsp, d) - ctr, move_d1) < 0
-                continue
-            end
-            # Make sure that the magnitude is increasing:
-            mag2(v) = sum(x -> x^2, v)
-            m1 = mag2(rsp.accumulated_movement[d])
-            @info("Breathe: moving $d by", move_d1)
-            rsp.accumulated_movement[d] += move_d1
-            push!(moved, d)
-            m2 = mag2(rsp.accumulated_movement[d])
-            if m2 < m1
-                error("movement decreased for $d in breathing")
-            end
-        end
-        if isempty(moved)
-            error("no dancers moved")
-        end
+        apply_motion(rsp, movement)
     end
     result = map(everyone) do ds
         DancerState(ds, ds.time, ds.direction,

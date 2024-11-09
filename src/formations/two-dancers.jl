@@ -239,7 +239,7 @@ formations: [`Couple`](@ref), [`FaceToFace`](@ref),
 # playmate is used by breathe.
 
 function playmate(ds::Dancer,
-                  v::Vector{TwoDancerFormation})::Union{Nothing, Dancer}
+                  v::Vector{<:TwoDancerFormation})::Union{Nothing, Dancer}
     for f in v
         pm = playmate(ds, f)
         if pm != nothing
