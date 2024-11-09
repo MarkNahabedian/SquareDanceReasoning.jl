@@ -14,7 +14,7 @@ function safe_logger(filename)
     # for Symbol keys and the keys in ENV are Strings, so isdefined
     # was always returning false.
     if haskey(ENV, "GITHUB_ACTION")
-        SimpleLogger()
+        NullLogger()    # SimpleLogger()
     else
         FileLogger(joinpath( @__DIR__,
                              "src", "Showcase",
@@ -47,8 +47,6 @@ let
     end
 end
 
-
-#=
 let
     filename = "SquareThru_from_SquaredSet"
     start_time = time()
@@ -75,7 +73,6 @@ let
     @info "Elapsed time: $(time() - start_time) seconds."
     end
 end
-=#
 
 
 # This sould be the last expression in this file.
