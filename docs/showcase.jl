@@ -57,8 +57,9 @@ let
         receive.([kb], square_up(square))
         write_formation_html_file(
             "Squared Set",
-            abspath(joinpath(@__DIR__,
-                             "src/formation_drawings/squared_set.html")),
+            joinpath(@__DIR__,
+                     "src", "formation_drawings",
+                     "squared_set.html"),
             kb)
         dbgctx = @CallEngineDebugContext("src/Showcase",
                                          "SquareThru_from_SquaredSet")
