@@ -5,6 +5,7 @@
 
 export _Rest, _GenderedRoll, StepToAWave, _UnStepToAWave,
     _BackToAWave
+export _FaceOriginalPartner, _FaceOriginalCorner
 
 
 """
@@ -28,6 +29,113 @@ can_do_from(::_Rest, ::DancerState) = 1
 
 function perform(c::_Rest, ds::DancerState, kb::ReteRootNode)
     DancerState(ds, ds.time + c.time, ds.direction,
+                ds.down, ds.left)
+end
+
+
+"""
+    _FaceOriginalPartner(; role=Everyone(), time=0)
+
+Primitive square dance call which causes a dancer to face its
+original partner.
+
+Timing: as specified in the parameter.
+"""
+@with_kw_noshow struct _FaceOriginalPartner <: SquareDanceCall
+    role::Role = Everyone()
+    # This call should take negligible time as it can be performed as
+    # part of the previous action, but there's a test in the call
+    # engine that a call has elapsed time.  We eventually need a
+    # workaround, perhaps a way of the call engine to ask the call for
+    # its duration.
+    time::Int = 1
+end
+
+as_text(c::_FaceOriginalPartner) =
+    "$(as_text(c.role)) face your original partner."
+
+can_do_from(::_FaceOriginalPartner, ::DancerState) = 1
+
+function perform(c::_FaceOriginalPartner, ds::DancerState, kb::ReteRootNode)
+    square = let
+        found = nothing
+        askc(kb, SDSquare) do sdsquare
+            if ds.dancer in sdsquare
+                if found == nothing
+                    found = sdsquare
+                else
+                    error("$(ds.dancer) in more than one SDSquare")
+                end
+            end
+        end
+        found
+    end
+    partner = nothing
+    askc(kb, DancerState) do ds1
+        if ((ds1.dancer in square) &&
+            (ds1.dancer.couple_number == ds.dancer.couple_number) &&
+            (ds1.dancer.gender == opposite(ds.dancer.gender)))
+            if partner == nothing
+                partner = ds1
+            else
+                error("more than one partner for $ds")
+            end
+        end
+    end
+    DancerState(ds, ds.time + c.time,
+                direction(ds, partner),
+                ds.down, ds.left)
+end
+
+
+"""
+    _FaceOriginalCorner(; role=Everyone(), time=0)
+
+Primitive square dance call which causes a dancer to face its
+original corner.
+
+Timing: as specified in the parameter.
+"""
+@with_kw_noshow struct _FaceOriginalCorner <: SquareDanceCall
+    role::Role = Everyone()
+    time::Int = 1
+end
+
+as_text(c::_FaceOriginalCorner) =
+    "$(as_text(c.role)) face your original corner."
+
+can_do_from(::_FaceOriginalCorner, ::DancerState) = 1
+
+function perform(c::_FaceOriginalCorner, ds::DancerState, kb::ReteRootNode)
+    square = let
+        found = nothing
+        askc(kb, SDSquare) do sdsquare
+            if ds.dancer in sdsquare
+                if found == nothing
+                    found = sdsquare
+                else
+                    error("$(ds.dancer) in more than one SDSquare")
+                end
+            end
+        end
+        found
+    end
+    ncouples = length(square) / 2
+    ccn = mod1(corner_couple_number(ds), ncouples)
+    corner = nothing
+    askc(kb, DancerState) do ds1
+        if ((ds1.dancer in square) &&
+            (ds1.dancer.couple_number == ccn) &&
+            (ds1.dancer.gender == opposite(ds.dancer.gender)))
+            if corner == nothing
+                corner = ds1
+            else
+                error("more than one corner for $ds1")
+            end
+        end
+    end
+    DancerState(ds, ds.time + c.time,
+                direction(ds, corner),
                 ds.down, ds.left)
 end
 

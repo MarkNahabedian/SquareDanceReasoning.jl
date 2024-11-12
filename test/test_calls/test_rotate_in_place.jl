@@ -216,3 +216,70 @@ end
     end
 end
 
+@testset "test _FaceOriginalPartner" begin
+    log_to_file(@__DIR__, log_file_name_for_testset(Test.get_testset())) do
+        logger = TestLogger()
+        kb = make_kb()
+        square = make_square(4)
+        receive(kb, square)
+        dss = square_up(square)
+        receive.([kb], dss)
+        @debug_formations(kb)
+        kb = do_call(kb, _FaceOriginalPartner())
+        @debug_formations(kb)
+        couples = Dict{Int, Vector{DancerState}}()
+        askc(kb, DancerState) do ds
+            cn = ds.dancer.couple_number
+            if !haskey(couples, cn)
+                couples[cn] = []
+            end
+            push!(couples[cn], ds)
+        end
+        for (cn, dss) in couples
+            (ds1, ds2) = dss
+            @test ds1.direction == opposite(ds2.direction)
+            @test ds1.down == ds1.previous.down
+            @test ds1.left == ds1.previous.left
+            @test ds2.down == ds2.previous.down
+            @test ds2.left == ds2.previous.left
+        end
+    end
+end
+
+@testset "test _FaceOriginalCorner" begin
+    log_to_file(@__DIR__, log_file_name_for_testset(Test.get_testset())) do
+        logger = TestLogger()
+        kb = make_kb()
+        square = make_square(4)
+        receive(kb, square)
+        dss = square_up(square)
+        receive.([kb], dss)
+        @debug_formations(kb)
+        kb = do_call(kb, _FaceOriginalCorner())
+        @debug_formations(kb)
+        # corners is keyed by the Guy's couple number
+        corners = Dict{Int, Vector{DancerState}}()
+        askc(kb, DancerState) do ds
+            if ds.dancer.gender isa Guy
+                gcn = ds.dancer.couple_number
+            elseif ds.dancer.gender isa Gal
+                gcn = mod1(corner_couple_number(ds.dancer), 4)
+            else
+                error("Unsupported gender")
+            end
+            if !haskey(corners, gcn)
+                corners[gcn] = []
+            end
+            push!(corners[gcn], ds)
+        end
+        for (cn, dss) in corners
+            (ds1, ds2) = dss
+            @test ds1.direction == opposite(ds2.direction)
+            @test ds1.down == ds1.previous.down
+            @test ds1.left == ds1.previous.left
+            @test ds2.down == ds2.previous.down
+            @test ds2.left == ds2.previous.left
+        end
+    end
+end
+

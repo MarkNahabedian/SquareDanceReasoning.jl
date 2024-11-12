@@ -313,3 +313,6 @@ function earliest(ds::DancerState)
     ds
 end
 
+
+corner_couple_number(ds::DancerState) = corner_couple_number(ds.dancer)
+

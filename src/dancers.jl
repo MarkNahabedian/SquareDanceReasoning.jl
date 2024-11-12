@@ -3,6 +3,7 @@
 export Gender, Guy, Gal, Unspecified, opposite
 export Dancer, couple_number
 export is_original_head, is_original_side
+export corner_couple_number
 
 
 """
@@ -125,4 +126,19 @@ is_original_head(d::Dancer)::Bool = isodd(d.couple_number)
 returns true if the dancer was originally in a side position.
 """
 is_original_side(d::Dancer)::Bool = iseven(d.couple_number)
+
+
+"""
+    corner_couple_number(::Dancer)
+
+Returns the couple number of the dancer's corner.  Since this function
+has no way of knowing the number of daners in the "square", the value
+returned nmight require numeric rapping.
+"""
+corner_couple_number(d::Dancer) =
+    return d.couple_number + (
+        d.gender isa Guy ? -1 :
+            d.gender isa Gal ? 1 :
+            error("Unsupported gender")
+    )
 
