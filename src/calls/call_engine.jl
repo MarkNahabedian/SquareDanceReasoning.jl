@@ -13,7 +13,7 @@ function restricted_to(call::SquareDanceCall)::Role
     if hasfield(typeof(call), :role)
         call.role
     else
-        error("Each subtype of  SquareDanceCall must have either a `role` field or a `restricted_to` method.")
+        error("Each subtype of  SquareDanceCall must have either a `role` field or a `restricted_to` method: $(typeof(call))")
     end
 end
 
@@ -108,6 +108,8 @@ function do_schedule(sched::CallSchedule, kb::ReteRootNode;
                     push!(playmates, f)
                 end
                 for ds in dancer_states(f)
+                    # This assertion assumes that there are no calls
+                    # that require no elapsed time.
                     # Ensure that the dancers that performed the call
                     # experience the passage of time:
                     @assert(ds.time > newest_dancer_states[ds.dancer].time,
@@ -264,6 +266,7 @@ function get_call_options(call::SquareDanceCall,
         @info("get_call_options formations", formations)
         error("No options for $call")
     end
+    @info("get_call_options initial options", options)
     # Restrict by role:
     options = filter!(options) do cdc
         # Every dancer in the formation satisfies the role
@@ -271,6 +274,7 @@ function get_call_options(call::SquareDanceCall,
         length(those_with_role(cdc.formation, restricted_to(call))) ==
             length(dancer_states(cdc.formation))
     end
+    @info("get_call_options after role restriction", options)
     # Find highest preference option for each dancer:
     preferred = Dict{DancerState, Vector{CanDoCall}}()
     for opt in options
@@ -287,6 +291,7 @@ function get_call_options(call::SquareDanceCall,
             end
         end
     end
+    @info("get_call_options preferred", preferred)
     # Consolidate the options, making sure that there are no two
     # options that concern the same dancer.  We map each Dancer to
     # each CanDoCall whose formation contains that dancer.
