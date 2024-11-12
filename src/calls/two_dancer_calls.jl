@@ -1,14 +1,11 @@
-export StepThru, StepToAWave, PassThru, PullBy, Dosado, Hinge, Trade
+export StepThru, StepToAWave, PassThru, PullBy, Dosado,
+    Hinge, PartnerHinge, Trade
 
 #= Some two dancer calls to implement:
 
 HalfSashay, RollawayWithAHalfSashay
-Primitive FaceYourPartner
-primitive FaceYourCorner
 SlideThru
 StarThru expands to SlideThru
-PartnerTrade
-Primitive FinishPartnerTrade
 Run
 BoxTheGnat espands to StepToAWave, revolve around the your center -1/4, AndRoll
 =#
@@ -155,7 +152,7 @@ end
 function expand_parts(c::Dosado, mw::MiniWave)
     dancers = map(ds -> ds.dancer, dancer_states(mw))
     [
-        # The timing budget is at leat 6.  Where should we spread out
+        # The timing budget is at least 6.  Where should we spread out
         # the extra time?
         (0, StepThru(role = DesignatedDancers(dancers))),
         (1, _BackToAWave(role = DesignatedDancers(dancers),
@@ -176,11 +173,10 @@ Timing: CallerLab: 2.
     role::Role = Everyone()
     # Taminations says timing is 2, but for Trade from a MiniWave the
     # total timing is 3 rather than 4.
-    time::Int = 2
+    time = 2
 end
 
 can_do_from(::Hinge, ::MiniWave) = 1
-can_do_from(::Hinge, ::Couple) = 1
 
 function perform(c::Hinge, mw::MiniWave, kb::ReteRootNode)
     c = center(mw)
@@ -196,7 +192,23 @@ function perform(c::Hinge, mw::MiniWave, kb::ReteRootNode)
     r
 end
 
-function perform(c::Hinge, couple::Couple, kb::ReteRootNode)
+
+"""
+    PartnerHinge(; role=Everyone(), tile=2)
+
+CallerLab Advanced-1 call.
+
+Timing: CallerLab: 2.
+"""
+@with_kw_noshow struct PartnerHinge <: SquareDanceCall
+    role::Role = Everyone()
+    # Taminations says timing is 2.
+    time = 2
+end
+
+can_do_from(::PartnerHinge, ::Couple) = 1
+
+function perform(c::PartnerHinge, couple::Couple, kb::ReteRootNode)
     c = center(couple)
     cpl = RHMiniWave(let
                          dir = couple.beau.direction - 1//4
@@ -211,5 +223,84 @@ function perform(c::Hinge, couple::Couple, kb::ReteRootNode)
                                  couple.belle.direction + 1//4,
                                  c...))
     cpl
+end
+
+
+"""
+    Trade(; role=Everyone(), tile=2)
+
+CallerLab Basic call.
+
+Timing: CallerLab: MiniWave: 3, Couple: 4
+"""
+@with_kw_noshow struct Trade <: SquareDanceCall
+    role::Role = Everyone()
+    # Taminations says timing is 2.
+    time = 4
+end
+
+# What about "ends trade"?
+
+can_do_from(::Trade, ::Couple) = 1
+can_do_from(::Trade, ::MiniWave) = 1
+
+function expand_parts(c::Trade, mw::MiniWave)
+    dancers = map(ds -> ds.dancer, dancer_states(mw))
+    [
+        (0, Hinge(; role=DesignatedDancers(dancers),
+                  time=1.5)),
+        (1.5, Hinge(; role=DesignatedDancers(dancers),
+                    time=1.5))
+    ]
+end
+
+function expand_parts(c::Trade, cpl::Couple)
+    dancers = map(ds -> ds.dancer, dancer_states(cpl))
+    [
+        (0, PartnerHinge(; role=DesignatedDancers(dancers),
+                         time=2)),
+        (2, _FinishTrade(;
+                         original_beau= cpl.beau,
+                         original_belle=cpl.belle,
+                         time=2))
+    ]
+end
+
+
+"""
+    _FinishTrade(; role=Everyone, time=2)
+
+a primitive call that represents the second half of
+[`Trade`](@ref) from `[Couple`](@ref).
+"""
+@with_kw_noshow struct _FinishTrade <: SquareDanceCall
+    original_beau::DancerState
+    original_belle::DancerState
+    # Taminations says that timing for Trade from Couples is 4 and
+    # timing for PartnerHinge is 2, leaving 2 for _FinishTrade.
+    time = 2
+end
+
+can_do_from(::_FinishTrade, ::RHMiniWave) = 1
+
+restricted_to(call::_FinishTrade) =
+    DesignatedDancers([ call.original_beau.dancer,
+                        call.original_belle.dancer ])
+
+function perform(c::_FinishTrade, mw::RHMiniWave, kb::ReteRootNode)
+    beau = only(filter(dancer_states(mw)) do ds
+                    ds.dancer == c.original_beau.dancer
+                end)
+    belle = only(filter(dancer_states(mw)) do ds
+                     ds.dancer == c.original_belle.dancer
+                 end)
+    new_direction = c.original_beau.direction + 1//2
+    Couple(
+        DancerState(beau, beau.time + c.time,
+                    new_direction,
+                    location(c.original_belle)...),
+        DancerState(belle, belle.time + c.time,
+                    new_direction,
+                    location(c.original_beau)...))
 end
 
