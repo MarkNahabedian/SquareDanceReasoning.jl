@@ -7,7 +7,7 @@ export OriginalPartnerRule, OriginalPartners
 
 SDSquare represents the dancers in a square.
 
-`make_square(number_of_dancers)` will return an `SDSquare`.
+`make_square(number_of_couples)` will return an `SDSquare`.
 
 SDSquare is a fact that can be asserted to the knowledge base to
 inform it that the dancers form a square.
