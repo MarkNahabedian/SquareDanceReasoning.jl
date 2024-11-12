@@ -223,6 +223,7 @@ function history_for_animation(ds)
             push!(hist, ds1)
         end
     end
+    hist
 end
 
 function animate(method::PureSVGAnimation,
