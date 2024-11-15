@@ -187,6 +187,7 @@ Timing: 2.
 @with_kw_noshow struct StepToAWave <: SquareDanceCall
     role::Role = Everyone()
     handedness::Union{RightHanded, LeftHanded} = RightHanded()
+    time = 2
 end
 
 descirption(c::StepToAWave) = "$(c.role) Step To a Wave"

@@ -92,3 +92,60 @@ end
     end
 end
 
+@testset "test SlideThru" begin
+    log_to_file(@__DIR__, log_file_name_for_testset(Test.get_testset())) do
+        square = make_square(3)
+        kb = make_kb()
+        receive(kb, square)
+        grid = grid_arrangement(square.dancers,
+                                [ 1 2 0 0 0 0;
+                                  0 0 3 5 0 0;
+                                  0 0 0 0 4 6 ],
+                                [ "→←    ",
+                                  "  →←  ",
+                                  "    →←" ])
+        receive.([kb], grid)
+        # 1, 2 => Couple,
+        # 3, 5 => RHMiniWave,
+        # 4, 6 => LHMiniWave
+        @debug_formations(kb)
+        kb = do_call(kb, SlideThru())
+        @debug_formations(kb)
+        cpl = only(askc(Collector{Couple}(), kb, Couple))
+        rhw = only(askc(Collector{RHMiniWave}(), kb, RHMiniWave))
+        lhw = only(askc(Collector{LHMiniWave}(), kb, LHMiniWave))
+        @test cpl.beau.dancer == square[1]
+        @test cpl.belle.dancer == square[2]
+        @test rhw.a.dancer == square[3]
+        @test rhw.b.dancer == square[5]
+        @test lhw.a.dancer == square[6]
+        @test lhw.b.dancer == square[4]
+    end
+end
+
+@testset "test StarThru" begin
+    log_to_file(@__DIR__, log_file_name_for_testset(Test.get_testset())) do
+        square = make_square(3)
+        kb = make_kb()
+        receive(kb, square)
+        grid = grid_arrangement(square.dancers,
+                                [ 1 2 0 0 0 0;
+                                  0 0 3 5 0 0;
+                                  0 0 0 0 4 6 ],
+                                [ "→←    ",
+                                  "  →←  ",
+                                  "    →←" ])
+        receive.([kb], grid)
+        # 1, 2 => Couple,
+        # 3, 5 => FaceToFace (can't do)
+        # 4, 6 => FaceToFace (can't do)
+        @debug_formations(kb)
+        kb = do_call(kb, StarThru())
+        @debug_formations(kb)
+        cpl = only(askc(Collector{Couple}(), kb, Couple))
+        @test 2 == askc(Counter(), kb, FaceToFace)
+        @test cpl.beau.dancer == square[1]
+        @test cpl.belle.dancer == square[2]
+    end
+end
+

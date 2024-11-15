@@ -1,11 +1,10 @@
 export StepThru, StepToAWave, PassThru, PullBy, Dosado,
-    Hinge, PartnerHinge, Trade
+    Hinge, PartnerHinge, Trade, SlideThru, StarThru
 
 #= Some two dancer calls to implement:
 
+CourtesyTurn
 HalfSashay, RollawayWithAHalfSashay
-SlideThru
-StarThru expands to SlideThru
 Run
 BoxTheGnat espands to StepToAWave, revolve around the your center -1/4, AndRoll
 =#
@@ -18,7 +17,7 @@ CallerLab Basic 1 square dance call that goes from MiniWave to
 BackToBack.
 
 Timing: CallerLab doesn't spoecify a timing, but since the specified
-timing for [`PassThru`](@ref) is 2 and `StepThro` must be smpler,
+timing for [`PassThru`](@ref) is 2 and `StepThro` must be simpler,
 assume 1.
 """
 @with_kw_noshow struct StepThru <: SquareDanceCall
@@ -44,7 +43,7 @@ CallerLab Basic 1 call.
 Timing: CallerLab: 2.
 
 `PassThru` is only proper from `FaceToFace` or from `RHMiniWave`
-(because of the "Icean Wave Rule").  For `LHMiniWave`, use
+(because of the "Ocean Wave Rule").  For `LHMiniWave`, use
 [`StepThru`](@ref).
 """
 @with_kw_noshow struct PassThru <: SquareDanceCall
@@ -65,19 +64,20 @@ with the Heads back on Squared Set spots. See Squared Set Convention.
 function expand_parts(c::PassThru, f::FaceToFace)
     dd = DesignatedDancers(map(ds -> ds.dancer, dancer_states(f)))
     [
-        # ??? The CallerLab timing for PassThru is 2, but the timing
+        # The CallerLab timing for PassThru is 2, but the timing
         # for StepToAWave is 2 and the timing for StepThru is
         # presumably greater than zero.
         (0, StepToAWave(role = dd,
-                        handedness = RightHanded())),
-        (2, StepThru(role = dd))
+                        handedness = RightHanded(),
+                        time = 1)),
+        (1, StepThru(; role = dd))
     ]
 end
 
 function expand_parts(c::PassThru, f::RHMiniWave)
     dd = DesignatedDancers(map(ds -> ds.dancer, dancer_states(f)))
     [
-        (0, StepThru(role = dd))
+        (0, StepThru(; role = dd))
     ]
 end
 
@@ -103,7 +103,7 @@ can_do_from(::PullBy, ::FaceToFace) = 1
 function expand_parts(c::PullBy, f::MiniWave)
     dd = DesignatedDancers(map(ds -> ds.dancer, dancer_states(mw)))
     [
-        (0, StepThru(role = dd))
+        (0, StepThru(; role = dd))
     ]
 end
 
@@ -111,8 +111,9 @@ function expand_parts(c::PullBy, f::FaceToFace)
     dd = DesignatedDancers(map(ds -> ds.dancer, dancer_states(f)))
     [
         (0, StepToAWave(role = dd,
-                        handedness = c.handedness)),
-        (1, StepThru(role = dd))
+                        handedness = RightHanded(),
+                        time = 1)),
+        (1, StepThru(; role = dd))
     ]
 end
 
@@ -227,7 +228,7 @@ end
 
 
 """
-    Trade(; role=Everyone(), tile=2)
+    Trade(; role=Everyone(), time=2)
 
 CallerLab Basic call.
 
@@ -302,5 +303,56 @@ function perform(c::_FinishTrade, mw::RHMiniWave, kb::ReteRootNode)
         DancerState(belle, belle.time + c.time,
                     new_direction,
                     location(c.original_beau)...))
+end
+
+
+"""
+    SlideThru(; role=Everyone())
+
+CallerLab Mainstream call.
+
+Timing: CallerLab: 4.
+"""
+@with_kw_noshow struct SlideThru <: SquareDanceCall
+    role::Role = Everyone()
+end
+
+can_do_from(::SlideThru, ::FaceToFace) = 1
+
+function expand_parts(c::SlideThru, f::FaceToFace)
+    designated_dancers = DesignatedDancers(map(ds -> ds.dancer,
+                                               dancer_states(f)))
+    [
+        (0, PassThru(; role=designated_dancers)),
+        (2, _GenderedRoll(; role=designated_dancers))
+    ]
+end
+
+"""
+    StarThru(; role=Everyone())
+
+CallerLab Basic-1 call.
+
+Timing: CallerLab: 4.
+"""
+@with_kw_noshow struct StarThru <: SquareDanceCall
+    role::Role = Everyone()
+end
+
+can_do_from(::StarThru, f::FaceToFace) =
+    if f.a.dancer.gender == opposite(f.b.dancer.gender)
+        1
+    else
+        0
+    end
+
+function expand_parts(c::StarThru, f::FaceToFace)
+    @assert f.a.dancer.gender == opposite(f.b.dancer.gender)
+    designated_dancers = DesignatedDancers(map(ds -> ds.dancer,
+                                               dancer_states(f)))
+    [
+        (0, PassThru(; role=designated_dancers)),
+        (2, _GenderedRoll(; role=designated_dancers))
+    ]
 end
 
