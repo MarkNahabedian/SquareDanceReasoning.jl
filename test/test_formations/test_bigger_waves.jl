@@ -1,25 +1,11 @@
 
-function make_wave(dancers, initial_direction)
-    direction = initial_direction
-    down = 0
-    left = 1
-    map(dancers) do dancer
-        ds = DancerState(dancer, 0, direction, down, left)
-        left += 1
-        direction = opposite(direction)
-        ds
-    end
-end
-    
-
 @testset "test right hand wave of four" begin
     square = make_square(2)
     kb = make_kb()
     # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
     receive(kb, square)
-    for ds in make_wave(square.dancers, 1//2)
-        receive(kb, ds)
-    end
+    receive.([kb], grid_arrangement(square, [ 1 2 3 4 ],
+                                    [ "↑↓↑↓" ]))
     @debug_formations(kb)
     # First make sure we have the MiniWaves:
     @test askc(Counter(), kb, RHMiniWave) == 2
@@ -47,9 +33,8 @@ end
     kb = make_kb()
     # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
     receive(kb, square)
-    for ds in make_wave(square.dancers, 0)
-        receive(kb, ds)
-    end
+    receive.([kb], grid_arrangement(square, [ 1 2 3 4],
+                                    [ "↓↑↓↑" ]))
     @debug_formations(kb)
     # First make sure we have the MiniWaves:
     @test askc(Counter(), kb, RHMiniWave) == 1
@@ -77,9 +62,8 @@ end
     kb = make_kb()
     # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
     receive(kb, square)
-    for ds in make_wave(square.dancers, 1//2)
-        receive(kb, ds)
-    end
+    receive.([kb], grid_arrangement(square, [ 1 2 3 4 5 6 7 8 ],
+                                    [ "↑↓↑↓↑↓↑↓" ]))
     # First make sure we have the MiniWaves:
     @test askc(Counter(), kb, RHMiniWave) == 4
     @test askc(Counter(), kb, LHMiniWave) == 3

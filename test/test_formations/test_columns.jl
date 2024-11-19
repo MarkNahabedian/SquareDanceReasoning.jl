@@ -3,12 +3,10 @@
     square = make_square(4)
     kb = make_kb()
     receive(kb, square)
-    for ds in make_line(square[1:4], 1//4, 0)
-        receive(kb, ds)
-    end
-    for ds in make_line(square[5:8], 3//4, 1)
-        receive(kb, ds)
-    end
+    grid = grid_arrangement(square,
+                            [ 1 2 3 4; 5 6 7 8 ],
+                            [ "→→→→", "←←←←" ])
+    receive.([kb], grid)
     @debug_formations(kb)
     # First make sure we have the Tandems:
     let

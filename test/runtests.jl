@@ -98,43 +98,33 @@ end
     @test !right_of(d2, d3)
 end
 
-# Arrange all dancers in a line with the specified down and direction:
-function make_line(dancers, direction, down)
-    left = 1
-    map(dancers) do dancer
-        ds = DancerState(dancer, 0, direction, down, left)
-        left += 1
-        ds
-    end
-end
-
 @testset "Bounds" begin
     square = make_square(4)
-    dancers = collect(square.dancers)
-    dss = [ make_line(dancers[1:4], 0, 0)...,
-            make_line(dancers[5:8], 1//2, 1)... ]
+    grid = grid_arrangement(square,
+                            [ 1 2 3 4; 5 6 7 8 ],
+                            [ "↓↓↓↓", "↑↑↑↑" ])
     let
-        bounds = Bounds(dss)
-        @test bounds.min_down == 0.0
-        @test bounds.max_down == 1.0
+        bounds = Bounds(grid)
+        @test bounds.min_down == 1.0
+        @test bounds.max_down == 2.0
         @test bounds.min_left == 1.0
         @test bounds.max_left == 4.0
     end
     let
-        bounds = Bounds(dss)
+        bounds = Bounds(grid)
         bounds = bump_out(bounds)
         margin = COUPLE_DISTANCE / 2
-        @test bounds.min_down == 0 - margin
-        @test bounds.max_down == 1 + margin
+        @test bounds.min_down == 1 - margin
+        @test bounds.max_down == 2 + margin
         @test bounds.min_left == 1 - margin
         @test bounds.max_left == 4 + margin
     end
     let
-        bounds = bump_out(Bounds([dss[1], dss[3]]))
-        @test in_bounds(bounds, dss[1])
-        @test in_bounds(bounds, dss[2])
-        @test in_bounds(bounds, dss[3])
-        @test !in_bounds(bounds, dss[4])
+        bounds = bump_out(Bounds([grid[1, 1], grid[1, 3]]))
+        @test in_bounds(bounds, grid[1, 1])
+        @test in_bounds(bounds, grid[1, 2])
+        @test in_bounds(bounds, grid[1, 3])
+        @test !in_bounds(bounds, grid[1, 4])
     end
 end
 
