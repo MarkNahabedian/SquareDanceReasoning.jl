@@ -13,10 +13,10 @@
     @test 1 == askc(Counter(), kb, SquaredSet)
     @test 1 == askc(Counter(), kb, CircleOfEight)
     f = only(askc(Collector{SquaredSet}(), kb, SquaredSet))
-    @test Set(those_with_role(f, OriginalHead())) ==
-        Set(those_with_role(f, CurrentHead()))
-    @test Set(those_with_role(f, OriginalSide())) ==
-        Set(those_with_role(f, CurrentSide()))
+    @test Set(those_with_role(f, OriginalHeads())) ==
+        Set(those_with_role(f, CurrentHeads()))
+    @test Set(those_with_role(f, OriginalSides())) ==
+        Set(those_with_role(f, CurrentSides()))
     @test all(ds -> ds.dancer.gender isa Guy,
               those_with_role(f, Guys()))
     @test all(ds -> ds.dancer.gender isa Gal,

@@ -1,11 +1,11 @@
 # Dancer roles.
 
 export Everyone, Noone, Role, Guys, Gals,
-    OriginalHead, OriginalSide,
-    CurrentHead, CurrentSide,
-    Beau, Belle, Center, End, VeryCenter, AllButVeryCenter,
-    Leader, Trailer,
-    DiamondCenter, Point,
+    OriginalHeads, OriginalSides,
+    CurrentHeads, CurrentSides,
+    Beaus, Belles, Centers, Ends, VeryCenters, AllButVeryCenters,
+    Leaders, Trailers,
+    DiamondCenters, Points,
     ObverseRole, CoupleNumbers, DesignatedDancers
 
 export obverse, those_with_role, supported_roles
@@ -32,20 +32,20 @@ struct Everyone <: Role end
 struct Noone <: Role end
 struct Guys <: Role end
 struct Gals <: Role end    
-struct OriginalHead <: Role end
-struct OriginalSide <: Role end
-struct CurrentHead <: Role end
-struct CurrentSide <: Role end
-struct Beau <: FormationContextRole end
-struct Belle <: FormationContextRole end
-struct Center <: FormationContextRole end
-struct VeryCenter <: FormationContextRole end
-struct AllButVeryCenter <: FormationContextRole end
-struct End <: FormationContextRole end
-struct Leader <: FormationContextRole end
-struct Trailer <: FormationContextRole end
-struct DiamondCenter <: FormationContextRole end
-struct Point <: FormationContextRole end
+struct OriginalHeads <: Role end
+struct OriginalSides <: Role end
+struct CurrentHeads <: Role end
+struct CurrentSides <: Role end
+struct Beaus <: FormationContextRole end
+struct Belles <: FormationContextRole end
+struct Centers <: FormationContextRole end
+struct VeryCenters <: FormationContextRole end
+struct AllButVeryCenters <: FormationContextRole end
+struct Ends <: FormationContextRole end
+struct Leaders <: FormationContextRole end
+struct Trailers <: FormationContextRole end
+struct DiamondCenters <: FormationContextRole end
+struct Points <: FormationContextRole end
 
 # NOTE that sometimes roles are used to restrict which formations are
 # participating and sometimes they are used to designate which dancer
@@ -69,26 +69,26 @@ obverse(::Noone) = Everyone()
 obverse(::Guys) = Gals()
 obverse(::Gals) = Guys()
 
-obverse(::OriginalHead) = OriginalSide()
-obverse(::OriginalSide) = OriginalHead()
+obverse(::OriginalHeads) = OriginalSides()
+obverse(::OriginalSides) = OriginalHeads()
 
-obverse(::CurrentHead) = CurrentSide()
-obverse(::CurrentSide) = CurrentHead()
+obverse(::CurrentHeads) = CurrentSides()
+obverse(::CurrentSides) = CurrentHeads()
 
-obverse(::Beau) = Belle()
-obverse(::Belle) = Beau()
+obverse(::Beaus) = Belles()
+obverse(::Belles) = Beaus()
 
-obverse(::VeryCenter) = AllButVeryCenter()
-obverse(::AllButVeryCenter) = VeryCenter()
+obverse(::VeryCenters) = AllButVeryCenters()
+obverse(::AllButVeryCenters) = VeryCenters()
 
-obverse(::Center) = End()
-obverse(::End) = Center()
+obverse(::Centers) = Ends()
+obverse(::Ends) = Centers()
 
-obverse(::Leader) = Trailer()
-obverse(::Trailer) = Leader()
+obverse(::Leaders) = Trailers()
+obverse(::Trailers) = Leaders()
 
-obverse(::DiamondCenter) = Point()
-obverse(::Point) = DiamondCenter()
+obverse(::DiamondCenters) = Points()
+obverse(::Points) = DiamondCenters()
     
 """
     ObverseRole(::role)
@@ -158,20 +158,20 @@ those_with_role(f::SquareDanceFormation, ::Gals) =
         ds.dancer.gender isa Gal
     end
 
-those_with_role(f::SquareDanceFormation, ::OriginalHead) =
+those_with_role(f::SquareDanceFormation, ::OriginalHeads) =
     filter(ds -> is_original_head(ds.dancer),
            dancer_states(f))
 
-those_with_role(f::SquareDanceFormation, ::OriginalSide) =
+those_with_role(f::SquareDanceFormation, ::OriginalSides) =
     filter(ds -> is_original_side(ds.dancer),
            dancer_states(f))
 
-those_with_role(f::SquareDanceFormation, ::CurrentHead) =
+those_with_role(f::SquareDanceFormation, ::CurrentHeads) =
     filter(dancer_states(f)) do ds
         (ds.direction == 0) || (ds.direction == 1//2)
     end
 
-those_with_role(f::SquareDanceFormation, ::CurrentSide) =
+those_with_role(f::SquareDanceFormation, ::CurrentSides) =
     filter(dancer_states(f)) do ds
         (ds.direction == 1//4) || (ds.direction == 3//4)
     end
@@ -219,21 +219,21 @@ as_text(::Everyone) = "Everyone"
 as_text(::Noone) = "Noone"
 as_text(::Guys) = "Guys"
 as_text(::Gals) = "Gals"
-as_text(::OriginalHead) = "OriginalHead"
-as_text(::OriginalSide) = "OriginalSides"
-as_text(::CurrentHead) = "CurrentHead"
-as_text(::CurrentSide) = "CurrentSide"
-as_text(::Beau) = "Beaus"
-as_text(::Belle) = "Belles"
-as_text(::Center) = "Centers"
-as_text(::End) = "Ends"
-as_text(::Leader) = "Leaders"
-as_text(::Trailer) = "Trailers"
-as_text(::DiamondCenter) = "Centers of your diamonds"
-as_text(::Point) = "Points"
+as_text(::OriginalHeads) = "OriginalHeads"
+as_text(::OriginalSides) = "OriginalSides"
+as_text(::CurrentHeads) = "CurrentHeads"
+as_text(::CurrentSides) = "CurrentSides"
+as_text(::Beaus) = "Beaus"
+as_text(::Belles) = "Belles"
+as_text(::Centers) = "Centers"
+as_text(::Ends) = "Ends"
+as_text(::Leaders) = "Leaders"
+as_text(::Trailers) = "Trailers"
+as_text(::DiamondCenters) = "Centers of your diamonds"
+as_text(::Points) = "Points"
 
 
-those_with_role(f::OneByFourFormation, ::Center) = dancer_states(f.centers)
-those_with_role(f::OneByFourFormation, ::End) =
+those_with_role(f::OneByFourFormation, ::Centers) = dancer_states(f.centers)
+those_with_role(f::OneByFourFormation, ::Ends) =
     setdiff(dancer_states(f), f.centers())
 

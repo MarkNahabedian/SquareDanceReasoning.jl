@@ -34,9 +34,9 @@ end
         @test f.wave1.b.dancer == square[1]
         @test f.wave2.a.dancer == square[4]
         @test f.wave2.b.dancer == square[3]
-        @test Set(dancer.(those_with_role(f, Center()))) ==
+        @test Set(dancer.(those_with_role(f, Centers()))) ==
             Set([square[2], square[3]])
-        @test Set(dancer.(those_with_role(f, End()))) ==
+        @test Set(dancer.(those_with_role(f, Ends()))) ==
             Set([square[1], square[4]])
     end
     collect_formation_examples(kb)
@@ -64,9 +64,9 @@ end
         @test f.wave1.b.dancer == square[4]
         @test f.wave2.a.dancer == square[1]
         @test f.wave2.b.dancer == square[2]
-        @test Set(dancer.(those_with_role(f, Center()))) ==
+        @test Set(dancer.(those_with_role(f, Centers()))) ==
             Set([square[2], square[3]])
-        @test Set(dancer.(those_with_role(f, End()))) ==
+        @test Set(dancer.(those_with_role(f, Ends()))) ==
             Set([square[1], square[4]])
     end
     collect_formation_examples(kb)
@@ -100,11 +100,11 @@ end
         @test f.wave2.wave1.b.dancer == square[5]
         @test f.wave2.wave2.a.dancer == square[8]
         @test f.wave2.wave2.b.dancer == square[7]
-        @test Set(dancer.(those_with_role(f, VeryCenter()))) ==
+        @test Set(dancer.(those_with_role(f, VeryCenters()))) ==
             Set([square[4], square[5]])
-        @test Set(dancer.(those_with_role(f, Center()))) ==
+        @test Set(dancer.(those_with_role(f, Centers()))) ==
             Set([square[2], square[3], square[6], square[7]])
-        @test Set(dancer.(those_with_role(f, End()))) ==
+        @test Set(dancer.(those_with_role(f, Ends()))) ==
             Set([square[1], square[4], square[5], square[8]])
     end
     collect_formation_examples(kb)

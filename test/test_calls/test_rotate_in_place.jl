@@ -8,7 +8,7 @@ using Logging
                 ]
         @test as_text(FaceRight()) == "Everyone quarter right, 1 ticks."
         @test as_text(FaceLeft()) == "Everyone quarter left, 1 ticks."
-        @test as_text(_GenderedRoll(; role=Center())) ==
+        @test as_text(_GenderedRoll(; role=Centers())) ==
             "Centers Guy quarter right, Gal quarter left."
         kb = make_kb()
         receive.([kb], dss)

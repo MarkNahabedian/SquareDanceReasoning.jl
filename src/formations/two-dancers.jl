@@ -24,8 +24,8 @@ handedness(::Couple) = NoHandedness()
 
 direction(f::Couple) = direction(f.beau)    
 
-those_with_role(c::Couple, ::Beau) = [ c.beau ]
-those_with_role(c::Couple, ::Belle) = [ c.belle ]
+those_with_role(c::Couple, ::Beaus) = [ c.beau ]
+those_with_role(c::Couple, ::Belles) = [ c.belle ]
 
 
 """
@@ -51,7 +51,7 @@ end
 
 handedness(::FaceToFace) = NoHandedness()
 
-those_with_role(c::FaceToFace, ::Trailer) = [ c.a, c.b ]
+those_with_role(c::FaceToFace, ::Trailers) = [ c.a, c.b ]
 
 
 """
@@ -78,7 +78,7 @@ end
 
 handedness(::BackToBack) = NoHandedness()
 
-those_with_role(c::BackToBack, ::Leader) = [ c.a, c.b ]
+those_with_role(c::BackToBack, ::Leaders) = [ c.a, c.b ]
 
 
 """
@@ -101,8 +101,8 @@ handedness(::Tandem) = NoHandedness()
 
 direction(f::Tandem) = direction(f.leader)
 
-those_with_role(c::Tandem, ::Leader) = [ c.leader ]
-those_with_role(c::Tandem, ::Trailer) = [ c.trailer ]
+those_with_role(c::Tandem, ::Leaders) = [ c.leader ]
+those_with_role(c::Tandem, ::Trailers) = [ c.trailer ]
 
 
 """
@@ -134,7 +134,7 @@ end
 
 handedness(::RHMiniWave) = RightHanded()
 
-those_with_role(c::RHMiniWave, ::Beau) = [ c.a, c.b ]
+those_with_role(c::RHMiniWave, ::Beaus) = [ c.a, c.b ]
 
 
 """
@@ -155,7 +155,7 @@ end
 
 handedness(::LHMiniWave) = LeftHanded()
 
-those_with_role(c::LHMiniWave, ::Belle) = [ c.a, c.b ]
+those_with_role(c::LHMiniWave, ::Belles) = [ c.a, c.b ]
 
 
 @rule SquareDanceFormationRule.TwoDancerFormationsRule(kb::ReteRootNode,

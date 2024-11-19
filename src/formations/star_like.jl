@@ -24,7 +24,7 @@ end
 
 handedness(f::Star) = handedness(f.mw1)
 
-those_with_role(f::Star, role::Union{Beau, Belle}) =
+those_with_role(f::Star, role::Union{Beaus, Belles}) =
     [ those_with_role(f.mw1, role)...,
       those_with_role(f.mw2, role)...
       ]

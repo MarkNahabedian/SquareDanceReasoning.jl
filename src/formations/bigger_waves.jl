@@ -38,10 +38,10 @@ end
 handedness(f::WaveOfFour) = handedness(f.wave1)
 handedness(f::WaveOfEight) = handedness(f.wave1)
 
-those_with_role(f::WaveOfEight, ::VeryCenter) = dancer_states(f.centers)
-those_with_role(f::WaveOfEight, r::AllButVeryCenter) =
+those_with_role(f::WaveOfEight, ::VeryCenters) = dancer_states(f.centers)
+those_with_role(f::WaveOfEight, r::AllButVeryCenters) =
     setdiff(dancer_states(f), those_with_role(f, obverse(r)))
-those_with_role(f::WaveOfEight, r::Union{Center, End}) = [
+those_with_role(f::WaveOfEight, r::Union{Centers, Ends}) = [
     those_with_role(f.wave1, r)...,
     those_with_role(f.wave2, r)... ]
 
