@@ -36,9 +36,10 @@ let
                                   "↑↑" ])
         receive.([kb], grid)
         showcase(filename,
-                 "Square Thru",
+                 "Square Thru from FacingCouples",
                  kb,
                  SquareDanceCall[
+                     _Rest(time = 2),
                      SquareThru(),
                      _Rest(time = 2)
                  ]
@@ -47,6 +48,7 @@ let
     end
 end
 
+#=
 let
     filename = "SquareThru_from_SquaredSet"
     start_time = time()
@@ -67,7 +69,8 @@ let
                  "Heads Square Thru from a squared set",
                  kb,
                  SquareDanceCall[
-                     SquareThru(role = OriginalHead()),
+                     _Rest(time = 2),
+                     SquareThru(role = OriginalHeads()),
                      _Rest(time = 2)
                  ];
                  inhibit_call_engine_logging = false,
@@ -76,8 +79,8 @@ let
     @info "Elapsed time: $(time() - start_time) seconds."
     end
 end
+=#
 
-
-# This sould be the last expression in this file.
+# This should be the last expression in this file:
 make_showcase_index_file()
 
