@@ -48,9 +48,42 @@ let
     end
 end
 
-#=
 let
     filename = "SquareThru_from_SquaredSet"
+    start_time = time()
+    with_logger(safe_logger(filename)) do
+        square = make_square(4)
+        kb = make_kb()
+        receive(kb, square)
+        receive.([kb], square_up(square))
+#=
+        write_formation_html_file(
+            "Squared Set",
+            joinpath(@__DIR__,
+                     "src", "formation_drawings",
+                     "squared_set.html"),
+            kb)
+=#
+        dbgctx = @CallEngineDebugContext(joinpath(@__DIR__, "src", "Showcase"),
+                                         "SquareThru_from_SquaredSet")
+        showcase(filename,
+                 "Heads Square Thru from a squared set",
+                 kb,
+                 SquareDanceCall[
+                     _Rest(time = 2),
+                     SquareThru(role = OriginalHeads()),
+                     _Rest(time = 2)
+                 ];
+                 inhibit_call_engine_logging = false,
+                 dbgctx = dbgctx
+                 )
+    @info "Elapsed time: $(time() - start_time) seconds."
+    end
+end
+
+#=
+let
+    filename = "ChickenPlucker"
     start_time = time()
     with_logger(safe_logger(filename)) do
         square = make_square(4)
@@ -64,13 +97,22 @@ let
                      "squared_set.html"),
             kb)
         dbgctx = @CallEngineDebugContext("src/Showcase",
-                                         "SquareThru_from_SquaredSet")
+                                         "ChickenPlucker")
         showcase(filename,
-                 "Heads Square Thru from a squared set",
+                 "Chicken Plucker",
                  kb,
                  SquareDanceCall[
                      _Rest(time = 2),
                      SquareThru(role = OriginalHeads()),
+                     # right and left thru:
+                     PassThru(),
+                     Trade(),
+                     # dive thru:
+                     PassThru(),
+                     Trade(role=OriginalHeads()),   # cheat!
+                     #
+                     PassThru(),
+                     # allemande left
                      _Rest(time = 2)
                  ];
                  inhibit_call_engine_logging = false,
