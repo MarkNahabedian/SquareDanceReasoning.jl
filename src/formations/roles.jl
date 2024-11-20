@@ -1,6 +1,7 @@
 # Dancer roles.
 
-export Everyone, Noone, Role, Guys, Gals,
+export Role, UniversalRole, FormationContextRole,
+    Everyone, Noone, Guys, Gals,
     OriginalHeads, OriginalSides,
     CurrentHeads, CurrentSides,
     Beaus, Belles, Centers, Ends, VeryCenters, AllButVeryCenters,
@@ -20,6 +21,15 @@ abstract type Role end
 
 
 """
+    UniversalRole
+
+is the abstract type for those roles which might apply regardless of
+what formation the daners are in.
+"""
+abstract type UniversalRole <: Role end
+
+
+"""
 FormationContextRole
 
 is the abstract supertype for square dance roles which are defined by
@@ -28,14 +38,14 @@ a dancer's context in a particular formation.
 abstract type FormationContextRole <: Role end
 
 
-struct Everyone <: Role end
-struct Noone <: Role end
-struct Guys <: Role end
-struct Gals <: Role end    
-struct OriginalHeads <: Role end
-struct OriginalSides <: Role end
-struct CurrentHeads <: Role end
-struct CurrentSides <: Role end
+struct Everyone <: UniversalRole end
+struct Noone <: UniversalRole end
+struct Guys <: UniversalRole end
+struct Gals <: UniversalRole end    
+struct OriginalHeads <: UniversalRole end
+struct OriginalSides <: UniversalRole end
+struct CurrentHeads <: UniversalRole end
+struct CurrentSides <: UniversalRole end
 struct Beaus <: FormationContextRole end
 struct Belles <: FormationContextRole end
 struct Centers <: FormationContextRole end
@@ -177,7 +187,7 @@ those_with_role(f::SquareDanceFormation, ::CurrentSides) =
     end
 
 
-struct CoupleNumbers <: Role
+struct CoupleNumbers <: UniversalRole
     numbers::Vector{Integer}
 
     CoupleNumbers(numbers::Integer...) =
@@ -196,7 +206,7 @@ those_with_role(f::SquareDanceFormation, cn::CoupleNumbers) =
 as_text(r::CoupleNumbers) =
     """CoupleNumbers $(join(r.numbers, ", "))"""
 
-struct DesignatedDancers <: Role
+struct DesignatedDancers <: UniversalRole
     dancers::Vector{Dancer}
 
     DesignatedDancers(dancers::Vector{Dancer}) = new(sort(dancers))
