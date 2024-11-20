@@ -1,3 +1,4 @@
+export FORMATION_ROLES
 
 include("generic.jl")
 include("catch_conflicting_dancer_states.jl")
@@ -49,3 +50,19 @@ let
     end
 end
 
+
+"""
+FORMATION_ROLES maps SquareDanceFormations to Roles.
+"""
+FORMATION_ROLES = Dict{Type{<:SquareDanceFormation}, Vector{Type{<:Role}}}()
+
+let
+    function walk(f)
+        if !haskey(FORMATION_ROLES, f)
+            FORMATION_ROLES[f] = Type{Role}[]
+        end
+        push!(FORMATION_ROLES[f], supported_roles(f)...)
+        walk.(subtypes(f))
+    end
+    walk(SquareDanceFormation)
+end

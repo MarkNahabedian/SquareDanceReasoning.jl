@@ -12,7 +12,7 @@ function generate_formation_hierarchy()
              println(io,
                      "\nThese are the formations that are currently supported, and the roles supported for those formations:\n")
              function walk(f, level)
-                 roles = supported_roles(f)
+                 roles = FORMATION_ROLES[f]
                  roletext = if isempty(roles)
                      ""
                  else
