@@ -3,7 +3,7 @@ export COUPLE_DISTANCE
 export canonicalize, canonicalize_signed
 export FULL_CIRCLE, DIRECTION0, DIRECTION1, DIRECTION2, DIRECTION3
 export opposite, quarter_left, quarter_right
-export distance
+export distance, unit_vector
 
 
 """
@@ -88,5 +88,20 @@ returns the distance between the two points represented by vectors.
 function distance(p1, p2)
     delta = p2 - p1
     sqrt(sum(x -> x^2, delta))
+end
+
+
+"""
+    unit_vector(direction)
+
+Returns a unit vector pointing in `direction`, which is specified as a
+fraction of a full circle.
+"""
+function unit_vector(direction)
+    slop = 10000
+    radians = 2 * pi * direction
+    [ (slop * cos(radians)) / slop,
+      (slop * sin(radians)) / slop
+      ]
 end
 
