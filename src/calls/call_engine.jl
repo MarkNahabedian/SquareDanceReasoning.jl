@@ -43,7 +43,7 @@ can_do_from(::SquareDanceCall, ::SquareDanceFormation) = 0
 
 
 """
-    perform(::SquareDanceCall, ::SquareDanceFormation, ::ReteRootNode)::SquareDanceFormation
+    perform(::SquareDanceCall, ::SquareDanceFormation, ::SDRKnowledgeBase)::SquareDanceFormation
 
 Performs the call on the specified formation and returns the new
 formation.
@@ -52,13 +52,13 @@ function perform end
 
 
 """
-    do_call(kb::ReteRootNode, call::SquareDanceCall; dbgctx = nothing)::ReteRootNode
+    do_call(kb::SDRKnowledgeBase, call::SquareDanceCall; dbgctx = nothing)::SDRKnowledgeBase
 
 Perform the specified square dance call and retrn an updated
 knowledgebase.
 """
-function do_call(kb::ReteRootNode, call::SquareDanceCall;
-                 dbgctx = nothing)::ReteRootNode
+function do_call(kb::SDRKnowledgeBase, call::SquareDanceCall;
+                 dbgctx = nothing)::SDRKnowledgeBase
     sched = let
         dss = askc(Collector{DancerState}(), kb, DancerState)
         if allequal(map(ds -> ds.time, dss))
@@ -71,7 +71,7 @@ function do_call(kb::ReteRootNode, call::SquareDanceCall;
     do_schedule(sched, kb; dbgctx = dbgctx)
 end
 
-function do_schedule(sched::CallSchedule, kb::ReteRootNode;
+function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                      dbgctx = nothing)
     call_history = []
     newest_dancer_states = Dict{Dancer, DancerState}()
@@ -246,13 +246,17 @@ function do_schedule(sched::CallSchedule, kb::ReteRootNode;
 end
 
 function get_call_options(call::SquareDanceCall,
-                          kb::ReteRootNode)::Vector{CanDoCall}
+                          kb::SDRKnowledgeBase)::Vector{CanDoCall}
     # This needs to be a Set to avoid the duplicates we would get from
     # querying for SquareDanceFormation sand it subtypes.  Maybe this
     # should be fixed in Rete.Collector.
     formations = Set{SquareDanceFormation}()
+    everyone = DancerState[]
     askc(kb, SquareDanceFormation) do f
         push!(formations, f)
+        if f isa DancerState
+            push!(everyone, f)
+        end
     end
     # What calls can we do from where?
     options = CanDoCall[]

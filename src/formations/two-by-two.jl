@@ -68,7 +68,7 @@ handedness(::TandemCouples) = NoHandedness()
 direction(f::TandemCouples) = direction(f.leaders)
 
 
-@rule SquareDanceFormationRule.CoupleBoxRule(kb::ReteRootNode,
+@rule SquareDanceFormationRule.CoupleBoxRule(kb::SDRKnowledgeBase,
                                              couple1::Couple,
                                              couple2::Couple,
                                              ::FacingCouples,

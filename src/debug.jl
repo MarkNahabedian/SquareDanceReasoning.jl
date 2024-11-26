@@ -188,7 +188,7 @@ function dancer_placement_svg(ds::DancerState)
         )
 end
 
-function get_formations_by_type(kb::ReteRootNode)
+function get_formations_by_type(kb::SDRKnowledgeBase)
     formations_by_type = Dict{Type, Vector}()
     askc(kb, Union{SquareDanceFormation,
                    Collision}) do fact
@@ -207,7 +207,7 @@ end
 function formation_debug_html(source,   # ::LineNumberNode,
                               testset,  # Test.AbstractTestSet
                               output_path,
-                              kb::ReteRootNode)
+                              kb::SDRKnowledgeBase)
     formation_debug_html(source,
                          testset,
                          output_path,
@@ -240,7 +240,7 @@ function formation_debug_html(source,   # ::LineNumberNode,
 end
 
 function write_formation_html_file(title, output_path,
-                                   kb::ReteRootNode)
+                                   kb::SDRKnowledgeBase)
     write_formation_html_file(title, output_path,
                               get_formations_by_type(kb))
 end

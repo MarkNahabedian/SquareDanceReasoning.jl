@@ -61,7 +61,7 @@ end
 end
 
 @testset "OriginalPartners" begin
-    kb = Rete.ReteRootNode("root")
+    kb = make_kb()
     install(kb, OriginalPartnerRule)
     install(kb, SquareHasDancers)
     square = make_square(4)

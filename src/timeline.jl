@@ -235,7 +235,7 @@ end
 
 dancer_states(f::Collision) = [f()...]
 
-function latest_dancer_states(root::ReteRootNode)::Dict{Dancer, DancerState}
+function latest_dancer_states(root::SDRKnowledgeBase)::Dict{Dancer, DancerState}
     latest_dss = Dict{Dancer, DancerState}()
     askc(root, DancerState) do ds
         if !haskey(latest_dss, ds.dancer)

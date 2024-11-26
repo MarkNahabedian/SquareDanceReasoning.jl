@@ -24,7 +24,7 @@ as_text(c::FaceRight) = "$(as_text(c.role)) quarter right, $(c.time) ticks."
 
 can_do_from(::FaceRight, ::DancerState) = 1
 
-function perform(c::FaceRight, ds::DancerState, kb::ReteRootNode)
+function perform(c::FaceRight, ds::DancerState, kb::SDRKnowledgeBase)
     rotate(ds, -1//4, c.time)
 end
 
@@ -49,7 +49,7 @@ as_text(c::FaceLeft) =
 
 can_do_from(::FaceLeft, ::DancerState) = 1
 
-function perform(c::FaceLeft, ds::DancerState, kb::ReteRootNode)
+function perform(c::FaceLeft, ds::DancerState, kb::SDRKnowledgeBase)
     rotate(ds, 1//4, c.time)
 end
 
@@ -94,20 +94,20 @@ function uturnback1(ds::DancerState, turn_toward::Vector{<:Real})
     end
 end
 
-function perform(c::UTurnBack, ds::DancerState, kb::ReteRootNode)
+function perform(c::UTurnBack, ds::DancerState, kb::SDRKnowledgeBase)
     # If we knew the rotational flow here we could avoid the askc in
     # most cases.
     everyone = askc(Collector{DancerState}(), kb, DancerState)
     uturnback1(ds, center(everyone))
 end
 
-function perform(::UTurnBack, f::Couple, kb::ReteRootNode)
+function perform(::UTurnBack, f::Couple, kb::SDRKnowledgeBase)
     ctr = center(dancer_states(f))
     Couple(uturnback1(f.belle, ctr),
            uturnback1(f.beau, ctr))
 end
 
-function perform(::UTurnBack, f::MiniWave, kb::ReteRootNode)
+function perform(::UTurnBack, f::MiniWave, kb::SDRKnowledgeBase)
     mwtype = if handedness(f) == RightHanded
         LHMiniWave
     else
@@ -140,7 +140,7 @@ can_do_from(::AndRoll, ds::DancerState) =
     # can_roll(ds) == 0 ? 0 : 1
     1
 
-function perform(r::AndRoll, ds::DancerState, kb::ReteRootNode)
+function perform(r::AndRoll, ds::DancerState, kb::SDRKnowledgeBase)
     # Taminations says that the timing for And Roll is 2.
     try
         r = sign(can_roll(ds))

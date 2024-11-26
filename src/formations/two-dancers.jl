@@ -158,7 +158,7 @@ handedness(::LHMiniWave) = LeftHanded()
 those_with_role(c::LHMiniWave, ::Belles) = [ c.a, c.b ]
 
 
-@rule SquareDanceFormationRule.TwoDancerFormationsRule(kb::ReteRootNode,
+@rule SquareDanceFormationRule.TwoDancerFormationsRule(kb::SDRKnowledgeBase,
                                                        sq::AllPresent,
                                                        ds1::DancerState,
                                                        ds2::DancerState,

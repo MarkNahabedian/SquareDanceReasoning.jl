@@ -43,14 +43,14 @@ function choreography_debug_title(ctx::CallEngineDebugContext, time)
 end
 
 function write_debug_formation_file(dbgctx::Nothing,
-                                    kb::ReteRootNode, time)
+                                    kb::SDRKnowledgeBase, time)
 end
 
 function write_debug_formation_file(dbgctx::CallEngineDebugContext,
-                                    kb::ReteRootNode, time)
+                                    kb::SDRKnowledgeBase, time)
     dir, title = choreography_debug_title(dbgctx, time)
     filepath = joinpath(dir, title * ".html")
-    write_formation_html_file(title, filepath, kb::ReteRootNode)
+    write_formation_html_file(title, filepath, kb::SDRKnowledgeBase)
     println("\nwrite_debug_formation_file wrote $filepath")
 end
 

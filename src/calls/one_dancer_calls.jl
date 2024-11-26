@@ -17,7 +17,7 @@ as_text(c::Balance) = "$(as_text(c.role)) Balance"
 
 can_do_from(::Balance, ::DancerState) = 1
 
-function perform(c::Balance, ds::DancerState, kb::ReteRootNode)
+function perform(c::Balance, ds::DancerState, kb::SDRKnowledgeBase)
     inc = 0.1
     how_far = 2//10 * COUPLE_DISTANCE
     home = location(ds)

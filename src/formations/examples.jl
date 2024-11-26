@@ -18,7 +18,7 @@ export COLLECTED_FORMATIONS, collect_formation_examples,
 
 COLLECTED_FORMATIONS = Vector{SquareDanceFormation}()
 
-function collect_formation_examples(kb::ReteRootNode)
+function collect_formation_examples(kb::SDRKnowledgeBase)
     askc(kb, SquareDanceFormation) do f
         if (!any(COLLECTED_FORMATIONS) do example
                 isa(example, typeof(f))

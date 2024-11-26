@@ -27,7 +27,7 @@ as_text(c::_Rest) = "$(as_text(c.role)) rest for $(c.time) ticks."
 
 can_do_from(::_Rest, ::DancerState) = 1
 
-function perform(c::_Rest, ds::DancerState, kb::ReteRootNode)
+function perform(c::_Rest, ds::DancerState, kb::SDRKnowledgeBase)
     DancerState(ds, ds.time + c.time, ds.direction,
                 ds.down, ds.left)
 end
@@ -56,7 +56,7 @@ as_text(c::_FaceOriginalPartner) =
 
 can_do_from(::_FaceOriginalPartner, ::DancerState) = 1
 
-function perform(c::_FaceOriginalPartner, ds::DancerState, kb::ReteRootNode)
+function perform(c::_FaceOriginalPartner, ds::DancerState, kb::SDRKnowledgeBase)
     square = let
         found = nothing
         askc(kb, SDSquare) do sdsquare
@@ -106,7 +106,7 @@ as_text(c::_FaceOriginalCorner) =
 
 can_do_from(::_FaceOriginalCorner, ::DancerState) = 1
 
-function perform(c::_FaceOriginalCorner, ds::DancerState, kb::ReteRootNode)
+function perform(c::_FaceOriginalCorner, ds::DancerState, kb::SDRKnowledgeBase)
     square = let
         found = nothing
         askc(kb, SDSquare) do sdsquare
@@ -159,7 +159,7 @@ as_text(c::_GenderedRoll) =
 
 can_do_from(::_GenderedRoll, ::DancerState) = 1
 
-function perform(c::_GenderedRoll, ds::DancerState, kb::ReteRootNode)
+function perform(c::_GenderedRoll, ds::DancerState, kb::SDRKnowledgeBase)
     # The timing of QuarterIn is 2.  Since this is combined with other
     # calls we leave the timing as a parameter.
     if ds.dancer.gender isa Guy
@@ -194,7 +194,7 @@ descirption(c::StepToAWave) = "$(c.role) Step To a Wave"
 
 can_do_from(::StepToAWave, ::FaceToFace) = 1
 
-function perform(c::StepToAWave, f::FaceToFace, kb::ReteRootNode)
+function perform(c::StepToAWave, f::FaceToFace, kb::SDRKnowledgeBase)
     step_to_a_wave(f, 2, c.handedness)
 end
 
@@ -220,7 +220,7 @@ descirption(c::_UnStepToAWave) = "$(c.role) Un Step To a Wave"
 
 can_do_from(::_UnStepToAWave, ::MiniWave) = 1
 
-function perform(c::_UnStepToAWave, f::MiniWave, kb::ReteRootNode)
+function perform(c::_UnStepToAWave, f::MiniWave, kb::SDRKnowledgeBase)
     un_step_to_a_wave(f, 1)
 end
 
@@ -244,7 +244,7 @@ descirption(c::_BackToAWave) = "$(c.role) Backup to a Wave"
 
 can_do_from(::_BackToAWave, ::BackToBack) = 1
 
-function perform(c::_BackToAWave, f::BackToBack, kb::ReteRootNode)
+function perform(c::_BackToAWave, f::BackToBack, kb::SDRKnowledgeBase)
     back_to_a_wave(f, 1, c.handedness)
 end
 

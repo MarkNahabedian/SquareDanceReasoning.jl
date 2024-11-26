@@ -31,10 +31,10 @@ end
 can_do_from(::QuarterIn, ::Couple) = 1
 can_do_from(::QuarterIn, ::MiniWave) = 1
 
-perform(c::QuarterIn, f::Couple, kb::ReteRootNode) =
+perform(c::QuarterIn, f::Couple, kb::SDRKnowledgeBase) =
     quarter_inout_helper(c, f.beau, f.belle)
 
-perform(c::QuarterIn, f::MiniWave, kb::ReteRootNode) =
+perform(c::QuarterIn, f::MiniWave, kb::SDRKnowledgeBase) =
     quarter_inout_helper(c, f.a, f.b)
 
 
@@ -52,9 +52,9 @@ end
 can_do_from(::QuarterOut, ::Couple) = 1
 can_do_from(::QuarterOut, ::MiniWave) = 1
 
-perform(c::QuarterOut, f::Couple, kb::ReteRootNode) =
+perform(c::QuarterOut, f::Couple, kb::SDRKnowledgeBase) =
     quarter_inout_helper(c, f.beau, f.belle)
 
-perform(c::QuarterOut, f::MiniWave, kb::ReteRootNode) =
+perform(c::QuarterOut, f::MiniWave, kb::SDRKnowledgeBase) =
     quarter_inout_helper(c, f.a, f.b)
 
