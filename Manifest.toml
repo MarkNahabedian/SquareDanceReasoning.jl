@@ -1,8 +1,8 @@
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.10.5"
+julia_version = "1.10.6"
 manifest_format = "2.0"
-project_hash = "b8e956c215433c74f3425ec6b29217affa6fb022"
+project_hash = "be3badc1dd9b86365f62e58386d80728114e54d0"
 
 [[deps.Artifacts]]
 uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
@@ -158,11 +158,11 @@ version = "0.6.10"
 
 [[deps.Rete]]
 deps = ["InteractiveUtils", "IterTools", "MacroTools", "OrderedCollections", "Printf"]
-git-tree-sha1 = "31aea1ffa3fe2b60fab2d4891ff3fe218f1a0aea"
+git-tree-sha1 = "f3411b18c6f2d0bb8d7e4b70370d254a52105337"
 repo-rev = "main"
 repo-url = "https://github.com/MarkNahabedian/Rete.jl"
 uuid = "3d46c559-9b3d-4aba-9ca1-48ff7627231e"
-version = "1.1.0"
+version = "1.2.0"
 
 [[deps.SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
