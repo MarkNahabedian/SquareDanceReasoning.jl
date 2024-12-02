@@ -30,7 +30,8 @@ direction(f::ColumnOfFour) = direction(f.lead)
 
 @rule SquareDanceFormationRule.ColumnOfFourRule(lead::Tandem, tail::Tandem,
                                                 centers::Tandem,
-                                                ::ColumnOfFour) begin
+                                                ::ColumnOfFour,
+                                                ::FormationContainedIn) begin
     if direction(lead) != direction(tail)
         return
     end
@@ -43,7 +44,10 @@ direction(f::ColumnOfFour) = direction(f.lead)
     if tail.leader != centers.trailer
         return
     end
-    emit(ColumnOfFour(lead, tail, centers))
+    f = ColumnOfFour(lead, tail, centers)
+    emit(f)
+    emit(FormationContainedIn(lead, f))
+    emit(FormationContainedIn(tail, f))
 end
 
 @doc """

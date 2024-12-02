@@ -73,7 +73,8 @@ direction(f::TandemCouples) = direction(f.leaders)
                                              couple2::Couple,
                                              ::FacingCouples,
                                              ::BackToBackCouples,
-                                             ::TandemCouples) begin
+                                             ::TandemCouples,
+                                             ::FormationContainedIn) begin
     if couple1 == couple2
         return
     end
@@ -88,22 +89,30 @@ direction(f::TandemCouples) = direction(f.leaders)
     if encroached_on([ couple1, couple2 ], kb)
         return
     end
+    local f
     if ((direction(couple1) == direction(couple2)) &&
         in_front_of(couple2.beau, couple1.beau) &&
         in_front_of(couple2.belle, couple1.belle))
-        emit(TandemCouples(couple1, couple2))
+        f = TandemCouples(couple1, couple2)
+        emit(f)
     elseif direction(couple1) == opposite(direction(couple2))
         if (in_front_of(couple1.beau, couple2.belle) &&
             in_front_of(couple2.belle, couple1.beau) &&
             in_front_of(couple1.belle, couple2.beau) &&
             in_front_of(couple2.beau, couple1.belle))
-            emit(FacingCouples(couple1, couple2))
+            f = FacingCouples(couple1, couple2)
+            emit(f)
         elseif (behind(couple1.beau, couple2.belle) &&
             behind(couple2.belle, couple1.beau) &&
             behind(couple1.belle, couple2.beau) &&
             behind(couple2.beau, couple1.belle))
-            emit(BackToBackCouples(couple1, couple2))
+            f = BackToBackCouples(couple1, couple2)
+            emit(f)
         end
+    end
+    if @isdefined f    
+        emit(FormationContainedIn(couple1, f))
+        emit(FormationContainedIn(couple2, f))
     end
 end
 
@@ -157,7 +166,8 @@ end
                                              t1::Tandem,
                                              t2::Tandem,
                                              ::RHBoxOfFour,
-                                             ::LHBoxOfFour) begin
+                                             ::LHBoxOfFour,
+                                             ::FormationContainedIn) begin
     if mw1 == mw2
         return
     end
@@ -176,10 +186,16 @@ end
         t2.leader in mw2() &&
         t2.trailer in mw1())
         if handedness(mw1) == RightHanded()
-            emit(RHBoxOfFour(mw1, mw2, t1, t2))
+            box = RHBoxOfFour(mw1, mw2, t1, t2)
+            emit(box)
         else
-            emit(LHBoxOfFour(mw1, mw2, t1, t2))
+            box = LHBoxOfFour(mw1, mw2, t1, t2)
+            emit(box)
         end
+        emit(FormationContainedIn(mw1, box))
+        emit(FormationContainedIn(mw2, box))
+        emit(FormationContainedIn(t1, box))
+        emit(FormationContainedIn(t2, box))
     end
 end
 

@@ -167,7 +167,8 @@ those_with_role(c::LHMiniWave, ::Belles) = [ c.a, c.b ]
                                                        ::BackToBack,
                                                        ::Tandem,
                                                        ::RHMiniWave,
-                                                       ::LHMiniWave) begin
+                                                       ::LHMiniWave,
+                                                       ::FormationContainedIn) begin
     RULE_DECLARATIONS(FORWARD_TRIGGERS(sq))
     # Not the same dancer:
     if ds1.dancer == ds2.dancer
@@ -192,12 +193,22 @@ those_with_role(c::LHMiniWave, ::Belles) = [ c.a, c.b ]
     if direction(ds1) == direction(ds2)
         # Couple or Tandem?
         if right_of(ds1, ds2) && left_of(ds2, ds1)
-            dbgemit(Couple(ds1, ds2))
+            let
+                cpl = Couple(ds1, ds2)
+                dbgemit(cpl)
+                emit(FormationContainedIn(ds1, cpl))
+                emit(FormationContainedIn(ds2, cpl))
+            end
             return
         end
         if in_front_of(ds1, ds2) && behind(ds2, ds1)
-            dbgemit(Tandem(ds2, ds1))
-            return
+            let
+                tdm = Tandem(ds2, ds1)
+                dbgemit(tdm)
+                emit(FormationContainedIn(ds1, tdm))
+                emit(FormationContainedIn(ds2, tdm))
+                return
+            end
         end
     elseif direction(ds1) == opposite(direction(ds2))
         # FaceToFace, BackToBack or MiniWave We break symetry using
@@ -206,20 +217,40 @@ those_with_role(c::LHMiniWave, ::Belles) = [ c.a, c.b ]
             return
         end
         if in_front_of(ds1, ds2) && in_front_of(ds2, ds1)
-            dbgemit(FaceToFace(ds1, ds2))
+            let
+                ftf = FaceToFace(ds1, ds2)
+                dbgemit(ftf)
+                emit(FormationContainedIn(ds1, ftf))
+                emit(FormationContainedIn(ds2, ftf))
+            end
             return
         end
         if behind(ds1, ds2) && behind(ds2, ds1)
-            dbgemit(BackToBack(ds1, ds2))
-            return
+            let
+                btb = BackToBack(ds1, ds2)
+                dbgemit(btb)
+                emit(FormationContainedIn(ds1, btb))
+                emit(FormationContainedIn(ds2, btb))
+                return
+            end
         end
         if right_of(ds1, ds2) && right_of(ds2, ds1)
-            dbgemit(RHMiniWave(ds1, ds2))
-            return
+            let
+                mw = RHMiniWave(ds1, ds2)
+                dbgemit(mw)
+                emit(FormationContainedIn(ds1, mw))
+                emit(FormationContainedIn(ds2, mw))
+                return
+            end
         end
         if left_of(ds1, ds2) && left_of(ds2, ds1)
-            dbgemit(LHMiniWave(ds1, ds2))
-            return
+            let
+                mw = LHMiniWave(ds1, ds2)
+                dbgemit(mw)
+                emit(FormationContainedIn(ds1, mw))
+                emit(FormationContainedIn(ds2, mw))
+                return
+            end
         end
     end
 end

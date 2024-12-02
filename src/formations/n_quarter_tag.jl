@@ -88,7 +88,8 @@ end
 @rule SquareDanceFormationRule.QuarterTagRule(q::QTWCT,
                                               f2f1::FaceToFace,
                                               f2f2::FaceToFace,
-                                              ::QuarterTag) begin
+                                              ::QuarterTag,
+                                              ::FormationContainedIn) begin
 
     if f2f1 == f2f2; return; end
     # The leader of each tandem is in the center of the wave
@@ -106,9 +107,17 @@ end
     if !(q.tandem2.leader in f2f2())
         return
     end
-    emit(QuarterTag(q.wave, q.couple1, q.couple2,
+    qt = QuarterTag(q.wave, q.couple1, q.couple2,
                     q.tandem1, q.tandem2,
-                    f2f1, f2f2))
+                    f2f1, f2f2)
+    emit(qt)
+    emit(FormationContainedIn(q.wave, qt))
+    emit(FormationContainedIn(q.couple1, qt))
+    emit(FormationContainedIn(q.couple2, qt))
+    emit(FormationContainedIn(q.tandem1, qt))
+    emit(FormationContainedIn(q.tandem2, qt))
+    emit(FormationContainedIn(f2f1, qt))
+    emit(FormationContainedIn(f2f2, qt))
 end
 
 @doc """
@@ -135,7 +144,8 @@ end
 @rule SquareDanceFormationRule.ThreeQuarterTagRule(q::QTWCT,
                                                    b2b1::BackToBack,
                                                    b2b2::BackToBack,
-                                                   ::ThreeQuarterTag) begin
+                                                   ::ThreeQuarterTag,
+                                                   ::FormationContainedIn) begin
     if b2b1 == b2b2; return; end
     # The leader of each tandem is in the center of the wave
     centers = dancer_states(q.wave.centers)
@@ -152,9 +162,17 @@ end
     if !(q.tandem2.trailer in b2b2())
         return
     end
-    emit(ThreeQuarterTag(q.wave, q.couple1, q.couple2,
+    qt = ThreeQuarterTag(q.wave, q.couple1, q.couple2,
                          q.tandem1, q.tandem2,
-                         b2b1, b2b2))
+                         b2b1, b2b2)
+    emit(qt)
+    emit(FormationContainedIn(q.wave, qt))
+    emit(FormationContainedIn(q.couple1, qt))
+    emit(FormationContainedIn(q.couple2, qt))
+    emit(FormationContainedIn(q.tandem1, qt))
+    emit(FormationContainedIn(q.tandem2, qt))
+    emit(FormationContainedIn(b2b1, qt))
+    emit(FormationContainedIn(b2b2, qt))
 end
 
 @doc """

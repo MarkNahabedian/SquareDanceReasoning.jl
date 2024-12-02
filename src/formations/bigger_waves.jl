@@ -90,7 +90,8 @@ end
                                               wave2::MiniWave,
                                               centers::MiniWave,
                                               ::RHWaveOfFour,
-                                              ::LHWaveOfFour) begin
+                                              ::LHWaveOfFour,
+                                              ::FormationContainedIn) begin
     if wave1 == wave2
         return
     end
@@ -114,7 +115,11 @@ end
     else
         @assert !isa(handedness(wave1), NoHandedness)
     end
-    emit(constructor(wave1, wave2, centers))
+    f = constructor(wave1, wave2, centers)
+    emit(f)
+    emit(FormationContainedIn(wave1, f))
+    emit(FormationContainedIn(wave2, f))
+    emit(FormationContainedIn(centers, f))
 end
 
 @doc """
@@ -129,7 +134,8 @@ dancers: [`RHWaveOfFour`](@ref) and [`LHWaveOfFour`](@ref).
                                                wave2::WaveOfFour,
                                                centers::MiniWave,
                                                ::RHWaveOfEight,
-                                               ::LHWaveOfEight) begin
+                                               ::LHWaveOfEight,
+                                               ::FormationContainedIn) begin
     if wave1 == wave2
         return
     end
@@ -153,7 +159,11 @@ dancers: [`RHWaveOfFour`](@ref) and [`LHWaveOfFour`](@ref).
     else
         @assert !isa(handedness(wave1), NoHandedness)
     end
-    emit(constructor(wave1, wave2, centers))
+    f = constructor(wave1, wave2, centers)
+    emit(f)
+    emit(FormationContainedIn(wave1, f))
+    emit(FormationContainedIn(wave2, f))
+    emit(FormationContainedIn(centers, f))
 end
 
 @doc """

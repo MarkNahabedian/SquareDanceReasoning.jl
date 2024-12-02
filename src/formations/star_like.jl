@@ -29,7 +29,8 @@ those_with_role(f::Star, role::Union{Beaus, Belles}) =
       those_with_role(f.mw2, role)...
       ]
 
-@rule SquareDanceFormationRule.StarRule(mw1::MiniWave, mw2::MiniWave, ::Star) begin
+@rule SquareDanceFormationRule.StarRule(mw1::MiniWave, mw2::MiniWave, ::Star,
+                                        ::FormationContainedIn) begin
     if mw1 == mw2
         return
     end
@@ -43,7 +44,10 @@ those_with_role(f::Star, role::Union{Beaus, Belles}) =
         return
     end
     if mw1.a.direction + DIRECTION1 == mw2.a.direction
-        emit(Star(mw1, mw2))
+        star = Star(mw1, mw2)
+        emit(star)
+        emit(FormationContainedIn(mw1, star))
+        emit(FormationContainedIn(mw2, star))
     end
 end
 

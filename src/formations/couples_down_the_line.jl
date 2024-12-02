@@ -36,7 +36,8 @@ handedness(::FacingTandemCouples) = NoHandedness()
 @rule SquareDanceFormationRule.FacingTandemCouplesRule(tc1::TandemCouples,
                                                        tc2::TandemCouples,
                                                        centers::FacingCouples,
-                                                       ::FacingTandemCouples) begin
+                                                       ::FacingTandemCouples,
+                                                       ::FormationContainedIn) begin
     if tc1 == tc2
         return
     end
@@ -47,7 +48,11 @@ handedness(::FacingTandemCouples) = NoHandedness()
     end
     if (tc1.leaders == centers.couple1 &&
         tc2.leaders == centers.couple2)
-        emit(FacingTandemCouples(tc1, tc2, centers))
+        f = FacingTandemCouples(tc1, tc2, centers)
+        emit(f)
+        emit(FormationContainedIn(tc1, f))
+        emit(FormationContainedIn(tc2, f))
+        emit(FormationContainedIn(centers, f))
     end
 end
 
@@ -88,13 +93,18 @@ handedness(::BeforeEightChain) = NoHandedness()
 @rule SquareDanceFormationRule.BeforeEightChainRule(fc1::FacingCouples,
                                                     fc2::FacingCouples,
                                                     centers::BackToBackCouples,
-                                                    ::BeforeEightChain) begin
+                                                    ::BeforeEightChain,
+                                                    ::FormationContainedIn) begin
     if fc1 == fc2
         return
     end
     if centers.couple1 == fc2.couple1 &&
         centers.couple2 == fc1.couple2
-        emit(BeforeEightChain(fc1, fc2, centers))
+        f = BeforeEightChain(fc1, fc2, centers)
+        emit(f)
+        emit(FormationContainedIn(fc1, f))
+        emit(FormationContainedIn(fc2, f))
+        emit(FormationContainedIn(centers, f))
     end
 end
 
@@ -134,13 +144,18 @@ handedness(::AfterEightChainOne) = NoHandedness()
 @rule SquareDanceFormationRule.AfterEightChainOneRule(bb1::BackToBackCouples,
                                                       bb2::BackToBackCouples,
                                                       centers::FacingCouples,
-                                                      ::AfterEightChainOne) begin
+                                                      ::AfterEightChainOne,
+                                                      ::FormationContainedIn) begin
     if bb1 == bb2
         return
     end
     if (centers.couple1 == bb1.couple1 &&
         centers.couple2 == bb2.couple2)
+        f = AfterEightChainOne(bb1, bb2, centers)
         emit(AfterEightChainOne(bb1, bb2, centers))
+        emit(FormationContainedIn(bb1, f))
+        emit(FormationContainedIn(bb2, f))
+        emit(FormationContainedIn(centers, f))
     end
 end
 
@@ -180,7 +195,8 @@ handedness(::CompletedDoublePassThru) = NoHandedness()
 @rule SquareDanceFormationRule.CompletedDoublePassThruRule(tc1::TandemCouples,
                                                            tc2::TandemCouples,
                                                            centers::BackToBackCouples,
-                                                           ::CompletedDoublePassThru) begin
+                                                           ::CompletedDoublePassThru,
+                                                           ::FormationContainedIn) begin
     if tc1 == tc2
         return
     end
@@ -190,7 +206,11 @@ handedness(::CompletedDoublePassThru) = NoHandedness()
     end
     if (centers.couple1 == tc1.trailers &&
         centers.couple2 == tc2.trailers)
-        emit(CompletedDoublePassThru(tc1, tc2, centers))
+        f = CompletedDoublePassThru(tc1, tc2, centers)
+        emit(f)
+        emit(FormationContainedIn(tc1, f))
+        emit(FormationContainedIn(tc2, f))
+        emit(FormationContainedIn(centers, f))
     end
 end
 

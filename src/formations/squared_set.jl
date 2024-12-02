@@ -24,11 +24,18 @@ end
 handedness(::SquaredSet) = NoHandedness()
 
 
-@rule SquareDanceFormationRule.SquaredSetFormationRule(fc1::FacingCouples, fc2::FacingCouples, ::SquaredSet) begin
+@rule SquareDanceFormationRule.SquaredSetFormationRule(fc1::FacingCouples,
+                                                       fc2::FacingCouples,
+                                                       ::SquaredSet,
+                                                       ::FormationContainedIn) begin
     if (direction(fc1.couple1) + 1//4) != direction(fc2.couple1)
         return
     end
-    emit(SquaredSet(fc1, fc2))
+    f = SquaredSet(fc1, fc2)
+    emit(f)
+    emit(FormationContainedIn(fc1, f))
+    emit(FormationContainedIn(fc2, f))
+
 end
 
 @doc """
@@ -69,7 +76,17 @@ end
 #
 # How do we know where the center is if we don't have all of the
 # dancers?
-@rule SquareDanceFormationRule.CircleOfEightFormationRule(sq::SDSquare, ds1::DancerState, ds2::DancerState, ds3::DancerState, ds4::DancerState, ds5::DancerState, ds6::DancerState, ds7::DancerState, ds8::DancerState, ::CircleOfEight) begin
+@rule SquareDanceFormationRule.CircleOfEightFormationRule(sq::SDSquare,
+                                                          ds1::DancerState,
+                                                          ds2::DancerState,
+                                                          ds3::DancerState,
+                                                          ds4::DancerState,
+                                                          ds5::DancerState,
+                                                          ds6::DancerState,
+                                                          ds7::DancerState,
+                                                          ds8::DancerState,
+                                                          ::CircleOfEight,
+                                                          ::FormationContainedIn) begin
     dss = [ ds1, ds2, ds3, ds4, ds5, ds6, ds7, ds8 ]
     howmany = length(dss)
     # All in same square:
@@ -120,7 +137,11 @@ end
             end
         end
     end
-    emit(CircleOfEight(dss...))
+    f = CircleOfEight(dss...)
+    emit(f)
+    for ds in dss
+        emit(FormationContainedIn(ds, f))
+    end
 end
 
 @doc """

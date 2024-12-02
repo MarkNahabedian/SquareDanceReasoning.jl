@@ -48,9 +48,11 @@ end
 handedness(f::TwoFacedLine) = handedness(f.centers)
 
 
-@rule SquareDanceFormationRule.LineOfFourRule(a::Couple, b::Couple,
+@rule SquareDanceFormationRule.LineOfFourRule(a::Couple,
+                                              b::Couple,
                                               centers::Couple,
-                                              ::LineOfFour) begin
+                                              ::LineOfFour,
+                                              ::FormationContainedIn) begin
     if direction(a) != direction(b)
         return
     end
@@ -63,7 +65,10 @@ handedness(f::TwoFacedLine) = handedness(f.centers)
     if centers.belle != a.beau
         return
     end
-    emit(LineOfFour(a, b, centers))
+    l = LineOfFour(a, b, centers)
+    emit(l)
+    emit(FormationContainedIn(a, l))
+    emit(FormationContainedIn(b, l))
 end
 
 @doc """
@@ -72,9 +77,11 @@ formation.
 """ LineOfFourRule
 
 
-@rule SquareDanceFormationRule.TwoFacedLineRule(a::Couple, b::Couple,
+@rule SquareDanceFormationRule.TwoFacedLineRule(a::Couple,
+                                                b::Couple,
                                                 centers::MiniWave,
-                                                ::TwoFacedLine) begin
+                                                ::TwoFacedLine,
+                                                ::FormationContainedIn) begin
     if direction(a) != opposite(direction(b))
         return
     end
@@ -95,7 +102,10 @@ formation.
     if centers.b != getfield(b, center_dancer_field)
         return
     end
-    emit(TwoFacedLine(a, b, centers))
+    l = TwoFacedLine(a, b, centers)
+    emit(l)
+    emit(FormationContainedIn(a, l))
+    emit(FormationContainedIn(b, l))
 end
 
 @doc """
