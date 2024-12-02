@@ -3,7 +3,6 @@ export StepThru, StepToAWave, PassThru, PullBy, Dosado,
 
 #= Some two dancer calls to implement:
 
-CourtesyTurn
 HalfSashay, RollawayWithAHalfSashay
 Run
 BoxTheGnat espands to StepToAWave, revolve around the your center -1/4, AndRoll
@@ -30,7 +29,7 @@ as_text(c::StepThru) = "$(as_text(c.role)) StepThru"
 
 can_do_from(::StepThru, ::MiniWave) = 1
 
-function perform(c::StepThru, mw::MiniWave, kb::ReteRootNode)
+function perform(c::StepThru, mw::MiniWave, kb::SDRKnowledgeBase)
     pass_by(mw, 1)
 end
 
@@ -179,7 +178,7 @@ end
 
 can_do_from(::Hinge, ::MiniWave) = 1
 
-function perform(c::Hinge, mw::MiniWave, kb::ReteRootNode)
+function perform(c::Hinge, mw::MiniWave, kb::SDRKnowledgeBase)
     c = center(mw)
     rot = begin
         if handedness(mw) isa RightHanded
@@ -209,7 +208,7 @@ end
 
 can_do_from(::PartnerHinge, ::Couple) = 1
 
-function perform(c::PartnerHinge, couple::Couple, kb::ReteRootNode)
+function perform(c::PartnerHinge, couple::Couple, kb::SDRKnowledgeBase)
     c = center(couple)
     cpl = RHMiniWave(let
                          dir = couple.beau.direction - 1//4
@@ -288,7 +287,7 @@ restricted_to(call::_FinishTrade) =
     DesignatedDancers([ call.original_beau.dancer,
                         call.original_belle.dancer ])
 
-function perform(c::_FinishTrade, mw::RHMiniWave, kb::ReteRootNode)
+function perform(c::_FinishTrade, mw::RHMiniWave, kb::SDRKnowledgeBase)
     beau = only(filter(dancer_states(mw)) do ds
                     ds.dancer == c.original_beau.dancer
                 end)
