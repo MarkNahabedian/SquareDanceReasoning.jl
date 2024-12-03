@@ -27,7 +27,7 @@ LoggingExtras = "1"
 OrderedCollections = "1"
 Parameters = "0.12"
 ResumableFunctions = "0.6, 1"
-Rete = "1.2"
+Rete = "1.2, 1"
 XML = "0.3"
 julia = "1"
 
