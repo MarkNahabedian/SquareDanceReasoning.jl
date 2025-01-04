@@ -69,6 +69,7 @@ handedness(f::TwoFacedLine) = handedness(f.centers)
     emit(l)
     emit(FormationContainedIn(a, l))
     emit(FormationContainedIn(b, l))
+    emit(FormationContainedIn(centers, l)) 
 end
 
 @doc """

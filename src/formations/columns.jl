@@ -48,6 +48,7 @@ direction(f::ColumnOfFour) = direction(f.lead)
     emit(f)
     emit(FormationContainedIn(lead, f))
     emit(FormationContainedIn(tail, f))
+    emit(FormationContainedIn(centers, f))
 end
 
 @doc """
