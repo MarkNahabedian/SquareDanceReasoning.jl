@@ -19,9 +19,9 @@
     @test fc.couple1.belle.dancer == square[2]
     @test fc.couple2.beau.dancer == square[3]
     @test fc.couple2.belle.dancer == square[4]
+    @test askc(Counter(), kb, FormationContainedIn) == 12
     collect_formation_examples(kb)
 end
-
 
 @testset "test BackToBackCouples" begin
     square = make_square(2)
@@ -43,6 +43,7 @@ end
     @test bb.couple1.belle.dancer == square[2]
     @test bb.couple2.beau.dancer == square[3]
     @test bb.couple2.belle.dancer == square[4]
+    @test askc(Counter(), kb, FormationContainedIn) == 12
     collect_formation_examples(kb)
 end
 
@@ -67,6 +68,7 @@ end
     @test tc.leaders.belle.dancer == square[2]
     @test tc.trailers.beau.dancer == square[3]
     @test tc.trailers.belle.dancer == square[4]
+    @test askc(Counter(), kb, FormationContainedIn) == 12
     collect_formation_examples(kb)
 end
 
@@ -91,6 +93,7 @@ end
     @test box.tandem2.leader.dancer == square[4]
     @test box.tandem1.trailer.dancer == square[1]
     @test box.tandem2.trailer.dancer == square[3]
+    @test askc(Counter(), kb, FormationContainedIn) == 12
     collect_formation_examples(kb)
 end
 
@@ -115,6 +118,7 @@ end
     @test box.tandem2.leader.dancer == square[4]
     @test box.tandem1.trailer.dancer == square[1]
     @test box.tandem2.trailer.dancer == square[3]
+    @test askc(Counter(), kb, FormationContainedIn) == 12
     collect_formation_examples(kb)
 end
 

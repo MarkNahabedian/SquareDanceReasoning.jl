@@ -21,6 +21,7 @@
               those_with_role(f, Guys()))
     @test all(ds -> ds.dancer.gender isa Gal,
               those_with_role(f, Gals()))
+    @test askc(Counter(), kb, FormationContainedIn) == 34
     collect_formation_examples(kb)
 end
 

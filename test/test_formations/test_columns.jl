@@ -41,6 +41,7 @@
         @test columns[2].tail.leader.dancer == square[7]
         @test columns[2].tail.trailer.dancer == square[8]
     end
+    @test askc(Counter(), kb, FormationContainedIn) == 38
     collect_formation_examples(kb)
 end
 

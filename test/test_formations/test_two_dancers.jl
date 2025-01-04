@@ -28,6 +28,7 @@ end
     @test f.belle.dancer == dancers[2]
     @test playmate(f.beau.dancer, f) == f.belle.dancer
     @test playmate(f.belle.dancer, f) == f.beau.dancer
+    @test askc(Counter(), kb, FormationContainedIn) == 2
     collect_formation_examples(kb)
 end
 
@@ -45,6 +46,7 @@ end
     @test f.b.dancer == dancers[2]
     @test playmate(f.a.dancer, f) == f.b.dancer
     @test playmate(f.b.dancer, f) == f.a.dancer
+    @test askc(Counter(), kb, FormationContainedIn) == 2
     collect_formation_examples(kb)
 end
     
@@ -63,6 +65,7 @@ end
     @test f.b.dancer == dancers[1]
     @test playmate(f.a.dancer, f) == f.b.dancer
     @test playmate(f.b.dancer, f) == f.a.dancer
+    @test askc(Counter(), kb, FormationContainedIn) == 2
     collect_formation_examples(kb)
 end
 
@@ -80,6 +83,7 @@ end
     @test f.trailer.dancer == dancers[1]
     @test playmate(f.leader.dancer, f) == f.trailer.dancer
     @test playmate(f.trailer.dancer, f) == f.leader.dancer
+    @test askc(Counter(), kb, FormationContainedIn) == 2
     collect_formation_examples(kb)
 end
 
@@ -97,6 +101,7 @@ end
     @test f.b.dancer == dancers[1]
     @test playmate(f.a.dancer, f) == f.b.dancer
     @test playmate(f.b.dancer, f) == f.a.dancer
+    @test askc(Counter(), kb, FormationContainedIn) == 2
     collect_formation_examples(kb)
 end
 
@@ -114,6 +119,7 @@ end
     @test f.b.dancer == dancers[2]
     @test playmate(f.a.dancer, f) == f.b.dancer
     @test playmate(f.b.dancer, f) == f.a.dancer
+    @test askc(Counter(), kb, FormationContainedIn) == 2
     collect_formation_examples(kb)
 end
 

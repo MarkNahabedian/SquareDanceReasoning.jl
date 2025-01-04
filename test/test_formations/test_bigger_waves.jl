@@ -10,8 +10,9 @@
     # First make sure we have the MiniWaves:
     @test askc(Counter(), kb, RHMiniWave) == 2
     @test askc(Counter(), kb, LHMiniWave) == 1
+    @test askc(Counter(), kb, MiniWave) == 3
     let
-        waves = askc(Collector{RHWaveOfFour}(), kb, RHWaveOfFour)
+        waves = askc(Collector{RHWaveOfFour}(), kb)
         @test length(waves) == 1
         f = first(waves)
         @test length(dancer_states(f)) == 4
@@ -25,6 +26,7 @@
         @test Set(dancer.(those_with_role(f, Ends()))) ==
             Set([square[1], square[4]])
     end
+    @test askc(Counter(), kb, FormationContainedIn) == 9
     collect_formation_examples(kb)
 end
 
@@ -54,6 +56,7 @@ end
         @test Set(dancer.(those_with_role(f, Ends()))) ==
             Set([square[1], square[4]])
     end
+    @test askc(Counter(), kb, FormationContainedIn) == 9
     collect_formation_examples(kb)
 end
 
@@ -64,6 +67,7 @@ end
     receive(kb, square)
     receive.([kb], grid_arrangement(square, [ 1 2 3 4 5 6 7 8 ],
                                     [ "↑↓↑↓↑↓↑↓" ]))
+    @debug_formations(kb)
     # First make sure we have the MiniWaves:
     @test askc(Counter(), kb, RHMiniWave) == 4
     @test askc(Counter(), kb, LHMiniWave) == 3
@@ -74,7 +78,7 @@ end
         waves = askc(Collector{RHWaveOfEight}(), kb, RHWaveOfEight)
         @test length(waves) == 1
         f = first(waves)
-        push!(TEXT_EXAMPLE_FORMATIONS, f)
+        # push!(TEST_EXAMPLE_FORMATIONS, f)
         @test handedness(f) == RightHanded()
         @test f.wave1.wave1.a.dancer == square[2]
         @test f.wave1.wave1.b.dancer == square[1]
@@ -91,6 +95,7 @@ end
         @test Set(dancer.(those_with_role(f, Ends()))) ==
             Set([square[1], square[4], square[5], square[8]])
     end
+    @test askc(Counter(), kb, FormationContainedIn) == 32
     collect_formation_examples(kb)
 end
 
