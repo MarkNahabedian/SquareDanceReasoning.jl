@@ -190,15 +190,17 @@ end
 
 function get_formations_by_type(kb::SDRKnowledgeBase)
     formations_by_type = Dict{Type, Vector}()
-    askc(kb, Union{SquareDanceFormation,
-                   Collision}) do fact
-        if !haskey(formations_by_type, typeof(fact))
-            formations_by_type[typeof(fact)] = []
-        end
-        # Some formations are stored in memory nodes for their
-        # supertypes as well.  Avoid duplicates:
-        if !in(fact, formations_by_type[typeof(fact)])
-             push!(formations_by_type[typeof(fact)], fact)
+    for o in kb.outputs
+        if o isa Rete.IsaMemoryNode
+            t = typeof(o).parameters[1]
+            if t <: SquareDanceFormation || t <: Collision
+                askc(o) do fact
+                    if !haskey(formations_by_type, t)
+                        formations_by_type[t] = []
+                    end
+                    push!(formations_by_type[t], fact)
+                end
+            end
         end
     end
     formations_by_type
