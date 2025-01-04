@@ -5,6 +5,40 @@ export BoxOfFour, RHBoxOfFour, LHBoxOfFour, BoxOfFourRule
 
 
 """
+    TwoDifferentCouples
+
+TwoDifferentCouples is a preliminary fact that supports the rules for
+finding FacingCouples, BackToBackCouples and TandemCouples.
+"""
+struct TwoDifferentCouples <: TemporalFact
+    couple1::Couple
+    couple2::Couple
+end
+
+
+@rule SquareDanceFormationRule.TwoDifferentCouplesRule(kb::SDRKnowledgeBase,
+                                                       couple1::Couple,
+                                                       couple2::Couple,
+                                                       ::TwoDifferentCouples) begin
+    if couple1 == couple2
+        return
+    end
+    # Symetry disambiguation
+    if direction(couple1) > direction(couple2)
+        return
+    end
+    # No other dancers in the way:
+    if encroached_on([couple1, couple2], kb)
+        return
+    end
+    if encroached_on([ couple1, couple2 ], kb)
+        return
+    end
+    emit(TwoDifferentCouples(couple1, couple2))
+end
+
+
+"""
 FacingCouples is a formation that includes two `Couple` formations
 that are facing each other.
 """
@@ -23,6 +57,31 @@ end
 end
 
 handedness(::FacingCouples) = NoHandedness()
+
+@rule SquareDanceFormationRule.FacingCouplesRule(tdc::TwoDifferentCouples,
+                                                 f2f1::FaceToFace,
+                                                 f2f2::FaceToFace,
+                                                 ::FacingCouples,
+                                                 ::FormationContainedIn) begin
+    couple1 = tdc.couple1
+    couple2 = tdc.couple2
+    if (f2f1.a in couple1 &&
+        f2f1.b in couple2 &&
+        f2f2.a in couple1 &&
+        f2f2.b in couple2)
+        f = FacingCouples(couple1, couple2)
+        emit(f)
+        emit(FormationContainedIn(couple1, f))
+        emit(FormationContainedIn(couple2, f))
+        emit(FormationContainedIn(f2f1, f))
+        emit(FormationContainedIn(f2f2, f))
+    end
+end
+
+@doc """
+FacingCouplesRule is the rule for identifying the FacingCouples
+formation.
+""" FacingCouplesRule
 
 
 """
@@ -45,6 +104,31 @@ end
 
 handedness(::BackToBackCouples) = NoHandedness()
     
+@rule SquareDanceFormationRule.BackToBackCouplesRule(tdc::TwoDifferentCouples,
+                                                     b2b1::BackToBack,
+                                                     b2b2::BackToBack,
+                                                     ::BackToBackCouples,
+                                                     ::FormationContainedIn) begin
+    couple1 = tdc.couple1
+    couple2 = tdc.couple2
+    if (b2b1.a in couple1 &&
+        b2b1.b in couple2 &&
+        b2b2.a in couple1 &&
+        b2b2.b in couple2)
+        f = BackToBackCouples(couple1, couple2)
+        emit(f)
+        emit(FormationContainedIn(couple1, f))
+        emit(FormationContainedIn(couple2, f))
+        emit(FormationContainedIn(b2b1, f))
+        emit(FormationContainedIn(b2b2, f))
+    end
+end
+
+@doc """
+BackToBackCouplesRule is the rule for identifying the
+BackToBackCouples formation.
+""" BackToBackCouplesRule
+
 
 """
 TandemCouples is a formation for two Couples in Tandem.
@@ -67,59 +151,30 @@ handedness(::TandemCouples) = NoHandedness()
 
 direction(f::TandemCouples) = direction(f.leaders)
 
-
-@rule SquareDanceFormationRule.CoupleBoxRule(kb::SDRKnowledgeBase,
-                                             couple1::Couple,
-                                             couple2::Couple,
-                                             ::FacingCouples,
-                                             ::BackToBackCouples,
-                                             ::TandemCouples,
-                                             ::FormationContainedIn) begin
-    if couple1 == couple2
-        return
-    end
-    # Symetry disambiguation
-    if direction(couple1) > direction(couple2)
-        return
-    end
-    # No other dancers in the way:
-    if encroached_on([couple1, couple2], kb)
-        return
-    end
-    if encroached_on([ couple1, couple2 ], kb)
-        return
-    end
-    local f
-    if ((direction(couple1) == direction(couple2)) &&
-        in_front_of(couple2.beau, couple1.beau) &&
-        in_front_of(couple2.belle, couple1.belle))
-        f = TandemCouples(couple1, couple2)
+@rule SquareDanceFormationRule.TandemCouplesRule(tdc::TwoDifferentCouples,
+                                                 tandem1::Tandem,
+                                                 tandem2::Tandem,
+                                                 ::TandemCouples,
+                                                 ::FormationContainedIn) begin
+    leaders = tdc.couple1
+    trailers = tdc.couple2
+    if (tandem1.leader in leaders &&
+        tandem1.trailer in trailers &&
+        tandem2.leader in leaders &&
+        tandem2.trailer in trailers)
+        f = TandemCouples(leaders, trailers)
         emit(f)
-    elseif direction(couple1) == opposite(direction(couple2))
-        if (in_front_of(couple1.beau, couple2.belle) &&
-            in_front_of(couple2.belle, couple1.beau) &&
-            in_front_of(couple1.belle, couple2.beau) &&
-            in_front_of(couple2.beau, couple1.belle))
-            f = FacingCouples(couple1, couple2)
-            emit(f)
-        elseif (behind(couple1.beau, couple2.belle) &&
-            behind(couple2.belle, couple1.beau) &&
-            behind(couple1.belle, couple2.beau) &&
-            behind(couple2.beau, couple1.belle))
-            f = BackToBackCouples(couple1, couple2)
-            emit(f)
-        end
-    end
-    if @isdefined f    
-        emit(FormationContainedIn(couple1, f))
-        emit(FormationContainedIn(couple2, f))
+        emit(FormationContainedIn(leaders, f))
+        emit(FormationContainedIn(trailers, f))
+        emit(FormationContainedIn(tandem1, f))
+        emit(FormationContainedIn(tandem2, f))
     end
 end
 
 @doc """
-CoupleBoxRule is the rule for identifying two couples arranged in a
-two by two box.
-""" CoupleBoxRule
+TandemCouplesRule is the rule for identifying the
+TandemCouples formation.
+""" TandemCouplesRule
 
 
 """
