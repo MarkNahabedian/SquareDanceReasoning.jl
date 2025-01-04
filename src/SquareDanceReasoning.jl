@@ -4,8 +4,10 @@ using InteractiveUtils
 using DataStructures
 using Parameters
 using Printf
+using IterTools
 using Logging
 using LoggingExtras
+using OrderedCollections
 using ResumableFunctions
 using LinearAlgebra: dot, normalize, normalize!
 using Base.Iterators: flatten
@@ -42,6 +44,7 @@ the [`DancerState`](@ref)s of the formation.
 abstract type SquareDanceFormation <: TemporalFact end
 
 
+include("utils.jl")
 include("coordinate_system.jl")
 include("handedness.jl")
 include("dancers.jl")

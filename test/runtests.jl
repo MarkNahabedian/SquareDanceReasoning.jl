@@ -6,6 +6,11 @@ using InteractiveUtils
 
 include("debug_formations.jl")
 
+@testset "utils" begin
+    @test collect(SquareDanceReasoning.merge_sorted_iterators(1:3, 2:2:6, 1:8)) ==
+        collect(1:8)
+end
+
 @testset "directions" begin
     @test opposite(DIRECTION0) == DIRECTION2
     @test opposite(DIRECTION1) == DIRECTION3
