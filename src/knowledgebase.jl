@@ -25,6 +25,10 @@ end
 
 Rete.CanInstallRulesTrait(::Type{<:SDRKnowledgeBase}) = CanInstallRulesTrait()
 
+Rete.inputs(kb::SDRKnowledgeBase) = kb.inputs
+
+Rete.outputs(kb::SDRKnowledgeBase) = kb.outputs
+
 Rete.label(node::SDRKnowledgeBase) = node.label
 
 
