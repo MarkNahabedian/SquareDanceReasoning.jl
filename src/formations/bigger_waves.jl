@@ -92,20 +92,25 @@ end
                                               ::RHWaveOfFour,
                                               ::LHWaveOfFour,
                                               ::FormationContainedIn) begin
+     # @info("WaveOfFourRule", _group=WaveOfFourRule, wave1, wave2, centers)
     if wave1 == wave2
+        # @ info("same miniwave test", _group=WaveOfFourRule, wave1, wave2) 
         return
     end
     if !(handedness(wave1) == handedness(wave2) &&
          handedness(wave1) == opposite(handedness(centers)) &&
          handedness(wave2) == opposite(handedness(centers)))
+        # @info("handedness test", _group=WaveOfFourRule, wave1, wave2, centers) 
         return
     end
-    # How do we break symery between wave1 and wave2?  They will only
+    # How do we break symetry between wave1 and wave2?  They will only
     # connect to centers one way.
     if centers.a != wave1.a
+        # @info("centers.a", _group=WaveOfFourRule, wave1, centers) 
         return
     end
     if centers.b != wave2.b
+        # @info("centers.b", _group=WaveOfFourRule, wave2, centers) 
         return
     end
     if handedness(wave1) == RightHanded()
