@@ -78,7 +78,7 @@ end
         waves = askc(Collector{RHWaveOfEight}(), kb, RHWaveOfEight)
         @test length(waves) == 1
         f = first(waves)
-        # push!(TEST_EXAMPLE_FORMATIONS, f)
+        push!(TEST_EXAMPLE_FORMATIONS, f)
         @test handedness(f) == RightHanded()
         @test f.wave1.wave1.a.dancer == square[2]
         @test f.wave1.wave1.b.dancer == square[1]
