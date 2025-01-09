@@ -19,6 +19,7 @@ struct SDRKnowledgeBase <: AbstractReteRootNode
                  # Special memory for FormationContainedInMemoryNode facts:
                  FormationContainedInMemoryNode())
         connect(kb, kb.formations_contained_in)
+        ensure_memory_node(kb, SquareDanceFormation)
         kb
     end
 end

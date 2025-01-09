@@ -190,18 +190,14 @@ end
 
 function get_formations_by_type(kb::SDRKnowledgeBase)
     formations_by_type = Dict{Type, Vector}()
-    for o in kb.outputs
-        if o isa Rete.IsaMemoryNode
-            t = typeof(o).parameters[1]
-            if t <: SquareDanceFormation || t <: Collision
-                askc(o) do fact
-                    if !haskey(formations_by_type, t)
-                        formations_by_type[t] = []
-                    end
-                    push!(formations_by_type[t], fact)
-                end
+    let
+        function f(fact)
+            if !haskey(formations_by_type, typeof(fact))
+                formations_by_type[typeof(fact)] = []
             end
+            push!(formations_by_type[typeof(fact)], fact)
         end
+        askc(f, kb, SquareDanceFormation)
     end
     formations_by_type
 end
