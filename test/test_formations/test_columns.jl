@@ -27,9 +27,9 @@
         @test columns[1].lead.leader.dancer == square[4]
         let
             f = columns[1]
-            @test Set(those_with_role(f, Centers())) ==
+            @test Set(those_with_role(f, kb, Centers())) ==
                 Set([ f.tail.leader, f.lead.trailer ])
-            @test Set(those_with_role(f, Ends())) ==
+            @test Set(those_with_role(f, kb, Ends())) ==
                 Set([ f.tail.trailer, f.lead.leader ])
         end
         #   →→→→   direction 3/4

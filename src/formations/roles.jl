@@ -143,6 +143,18 @@ function supported_roles(f::Type{<:SquareDanceFormation})
     supported
 end
 
+function those_with_role(formation::SquareDanceFormation, kb::SDRKnowledgeBase, role::Role)
+    those = those_with_role(formation, role)
+    f = formation
+    # Is depth_first good enough?
+    if isempty(those)
+        for cf in kb.formations_contained_in.contained_to_container[f]
+            those = union(those, those_with_role(cf, kb, role))
+        end
+    end
+    those
+end
+
 those_with_role(f::SquareDanceFormation, o::ObverseRole) =
     typeof(o.role)(setdiff(those_with_role(f, Everyone()),
                            those_with_role(f, o.role)))

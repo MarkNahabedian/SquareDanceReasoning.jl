@@ -32,9 +32,9 @@
         @test lines[2].a.belle.dancer == square[8]
         let
             f = lines[1]
-            @test Set(dancer.(those_with_role(f, Centers()))) ==
+            @test Set(dancer.(those_with_role(f, kb, Centers()))) ==
                 Set([ square[2], square[3] ])
-            @test Set(dancer.(those_with_role(f, Ends()))) ==
+            @test Set(dancer.(those_with_role(f, kb, Ends()))) ==
                 Set([ square[1], square[4] ])
         end
 

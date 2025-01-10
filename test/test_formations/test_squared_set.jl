@@ -13,14 +13,14 @@
     @test 1 == askc(Counter(), kb, SquaredSet)
     @test 1 == askc(Counter(), kb, CircleOfEight)
     f = only(askc(Collector{SquaredSet}(), kb, SquaredSet))
-    @test Set(those_with_role(f, OriginalHeads())) ==
-        Set(those_with_role(f, CurrentHeads()))
-    @test Set(those_with_role(f, OriginalSides())) ==
-        Set(those_with_role(f, CurrentSides()))
+    @test Set(those_with_role(f, kb, OriginalHeads())) ==
+        Set(those_with_role(f, kb, CurrentHeads()))
+    @test Set(those_with_role(f, kb, OriginalSides())) ==
+        Set(those_with_role(f, kb, CurrentSides()))
     @test all(ds -> ds.dancer.gender isa Guy,
-              those_with_role(f, Guys()))
+              those_with_role(f, kb, Guys()))
     @test all(ds -> ds.dancer.gender isa Gal,
-              those_with_role(f, Gals()))
+              those_with_role(f, kb, Gals()))
     @test askc(Counter(), kb, FormationContainedIn) == 34
     collect_formation_examples(kb)
 end
