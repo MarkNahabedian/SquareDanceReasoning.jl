@@ -131,7 +131,7 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                 # requeueing its parts.
                 #
                 # Should we do all of the expand_parts before doing
-                # any of the performs?  Wewould need some way to defer
+                # any of the performs?  We would need some way to defer
                 # the atomic calls, perhaps with more complicated
                 # values in the PriorityQueue.
                 now_do_this = dequeue!(sched)
@@ -275,8 +275,8 @@ function get_call_options(call::SquareDanceCall,
     options = filter!(options) do cdc
         # Every dancer in the formation satisfies the role
         # restriction:
-        length(those_with_role(cdc.formation, restricted_to(call))) ==
-            length(dancer_states(cdc.formation))
+        Set(those_with_role(cdc.formation, kb, restricted_to(call))) ==
+            Set(dancer_states(cdc.formation))
     end
     @info("get_call_options after role restriction", options)
     # Find highest preference option for each dancer:

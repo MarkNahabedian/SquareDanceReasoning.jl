@@ -64,4 +64,5 @@ include("test_two_dancer_calls.jl")
 include("test_pass_thru.jl")
 include("test_quarter_in_out.jl")
 include("test_squareThru.jl")
+include("test_container_roles.jl")
 

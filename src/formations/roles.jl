@@ -145,12 +145,22 @@ end
 
 function those_with_role(formation::SquareDanceFormation, kb::SDRKnowledgeBase, role::Role)
     those = those_with_role(formation, role)
-    f = formation
-    # Is depth_first good enough?
-    if isempty(those)
-        for cf in kb.formations_contained_in.contained_to_container[f]
-            those = union(those, those_with_role(cf, kb, role))
+    more_containers = []
+    function check_containers_for(f::SquareDanceFormation)
+        fcis = get(kb.formations_contained_in.contained_to_container, f, [])
+        for fci in fcis
+            got = those_with_role(fci.container, kb, role)
+            if isempty(got)
+                push!(more_containers, fci.container)
+            else
+                those = union(those, got)
+                break
+            end
         end
+    end
+    push!(more_containers, formation)
+    while isempty(those) && !isempty(more_containers)
+        check_containers_for(popfirst!(more_containers))
     end
     those
 end
