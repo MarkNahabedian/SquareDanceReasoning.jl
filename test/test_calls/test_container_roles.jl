@@ -12,7 +12,7 @@
                                   "↓↑↓↑" ])
         receive.([kb], grid)
         @debug_formations(kb)
-        containment_graph(kb, "test_centers_trade", DotBackend(@__DIR__, "test_centers_trade"))
+        # containment_graph(kb, "test_centers_trade", DotBackend(@__DIR__, "test_centers_trade"))
         # Check that those_with_role is working:
         let
             line = only(askc(Collector{LineOfFour}(), kb))
