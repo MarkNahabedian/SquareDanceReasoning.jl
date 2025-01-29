@@ -23,6 +23,7 @@ XML = "72c71f33-b9b6-44de-8c94-c961784809e2"
 [compat]
 Colors = "0.12, 0.13"
 DataStructures = "0.18"
+IterTools = "1"
 JSON = "0.21"
 LoggingExtras = "1"
 OrderedCollections = "1"
