@@ -1,6 +1,7 @@
 
 export LineOfFour, TwoFacedLine
 export LineOfFourRule, TwoFacedLineRule
+export InvertedLineOfFour, InvertedLineOfFourRule
 
 
 """
@@ -107,9 +108,54 @@ formation.
     emit(l)
     emit(FormationContainedIn(a, l))
     emit(FormationContainedIn(b, l))
+    emit(FormationContainedIn(centers, l))
 end
 
 @doc """
 TwoFacedLineRule is the rule for identifying [`TwoFacedLine`](@ref)
 formations.
 """ TwoFacedLineRule
+
+
+"""
+InvertedLineOfFour represents an inverted line of four formation with a
+Couple in the center connecting two MiniWaves.
+"""
+struct InvertedLineOfFour <: OneByFourFormation
+    a::MiniWave
+    b::MiniWave
+    centers::Couple
+end
+
+@resumable function(f::InvertedLineOfFour)()
+    for ds in f.a()
+        @yield ds
+    end
+    for ds in f.b()
+        @yield ds
+    end
+end
+
+@rule SquareDanceFormationRule.InvertedLineOfFourRule(a::MiniWave,
+                                                      b::MiniWave,
+                                                      centers::Couple,
+                                                      ::InvertedLineOfFour,
+                                                      ::FormationContainedIn) begin
+    if !(centers.beau in a)
+        return
+    end
+    if !(centers.belle in b)
+        return
+    end
+    il = InvertedLineOfFour(a, b, centers)
+    emit(il)
+    emit(FormationContainedIn(a, il))
+    emit(FormationContainedIn(b, il))
+    emit(FormationContainedIn(centers, il))
+end
+
+@doc """
+InvertedLineOfFourRule is the rule for identifying [`InvertedLineOfFour`](@ref)
+formations.
+""" InvertedLineOfFourRule
+

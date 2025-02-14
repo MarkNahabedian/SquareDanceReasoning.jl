@@ -50,41 +50,34 @@ end
     square = make_square(4)
     kb = make_kb()
     receive(kb, square)
-    # Rught hand two faced line:  ↑↑↓↓
-    receive(kb, DancerState(square[1], 0, 1//2, 0, 1))
-    receive(kb, DancerState(square[2], 0, 1//2, 0, 2))
-    receive(kb, DancerState(square[3], 0,    0, 0, 3))
-    receive(kb, DancerState(square[4], 0,    0, 0, 4))
-    # Left hand two faced line    ↓↓↑↑
-    receive(kb, DancerState(square[5], 0,    0, 1, 1))
-    receive(kb, DancerState(square[6], 0,    0, 1, 2))
-    receive(kb, DancerState(square[7], 0, 1//2, 1, 3))
-    receive(kb, DancerState(square[8], 0, 1//2, 1, 4))
+    grid = grid_arrangement(square.dancers,
+                            [ 1 2 3 4;
+                              5 6 7 8 ],
+                            [ "↑↑↓↓";
+                              "↓↓↑↑" ])
+    receive.([kb], grid)
     @debug_formations(kb)
     # First make sure we have the Couples:
+    @test askc(Counter(), kb, Couple) == 4
     let
-        m = find_memory_for_type(kb, Couple)
-        @test length(m.memory) == 4
-    end
-    let
-        lines = askc(Collector{TwoFacedLine}(), kb, TwoFacedLine)
-        line_offset = 0
+        lines = askc(Collector{TwoFacedLine}(), kb)
         for line in lines
             @test length(dancer_states(line)) == 4
             if handedness(line) == RightHanded()
+                line_offset = 0
                 @test handedness(line.centers) == RightHanded()
                 @test line.b.beau.dancer == square[line_offset + 1]
                 @test line.b.belle.dancer == square[line_offset + 2]
                 @test line.a.belle.dancer == square[line_offset + 3]
                 @test line.a.beau.dancer == square[line_offset + 4]
             else
+                line_offset = 4
                 @test handedness(line.centers) == LeftHanded()
                 @test line.a.belle.dancer == square[line_offset + 1]
                 @test line.a.beau.dancer == square[line_offset + 2]
                 @test line.b.beau.dancer == square[line_offset + 3]
                 @test line.b.belle.dancer == square[line_offset + 4]
             end
-            line_offset += 4
         end
         # We should also have two FaceToFace and two BackToBack
         # couples:
@@ -96,8 +89,30 @@ end
             m = find_memory_for_type(kb, BackToBack)
             @test length(m.memory) == 2
         end
-        @test askc(Counter(), kb, FormationContainedIn) == 32
+        @test askc(Counter(), kb, FormationContainedIn) == 34
     end
     collect_formation_examples(kb)
+end
+
+@testset "inverted lines of four" begin
+    square = make_square(4)
+    kb = make_kb()
+    receive(kb, square)
+    grid = grid_arrangement(square.dancers,
+                            [ 1 2 3 4;
+                              5 6 7 8 ],
+                            [ "↑↓↓↑";
+                              "↓↑↑↓" ])
+    receive.([kb], grid)
+    @debug_formations(kb)
+    lines = askc(Collector{InvertedLineOfFour}(), kb)
+    @test length(lines) == 2
+    for line in lines
+        @test length(dancer_states(line)) == 4
+        @test line.a.a.direction == 0
+        @test line.a.b.direction == 1//2
+        @test line.b.a.direction == 0
+        @test line.b.b.direction == 1//2
+    end
 end
 
