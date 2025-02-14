@@ -123,7 +123,7 @@ function json_to_formation(json)
     json_to_formation1(json)
 end
 
-CACHED_FORMATION_EXAMPLES = Dict{String, SquareDanceFormation}()
+CACHED_FORMATION_EXAMPLES = OrderedDict{String, SquareDanceFormation}()
 
 function load_formation_examples(; force=false)
     if !force && !isempty(CACHED_FORMATION_EXAMPLES)

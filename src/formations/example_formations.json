@@ -1432,49 +1432,49 @@
   {
     "_TYPE_": "TwoFacedLine",
     "DancerStates": {
-      "1m": {
-        "couple_number": 1,
-        "gender": "Guy",
-        "direction": 0.5,
-        "down": 0.0,
-        "left": 1.0
-      },
-      "1f": {
-        "couple_number": 1,
+      "3f": {
+        "couple_number": 3,
         "gender": "Gal",
-        "direction": 0.5,
-        "down": 0.0,
+        "direction": 0.0,
+        "down": 2.0,
         "left": 2.0
       },
-      "2m": {
-        "couple_number": 2,
+      "4m": {
+        "couple_number": 4,
         "gender": "Guy",
-        "direction": 0.0,
-        "down": 0.0,
+        "direction": 0.5,
+        "down": 2.0,
         "left": 3.0
       },
-      "2f": {
-        "couple_number": 2,
-        "gender": "Gal",
+      "3m": {
+        "couple_number": 3,
+        "gender": "Guy",
         "direction": 0.0,
-        "down": 0.0,
+        "down": 2.0,
+        "left": 1.0
+      },
+      "4f": {
+        "couple_number": 4,
+        "gender": "Gal",
+        "direction": 0.5,
+        "down": 2.0,
         "left": 4.0
       }
     },
     "a": {
       "_TYPE_": "Couple",
-      "beau": "2f",
-      "belle": "2m"
+      "beau": "3f",
+      "belle": "3m"
     },
     "b": {
       "_TYPE_": "Couple",
-      "beau": "1m",
-      "belle": "1f"
+      "beau": "4m",
+      "belle": "4f"
     },
     "centers": {
-      "_TYPE_": "RHMiniWave",
-      "a": "2m",
-      "b": "1f"
+      "_TYPE_": "LHMiniWave",
+      "a": "3f",
+      "b": "4m"
     }
   }
 ]
