@@ -1,5 +1,5 @@
 export StepThru, StepToAWave, PassThru, PullBy, Dosado,
-    Hinge, PartnerHinge, Trade, SlideThru, StarThru
+    Hinge, PartnerHinge, Trade, SlideThru, StarThru, CourtesyTurn
 
 #= Some two dancer calls to implement:
 
@@ -353,5 +353,65 @@ function expand_parts(c::StarThru, f::FaceToFace)
         (0, PassThru(; role=designated_dancers)),
         (2, _GenderedRoll(; role=designated_dancers))
     ]
+end
+
+
+"""
+    CourtesyTurn(; role=Everyone())
+
+CallerLab Basic-1 call.
+
+Timing: CallerLab: 4.
+"""
+@with_kw_noshow struct CourtesyTurn <: SquareDanceCall
+    role::Role = Everyone()
+    inactive::Union{Nothing, DancerState} = nothing
+end
+
+can_do_from(::CourtesyTurn, f::FaceToFace) = 1
+can_do_from(::CourtesyTurn, f::Couple) = 1
+
+function perform(c::CourtesyTurn, f::Couple, kb::SDRKnowledgeBase)
+    # This dance action is a simplification which strays from the
+    # actual definition.  We can try to fix it if we see it's a
+    # problem.
+    @assert c.inactive == nothing
+    ctr = center(f)
+    end_direction = opposite(f.beau.direction)
+    # Revolving is done 1/4 turn at a time to facilitate SVG
+    # animation.
+    Couple(revolve(revolve(f.beau, ctr, end_direction - 1//4, 2),
+                   ctr, end_direction, 2),
+           revolve(revolve(f.belle, ctr, end_direction - 1//4, 2),
+                   ctr, end_direction, 2))
+end
+
+function perform(c::CourtesyTurn, f::FaceToFace, kb::SDRKnowledgeBase)
+    # This dance action is a simplification which strays from the
+    # actual definition.  We can try to fix it if we see it's a
+    # problem.
+    @assert c.inactive isa DancerState
+    inactive = c.inactive
+    active = only(setdiff(dancer_states(f), [c.inactive]))
+    end_direction = inactive.direction
+    # active moves up to beside inactive while inactive turns in place
+    # to face same direction as active.  Then both revolve around
+    # their center pont to face end_direction.
+    inactive1 = let
+        half_rotation = (active.rotation - inactive.rotation) // 2
+        rotate(rotate(inactive, half_rotation, 1),
+               half_rotation, 1)
+    end
+    active1 = let
+        pos = location(inactive) +
+            COUPLE_DISTANCE * unit_vector(inactive.direction + 1//4)
+        DancerState(active, active.time + 2, active.direction,
+                    pos...)
+    end
+    end_direction = inactive.direction
+    Couple(revolve(revolve(inactive1, ctr, end_direction - 1//4, 2),
+                   ctr, end_direction, 2),
+           revolve(revolve(active1, ctr, end_direction - 1//4, 2),
+                   ctr, end_direction, 2))
 end
 
