@@ -1,5 +1,5 @@
 
-export formation_svg, dancer_svg
+export formation_svg, dancer_svg, wrap_with_document_and_xml_declaration
 
 
 gender_fragment(::Guy) = "Guy"
@@ -16,10 +16,10 @@ function dancer_svg(ds::DancerState, symbol_uri_base; id=missing)
     y = DANCER_SVG_SIZE * ds.down
 
     elt("use",
-        if id isa Missing
+        if id isa Missing || id isa Nothing
             [ "id" => formation_id_string(ds) ]
         elseif !(id isa Nothing)
-            [ "id" => id ]
+            [ "id" => "$id.$(formation_id_string(ds))" ]
         else
             []
         end...,
@@ -61,4 +61,9 @@ function formation_svg(f, symbol_uri_base; id=nothing,
             end...))
 end
 
+
+function wrap_with_document_and_xml_declaration(content)
+    XML.Document(XML.Declaration(; version="1.0", encoding="UTF-8", standalone="no"),
+                 content)
+end
 
