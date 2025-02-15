@@ -14,8 +14,8 @@ function bounds_to_viewbox(bounds::Bounds)
                      DANCER_SVG_SIZE * bounds.min_left,
                      DANCER_SVG_SIZE * bounds.min_down,
                      width, height),
-        "width" => width,
-        "height" => height
+        "width" => "$width$SVG_SIZE_UNITS",
+        "height" => "$height$SVG_SIZE_UNITS"
     ]
 end
 
@@ -26,4 +26,5 @@ include("dancer_symbols.jl")
 include("dancer_colors.jl")
 include("formation_svg.jl")
 include("animate.jl")
+include("containment_graph.jl")
 
