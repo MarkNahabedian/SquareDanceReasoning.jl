@@ -8,9 +8,10 @@ A formation might consist of 1, 2, 4, 6, or 8 dancers.
 For each kind of formation an immutable struct is defined which can be
 asserted in and by the knowledge base.
 
-Each formation has a way to iterate over its dancers.  A formation
-might also divide its dancers into roles, for example, *beaus* and
-*belles* or *centers* and *ends*.
+Each formation has a way to iterate over its dancers.  The formation
+object itself is the iterator.  A formation might also divide its
+dancers into roles, for example, *beaus* and *belles* or *centers* and
+*ends*.
 
 A formation might have a [`direction`](@ref) if all of its dancers are
 facing the same way.
