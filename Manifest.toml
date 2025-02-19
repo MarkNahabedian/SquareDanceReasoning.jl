@@ -2,7 +2,7 @@
 
 julia_version = "1.11.2"
 manifest_format = "2.0"
-project_hash = "379ae308051653f5f8ece05b69f8e484f290dbf3"
+project_hash = "1d4e3f3120966918603a78eef3386fa121e84e87"
 
 [[deps.Artifacts]]
 uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
@@ -98,10 +98,9 @@ uuid = "e6f89c97-d47a-5376-807f-9c37f3926c36"
 version = "1.1.0"
 
 [[deps.MacroTools]]
-deps = ["Markdown", "Random"]
-git-tree-sha1 = "2fa9ee3e63fd3a4f7a9a4f4744a52f4856de82df"
+git-tree-sha1 = "72aebe0b5051e5143a079a4685a46da330a40472"
 uuid = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
-version = "0.5.13"
+version = "0.5.15"
 
 [[deps.Markdown]]
 deps = ["Base64"]
@@ -118,9 +117,9 @@ uuid = "4536629a-c528-5b80-bd46-f80d51c5b363"
 version = "0.3.27+1"
 
 [[deps.OrderedCollections]]
-git-tree-sha1 = "dfdf5519f235516220579f949664f1bf44e741c5"
+git-tree-sha1 = "cc4054e898b852042d7b503313f7ad03de99c3dd"
 uuid = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
-version = "1.6.3"
+version = "1.8.0"
 
 [[deps.Parameters]]
 deps = ["OrderedCollections", "UnPack"]
@@ -163,15 +162,15 @@ version = "1.2.2"
 
 [[deps.ResumableFunctions]]
 deps = ["Logging", "MacroTools"]
-git-tree-sha1 = "910fb2b8f0dd33649f606266c392f639bb939b10"
+git-tree-sha1 = "a806de0d1f85cfc291317b01fb96a6674ff4c267"
 uuid = "c5292f4c-5179-55e1-98c5-05642aab7184"
-version = "0.6.10"
+version = "1.0.2"
 
 [[deps.Rete]]
-deps = ["InteractiveUtils", "IterTools", "MacroTools", "OrderedCollections", "Printf"]
-git-tree-sha1 = "d8eafc96035f78fb0383cfd0ecc2f5c294eea557"
+deps = ["InteractiveUtils", "IterTools", "Logging", "LoggingExtras", "MacroTools", "OrderedCollections", "Printf"]
+git-tree-sha1 = "4658c20c9c1e7eb472bf85ac85551c967013f319"
 uuid = "3d46c559-9b3d-4aba-9ca1-48ff7627231e"
-version = "1.3.0"
+version = "1.4.0"
 
 [[deps.SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"

@@ -10,7 +10,7 @@ export Attendance, AllPresent, SDSquareHasAttendanceRule, AttendanceRule
 """
     Attendance(::SDSquare)
 
-`Attendane` is a fact in the knowledgebase that leeps track of how many
+`AAttendance` is a fact in the knowledgebase that keeps track of how many
 [`DancerState`](@ref)s in a square are present.
 
 This is necessary because tests like [`encroached_on`](@ref) can only
@@ -54,12 +54,10 @@ every [`SDSquare`](@ref) fact.
 
 
 @rule SquareDanceFormationRule.AttendanceRule(a::Attendance, ds::DancerState, ::AllPresent) begin
-    if haskey(a.present, ds.dancer)
-        a.present[ds.dancer] = true
-        if all(values(a.present))
-            emit(AllPresent(a.expected))
-        end
-    end
+    @continueif haskey(a.present, ds.dancer)
+    a.present[ds.dancer] = true
+    @continueif all(values(a.present))
+    emit(AllPresent(a.expected))
 end
 @doc """
     AttendanceRule

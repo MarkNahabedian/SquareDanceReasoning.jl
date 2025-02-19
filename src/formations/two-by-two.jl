@@ -20,20 +20,12 @@ end
                                                        couple1::Couple,
                                                        couple2::Couple,
                                                        ::TwoDifferentCouples) begin
-    if couple1 == couple2
-        return
-    end
+    @rejectif couple1 == couple2
     # Symetry disambiguation
-    if direction(couple1) > direction(couple2)
-        return
-    end
+    @rejectif direction(couple1) > direction(couple2)
     # No other dancers in the way:
-    if encroached_on([couple1, couple2], kb)
-        return
-    end
-    if encroached_on([ couple1, couple2 ], kb)
-        return
-    end
+    @rejectif encroached_on([couple1, couple2], kb)
+    @rejectif encroached_on([ couple1, couple2 ], kb)
     emit(TwoDifferentCouples(couple1, couple2))
 end
 

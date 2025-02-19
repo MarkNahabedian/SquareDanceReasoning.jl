@@ -171,22 +171,14 @@ those_with_role(c::LHMiniWave, ::Belles) = [ c.a, c.b ]
                                                        ::FormationContainedIn) begin
     RULE_DECLARATIONS(FORWARD_TRIGGERS(sq))
     # Not the same dancer:
-    if ds1.dancer == ds2.dancer
-        return
-    end
+    @rejectif ds1.dancer == ds2.dancer
     # Contemporary:
-    if ds1.time != ds2.time
-        return
-    end
+    @rejectif ds1.time != ds2.time
     # In the same square:
-    if !in(ds1, sq.expected) || !in(ds2, sq.expected)
-        return
-    end
+    @rejectif !in(ds1, sq.expected) || !in(ds2, sq.expected)
     # Rather than using near, make sure there are no other dancers
     # between these two:
-    if encroached_on([ds1, ds2], kb)
-        return
-    end
+    @rejectif encroached_on([ds1, ds2], kb)
     function dbgemit(f)
         emit(f)
     end
