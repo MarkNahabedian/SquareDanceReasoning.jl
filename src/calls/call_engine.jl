@@ -54,8 +54,8 @@ function perform end
 """
     do_call(kb::SDRKnowledgeBase, call::SquareDanceCall; dbgctx = nothing)::SDRKnowledgeBase
 
-Perform the specified square dance call and retrn an updated
-knowledgebase.
+Perform the specified square dance call and return an updated
+knowledgebase.  `do_call` is the entry point into the call engine.
 """
 function do_call(kb::SDRKnowledgeBase, call::SquareDanceCall;
                  dbgctx = nothing)::SDRKnowledgeBase
@@ -83,13 +83,6 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
             playmates = TwoDancerFormation[]
             function expand_cdc(cdc::CanDoCall)
                 @info("do_schedule expand_cdc", cdc)
-                if !all(ds -> ds == newest_dancer_states[ds.dancer],
-                        dancer_states(cdc.formation))
-                    error("Some dancers in $(cdc.formation) are not newest: $newest_dancer_states")
-                end
-                @assert all(ds -> ds.time == sched.now,
-                            dancer_states(cdc.formation))
-                dancer_states(cdc.formation)
                 e = expand_parts(cdc.call, cdc.formation)
                 @info("do_schedule expand_parts returned", e)
                 e
@@ -97,10 +90,6 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
             function perform_cdc(cdc::CanDoCall)
                 @info("do_schedule performing",  cdc)
                 push!(call_history, (sched.now, cdc))
-                @assert all(ds -> ds.time == sched.now,
-                            dancer_states(cdc.formation))
-                @assert all(ds -> ds == newest_dancer_states[ds.dancer],
-                            dancer_states(cdc.formation))
                 f = perform(cdc.call, cdc.formation, kb)
                 @info(("do_schedule perform returned", f))
                 @assert f isa SquareDanceFormation
@@ -142,6 +131,12 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                     options = get_call_options(now_do_this, kb)
                     @info("do_schedule get_call_options returned", options)
                     for cdc in options
+                        if !all(ds -> ds == newest_dancer_states[ds.dancer],
+                                dancer_states(cdc.formation))
+                            error("Some dancers in $(cdc.formation) are not newest: $newest_dancer_states")
+                        end
+                        @assert all(ds -> ds.time == sched.now,
+                                    dancer_states(cdc.formation))
                         e = expand_cdc(cdc)
                         # No further expansion.  Perform the call:
                         if e == now_do_this
@@ -221,6 +216,7 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                                         ds.down, ds.left)
                     end
                 end
+                # Check that DancerStates are synchronized:
                 @assert allequal(map(ds -> ds.time,
                                      values(newest_dancer_states)))
             end
