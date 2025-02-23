@@ -41,7 +41,6 @@
         # We should also have four FaceToFace formations
         @test askc(Counter(), kb, FaceToFace) == 4
     end
-    show_formation_containment(kb)
     @test askc(Counter(), kb, FormationContainedIn) == 38
     collect_formation_examples(kb)
 end
