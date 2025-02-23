@@ -1,7 +1,8 @@
 
 using SquareDanceReasoning: formation_debug_html
 using Logging: with_logger
-using LoggingExtras: FileLogger
+# using LoggingExtras: FileLogger
+using JSON
 
 function file_name_for_source_location(source::LineNumberNode)
     path, _ = splitext(string(source.file))
@@ -39,6 +40,15 @@ function log_file_name_for_testset(testset)
 end
 
 function log_to_file(body, dir, filename)
-    with_logger(body, FileLogger(joinpath( dir, filename)))
+    logger = TestLogger()
+    try
+        with_logger(body, logger)
+    finally
+        open(joinpath(dir, filename), "w") do io
+            JSON.show_json(JSON.Writer.PrettyContext(io, 4),
+                           FormationExamplesSerialization(),
+                           logger.logs)
+        end
+    end
 end
 
