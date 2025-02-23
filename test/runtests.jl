@@ -33,6 +33,7 @@ end
     @test Unspecified() < Guy()
     @test Guy() < Gal()
     @test Unspecified() < Gal()
+    @test !(Guy() > Gal())
 end
 
 @testset "dancers" begin
