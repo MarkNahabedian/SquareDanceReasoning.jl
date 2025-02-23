@@ -6,8 +6,6 @@
 
 # We can then generate HTML files for the documentation.
 
-using JSON
-
 export COLLECTED_FORMATIONS, collect_formation_examples,
     save_formation_examples, load_formation_examples,
     json_to_formation,
@@ -29,49 +27,6 @@ function collect_formation_examples(kb::SDRKnowledgeBase)
 end
 
 
-struct FormationExamplesSerialization <: JSON.CommonSerialization
-end
-
-struct AbbreviatedDancerStateSerialization <: JSON.CommonSerialization
-end
-
-function JSON.show_json(io::JSON.StructuralContext,
-                        s::Union{FormationExamplesSerialization,
-                                 AbbreviatedDancerStateSerialization},
-                        f::SquareDanceFormation)
-    JSON.Writer.begin_object(io)
-    JSON.show_pair(io, s, "_TYPE_", string(nameof(typeof(f))))
-    if !isa(s, AbbreviatedDancerStateSerialization)
-        JSON.show_pair(io, s, "DancerStates",
-                       Dict(map(dancer_states(f)) do ds
-                                formation_id_string(ds) => ds
-                            end))
-    end
-    for field in fieldnames(typeof(f))
-        JSON.show_pair(io, AbbreviatedDancerStateSerialization(),
-                       field, getproperty(f, field))
-    end
-    JSON.Writer.end_object(io)
-end
-
-function JSON.show_json(io::JSON.StructuralContext,
-                        s::FormationExamplesSerialization,
-                        ds::DancerState)
-    JSON.Writer.begin_object(io)
-    JSON.show_pair(io, s, "couple_number", ds.dancer.couple_number)
-    JSON.show_pair(io, s, "gender", string(typeof(ds.dancer.gender)))
-    JSON.show_pair(io, s, "direction", ds.direction)
-    JSON.show_pair(io, s, "down", ds.down)
-    JSON.show_pair(io, s, "left", ds.left)
-    JSON.Writer.end_object(io)
-end
-
-function JSON.show_json(io::JSON.StructuralContext,
-                        s::AbbreviatedDancerStateSerialization,
-                        ds::DancerState)
-    write(io, "\"$(formation_id_string(ds))\"")
-end
-
 FORMATIONS_EXAMPLE_FILE = joinpath(@__DIR__, "example_formations.json")
 
 function save_formation_examples()
@@ -92,16 +47,7 @@ end
 
 function json_to_formation(json)
     t = formation_name_to_type(json["_TYPE_"])
-    dancer_states = Dict()
-    for (k, ds) in json["DancerStates"]
-        dancer_states[k] = DancerState(
-            Dancer(ds["couple_number"],
-                   GENDER_FROM_STRING[ds["gender"]]),
-            0,
-            ds["direction"],
-            ds["down"],
-            ds["left"])
-    end
+    dancer_states = OrderedDict()
     for (k, ds) in json["DancerStates"]
         dancer_states[k] = DancerState(
             Dancer(ds["couple_number"],

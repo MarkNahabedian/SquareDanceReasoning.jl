@@ -60,6 +60,7 @@ include("calls/calls.jl")
 include("xml/load.jl")
 include("showcase.jl")
 
+include("json_serialization.jl")
 include("debug.jl")
 
 end  # module
