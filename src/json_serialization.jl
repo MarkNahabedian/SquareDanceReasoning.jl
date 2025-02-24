@@ -1,6 +1,6 @@
 using JSON
 
-export FormationExamplesSerialization
+export FormationExamplesSerialization, load_json_log_file
 
 abstract type SDR_JSON_Serialization <: JSON.CommonSerialization end
 
@@ -78,3 +78,19 @@ function JSON.show_json(io::JSON.StructuralContext,
                         ds::DancerState)
     write(io, "\"$(formation_id_string(ds))\"")
 end
+
+
+function load_json_log_file(file)
+    parsed = JSON.parsefile(file)
+    map(parsed) do d
+        LogRecord(Logging.LogLevel(d["level"]["level"]),
+                  d["message"],
+                  Module(Symbol(d["_module"]["name"])),
+                  d["group"],
+                  d["id"],
+                  d["file"],
+                  d["line"],
+                  d["kwargs"])
+    end
+end
+
