@@ -71,10 +71,8 @@ function schedule(sched::CallSchedule, call::SquareDanceCall, at)
     sched.queue[ScheduledCall(at, call)] = at
 end
 
-
-function schedule(sched::CallSchedule,
-                  t::Tuple{Real, SquareDanceCall})
-    schedule(sched, t.second, t.first + sched.now)
+function schedule(sched::CallSchedule, s::Tuple{Real, SquareDanceCall})
+    schedule(sched, s[2], s[1] + sched.now)
 end
 
 
