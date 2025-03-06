@@ -59,6 +59,7 @@ knowledgebase.  `do_call` is the entry point into the call engine.
 """
 function do_call(kb::SDRKnowledgeBase, call::SquareDanceCall;
                  dbgctx = nothing)::SDRKnowledgeBase
+    @info("do_call", call)
     sched = let
         dss = askc(Collector{DancerState}(), kb, DancerState)
         if allequal(map(ds -> ds.time, dss))
@@ -80,15 +81,18 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
     end
     try
         while !isempty(sched)
+            @info("do_schedule while loop",
+                  now = sched.now,
+                  queue = [ pair for pair in sched.queue ])
             playmates = TwoDancerFormation[]
             function expand_cdc(cdc::CanDoCall)
-                @info("do_schedule expand_cdc", cdc)
+                @info("do_schedule expand_cdc", now=sched.now, cdc)
                 e = expand_parts(cdc.call, cdc.formation)
-                @info("do_schedule expand_parts returned", e)
+                @info("do_schedule expand_parts returned", cdc, e)
                 e
             end
             function perform_cdc(cdc::CanDoCall)
-                @info("do_schedule performing",  cdc)
+                @info("do_schedule performing",  now=sched.now, cdc)
                 push!(call_history, (sched.now, cdc))
                 f = perform(cdc.call, cdc.formation, kb)
                 @info(("do_schedule perform returned", f))
@@ -144,17 +148,19 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                             done += 1
                         else
                             # queue the parts:
-                            for (when, part) in e
-                                schedule(sched, part,
-                                         when + sched.now)
+                            for new_entry in e
+                                @info("scheduling", new_entry)
+                                schedule(sched, new_entry)
                             end
+                            @info("updated schedule",
+                                  queue = [ pair for pair in sched.queue ])
                             done += 1
                         end
                     end
                     @assert done > 0
                 end
             end
-            @info("do_schedule schedule", sched)
+            @info("do_schedule schedule", queue = [ pair for pair in sched.queue ])
             # We have finished all of the calls that were scheduled for a
             # given time.
             # Synchronize: catch the dancers up to the next schedule
