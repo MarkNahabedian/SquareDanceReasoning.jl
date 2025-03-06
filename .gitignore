@@ -2,6 +2,7 @@
 *.jl.cov
 *.jl.mem
 *.log
+*.binlog
 /Manifest.toml
 /docs/Manifest.toml
 /docs/build/
