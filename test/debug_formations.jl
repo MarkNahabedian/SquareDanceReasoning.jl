@@ -36,8 +36,10 @@ end
 
 
 function log_file_name_for_testset(testset)
-    replace(testset.description, " " => "-") * ".log"
+    replace(testset.description, " " => "-") * ".binlog"
 end
+
+using Serialization
 
 function log_to_file(body, dir, filename)
     logger = TestLogger()
@@ -45,9 +47,12 @@ function log_to_file(body, dir, filename)
         with_logger(body, logger)
     finally
         open(joinpath(dir, filename), "w") do io
+            serialize(io, logger.logs)
+            #=
             JSON.show_json(JSON.Writer.PrettyContext(io, 4),
                            FormationExamplesSerialization(),
                            logger.logs)
+            =#
         end
     end
 end
