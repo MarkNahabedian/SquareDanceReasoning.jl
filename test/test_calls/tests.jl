@@ -50,7 +50,7 @@ end
         @test 1 == askc(Counter(), kb, RHWaveOfEight)
         call = StepThru()
         @test as_text(call) == "Everyone StepThru"
-        options = SquareDanceReasoning.get_call_options(call, kb)
+        options = SquareDanceReasoning.get_call_options(timeof(grid[1, 1]), call, kb)
         @test 4 == length(options)
         @test all(options) do cdc
             cdc.formation isa RHMiniWave
