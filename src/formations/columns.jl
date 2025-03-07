@@ -32,18 +32,11 @@ direction(f::ColumnOfFour) = direction(f.lead)
                                                 centers::Tandem,
                                                 ::ColumnOfFour,
                                                 ::FormationContainedIn) begin
-    if direction(lead) != direction(tail)
-        return
-    end
-    if direction(lead) != direction(centers)
-        return
-    end
-    if lead.trailer != centers.leader
-        return
-    end
-    if tail.leader != centers.trailer
-        return
-    end
+    @rejectif direction(lead) != direction(tail)
+    @rejectif direction(lead) != direction(centers)
+    @rejectif lead.trailer != centers.leader
+    @rejectif tail.leader != centers.trailer
+    @continueif timeof(lead) == timeof(tail)
     f = ColumnOfFour(lead, tail, centers)
     emit(f)
     emit(FormationContainedIn(lead, f))

@@ -28,9 +28,8 @@ handedness(::SquaredSet) = NoHandedness()
                                                        fc2::FacingCouples,
                                                        ::SquaredSet,
                                                        ::FormationContainedIn) begin
-    if (direction(fc1.couple1) + 1//4) != direction(fc2.couple1)
-        return
-    end
+    @rejectif (direction(fc1.couple1) + 1//4) != direction(fc2.couple1)
+    @continueif timeof(fc1) == timeof(fc2)
     f = SquaredSet(fc1, fc2)
     emit(f)
     emit(FormationContainedIn(fc1, f))
@@ -148,4 +147,3 @@ end
 CircleOfEightFormationRule is the rule for recognizing eight dancers
 in a circle: [`CircleOfEight`](@ref).
 """ CircleOfEightFormationRule
-

@@ -20,25 +20,18 @@ end
                                          tandem1::Tandem,
                                          tandem2::Tandem,
                                          ::QTWCT) begin
-    if couple1 == couple2; return; end
-    if tandem1 == tandem2; return; end
+    @rejectif couple1 == couple2
+    @rejectif tandem1 == tandem2
+    @continueif timeof(wave) == timeof(couple1) == timeof(couple2)
     # Break Couple symetry:
-    if direction(couple2) < direction(couple1)
-        return
-    end
+    @rejectif direction(couple2) < direction(couple1)
     # BreaK Tandem symetry:
-    if direction(tandem2) < direction(tandem1)
-        return
-    end
+    @rejectif direction(tandem2) < direction(tandem1)
     # The first argument of intersect can't be an iterator:
-    if length(intersect(dancer_states(wave.centers),
+    @rejectif length(intersect(dancer_states(wave.centers),
                         tandem1())) != 1
-        return
-    end
-    if length(intersect(dancer_states(wave.centers),
+    @rejectif length(intersect(dancer_states(wave.centers),
                         tandem2())) != 1
-        return
-    end
     emit(QTWCT(wave, couple1, couple2, tandem1, tandem2))
 end
 
@@ -91,22 +84,14 @@ end
                                               ::QuarterTag,
                                               ::FormationContainedIn) begin
 
-    if f2f1 == f2f2; return; end
+    @rejectif f2f1 == f2f2
     # The leader of each tandem is in the center of the wave
     centers = q.wave.centers()
-    if !(q.tandem1.leader in centers)
-        return
-    end
-    if !(q.tandem2.leader in centers)
-        return
-    end
+    @continueif q.tandem1.leader in centers
+    @continueif q.tandem2.leader in centers
     # Match the FaceToFace subformations with their related tandems:
-    if !(q.tandem1.leader in f2f1())
-        return
-    end
-    if !(q.tandem2.leader in f2f2())
-        return
-    end
+    @continueif q.tandem1.leader in f2f1()
+    @continueif q.tandem2.leader in f2f2()
     qt = QuarterTag(q.wave, q.couple1, q.couple2,
                     q.tandem1, q.tandem2,
                     f2f1, f2f2)
@@ -146,22 +131,14 @@ end
                                                    b2b2::BackToBack,
                                                    ::ThreeQuarterTag,
                                                    ::FormationContainedIn) begin
-    if b2b1 == b2b2; return; end
+    @rejectif b2b1 == b2b2
     # The leader of each tandem is in the center of the wave
     centers = dancer_states(q.wave.centers)
-    if !(q.tandem1.trailer in centers)
-        return
-    end
-    if !(q.tandem2.trailer in centers)
-        return
-    end
+    @continueif q.tandem1.trailer in centers
+    @continueif q.tandem2.trailer in centers
     # Match the BackToBack subformations with their related tandems:
-    if !(q.tandem1.trailer in b2b1())
-        return
-    end
-    if !(q.tandem2.trailer in b2b2())
-        return
-    end
+    @continueif q.tandem1.trailer in b2b1()
+    @continueif q.tandem2.trailer in b2b2()
     qt = ThreeQuarterTag(q.wave, q.couple1, q.couple2,
                          q.tandem1, q.tandem2,
                          b2b1, b2b2)

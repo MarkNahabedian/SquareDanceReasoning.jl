@@ -93,10 +93,8 @@ end
                                               ::LHWaveOfFour,
                                               ::FormationContainedIn) begin
      # @info("WaveOfFourRule", _group=WaveOfFourRule, wave1, wave2, centers)
-    if wave1 == wave2
-        # @ info("same miniwave test", _group=WaveOfFourRule, wave1, wave2) 
-        return
-    end
+    @rejectif wave1 == wave2
+    @continueif timeof(wave1) == timeof(wave2)
     if !(handedness(wave1) == handedness(wave2) &&
          handedness(wave1) == opposite(handedness(centers)) &&
          handedness(wave2) == opposite(handedness(centers)))
@@ -141,22 +139,15 @@ dancers: [`RHWaveOfFour`](@ref) and [`LHWaveOfFour`](@ref).
                                                ::RHWaveOfEight,
                                                ::LHWaveOfEight,
                                                ::FormationContainedIn) begin
-    if wave1 == wave2
-        return
-    end
-    if !(handedness(wave1) == handedness(wave2) &&
-         handedness(wave1) == opposite(handedness(centers)) &&
-         handedness(wave2) == opposite(handedness(centers)))
-        return
-    end
+    @rejectif wave1 == wave2
+    @continueif (handedness(wave1) == handedness(wave2) &&
+                 handedness(wave1) == opposite(handedness(centers)) &&
+                 handedness(wave2) == opposite(handedness(centers)))
     # how do we know which miniwave to check?  Nearness to center?
     # Ends of the RHMiniWaves are wave1.b and wave2.a
-    if centers.a != wave1.wave2.a
-        return
-    end
-    if centers.b != wave2.wave1.b
-        return
-    end
+    @continueif centers.a == wave1.wave2.a
+    @continueif centers.b == wave2.wave1.b
+    @continueif timeof(wave1) == timeof(wave2)
     if handedness(wave1) == RightHanded()
         constructor = RHWaveOfEight
     elseif handedness(wave1) == LeftHanded()

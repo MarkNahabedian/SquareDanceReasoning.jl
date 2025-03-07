@@ -173,7 +173,7 @@ those_with_role(c::LHMiniWave, ::Belles) = [ c.a, c.b ]
     # Not the same dancer:
     @rejectif ds1.dancer == ds2.dancer
     # Contemporary:
-    @rejectif ds1.time != ds2.time
+    @continueif ds1.time == ds2.time
     # In the same square:
     @rejectif !in(ds1, sq.expected) || !in(ds2, sq.expected)
     # Rather than using near, make sure there are no other dancers

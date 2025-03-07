@@ -54,19 +54,12 @@ handedness(f::TwoFacedLine) = handedness(f.centers)
                                               centers::Couple,
                                               ::LineOfFour,
                                               ::FormationContainedIn) begin
-    if direction(a) != direction(b)
-        return
-    end
-    if direction(a) != direction(centers)
-        return
-    end
-    if centers.beau != b.belle
-        return
-    end
-    if centers.belle != a.beau
-        return
-    end
-    l = LineOfFour(a, b, centers)
+    @rejectif direction(a) != direction(b)
+    @rejectif direction(a) != direction(centers)
+    @rejectif centers.beau != b.belle
+    @rejectif centers.belle != a.beau
+    @continueif timeof(a) == timeof(b)
+   l = LineOfFour(a, b, centers)
     emit(l)
     emit(FormationContainedIn(a, l))
     emit(FormationContainedIn(b, l))
@@ -84,9 +77,8 @@ formation.
                                                 centers::MiniWave,
                                                 ::TwoFacedLine,
                                                 ::FormationContainedIn) begin
-    if direction(a) != opposite(direction(b))
-        return
-    end
+    @rejectif direction(a) != opposite(direction(b))
+    @continueif timeof(a) == timeof(b)
     if handedness(centers) == RightHanded()
         #  ↑↑↓↓
         center_dancer_field = :belle
@@ -141,12 +133,9 @@ end
                                                       centers::Couple,
                                                       ::InvertedLineOfFour,
                                                       ::FormationContainedIn) begin
-    if !(centers.beau in a)
-        return
-    end
-    if !(centers.belle in b)
-        return
-    end
+    @continueif centers.beau in a
+    @continueif centers.belle in b
+    @continueif timeof(a) == timeof(b)
     il = InvertedLineOfFour(a, b, centers)
     emit(il)
     emit(FormationContainedIn(a, il))

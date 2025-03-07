@@ -1,10 +1,19 @@
 
-export dancers, handedness
+export dancers, handedness, timeof
 export TwoDancerFormation, FourDancerFormation,
     OneByFourFormation, EightDancerFormation
 export SquareDanceFormationRule
 export dancer_states
 export update_from
+
+
+"""
+    timeof(::SquareDanceFormation)
+
+Returns the valuie of the `time` field, which should be the same for
+all `DancerSTate` in the formation.
+"""
+timeof(f::SquareDanceFormation) = first(f()).time
 
 
 """

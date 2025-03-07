@@ -38,14 +38,11 @@ handedness(::FacingTandemCouples) = NoHandedness()
                                                        centers::FacingCouples,
                                                        ::FacingTandemCouples,
                                                        ::FormationContainedIn) begin
-    if tc1 == tc2
-        return
-    end
+    @rejectif tc1 == tc2
     # Disambiguate TandemCouples to avoid duplicate symetric
     # formations:
-    if direction(tc2) < direction(tc1)
-        return
-    end
+    @rejectif direction(tc2) < direction(tc1)
+    @continueif timeof(tc1) == timeof(tc2)
     if (tc1.leaders == centers.couple1 &&
         tc2.leaders == centers.couple2)
         f = FacingTandemCouples(tc1, tc2, centers)
@@ -95,9 +92,8 @@ handedness(::BeforeEightChain) = NoHandedness()
                                                     centers::BackToBackCouples,
                                                     ::BeforeEightChain,
                                                     ::FormationContainedIn) begin
-    if fc1 == fc2
-        return
-    end
+    @rejectif fc1 == fc2
+    @continueif timeof(fc1) == timeof(fc2)
     if centers.couple1 == fc2.couple1 &&
         centers.couple2 == fc1.couple2
         f = BeforeEightChain(fc1, fc2, centers)
@@ -146,9 +142,8 @@ handedness(::AfterEightChainOne) = NoHandedness()
                                                       centers::FacingCouples,
                                                       ::AfterEightChainOne,
                                                       ::FormationContainedIn) begin
-    if bb1 == bb2
-        return
-    end
+    @rejectif bb1 == bb2
+    @continueif timeof(bb1) == timeof(bb2)
     if (centers.couple1 == bb1.couple1 &&
         centers.couple2 == bb2.couple2)
         f = AfterEightChainOne(bb1, bb2, centers)
@@ -197,13 +192,10 @@ handedness(::CompletedDoublePassThru) = NoHandedness()
                                                            centers::BackToBackCouples,
                                                            ::CompletedDoublePassThru,
                                                            ::FormationContainedIn) begin
-    if tc1 == tc2
-        return
-    end
+    @rejectif tc1 == tc2
     # Break symetry to avoid duplicates:
-    if direction(tc1) > direction(tc2)
-        return
-    end
+    @rejectif direction(tc1) > direction(tc2)
+    @continueif allequal(timeof, [ tc1, tc2, centers ])
     if (centers.couple1 == tc1.trailers &&
         centers.couple2 == tc2.trailers)
         f = CompletedDoublePassThru(tc1, tc2, centers)

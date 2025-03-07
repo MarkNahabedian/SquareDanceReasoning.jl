@@ -20,7 +20,10 @@ end
                                                        couple1::Couple,
                                                        couple2::Couple,
                                                        ::TwoDifferentCouples) begin
+    # Different couples:
     @rejectif couple1 == couple2
+    # Contemporary:
+    @continueif timeof(couple1) == timeof(couple2)
     # Symetry disambiguation
     @rejectif direction(couple1) > direction(couple2)
     # No other dancers in the way:
@@ -57,6 +60,7 @@ handedness(::FacingCouples) = NoHandedness()
                                                  ::FormationContainedIn) begin
     couple1 = tdc.couple1
     couple2 = tdc.couple2
+    @continueif timeof(couple1) == timeof(couple2)
     if (f2f1.a in couple1 &&
         f2f1.b in couple2 &&
         f2f2.a in couple1 &&
@@ -103,6 +107,7 @@ handedness(::BackToBackCouples) = NoHandedness()
                                                      ::FormationContainedIn) begin
     couple1 = tdc.couple1
     couple2 = tdc.couple2
+    @continueif timeof(couple1) == timeof(couple2)
     if (b2b1.a in couple1 &&
         b2b1.b in couple2 &&
         b2b2.a in couple1 &&
@@ -150,6 +155,7 @@ direction(f::TandemCouples) = direction(f.leaders)
                                                  ::FormationContainedIn) begin
     leaders = tdc.couple1
     trailers = tdc.couple2
+    @continueif timeof(leaders) == timeof(trailers)
     if (tandem1.leader in leaders &&
         tandem1.trailer in trailers &&
         tandem2.leader in leaders &&
@@ -215,12 +221,9 @@ end
                                              ::RHBoxOfFour,
                                              ::LHBoxOfFour,
                                              ::FormationContainedIn) begin
-    if mw1 == mw2
-        return
-    end
-    if t1 == t2
-        return
-    end
+    @rejectif mw1 == mw2
+    @rejectif t1 == t2
+    @continueif timeof(mw1) == timeof(mw2)
     if !(handedness(mw1) == handedness(mw2))
         return
     end
