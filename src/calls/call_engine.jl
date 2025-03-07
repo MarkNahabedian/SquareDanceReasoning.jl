@@ -132,7 +132,7 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                 @assert now_do_this isa SquareDanceCall
                 let
                     done = 0
-                    options = get_call_options(now_do_this, kb)
+                    options = get_call_options(sched.now, now_do_this, kb)
                     @info("do_schedule get_call_options returned", options)
                     for cdc in options
                         if !all(ds -> ds == newest_dancer_states[ds.dancer],
@@ -247,7 +247,7 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
     return kb
 end
 
-function get_call_options(call::SquareDanceCall,
+function get_call_options(now::Real, call::SquareDanceCall,
                           kb::SDRKnowledgeBase)::Vector{CanDoCall}
     # This needs to be a Set to avoid the duplicates we would get from
     # querying for SquareDanceFormation sand it subtypes.  Maybe this
@@ -255,9 +255,11 @@ function get_call_options(call::SquareDanceCall,
     formations = Set{SquareDanceFormation}()
     everyone = DancerState[]
     askc(kb, SquareDanceFormation) do f
-        push!(formations, f)
-        if f isa DancerState
-            push!(everyone, f)
+        if timeof(f) == now
+            push!(formations, f)
+            if f isa DancerState
+                push!(everyone, f)
+            end
         end
     end
     # What calls can we do from where?
