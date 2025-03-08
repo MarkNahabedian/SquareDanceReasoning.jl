@@ -76,9 +76,16 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                      dbgctx = nothing)
     call_history = []
     newest_dancer_states = Dict{Dancer, DancerState}()
-    askc(kb, DancerState) do ds
-        newest_dancer_states[ds.dancer] = ds
+    function update_newest(ds::DancerState)
+        if haskey(newest_dancer_states, ds.dancer)
+            if ds.time >= newest_dancer_states[ds.dancer].time
+                newest_dancer_states[ds.dancer] = ds
+            end
+        else
+            newest_dancer_states[ds.dancer] = ds
+        end
     end
+    askc(update_newest, kb, DancerState)
     try
         while !isempty(sched)
             @info("do_schedule while loop",
@@ -107,7 +114,7 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                     # experience the passage of time:
                     @assert(ds.time > newest_dancer_states[ds.dancer].time,
                             "$ds, $(newest_dancer_states[ds.dancer].time)")
-                    newest_dancer_states[ds.dancer] = ds
+                    update_newest(ds)
                 end
             end
             formations = askc(Collector{SquareDanceFormation}(),
@@ -139,8 +146,6 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                                 dancer_states(cdc.formation))
                             error("Some dancers in $(cdc.formation) are not newest: $newest_dancer_states")
                         end
-                        @assert all(ds -> ds.time == sched.now,
-                                    dancer_states(cdc.formation))
                         e = expand_cdc(cdc)
                         # No further expansion.  Perform the call:
                         if e == now_do_this
@@ -204,7 +209,7 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                     # Time doesn't elapse during breathing.
                     for ds in breathe(playmates,
                                       collect(values(newest_dancer_states)))
-                        newest_dancer_states[ds.dancer] = ds
+                        update_newest(ds)
                     end
                 end
             end
@@ -215,11 +220,10 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                 # the schedule.
                 for ds in values(newest_dancer_states)
                     if ds.time < sched.now
-                        newest_dancer_states[ds.dancer] =
-                            DancerState(ds,
-                                        sched.now,
-                                        ds.direction,
-                                        ds.down, ds.left)
+                        update_newest(DancerState(ds,
+                                                  sched.now,
+                                                  ds.direction,
+                                                  ds.down, ds.left))
                     end
                 end
                 # Check that DancerStates are synchronized:
