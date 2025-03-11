@@ -78,6 +78,8 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
     newest_dancer_states = Dict{Dancer, DancerState}()
     function update_newest(ds::DancerState)
         if haskey(newest_dancer_states, ds.dancer)
+            # >= rather than > because some actions like breathing
+            # create a new DancrState without advancing its time.
             if ds.time >= newest_dancer_states[ds.dancer].time
                 newest_dancer_states[ds.dancer] = ds
             end
@@ -139,11 +141,12 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                 @assert now_do_this isa SquareDanceCall
                 let
                     done = 0
+                    # get_call_options only considers formations that match sched.now.
                     options = get_call_options(sched.now, now_do_this, kb)
                     @info("do_schedule get_call_options returned", options)
                     for cdc in options
                         if !all(ds -> ds == newest_dancer_states[ds.dancer],
-                                dancer_states(cdc.formation))
+                               cdc.formation())
                             error("Some dancers in $(cdc.formation) are not newest: $newest_dancer_states")
                         end
                         e = expand_cdc(cdc)
