@@ -52,7 +52,7 @@ end
 """
     Respirator(::Vector{DancerState))
 
-Respirator is a device for assisting breating.  It performbs the
+Respirator is a device for assisting breating.  It performs the
 bookkeeping associed with tracking the current location of each dancer
 as adjusted by the breathing algorithm without creating new
 `DancerState`s.
