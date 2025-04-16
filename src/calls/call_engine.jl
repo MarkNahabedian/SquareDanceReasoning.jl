@@ -65,7 +65,12 @@ function do_call(kb::SDRKnowledgeBase, call::SquareDanceCall;
         if allequal(map(ds -> ds.time, dss))
             CallSchedule(dss[1].time)
         else
-            error("DancerStates do not have same time: $dss")
+            for dancer in sort(dss; by = ds -> ds.dancer)
+                history(newest_dancer_states[dancer]) do ds
+                    println("\t\t$(ds.time):\t$(ds.direction)\t$(ds.down)\t$(ds.left)")
+                end
+            end
+            error("DancerStates do not have the same time: $dss")
         end
     end
     schedule(sched, call, sched.now)
@@ -104,7 +109,7 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                 @info("do_schedule performing",  now=sched.now, cdc)
                 push!(call_history, (sched.now, cdc))
                 f = perform(cdc.call, cdc.formation, kb)
-                @info(("do_schedule perform returned", f))
+                @info("do_schedule perform returned", f)
                 @assert f isa SquareDanceFormation
                 if f isa TwoDancerFormation
                     push!(playmates, f)
@@ -181,19 +186,14 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                     sched.now = latest
                 else
                     sched.now = peek(sched).second
-                    if latest > sched.now
-                        let
-                            delta = latest - sched.now
-                            @warn("The dancers are ahead of the schedule",
-                                  latest = latest,
-                                  sched_now = sched.now)
-                            advance_schedule_by(sched, delta)
-                        end
-                    end
                 end
             end
             # Breathe:
+            # Do we need for all of the DancerStates to be
+            # synchronized before breathing?
             let
+                # find_collisions should probably make sure
+                # potentially colliding DancerStates are contemporary.
                 collisions = find_collisions(
                     collect(values(newest_dancer_states)))
                 if length(collisions) > 0
@@ -216,39 +216,34 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                     end
                 end
             end
-            begin
-                # What if a dancer has progressed beyond the next
-                # schedule entry because the last part it performed in
-                # was longer?  This is dealt with above by advancing
-                # the schedule.
-                for ds in values(newest_dancer_states)
-                    if ds.time < sched.now
-                        update_newest(DancerState(ds,
-                                                  sched.now,
-                                                  ds.direction,
-                                                  ds.down, ds.left))
-                    end
-                end
-                # Check that DancerStates are synchronized:
-                @assert allequal(map(ds -> ds.time,
-                                     values(newest_dancer_states)))
-            end
             # Update the knowledgebase:
-            kb = make_kb(kb)
-            for ds in values(newest_dancer_states)
-                receive(kb, ds)
+            if !isempty(sched)
+                kb = make_kb(kb)
+                for ds in values(newest_dancer_states)
+                    receive(kb, ds)
+                end
             end
+        end
+        # Synchronize the dancers for furure calls:
+        for ds in values(newest_dancer_states)
+            if ds.time < sched.now
+                update_newest(DancerState(ds,
+                                          sched.now,
+                                          ds.direction,
+                                          ds.down, ds.left))
+            end
+        end
+        # Update the knowledgebase:
+        kb = make_kb(kb)
+        for ds in values(newest_dancer_states)
+            receive(kb, ds)
         end
     catch e
-        dbgprint("\n# schedule\n", sched)
-        dbgprint("\n# newest_dancer_states\n", newest_dancer_states)
-        dbgprint("\n# call_history\n", call_history)
-        dbgprint("\n# DancerState history\n")
-        for ds in values(newest_dancer_states)
-            SquareDanceReasoning.history(ds) do ds1
-                dbgprint((ds1.dancer, ds1.time) => (ds1.direction, location(ds1)...))
-            end
-        end
+        @error("Exception",
+               error=e,
+               sched=deepcopy(sched),
+               newest_dancer_states=deepcopy(newest_dancer_states),
+               call_history=deepcopy(call_history))
         rethrow(e)
     end
     return kb
@@ -257,16 +252,16 @@ end
 function get_call_options(now::Real, call::SquareDanceCall,
                           kb::SDRKnowledgeBase)::Vector{CanDoCall}
     # This needs to be a Set to avoid the duplicates we would get from
-    # querying for SquareDanceFormation sand it subtypes.  Maybe this
+    # querying for SquareDanceFormation and it subtypes.  Maybe this
     # should be fixed in Rete.Collector.
     formations = Set{SquareDanceFormation}()
     everyone = DancerState[]
     askc(kb, SquareDanceFormation) do f
+        if f isa DancerState
+            push!(everyone, f)
+        end
         if timeof(f) == now
             push!(formations, f)
-            if f isa DancerState
-                push!(everyone, f)
-            end
         end
     end
     # What calls can we do from where?
@@ -278,7 +273,7 @@ function get_call_options(now::Real, call::SquareDanceCall,
         end
     end
     if length(options) == 0
-        @info("get_call_options formations", formations)
+        @info("get_call_options formations", now, call, everyone, formations, kb)
         error("No options for $call")
     end
     @info("get_call_options initial options", options)
