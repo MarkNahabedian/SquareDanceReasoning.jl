@@ -195,7 +195,7 @@ descirption(c::StepToAWave) = "$(c.role) Step To a Wave"
 can_do_from(::StepToAWave, ::FaceToFace) = 1
 
 function perform(c::StepToAWave, f::FaceToFace, kb::SDRKnowledgeBase)
-    step_to_a_wave(f, 2, c.handedness)
+    step_to_a_wave(f, c.time, c.handedness)
 end
 
 
@@ -247,4 +247,5 @@ can_do_from(::_BackToAWave, ::BackToBack) = 1
 function perform(c::_BackToAWave, f::BackToBack, kb::SDRKnowledgeBase)
     back_to_a_wave(f, 1, c.handedness)
 end
+
 
