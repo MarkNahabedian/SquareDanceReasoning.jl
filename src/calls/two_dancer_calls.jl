@@ -1,5 +1,6 @@
-export StepThru, StepToAWave, PassThru, PullBy, Dosado,
-    Hinge, PartnerHinge, Trade, SlideThru, StarThru, CourtesyTurn
+export StepThru, StepToAWave, PassThru, PullBy, Dosado, Hinge,
+    PartnerHinge, Trade, _FinishTrade, SlideThru, StarThru,
+    CourtesyTurn
 
 #= Some two dancer calls to implement:
 
@@ -16,7 +17,7 @@ CallerLab Basic 1 square dance call that goes from MiniWave to
 BackToBack.
 
 Timing: CallerLab doesn't spoecify a timing, but since the specified
-timing for [`PassThru`](@ref) is 2 and `StepThro` must be simpler,
+timing for [`PassThru`](@ref) is 2 and `StepThru` must be simpler,
 assume 1.
 """
 @with_kw_noshow struct StepThru <: SquareDanceCall
@@ -178,7 +179,7 @@ end
 
 can_do_from(::Hinge, ::MiniWave) = 1
 
-function perform(c::Hinge, mw::MiniWave, kb::SDRKnowledgeBase)
+function perform(call::Hinge, mw::MiniWave, kb::SDRKnowledgeBase)
     c = center(mw)
     rot = begin
         if handedness(mw) isa RightHanded
@@ -187,8 +188,8 @@ function perform(c::Hinge, mw::MiniWave, kb::SDRKnowledgeBase)
             1//4
         end
     end
-    r = typeof(mw)(revolve(mw.a, c, mw.a.direction + rot, 2),
-                   revolve(mw.b, c, mw.b.direction + rot, 2))
+    r = typeof(mw)(revolve(mw.a, c, mw.a.direction + rot, call.time),
+                   revolve(mw.b, c, mw.b.direction + rot, call.time))
     r
 end
 
@@ -208,18 +209,18 @@ end
 
 can_do_from(::PartnerHinge, ::Couple) = 1
 
-function perform(c::PartnerHinge, couple::Couple, kb::SDRKnowledgeBase)
+function perform(call::PartnerHinge, couple::Couple, kb::SDRKnowledgeBase)
     c = center(couple)
     cpl = RHMiniWave(let
                          dir = couple.beau.direction - 1//4
                          (d, l) = revolve(location(couple.beau),
                                           c, -1//4,
                                           COUPLE_DISTANCE)
-                         DancerState(couple.beau, couple.beau.time + 2,
+                         DancerState(couple.beau, couple.beau.time + call.time,
                                      couple.beau.direction - 1//4,
                                      d, l)
                      end,
-                     DancerState(couple.belle, couple.belle.time + 2,
+                     DancerState(couple.belle, couple.belle.time + call.time,
                                  couple.belle.direction + 1//4,
                                  c...))
     cpl
@@ -235,8 +236,6 @@ Timing: CallerLab: MiniWave: 3, Couple: 4
 """
 @with_kw_noshow struct Trade <: SquareDanceCall
     role::Role = Everyone()
-    # Taminations says timing is 2.
-    time = 4
 end
 
 # What about "ends trade"?
@@ -245,6 +244,8 @@ can_do_from(::Trade, ::Couple) = 1
 can_do_from(::Trade, ::MiniWave) = 1
 
 function expand_parts(c::Trade, mw::MiniWave)
+    # Taminations says that from a MiniWave the total time for Trade
+    # is 3.
     dancers = map(ds -> ds.dancer, dancer_states(mw))
     [
         (0, Hinge(; role=DesignatedDancers(dancers),
@@ -255,12 +256,14 @@ function expand_parts(c::Trade, mw::MiniWave)
 end
 
 function expand_parts(c::Trade, cpl::Couple)
+    # Taminations says that from a Couple the total time for Trade is
+    # 4.
     dancers = map(ds -> ds.dancer, dancer_states(cpl))
     [
         (0, PartnerHinge(; role=DesignatedDancers(dancers),
                          time=2)),
         (2, _FinishTrade(;
-                         original_beau= cpl.beau,
+                         original_beau=cpl.beau,
                          original_belle=cpl.belle,
                          time=2))
     ]
@@ -271,7 +274,7 @@ end
     _FinishTrade(; role=Everyone, time=2)
 
 a primitive call that represents the second half of
-[`Trade`](@ref) from `[Couple`](@ref).
+[`Trade`](@ref) from a `[Couple`](@ref).
 """
 @with_kw_noshow struct _FinishTrade <: SquareDanceCall
     original_beau::DancerState
