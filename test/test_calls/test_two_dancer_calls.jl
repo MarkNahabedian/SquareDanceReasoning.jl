@@ -120,6 +120,9 @@ end
         @test rhw.b.dancer == square[5]
         @test lhw.a.dancer == square[6]
         @test lhw.b.dancer == square[4]
+        animate(joinpath(@__DIR__, "SlideThru.svg"),
+                askc(Collector{DancerState}(), kb, DancerState),
+                40)
     end
 end
 
@@ -146,6 +149,9 @@ end
         @test 2 == askc(Counter(), kb, FaceToFace)
         @test cpl.beau.dancer == square[1]
         @test cpl.belle.dancer == square[2]
+        animate(joinpath(@__DIR__, "StarThrusvg"),
+                askc(Collector{DancerState}(), kb, DancerState),
+                40)
     end
 end
 
