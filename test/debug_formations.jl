@@ -43,16 +43,16 @@ using Serialization
 
 function log_to_file(body, dir, filename)
     logger = TestLogger()
+    rm(filename; force=true)
+    success = false
     try
         with_logger(body, logger)
+        success = true
     finally
-        open(joinpath(dir, filename), "w") do io
-            serialize(io, logger.logs)
-            #=
-            JSON.show_json(JSON.Writer.PrettyContext(io, 4),
-                           FormationExamplesSerialization(),
-                           logger.logs)
-            =#
+        if !success
+            open(joinpath(dir, filename), "w") do io
+                serialize(io, logger.logs)
+            end
         end
     end
 end
