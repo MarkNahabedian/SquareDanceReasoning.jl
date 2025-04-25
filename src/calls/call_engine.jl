@@ -83,8 +83,9 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
     newest_dancer_states = Dict{Dancer, DancerState}()
     function update_newest(ds::DancerState)
         if haskey(newest_dancer_states, ds.dancer)
-            # >= rather than > because some actions like breathing
-            # create a new DancrState without advancing its time.
+            # >= rather than > because some actions like breathing or
+            # the _EndAt call create new DancrStates without advancing
+            # its time.
             if ds.time >= newest_dancer_states[ds.dancer].time
                 newest_dancer_states[ds.dancer] = ds
             end
@@ -115,12 +116,14 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                     push!(playmates, f)
                 end
                 for ds in dancer_states(f)
+                    #=
                     # This assertion assumes that there are no calls
                     # that require no elapsed time.
                     # Ensure that the dancers that performed the call
                     # experience the passage of time:
                     @assert(ds.time > newest_dancer_states[ds.dancer].time,
                             "$ds, $(newest_dancer_states[ds.dancer].time)")
+                    =#
                     update_newest(ds)
                 end
             end
@@ -150,9 +153,12 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                     options = get_call_options(sched.now, now_do_this, kb)
                     @info("do_schedule get_call_options returned", options)
                     for cdc in options
-                        if !all(ds -> ds == newest_dancer_states[ds.dancer],
-                               cdc.formation())
-                            error("Some dancers in $(cdc.formation) are not newest: $newest_dancer_states")
+                        let
+                            not_newest = filter(ds -> ds != newest_dancer_states[ds.dancer],
+                                                collect(cdc.formation()))
+                            if !isempty(not_newest)
+                                error("Some dancers in $(cdc.formation) are not newest: $not_newest")
+                            end
                         end
                         e = expand_cdc(cdc)
                         # No further expansion.  Perform the call:
