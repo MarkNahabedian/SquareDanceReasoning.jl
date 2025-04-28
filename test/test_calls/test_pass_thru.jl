@@ -7,8 +7,7 @@ function original_ds(ds)
     end
 end
 
-
-@testset "test PassThru" begin
+function facing_lines_pass_thru(call)
     log_to_file(@__DIR__, log_file_name_for_testset(Test.get_testset())) do
         # Make a square of four couples, 8 Dancers:
         square = make_square(4)
@@ -28,7 +27,7 @@ end
         @debug_formations(kb)
         lines = askc(Collector{LineOfFour}(), kb, LineOfFour)
         @test length(lines) == 2
-        kb = do_call(kb, PassThru())
+        kb = do_call(kb, call)
         @debug_formations(kb)
         for ds in askc(Collector{DancerState}(), kb, DancerState)
             ods = original_ds(ds)
@@ -41,6 +40,15 @@ end
                 askc(Collector{DancerState}(), kb, DancerState),
                 40)
     end
+end
+
+@testset "test PassThru" begin
+    facing_lines_pass_thru(PassThru())
+end
+
+@testset "test PullBy" begin
+    # Pretty much the same as PassThru
+    facing_lines_pass_thru(PullBy())
 end
 
 @testset "test Dosado" begin
