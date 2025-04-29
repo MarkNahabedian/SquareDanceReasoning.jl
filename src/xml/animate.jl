@@ -11,7 +11,7 @@ I've implemented both.
 =#
 
 export AnimationMethod, CSSKeyfraneomesAnimation, PureSVGAnimation
-export animate
+export animate, animation_svg
 
 
 abstract type AnimationMethod end
@@ -100,6 +100,16 @@ function animate_finish(output_file, doc)
 end
 
 
+PARSED_DANCER_SYMBOLS_SVG = nothing
+
+function parsed_dancer_symbols_svg()
+    if PARSED_DANCER_SYMBOLS_SVG == nothing
+        global PARSED_DANCER_SYMBOLS_SVG = read(joinpath(@__DIR__, "dancer_symbols.svg"), Node)
+    end
+    PARSED_DANCER_SYMBOLS_SVG
+end
+
+
 """
     animate(method::AnimationMethod, output_file, dancer_states, bpm)
 
@@ -119,9 +129,22 @@ Assuming each unit of `time` in a `DancerState` is a single beat,
 `bpm` is used to calculate the total duration of one cycle through the
 animation.
 """
-function animate(method::CSSKeyframesAnimation,
+function animate(method::AnimationMethod,
                  output_file, dancer_states::Vector{DancerState},
-                 bpm)
+                 bpm;
+                 symbol_uri_base = collateral_file_relpath("dancer_symbols.svg",
+                                                           output_file))
+    doc = animation_svg(method, dancer_states, bpm;
+                        symbol_uri_base = collateral_file_relpath("dancer_symbols.svg",
+                                                                  output_file))
+    animate_finish(output_file, doc)
+end
+
+
+function animation_svg(method::CSSKeyframesAnimation,
+                       dancer_states::Vector{DancerState},
+                       bpm;
+                       symbol_uri_base="")
     dancer_states = sort(dancer_states; by = ds -> ds.dancer)
     number_of_couples = ceil(length(dancer_states) / 2)
     tbounds = TimeBounds()
@@ -135,8 +158,6 @@ function animate(method::CSSKeyframesAnimation,
     bounds = bump_out(bounds)
     duration_seconds = (tbounds.max - tbounds.min) / (bpm / 60)
     rot(ds) = "$(svg_angle(ds)) $(svg_x(ds)) $(svg_y(ds))"
-    symbol_uri_base = collateral_file_relpath("dancer_symbols.svg",
-                                              output_file)
     doc = elt("svg",
               "xmlns" => SVG_NAMESPACE,
               bounds_to_viewbox(bounds)...,
@@ -144,11 +165,18 @@ function animate(method::CSSKeyframesAnimation,
                   DIRECTION_DOT_STYLE,
                   dancer_colors_css(number_of_couples),
                   join(map(dancer_states) do ds
-                      animation_properties(ds.dancer, duration_seconds)
-                  end, "\n"),
+                           animation_properties(ds.dancer, duration_seconds)
+                       end, "\n"),
                   join(map(dancer_states) do ds
                            keyframes(ds, tbounds)
                        end,"\n")),
+              if symbol_uri_base == ""
+                  [
+                      elt("defs", parsed_dancer_symbols_svg())
+                  ]
+              else
+                  []
+              end...,
               elt("g") do a
                   for ds in dancer_states
                       e = earliest(ds)
@@ -173,9 +201,8 @@ function animate(method::CSSKeyframesAnimation,
                   end
               end
               )
-    animate_finish(output_file, doc)
+    doc
 end
-
 
 function smooth_svg_rotation(hist)
     # Returns the "value" attribute for animateTransform as a vector
@@ -226,9 +253,10 @@ function history_for_animation(ds)
     hist
 end
 
-function animate(method::PureSVGAnimation,
-                 output_file, dancer_states::Vector{DancerState},
-                 bpm)
+function animation_svg(method::PureSVGAnimation,
+                       dancer_states::Vector{DancerState},
+                       bpm;
+                       symbol_uri_base="")
     dancer_states = sort(dancer_states; by = ds -> ds.dancer)
     number_of_couples = ceil(length(dancer_states) / 2)
     tbounds = TimeBounds()
@@ -243,8 +271,6 @@ function animate(method::PureSVGAnimation,
     duration_seconds = (tbounds.max - tbounds.min) / (bpm / 60)
 
     rot(ds) = "$(svg_angle(ds)) $(svg_x(ds)) $(svg_y(ds))"
-    symbol_uri_base = collateral_file_relpath("dancer_symbols.svg",
-                                              output_file)
     doc = elt("svg",
               "xmlns" => SVG_NAMESPACE,
               bounds_to_viewbox(bounds)...,
@@ -252,6 +278,13 @@ function animate(method::PureSVGAnimation,
               elt("style",
                   DIRECTION_DOT_STYLE,
                   dancer_colors_css(number_of_couples)),
+              if symbol_uri_base == ""
+                  [
+                      elt("defs", parsed_dancer_symbols_svg())
+                  ]
+              else
+                  []
+              end...,
               elt("g") do a
                   for ds in dancer_states
                       hist = history_for_animation(ds)
@@ -294,11 +327,17 @@ function animate(method::PureSVGAnimation,
                             ))
                   end
               end)
-    animate_finish(output_file, doc)
+    doc
 end
+
 
 const DEFAULT_ANIMATION_METHOD = PureSVGAnimation()
 
 animate(output_file, dancer_states, bpm) =
-    animate(DEFAULT_ANIMATION_METHOD, output_file, dancer_states, bpm)
+    animate(DEFAULT_ANIMATION_METHOD, output_file, dancer_states, bpm;
+            symbol_uri_base = collateral_file_relpath("dancer_symbols.svg",
+                                                      output_file))
+
+animation_svg(dancer_states::Vector{DancerState}, bpm) =
+    animation_svg(DEFAULT_ANIMATION_METHOD, dancer_states, bpm)
 
