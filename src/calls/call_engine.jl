@@ -98,7 +98,7 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
         while !isempty(sched)
             @info("do_schedule while loop",
                   now = sched.now,
-                  queue = [ pair for pair in sched.queue ])
+                  queue = sched.scheduled_calls)
             playmates = TwoDancerFormation[]
             function expand_cdc(cdc::CanDoCall)
                 @info("do_schedule expand_cdc", now=sched.now, cdc)
@@ -136,7 +136,7 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                     near(dancer_states(f)...)
             end
             write_debug_formation_file(dbgctx, kb, sched.now)
-            while (!isempty(sched)) && sched.now == peek(sched).second
+            while (!isempty(sched)) && sched.now == peek(sched).when
                 # Process a queue entry, performing it if it's "atomic" or
                 # requeueing its parts.
                 #
@@ -146,11 +146,11 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                 # values in the PriorityQueue.
                 now_do_this = dequeue!(sched)
                 @info("do_schedule dequeued", now_do_this)
-                @assert now_do_this isa SquareDanceCall
+                @assert now_do_this isa ScheduledCall
                 let
                     done = 0
                     # get_call_options only considers formations that match sched.now.
-                    options = get_call_options(sched.now, now_do_this, kb)
+                    options = get_call_options(sched.now, now_do_this.call, kb)
                     @info("do_schedule get_call_options returned", options)
                     for cdc in options
                         let
@@ -162,7 +162,7 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                         end
                         e = expand_cdc(cdc)
                         # No further expansion.  Perform the call:
-                        if e == now_do_this
+                        if e == now_do_this.call
                             perform_cdc(cdc)
                             done += 1
                         else
@@ -172,27 +172,31 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                                 schedule(sched, new_entry)
                             end
                             @info("updated schedule",
-                                  queue = [ pair for pair in sched.queue ])
+                                  queue = sched.scheduled_calls)
                             done += 1
                         end
                     end
                     @assert done > 0
                 end
             end
-            @info("do_schedule schedule", queue = [ pair for pair in sched.queue ])
+            @info("do_schedule schedule", queue = sched.scheduled_calls)
             # We have finished all of the calls that were scheduled for a
             # given time.
             # Synchronize: catch the dancers up to the next schedule
             # entry:
             let
+                old = sched.now
                 # Advance the schedule forward to the next time:
                 latest = maximum(ds -> ds.time,
-                                 values(newest_dancer_states))
+                                 values(newest_dancer_states);
+                                 init = sched.now)
                 if isempty(sched)
                     sched.now = latest
                 else
-                    sched.now = peek(sched).second
+                    sched.now = peek(sched).when
                 end
+                @info("sched.now advanced from $old to $(sched.now).")
+                @assert old <= sched.now
             end
             # Breathe:
             # Do we need for all of the DancerStates to be

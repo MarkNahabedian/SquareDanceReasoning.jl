@@ -1,62 +1,50 @@
 export CallSchedule
 
+
+"""
+    ScheduledCall(when, ::SquareDanceCall)
+
+ScheduledCall associates a `SquareDanceCall` with the time it should be performed.
+"""
 struct ScheduledCall
     when::Real
     call::SquareDanceCall
 end
 
 
+Base.isless(sc1::ScheduledCall, sc2::ScheduledCall) =
+    (sc1.when < sc2.when) || (sc1.call < sc2.call)
+
+Base.isless(c1::SquareDanceCall, c2::SquareDanceCall) = false
+
+
 """
-    CallSchedule()
-    CallSchedule(now)
+    CallSchedule(start_time)
 
-Creates and returns an empty square dance call schedule, either
-starting at time 0 or at the specified time.
-
-Use [`schedule`](@ref) to add a new entry to the schedule.
+CallSchedule maintains the schedule of the `ScheduledCall`s that are
+to be performed.  The results of [`expand_parts` ](@ref) are added to
+the schedule while calls are being executed.  The call engine (see
+`do_schedule`) runs until the schedule is empty.
 """
 mutable struct CallSchedule
-    # Should the "priority" value here be a time/beat, or just a
-    # relative ordering?  We need to be able to say when sequential
-    # parts in simultaneous sequences are in lock step, but relative
-    # ordering can achieve that as long as the calls are scheduled by
-    # the same function.
-    # Maybe initially use beat/time for simplicity until that's found
-    # to be a problem.
-
-    # How might we deal with something like "do the first 2 parts of
-    # RelayTheDeucey (Trade, centers cast off 3/4); diamond circulate
-    # (very centers of the wave of 6 and the two circulators); finish
-    # RelayTheDeucey"?
-
-    # A hack might be to assemble the parts into a temporary
-    # CallSchedule and fiddle with it and then merge it with the real
-    # schedule.
-
-    # We could have a function which takes a time index into a
-    # CallSchedule and delays everything starting at that point by
-    # some additional time. openup(::CallSchedule, amount, at)
-
-    # What mechanism provides the easiest approach to part
-    # manipulation?
     now::Real
-    queue::PriorityQueue{ScheduledCall, Real}
-    
-    CallSchedule() =
-        new(0, PriorityQueue{ScheduledCall, Real}())
+    scheduled_calls::SortedSet{ScheduledCall}
 
-    CallSchedule(now::Real) =
-        new(now, PriorityQueue{ScheduledCall, Real}())
+    CallSchedule(start_time) = new(start_time, SortedSet{ScheduledCall}())
 end
 
+DataStructures.peek(sched::CallSchedule) = first(sched.scheduled_calls)
 
-Base.isempty(sched::CallSchedule) = isempty(sched.queue)
+function DataStructures.dequeue!(sched::CallSchedule)
+    sc = pop!(sched.scheduled_calls)
+    @assert sc.when == sched.now
+    sc
+end
 
-DataStructures.peek(sched::CallSchedule) =
-    peek(sched.queue)
+Base.length(sched::CallSchedule) = Base.length(sched.scheduled_calls)
 
-DataStructures.dequeue!(sched::CallSchedule) =
-    dequeue!(sched.queue).call
+Base.iterate(sched::CallSchedule) = Base.iterate(sched.scheduled_calls)
+Base.iterate(sched::CallSchedule, state) = Base.iterate(sched.scheduled_calls, state)
 
 
 """
@@ -65,15 +53,18 @@ DataStructures.dequeue!(sched::CallSchedule) =
 Enters `call` into `sched` so that it will be performed at the
 specified time `at`.
 """
-function schedule(sched::CallSchedule, call::SquareDanceCall, at)
-    @assert at >= sched.now
-    @assert !haskey(sched.queue, call)
-    sched.queue[ScheduledCall(at, call)] = at
+schedule(sched::CallSchedule, call::SquareDanceCall, at) =
+    schedule(sched, ScheduledCall(at, call))
+
+function schedule(sched::CallSchedule, sc::ScheduledCall)
+    @assert sc.when >= sched.now
+    push!(sched.scheduled_calls, sc)
 end
 
-function schedule(sched::CallSchedule, s::Tuple{Real, SquareDanceCall})
-    schedule(sched, s[2], s[1] + sched.now)
-end
+### SHOULD SOON NO LONGER BE NEEDED:
+schedule(sched::CallSchedule, s::Tuple{Real, SquareDanceCall}) =
+    push!(sched.scheduled_calls, ScheduledCall(s[1] + sched.now, s[2]))
+
 
 
 """
@@ -82,9 +73,10 @@ end
 Move every entry in the schedule forward by `delta`.
 """
 function advance_schedule_by(sched::CallSchedule, delta)
-    for key in keys(sched.queue)
-        delete!(sched.queue, key)
-        schedule(sched, key.call, key.when + delta)
+    @assert delta >= 0
+    for sc in sched.scheduled_calls
+        delete!(sched.scheduled_calls, sc)
+        schedule(sched, sc.call, sc.when + delta)
     end
     sched.now += delta
     sched

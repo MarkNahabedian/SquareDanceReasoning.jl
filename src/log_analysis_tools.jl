@@ -66,7 +66,7 @@ function analysis1(log)
             println("Error: $(record.kwargs[:error])")
             println("\tschedule:")
             let
-                queue = [ pair for pair in record.kwargs[:sched].queue ]
+                queue = [ sc for sc in record.kwargs[:sched] ]
                 print_schedule(queue)
             end
             println("\tcall history:")
@@ -101,6 +101,13 @@ end
 # HTML Log Analysis:
 
 global LOG_ANALYSIS_CSS = """
+.error {
+    margin-top: 40px;
+    border-style: solid;
+    border-width: 10px;
+    border-color: orange;
+}
+
 table {
     border: solid;
     border-collapse: collapse;
@@ -122,11 +129,13 @@ td {
     vertical-aligh: top;
 }
 td.time {
-attr("style",
     align: right;
 }
 p.time {
     font-weight: bold;
+    border-style: solid;
+    border-width: 6px;
+    border-color: green;
 }
 """
 
@@ -156,13 +165,13 @@ function analysis1_html(log)
             element("caption") do cap
                 add_text(cap, "Schedule")
             end
-            for pair in queue
+            for sc in queue
                 element("tr") do row
                     element("td") do td
-                        add_text(td, s(pair[2]))
+                        add_text(td, s(sc.when))
                     end
                     element("td") do td
-                        add_text(td, s(pair[1]))
+                        add_text(td, s(sc.call))
                     end
                 end
             end
@@ -294,10 +303,13 @@ function analysis1_html(log)
                 end
             elseif record.level == Logging.Error
                 element("div") do div
-                    paragraph("ERROR: " * s(record.kwargs[:error]))
+                    element("p") do p
+                        attr("class", "error")
+                        add_text(p, "ERROR: " * s(record.kwargs[:error]))
+                    end
                     element("div") do e
                         paragraph("Schedule:")
-                        add_schedule([ pair for pair in record.kwargs[:sched].queue ])
+                        add_schedule([ sc for sc in record.kwargs[:sched] ])
                     end
                     element("div") do e
                         element("table") do tbl
