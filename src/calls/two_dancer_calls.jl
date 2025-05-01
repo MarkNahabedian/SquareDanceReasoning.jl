@@ -61,23 +61,27 @@ with the Heads back on Squared Set spots. See Squared Set Convention.
 
 =#
 
-function expand_parts(c::PassThru, f::FaceToFace)
+function expand_parts(c::PassThru, f::FaceToFace, sc::ScheduledCall)
+    @assert c == sc.call
+    start = sc.when
     dd = DesignatedDancers(map(ds -> ds.dancer, dancer_states(f)))
     [
         # The CallerLab timing for PassThru is 2, but the timing
         # for StepToAWave is 2 and the timing for StepThru is
         # presumably greater than zero.
-        (0, StepToAWave(role = dd,
-                        handedness = RightHanded(),
-                        time = 1)),
-        (1, StepThru(; role = dd))
+        ScheduledCall(start + 0, StepToAWave(role = dd,
+                                             handedness = RightHanded(),
+                                             time = 1)),
+        ScheduledCall(start + 1, StepThru(; role = dd))
     ]
 end
 
-function expand_parts(c::PassThru, f::RHMiniWave)
+function expand_parts(c::PassThru, f::RHMiniWave, sc::ScheduledCall)
+    @assert c == sc.call
+    start = sc.when
     dd = DesignatedDancers(map(ds -> ds.dancer, dancer_states(f)))
     [
-        (0, StepThru(; role = dd))
+        ScheduledCall(start + 0, StepThru(; role = dd))
     ]
 end
 
@@ -100,20 +104,24 @@ can_do_from(c::PullBy, mw::MiniWave) =
 
 can_do_from(::PullBy, ::FaceToFace) = 1
 
-function expand_parts(c::PullBy, f::MiniWave)
+function expand_parts(c::PullBy, f::MiniWave, sc::ScheduledCall)
+    @assert c == sc.call
+    start = sc.when
     dd = DesignatedDancers(map(ds -> ds.dancer, dancer_states(mw)))
     [
-        (0, StepThru(; role = dd))
+        ScheduledCall(start + 0, StepThru(; role = dd))
     ]
 end
 
-function expand_parts(c::PullBy, f::FaceToFace)
+function expand_parts(c::PullBy, f::FaceToFace, sc::ScheduledCall)
+    @assert c == sc.call
+    start = sc.when
     dd = DesignatedDancers(map(ds -> ds.dancer, dancer_states(f)))
     [
-        (0, StepToAWave(role = dd,
-                        handedness = RightHanded(),
-                        time = 1)),
-        (1, StepThru(; role = dd))
+        ScheduledCall(start + 0, StepToAWave(role = dd,
+                                             handedness = RightHanded(),
+                                             time = 1)),
+        ScheduledCall(start + 1, StepThru(; role = dd))
     ]
 end
 
@@ -136,29 +144,33 @@ can_do_from(::Dosado, ::FaceToFace) = 1
 can_do_from(c::Dosado, mw::MiniWave) =
     (c.handedness == mw.handedness) ? 1 : 0    
 
-function expand_parts(c::Dosado, f::FaceToFace)
+function expand_parts(c::Dosado, f::FaceToFace, sc::ScheduledCall)
+    @assert c == sc.call
+    start = sc.when
     dancers = map(ds -> ds.dancer, dancer_states(f))
     [
         # The timing budget is at leat 6.  Where should we spread out
         # the extra time?
-        (0, StepToAWave(role = DesignatedDancers(dancers),
-                        handedness = c.handedness)),
-        (2, StepThru(role = DesignatedDancers(dancers))),
-        (3, _BackToAWave(role = DesignatedDancers(dancers),
-                         handedness = opposite(c.handedness))),
-        (4, _UnStepToAWave(role = DesignatedDancers(dancers)))
+        ScheduledCall(start + 0, StepToAWave(role = DesignatedDancers(dancers),
+                                             handedness = c.handedness)),
+        ScheduledCall(start + 2, StepThru(role = DesignatedDancers(dancers))),
+        ScheduledCall(start + 3, _BackToAWave(role = DesignatedDancers(dancers),
+                                              handedness = opposite(c.handedness))),
+        ScheduledCall(start + 4, _UnStepToAWave(role = DesignatedDancers(dancers)))
     ]
 end
 
-function expand_parts(c::Dosado, mw::MiniWave)
+function expand_parts(c::Dosado, mw::MiniWave, sc::ScheduledCall)
+    @assert c == sc.call
+    start = sc.when
     dancers = map(ds -> ds.dancer, dancer_states(mw))
     [
         # The timing budget is at least 6.  Where should we spread out
         # the extra time?
-        (0, StepThru(role = DesignatedDancers(dancers))),
-        (1, _BackToAWave(role = DesignatedDancers(dancers),
-                         handedness = opposite(c.handedness))),
-        (2, _UnStepToAWave(role = DesignatedDancers(dancers)))
+        ScheduledCall(start + 0, StepThru(role = DesignatedDancers(dancers))),
+        ScheduledCall(start + 1, _BackToAWave(role = DesignatedDancers(dancers),
+                                              handedness = opposite(c.handedness))),
+        ScheduledCall(start + 2, _UnStepToAWave(role = DesignatedDancers(dancers)))
     ]
 end
 
@@ -243,29 +255,33 @@ end
 can_do_from(::Trade, ::Couple) = 1
 can_do_from(::Trade, ::MiniWave) = 1
 
-function expand_parts(c::Trade, mw::MiniWave)
+function expand_parts(c::Trade, mw::MiniWave, sc::ScheduledCall)
+    @assert c == sc.call
+    start = sc.when
     # Taminations says that from a MiniWave the total time for Trade
     # is 3.
     dancers = map(ds -> ds.dancer, dancer_states(mw))
     [
-        (0, Hinge(; role=DesignatedDancers(dancers),
-                  time=1.5)),
-        (1.5, Hinge(; role=DesignatedDancers(dancers),
-                    time=1.5))
+        ScheduledCall(start + 0, Hinge(; role=DesignatedDancers(dancers),
+                                       time=1.5)),
+        ScheduledCall(start + 1.5, Hinge(; role=DesignatedDancers(dancers),
+                                         time=1.5))
     ]
 end
 
-function expand_parts(c::Trade, cpl::Couple)
+function expand_parts(c::Trade, cpl::Couple, sc::ScheduledCall)
+    @assert c == sc.call
+    start = sc.when
     # Taminations says that from a Couple the total time for Trade is
     # 4.
     dancers = map(ds -> ds.dancer, dancer_states(cpl))
     [
-        (0, PartnerHinge(; role=DesignatedDancers(dancers),
-                         time=2)),
-        (2, _FinishTrade(;
-                         original_beau=cpl.beau,
-                         original_belle=cpl.belle,
-                         time=2))
+        ScheduledCall(start + 0, PartnerHinge(; role=DesignatedDancers(dancers),
+                                              time=2)),
+        ScheduledCall(start + 2, _FinishTrade(;
+                                              original_beau=cpl.beau,
+                                              original_belle=cpl.belle,
+                                              time=2))
     ]
 end
 
@@ -321,12 +337,14 @@ end
 
 can_do_from(::SlideThru, ::FaceToFace) = 1
 
-function expand_parts(c::SlideThru, f::FaceToFace)
+function expand_parts(c::SlideThru, f::FaceToFace, sc::ScheduledCall)
+    @assert c == sc.call
+    start = sc.when
     designated_dancers = DesignatedDancers(map(ds -> ds.dancer,
                                                dancer_states(f)))
     [
-        (0, PassThru(; role=designated_dancers)),
-        (2, _GenderedRoll(; role=designated_dancers))
+        ScheduledCall(start + 0, PassThru(; role=designated_dancers)),
+        ScheduledCall(start + 2, _GenderedRoll(; role=designated_dancers))
     ]
 end
 
@@ -348,13 +366,15 @@ can_do_from(::StarThru, f::FaceToFace) =
         0
     end
 
-function expand_parts(c::StarThru, f::FaceToFace)
+function expand_parts(c::StarThru, f::FaceToFace, sc::ScheduledCall)
     @assert f.a.dancer.gender == opposite(f.b.dancer.gender)
+    @assert sc.call == c
+    start = sc.when
     designated_dancers = DesignatedDancers(map(ds -> ds.dancer,
                                                dancer_states(f)))
     [
-        (0, PassThru(; role=designated_dancers)),
-        (2, _GenderedRoll(; role=designated_dancers))
+        ScheduledCall(start + 0, PassThru(; role=designated_dancers)),
+        ScheduledCall(start + 2, _GenderedRoll(; role=designated_dancers))
     ]
 end
 

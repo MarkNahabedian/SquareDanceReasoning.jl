@@ -18,15 +18,19 @@ function restricted_to(call::SquareDanceCall)::Role
 end
 
 
-"""
-    expand_parts(::SquareDanceCall, ::SquareDanceFormation)
+expand_parts(cdc::CanDoCall) = expand_parts(cdc.scheduled_call.call,
+                                            cdc.formation, cdc.scheduled_call)
 
-Returns either the call itself, if it has no expansion, or a vector of
-`Tuple{relative_time, part}` containing one Tuple for each part.
-`relative_time` is the time (relative to the start of the call) at
-which the corresonding part should start.
 """
-expand_parts(c::SquareDanceCall, ::SquareDanceFormation) = c
+    expand_parts(::SquareDanceCall, ::SquareDanceFormation, ::ScheduledCall)
+
+Returns either the ScheduledCall itself, if it has no expansion, or a
+vector of a `ScheduledCall` for each part.
+
+The `ScheduledCall`'s `when` field is the starting time for the call.
+The pats in the expansion can have their times offset from that.
+"""
+expand_parts(::SquareDanceCall, ::SquareDanceFormation, sc::ScheduledCall) = sc
 
 
 """
@@ -102,7 +106,7 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
             playmates = TwoDancerFormation[]
             function expand_cdc(cdc::CanDoCall)
                 @info("do_schedule expand_cdc", now=sched.now, cdc)
-                e = expand_parts(cdc.scheduled_call.call, cdc.formation)
+                e = expand_parts(cdc)
                 @info("do_schedule expand_parts returned", cdc, e)
                 e
             end
@@ -162,7 +166,7 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                         end
                         e = expand_cdc(cdc)
                         # No further expansion.  Perform the call:
-                        if e == now_do_this.call
+                        if e == now_do_this
                             perform_cdc(cdc)
                             done += 1
                         else
