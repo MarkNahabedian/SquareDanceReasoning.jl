@@ -30,6 +30,17 @@ function as_text end
 
 
 """
+    ScheduledCall(when, ::SquareDanceCall)
+
+ScheduledCall associates a `SquareDanceCall` with the time it should be performed.
+"""
+struct ScheduledCall
+    when::Real
+    call::SquareDanceCall
+end
+
+
+"""
     CanDoCall(preference, call::SquareDanceCall, formation::SquareDanceFormation)
 
 CanDoCall represents that `call` can be performed from `formation`,
@@ -37,7 +48,7 @@ and doing so has the specified preference.
 """
 struct CanDoCall
     preference::Int
-    call::SquareDanceCall
+    scheduled_call::ScheduledCall
     formation::SquareDanceFormation
 end
 

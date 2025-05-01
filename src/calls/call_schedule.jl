@@ -1,17 +1,6 @@
 export CallSchedule
 
 
-"""
-    ScheduledCall(when, ::SquareDanceCall)
-
-ScheduledCall associates a `SquareDanceCall` with the time it should be performed.
-"""
-struct ScheduledCall
-    when::Real
-    call::SquareDanceCall
-end
-
-
 Base.isless(sc1::ScheduledCall, sc2::ScheduledCall) =
     (sc1.when < sc2.when) || (sc1.call < sc2.call)
 

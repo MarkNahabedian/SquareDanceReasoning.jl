@@ -102,14 +102,14 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
             playmates = TwoDancerFormation[]
             function expand_cdc(cdc::CanDoCall)
                 @info("do_schedule expand_cdc", now=sched.now, cdc)
-                e = expand_parts(cdc.call, cdc.formation)
+                e = expand_parts(cdc.scheduled_call.call, cdc.formation)
                 @info("do_schedule expand_parts returned", cdc, e)
                 e
             end
             function perform_cdc(cdc::CanDoCall)
                 @info("do_schedule performing",  now=sched.now, cdc)
                 push!(call_history, (sched.now, cdc))
-                f = perform(cdc.call, cdc.formation, kb)
+                f = perform(cdc.scheduled_call.call, cdc.formation, kb)
                 @info("do_schedule perform returned", f)
                 @assert f isa SquareDanceFormation
                 if f isa TwoDancerFormation
@@ -280,7 +280,7 @@ function get_call_options(sc::ScheduledCall, kb::SDRKnowledgeBase)::Vector{CanDo
     for f in formations
         p = can_do_from(call, f)
         if p > 0
-            push!(options, CanDoCall(p, call, f))
+            push!(options, CanDoCall(p, sc, f))
         end
     end
     if length(options) == 0
