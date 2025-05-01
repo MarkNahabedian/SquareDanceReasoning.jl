@@ -150,7 +150,7 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                 let
                     done = 0
                     # get_call_options only considers formations that match sched.now.
-                    options = get_call_options(sched.now, now_do_this.call, kb)
+                    options = get_call_options(now_do_this, kb)
                     @info("do_schedule get_call_options returned", options)
                     for cdc in options
                         let
@@ -259,8 +259,9 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
     return kb
 end
 
-function get_call_options(now::Real, call::SquareDanceCall,
-                          kb::SDRKnowledgeBase)::Vector{CanDoCall}
+function get_call_options(sc::ScheduledCall, kb::SDRKnowledgeBase)::Vector{CanDoCall}
+    now = sc.when
+    call = sc.call
     # This needs to be a Set to avoid the duplicates we would get from
     # querying for SquareDanceFormation and it subtypes.  Maybe this
     # should be fixed in Rete.Collector.

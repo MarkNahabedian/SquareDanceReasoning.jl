@@ -1,6 +1,6 @@
 
 using SquareDanceReasoning: Basic1, Basic2, Mainstream, Plus,
-    Advanced1, Challenge3B
+    Advanced1, Challenge3B, get_call_options, ScheduledCall
 
 cleanup_debug_formations(@__DIR__)
 
@@ -50,7 +50,7 @@ end
         @test 1 == askc(Counter(), kb, RHWaveOfEight)
         call = StepThru()
         @test as_text(call) == "Everyone StepThru"
-        options = SquareDanceReasoning.get_call_options(timeof(grid[1, 1]), call, kb)
+        options = get_call_options(ScheduledCall(timeof(grid[1, 1]), call), kb)
         @test 4 == length(options)
         @test all(options) do cdc
             cdc.formation isa RHMiniWave
