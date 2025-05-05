@@ -1,9 +1,13 @@
 using SquareDanceReasoning
+using Rete
 using Logging
 using Test
 using Serialization
 using DataStructures
+using XML
 using LightXML
+
+using SquareDanceReasoning: ScheduledCall
 
 #=
 A Note about serializing logs:
@@ -33,15 +37,15 @@ function analysis1(log)
             print_schedule(record.kwargs[:queue])
         elseif record.message == "do_schedule performing"
             println(" perform ", record.kwargs[:now], "\t",
-                    record.kwargs[:cdc].call)
+                    record.kwargs[:cdc]scheduled_call..call)
         elseif record.message == "do_schedule expand_cdc"
             cdc = record.kwargs[:cdc]
             println(" expand ", record.kwargs[:now], "\t",
-                    cdc.call, "\t",
+                    cdc.scheduled_call.call, "\t",
                     [ds.dancer for ds in cdc.formation()])
         elseif record.message == "do_schedule expand_parts returned"
             e = record.kwargs[:e]
-            if !isa(e, SquareDanceCall)
+            if !isa(e, SortedSet{ScheduledCall})
                 println(" expansion:")
                 for step in e
                     println("\t$step")
@@ -54,7 +58,7 @@ function analysis1(log)
             end
         elseif record.message == "scheduling"
             new_entry = record.kwargs[:new_entry]
-            println(" + " , new_entry[1], "\t", new_entry[2])
+            println(" + $new_entry")
         elseif record.message == "updated schedule"
             println(" schedule: ")
             print_schedule(record.kwargs[:queue])
@@ -201,14 +205,14 @@ function analysis1_html(log)
             elseif record.message == "do_schedule performing"
                 element("div") do elt
                     attr("class", "perform")
-                    add_text(elt, "PERFORM " * s(record.kwargs[:cdc].call))
+                    add_text(elt, "PERFORM " * s(record.kwargs[:cdc].scheduled_call.call))
                 end
             elseif record.message == "do_schedule expand_cdc"
                 let
                     cdc = record.kwargs[:cdc]
                     element("div") do elt
                         attr("class", "expand")
-                        add_text(elt, "EXPAND " * s(cdc.call) * "\n" *
+                        add_text(elt, "EXPAND " * s(cdc.scheduled_call.call) * "\n" *
                                  s([ds.dancer for ds in cdc.formation()]))
                     end
                 end
@@ -221,10 +225,12 @@ function analysis1_html(log)
                             element("caption") do cap
                                 add_text(cap, "Call Expansion")
                             end
-                            for step in e
-                                element("tr") do row
-                                    element("td") do td
-                                        add_text(td, s(step))
+                            if e isa SortedSet{ScheduledCall}
+                                for step in e
+                                    element("tr") do row
+                                        element("td") do td
+                                            add_text(td, s(step))
+                                        end
                                     end
                                 end
                             end
@@ -278,9 +284,7 @@ function analysis1_html(log)
                 element("div") do div
                     let
                         new_entry = record.kwargs[:new_entry]
-                        add_text(div, "scheduling " *
-                            s(new_entry[1]) * "   " *
-                            s(new_entry[2]))
+                        add_text(div, "scheduling $new_entry")
                     end
                 end
             elseif record.message == "updated schedule"
@@ -387,8 +391,28 @@ function analysis1_html(log)
                     end
                 end
             end
-        end
+        end     # end of log record loop
     end
     doc
+end
+
+
+function report1(logfile::String)
+    output_file = splitext(logfile)[1] * ".html"
+    report1(deserialize(logfile), output_file)
+end
+
+function report1(log, output_file)
+    doc = analysis1_html(log)
+    open(output_file, "w") do io
+        print(io, doc)
+    end
+end
+
+# LightXML doesn't directly support creating comments:
+function new_comment(content::AbstractString)
+    p = ccall((:xmlNewComment, LightXML.libxml2),
+              LightXML.Xptr, (LightXML.Cstring,), content)
+    return XMLNode(p)
 end
 
