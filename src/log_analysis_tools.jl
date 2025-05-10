@@ -5,7 +5,8 @@ using Test
 using Serialization
 using DataStructures
 using XML
-using LightXML
+
+using SquareDanceReasoning: elt
 
 using SquareDanceReasoning: ScheduledCall
 
@@ -143,259 +144,270 @@ p.time {
 }
 """
 
-function analysis1_html(log)
-    doc = XMLDocument()
-    stack = Stack{Any}()
-    push!(stack, create_root(doc, "html"))
-    function element(body, tag)
-        e = new_child(first(stack), tag)
-        push!(stack, e)
-        body(e)
-        pop!(stack)
-    end
-    function attr(name, value)
-        set_attribute(first(stack), name, value)
-    end
-    s(obj) = repr("text/plain", obj;
-                  context = (:module => SquareDanceReasoning))
-    function paragraph(text)
-        element("p") do p
-            add_text(p, text)
-        end
-    end
-    function add_schedule(queue)
-        element("table") do tbl
-            attr("class", "schedule")
-            element("caption") do cap
-                add_text(cap, "Schedule")
-            end
-            for sc in queue
-                element("tr") do row
-                    element("td") do td
-                        add_text(td, s(sc.when))
-                    end
-                    element("td") do td
-                        add_text(td, s(sc.call))
-                    end
-                end
-            end
-        end
-    end
-    element("head") do head
-        element("style") do style
-            add_text(style, LOG_ANALYSIS_CSS)
-        end
-    end
-    element("body") do body
-        for record in log
-            if record.message == "do_schedule while loop"
-                if attribute(first(stack), "class") == "at-time"
-                    pop!(stack)
-                end
-                push!(stack,
-                      element("div") do elt
-                          attr("class", "at-time")
-                          element("p") do p
-                              attr("class", "time")
-                              add_text(p, "time: " * s(record.kwargs[:now]))
-                          end
-                          add_schedule(record.kwargs[:queue])
-                          elt
-                      end)
-            elseif record.message == "do_schedule performing"
-                element("div") do elt
-                    attr("class", "perform")
-                    add_text(elt, "PERFORM " * s(record.kwargs[:cdc].scheduled_call.call))
-                end
-            elseif record.message == "do_schedule expand_cdc"
-                let
-                    cdc = record.kwargs[:cdc]
-                    element("div") do elt
-                        attr("class", "expand")
-                        add_text(elt, "EXPAND " * s(cdc.scheduled_call.call) * "\n" *
-                                 s([ds.dancer for ds in cdc.formation()]))
-                    end
-                end
-            elseif record.message == "do_schedule expand_parts returned"
-                let
-                    e = record.kwargs[:e]
-                    if !isa(e, SquareDanceCall)
-                        element("table") do tbl
-                            attr("class", "call-expansion")
-                            element("caption") do cap
-                                add_text(cap, "Call Expansion")
-                            end
-                            if e isa SortedSet{ScheduledCall}
-                                for step in e
-                                    element("tr") do row
-                                        element("td") do td
-                                            add_text(td, s(step))
-                                        end
-                                    end
-                                end
-                            end
-                        end
-                    end
-                end
-            elseif record.message == "do_schedule perform returned"
-                element("table") do tbl
-                    attr("class", "perform-returned")
-                    element("caption") do cap
-                        add_text(cap, "Perform Returned")
-                    end
-                    element("tr") do tr
-                        element("th") do th
-                            add_text(th, "dancer")
-                        end
-                        element("th") do th
-                            add_text(th, "time")
-                        end
-                        element("th") do th
-                            add_text(th, "direction")
-                        end
-                        element("th") do th
-                            add_text(th, "down")
-                        end
-                        element("th") do th
-                            add_text(th, "left")
-                        end
-                    end
-                    for ds in sort(dancer_states(record.kwargs[:f]); by = ds -> ds.dancer)
-                        element("tr") do tr
-                            element("td") do td
-                                add_text(td, s(ds.dancer))
-                            end
-                            element("td") do td
-                                add_text(td, s(ds.time))
-                            end  
-                            element("td") do td
-                                add_text(td, s(ds.direction))
-                            end  
-                            element("td") do td
-                                add_text(td, s(ds.down))
-                            end  
-                            element("td") do td
-                                add_text(td, s(ds.left))
-                            end  
-                        end
-                    end
-                end
-            elseif record.message == "scheduling"
-                element("div") do div
-                    let
-                        new_entry = record.kwargs[:new_entry]
-                        add_text(div, "scheduling $new_entry")
-                    end
-                end
-            elseif record.message == "updated schedule"
-                element("div") do div
-                    add_schedule(record.kwargs[:queue])
-                end
-            elseif record.message == "The dancers are ahead of the schedule"
-                element("div") do div
-                    element("div") do div
-                        add_text(div, "Dancers Ahead Of Schedule")
-                    end
-                    element("div") do div
-                        add_text(div, "latest: " *
-                            s(record.kwargs[:latest]))
-                    end
-                    element("div") do div
-                        add_text(div, "sched_now: " *
-                            s(record.kwargs[:sched_now]))
-                    end
-                end
-            elseif record.level == Logging.Error
-                element("div") do div
-                    element("p") do p
-                        attr("class", "error")
-                        add_text(p, "ERROR: " * s(record.kwargs[:error]))
-                    end
-                    element("div") do e
-                        paragraph("Schedule:")
-                        add_schedule([ sc for sc in record.kwargs[:sched] ])
-                    end
-                    element("div") do e
-                        element("table") do tbl
-                            element("caption") do cap
-                                add_text(cap, "Call History")
-                            end
-                            attr("class", "call-history")
-                            for (now, cdc) in record.kwargs[:call_history]
-                                element("tr") do row
-                                    element("td") do td
-                                        attr("class", "time")
-                                        add_text(td, s(now))
-                                    end
-                                    element("td") do td
-                                        add_text(td, s(cdc))
-                                    end
-                                end
-                            end
-                        end
-                    end
-                    let
-                        newest_dancer_states = record.kwargs[:newest_dancer_states]
-                        element("table") do tbl
-                            element("caption") do cap
-                                add_text(cap, "Dancer History")
-                            end
-                            element("tr") do tr
-                                element("th") do th
-                                    add_text(th, "dancer")
-                                end
-                                element("th") do th
-                                    add_text(th, "time")
-                                end
-                                element("th") do th
-                                    add_text(th, "direction")
-                                end
-                                element("th") do th
-                                    add_text(th, "down")
-                                end
-                                element("th") do th
-                                    add_text(th, "left")
-                                end
-                            end
-                            for dancer in sort(collect(keys(newest_dancer_states)))
-                                hist = history(newest_dancer_states[dancer])
-                                for i in 1:length(hist)
-                                    element("tr") do row
-                                        # dancer:
-                                        if i == 1
-                                            element("td") do td
-                                                attr("rowspan", "$(length(hist))")
-                                                add_text(td, s(dancer))
-                                            end
-                                        end
-                                        # time:
-                                        element("td") do td
-                                            add_text(td, s(hist[i].time))
-                                        end
-                                        # direction:
-                                        element("td") do td
-                                            add_text(td, s(hist[i].direction))
-                                        end
-                                        # down:
-                                        element("td") do td
-                                            add_text(td, s(hist[i].down))
-                                        end
-                                        # left:
-                                        element("td") do td
-                                            add_text(td, s(hist[i].left))
-                                        end                                        
-                                    end
-                                end                                    
-                            end
-                        end
-                    end
-                end
-            end
-        end     # end of log record loop
-    end
-    doc
+
+struct HTMLLogAnalysisReport end
+
+function objrepr(::HTMLLogAnalysisReport, obj)
+    repr("text/plain", obj;
+         context = (:module => SquareDanceReasoning))
 end
 
+function html_for_call_schedule(report::HTMLLogAnalysisReport, queue)
+    elt("table",
+        "class" => "schedule",
+        elt("caption","Schedule"),
+        [
+            elt("tr",
+                elt("td", objrepr(report, sc.when)),
+                elt("td", objrepr(report, sc.call)))
+            for sc in queue
+                ]...)
+end
+
+function html_for_call_history(report::HTMLLogAnalysisReport,
+                               rec::LogRecord)
+    elt("table",
+        "class" => "call-history",
+        elt("caption", "Call History"),
+        [
+            elt("tr",
+                elt("td",
+                    "class" => "time",
+                    objrepr(report, now)),
+                elt("td",
+                    objrepr(report, cdc)))
+            for (now, cdc) in rec.kwargs[:call_history]
+                ]...)
+end
+
+function html_for_dancer_history(report::HTMLLogAnalysisReport,
+                                 rec::LogRecord)
+    newest_dancer_states = rec.kwargs[:newest_dancer_states]
+    elt("table",
+        elt("caption", "Dancer History"),
+        elt("tr",
+            elt("th", "dancer"),
+            elt("th", "time"),
+            elt("th", "direction"),
+            elt("th", "down"),
+            elt("th", "left")),
+        let
+            rows = []
+            for dancer in sort(collect(keys(newest_dancer_states)))
+                hist = history(newest_dancer_states[dancer])
+                for i in 1:length(hist)
+                    push!(rows, elt("tr",
+                                    # dancer:
+                                    if i == 1
+                                        [ elt("td",
+                                              "rowspan" =>"$(length(hist))",
+                                              objrepr(report, dancer)) ]
+                                    else
+                                        []
+                                    end...,
+                                    # time:
+                                    elt("td", objrepr(report, hist[i].time)),
+                                    # direction:
+                                    elt("td", objrepr(report, hist[i].direction)),
+                                    # down:
+                                    elt("td", objrepr(report, hist[i].down)),
+                                    # left:
+                                    elt("td", objrepr(report, hist[i].left))))
+                end
+            end
+            rows
+        end...)
+end
+
+function html_for_log_records(report::HTMLLogAnalysisReport,
+                              remaining_log_records::Vector{LogRecord})::Vector{Node}
+    children = Node[]
+    while !isempty(remaining_log_records)
+        rec = popfirst!(remaining_log_records)
+        push!(children,
+              html_for_log_records(report,
+                                   rec,
+                                   remaining_log_records)...)
+    end
+    Node[
+        elt("div",
+            "class" => "top",
+            children...)
+    ]
+end
+
+function html_for_log_records(report::HTMLLogAnalysisReport,
+                              rec::LogRecord,
+                              remaining_log_records)::Vector{Node}
+    html_for_log_records(report,
+                         Val(Symbol(rec.message)),
+                         rec,
+                         remaining_log_records)
+end
+
+function html_for_log_records(report::HTMLLogAnalysisReport,
+                              m::Any,
+                              log_record::LogRecord,
+                              remaining_log_records)::Vector{Node}
+    Node[]
+end
+
+function html_for_log_records(report::HTMLLogAnalysisReport,
+                              m::Val{:Exception},
+                              rec::LogRecord,
+                              remaining_log_records)::Vector{Node}
+    @assert rec.level == Logging.Error
+    Node[
+        elt("div",
+            elt("p",
+                "class" => "error",
+                ("ERROR: " * objrepr(report, rec.kwargs[:error]))),
+            elt("div",
+                html_for_call_schedule(report,
+                                       [ sc for sc in rec.kwargs[:sched] ])),
+            elt("div",
+                html_for_call_history(report, rec)),
+            elt("div",
+                html_for_dancer_history(report, rec)))
+    ]
+end
+
+function html_for_log_records(report::HTMLLogAnalysisReport,
+                              m::Val{Symbol("do_schedule while loop")},
+                              record::LogRecord,
+                              remaining_log_records)::Vector{Node}
+    @assert record.message == "do_schedule while loop"
+    children = Node[]
+    push!(children, elt("p", "class" => "time",
+                        "time: " * objrepr(report, record.kwargs[:now])))
+    while (!isempty(remaining_log_records) &&
+           remaining_log_records[1].message != "do_schedule while loop")
+        push!(children,
+              html_for_log_records(report, remaining_log_records)...)
+    end
+    Node[
+        elt("div",
+            "class" => "at-time",
+            children...)
+    ]
+end
+
+function html_for_log_records(report::HTMLLogAnalysisReport,
+                              m::Val{Symbol("do_schedule performing")},
+                              record::LogRecord,
+                              remaining_log_records)::Vector{Node}
+    Node[
+        elt("div",
+            "class" => "perform",
+            "PERFORM " * objrepr(report, record.kwargs[:cdc].scheduled_call.call))
+    ]
+end
+
+function html_for_log_records(report::HTMLLogAnalysisReport,
+                              m::Val{Symbol("do_schedule expand_cdc")},
+                              record::LogRecord,
+                              remaining_log_records)::Vector{Node}
+    cdc = record.kwargs[:cdc]
+    Node[
+        elt("div", "class" => "expand",
+            ("EXPAND " * objrepr(report, cdc.scheduled_call.call)
+             * "\n" *
+                 objrepr(report, [ds.dancer for ds in cdc.formation()])))
+    ]
+end
+
+function html_for_log_records(report::HTMLLogAnalysisReport,
+                              m::Val{Symbol("do_schedule expand_parts returned")},
+                              log_record::LogRecord,
+                              remaining_log_records)::Vector{Node}
+    e = log_record.kwargs[:e]
+    if isa(e, ScheduledCall)
+        # No expansion:
+        Node[]
+    else
+        # The call was expanded by expand_parts:
+        @assert e isa Vector{ScheduledCall}
+        Node[
+            elt("table",
+                "class" => "call-expansion",
+                elt("caption", "Call Expansion"),
+                [
+                    elt("tr",
+                        elt("td", objrepr(report, step)))
+                    for step in e
+                        ]...)
+        ]
+    end
+end
+
+function html_for_log_records(report::HTMLLogAnalysisReport,
+                              m::Val{Symbol("do_schedule perform returned")},
+                              log_record::LogRecord,
+                              remaining_log_records)::Vector{Node}
+    Node[
+        elt("table",
+            "class" => "perform-returned",
+            elt("caption", "Perform Returned"),
+            elt("tr",
+                elt("th", "dancer"),
+                elt("th", "time"),
+                elt("th", "direction"),
+                elt("th", "down"),
+                elt("th", "left")),
+            [
+                elt("tr",
+                    elt("td", objrepr(report, ds.dancer)),
+                    elt("td", objrepr(report, ds.time)),
+                    elt("td", objrepr(report, ds.direction)),
+                    elt("td", objrepr(report, ds.down)),
+                    elt("td", objrepr(report, ds.left)))
+                for ds in sort(dancer_states(log_record.kwargs[:f]); by = ds -> ds.dancer)
+                    ]...)
+    ]
+end
+
+function html_for_log_records(report::HTMLLogAnalysisReport,
+                              m::Val{Symbol("scheduling")},
+                              log_record::LogRecord,
+                              remaining_log_records)::Vector{Node}
+    Node[
+        elt("div", "scheduling $(log_record.kwargs[:new_entry])")
+    ]
+end
+
+function html_for_log_records(report::HTMLLogAnalysisReport,
+                              m::Val{Symbol("updated schedule")},
+                              log_record::LogRecord,
+                              remaining_log_records)::Vector{Node}
+    Node[
+        elt("div",
+            html_for_call_schedule(report, log_record.kwargs[:queue]))
+    ]
+end
+
+function html_for_log_records(report::HTMLLogAnalysisReport,
+                              m::Val{Symbol("The dancers are ahead of the schedule")},
+                              log_record::LogRecord,
+                              remaining_log_records)::Vector{Node}
+    Node[
+        elt("div",
+            elt("div", "Dancers Ahead Of Schedule"),
+            elt("div",
+                "latest: " *
+                    objrepr(report, log_record.kwargs[:latest])),
+            elt("div",
+                "sched_now: " *
+                    objrepr(report, log_record.kwargs[:sched_now])))
+    ]
+end
+
+function analysis1_html(log)
+    elt("html",
+        elt("head",
+            elt("style", LOG_ANALYSIS_CSS)),
+        elt("body",
+            html_for_log_records(HTMLLogAnalysisReport(), log)...))
+end
 
 function report1(logfile::String)
     output_file = splitext(logfile)[1] * ".html"
@@ -405,14 +417,7 @@ end
 function report1(log, output_file)
     doc = analysis1_html(log)
     open(output_file, "w") do io
-        print(io, doc)
+        XML.write(output_file, doc)
     end
-end
-
-# LightXML doesn't directly support creating comments:
-function new_comment(content::AbstractString)
-    p = ccall((:xmlNewComment, LightXML.libxml2),
-              LightXML.Xptr, (LightXML.Cstring,), content)
-    return XMLNode(p)
 end
 
