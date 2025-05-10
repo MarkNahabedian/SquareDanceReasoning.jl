@@ -187,6 +187,7 @@ function html_for_dancer_history(report::HTMLLogAnalysisReport,
         elt("caption", "Dancer History"),
         elt("tr",
             elt("th", "dancer"),
+            elt("th", "history position"),
             elt("th", "time"),
             elt("th", "direction"),
             elt("th", "down"),
@@ -205,6 +206,15 @@ function html_for_dancer_history(report::HTMLLogAnalysisReport,
                                     else
                                         []
                                     end...,
+                                    # history position
+                                    elt("td",
+                                        let
+                                            count = 0
+                                            history(hist[i]) do ds
+                                                count += 1
+                                            end
+                                            count
+                                        end),
                                     # time:
                                     elt("td", objrepr(report, hist[i].time)),
                                     # direction:
