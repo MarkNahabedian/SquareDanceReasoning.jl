@@ -303,6 +303,17 @@ function html_for_log_records(report::HTMLLogAnalysisReport,
 end
 
 function html_for_log_records(report::HTMLLogAnalysisReport,
+                              m::Val{Symbol("do_schedule dequeued")},
+                              record::LogRecord,
+                              remaining_log_records)::Vector{Node}
+    Node[
+        elt("div",
+            "class" => "now_do_this",
+            "NOW_DO_THIS " * objrepr(report, record.kwargs[:now_do_this]))
+    ]    
+end
+
+function html_for_log_records(report::HTMLLogAnalysisReport,
                               m::Val{Symbol("do_schedule performing")},
                               record::LogRecord,
                               remaining_log_records)::Vector{Node}
