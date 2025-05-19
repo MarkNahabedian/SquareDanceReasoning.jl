@@ -6,6 +6,7 @@
 export _Rest, _GenderedRoll, StepToAWave, _UnStepToAWave,
     _BackToAWave
 export _FaceOriginalPartner, _FaceOriginalCorner
+export _EndAt
 
 
 """
@@ -248,4 +249,52 @@ function perform(c::_BackToAWave, f::BackToBack, kb::SDRKnowledgeBase)
     back_to_a_wave(f, 1, c.handedness)
 end
 
+
+"""
+    _EndAt(f::TwoDancerFormation, timing)
+
+Primitive square dance call that causes the dancer to end at the
+starting location of the other dancer.
+"""
+@with_kw_noshow struct _EndAt <: SquareDanceCall
+    two_dancers::TwoDancerFormation
+    time::Int = 0
+end
+
+_EndAt(two_dancers) = _EndAt(; two_dancers = two_dancers)
+
+descirption(c::_EndAt) = "_EndAt"
+
+call_schedule_isless(c1::_EndAt, c2::SquareDanceCall) = true
+
+can_do_from(::_EndAt, ::DancerState) = 1
+
+restricted_to(c::_EndAt) = DesignatedDancers(map(ds -> ds.dancer, c.two_dancers()))
+
+function perform(c::_EndAt, ds::DancerState, ::SDRKnowledgeBase)
+    fdss = dancer_states(c.two_dancers)
+    i = findfirst(fdss) do ds1
+        ds1.dancer == ds.dancer
+    end
+    other = fdss[mod1(i+1, length(fdss))]
+    @assert other.dancer != ds.dancer
+    #=
+    # The call engine has various checks that expect that time elapsed
+    # between successive dancer states.  To get around those, we
+    # replace the previous DancerState when the call takkes 0 time.
+    if i == 1
+        return DancerState(ds.previous, # c.time == 0 && ds.previous != nothing ? ds.previous : ds,
+                           ds.time + c.time, ds.direction,
+                           fdss[2].down, fdss[2].left)
+    elseif i == 2
+        return DancerState(ds.previous, # c.time == 0 && ds.previous != nothing ? ds.previous : ds,
+                           ds.time + c.time, ds.direction,
+                           fdss[1].down, fdss[1].left)
+    end
+    =#
+    # Move ds to the position that other's position in c.two_dancers:
+    return DancerState(ds,
+                       ds.time + c.time, ds.direction,
+                       other.down, other.left)
+end
 

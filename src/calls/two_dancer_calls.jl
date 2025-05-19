@@ -72,7 +72,8 @@ function expand_parts(c::PassThru, f::FaceToFace, sc::ScheduledCall)
         ScheduledCall(start + 0, StepToAWave(role = dd,
                                              handedness = RightHanded(),
                                              time = 1)),
-        ScheduledCall(start + 1, StepThru(; role = dd))
+        ScheduledCall(start + 1, StepThru(; role = dd)),
+        ScheduledCall(start + 2, _EndAt(f))
     ]
 end
 
@@ -121,7 +122,8 @@ function expand_parts(c::PullBy, f::FaceToFace, sc::ScheduledCall)
         ScheduledCall(start + 0, StepToAWave(role = dd,
                                              handedness = RightHanded(),
                                              time = 1)),
-        ScheduledCall(start + 1, StepThru(; role = dd))
+        ScheduledCall(start + 1, StepThru(; role = dd)),
+        ScheduledCall(start + 2, _EndAt(f))
     ]
 end
 
