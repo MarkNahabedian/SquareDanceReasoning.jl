@@ -1,8 +1,19 @@
 export CallSchedule
 
+"""
+    call_schedule_isless(call1::ScqareDanceCall, call2::SquareDanceCall)
+
+We need some way to control the scheduleing order of zero duration
+calls like _EndAt.
+
+This is kind of a kludge but I've not thought of anything better.
+"""
+call_schedule_isless(::SquareDanceCall, ::SquareDanceCall) = false
+
 
 Base.isless(sc1::ScheduledCall, sc2::ScheduledCall) =
-    (sc1.when < sc2.when) || (sc1.call < sc2.call)
+    (sc1.when < sc2.when) ||
+    ( sc1.when == sc2.when) && call_schedule_isless(sc1.call, sc2.call)
 
 Base.isless(c1::SquareDanceCall, c2::SquareDanceCall) = false
 
