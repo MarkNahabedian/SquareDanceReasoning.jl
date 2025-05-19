@@ -1,5 +1,5 @@
 
-export DancerState, dancer, TimeBounds, expand
+export DancerState, dancer, TimeBounds, expand, history_position
 export location, direction, square_up
 export DANCER_NEAR_DISTANCE, near, direction
 export Collision, CollisionRule
@@ -75,14 +75,11 @@ Base.show(io::IO, ds::DancerState) =
 function Base.show(io::IO, ::MIME"text/plain", ds::DancerState)
     # Definition cribbed from Base._show_default(io::IO, @nospecialize(x))
     io = IOContext(io, :compact => true)
-    need_comma = false
     print(io, "DancerState(")
+    print(io, history_position(ds))
     for f in fieldnames(typeof(ds))
         if !(f in (:previous,))
-            if need_comma
-                print(io, ", ")
-            end
-            need_comma = true
+            print(io, ", ")
             if !isdefined(ds, f)
                 print(io, Base.undef_ref_str)
             else
@@ -109,19 +106,24 @@ mutable struct TimeBounds
 end
 
 
+function expand(tb::TimeBounds, time::Real)
+    if time < tb.min
+        tb.min = time
+    end
+    if time > tb.max
+        tb.max = time
+    end
+    tb
+end
+
+
 """
     expand(tb::TimeBounds, ds::DancerState)::TimeBounds
 
 expands `tb` to encompass the time of the specified `DancerState`s.
 """
 function expand(tb::TimeBounds, ds::DancerState)::TimeBounds
-    if ds.time < tb.min
-        tb.min = ds.time
-    end
-    if ds.time > tb.max
-        tb.max = ds.time
-    end
-    tb
+    expand(tb, ds.time)
 end
 
 function expand(tb::TimeBounds, dss)::TimeBounds
@@ -296,6 +298,15 @@ end
 function history(ds::DancerState)
     Collector{DancerState}()() do c
         history(c, ds)
+    end
+end
+
+function history_position(ds::DancerState)
+    let count = 0
+        history(ds) do ds
+            count += 1
+        end
+        count
     end
 end
 
