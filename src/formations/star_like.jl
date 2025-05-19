@@ -29,7 +29,8 @@ those_with_role(f::Star, role::Union{Beaus, Belles}) =
       those_with_role(f.mw2, role)...
       ]
 
-@rule SquareDanceFormationRule.StarRule(mw1::MiniWave, mw2::MiniWave, ::Star,
+@rule SquareDanceFormationRule.StarRule(mw1::MiniWave, mw2::MiniWave,
+                                        ::Star,
                                         ::FormationContainedIn) begin
     if mw1 == mw2
         return
@@ -41,6 +42,9 @@ those_with_role(f::Star, role::Union{Beaus, Belles}) =
         return
     end
     if distance(center(mw1), center(mw2)) > COUPLE_DISTANCE/4
+        # Is this how we detect diamonds?
+        # The direction disambiguation case might conflict with this
+        # distance test.  We might need more complicated conditionals.
         return
     end
     if mw1.a.direction + DIRECTION1 == mw2.a.direction
