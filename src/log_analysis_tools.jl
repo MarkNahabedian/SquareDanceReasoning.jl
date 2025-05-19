@@ -113,6 +113,10 @@ global LOG_ANALYSIS_CSS = """
     border-color: orange;
 }
 
+div {
+    margin-top: 2ex;
+    margin-bottom: 2ex;
+}
 table {
     border: solid;
     border-collapse: collapse;
@@ -140,7 +144,12 @@ p.time {
     font-weight: bold;
     border-style: solid;
     border-width: 6px;
-    border-color: green;
+    border-color: yellow;
+}
+div.now_do_this {
+    border-style: solid;
+    border-width: 4px;
+    border-color: yellow;
 }
 """
 
@@ -207,14 +216,7 @@ function html_for_dancer_history(report::HTMLLogAnalysisReport,
                                         []
                                     end...,
                                     # history position
-                                    elt("td",
-                                        let
-                                            count = 0
-                                            history(hist[i]) do ds
-                                                count += 1
-                                            end
-                                            count
-                                        end),
+                                    elt("td", history_position(hist[i])),
                                     # time:
                                     elt("td", objrepr(report, hist[i].time)),
                                     # direction:
@@ -266,12 +268,21 @@ function html_for_log_records(report::HTMLLogAnalysisReport,
                               m::Val{:Exception},
                               rec::LogRecord,
                               remaining_log_records)::Vector{Node}
+    err = rec.kwargs[:error]
     @assert rec.level == Logging.Error
     Node[
         elt("div",
             elt("p",
                 "class" => "error",
-                ("ERROR: " * objrepr(report, rec.kwargs[:error]))),
+                ("ERROR: $err")),
+            elt("table",
+                [
+                    elt("tr",
+                        elt("td", string(field)),
+                        elt("td", objrepr(report, getfield(err, field))))
+                    for field in fieldnames(typeof(err))
+                        ]...
+                ),
             elt("div",
                 html_for_call_schedule(report,
                                        [ sc for sc in rec.kwargs[:sched] ])),
@@ -311,6 +322,44 @@ function html_for_log_records(report::HTMLLogAnalysisReport,
             "class" => "now_do_this",
             "NOW_DO_THIS " * objrepr(report, record.kwargs[:now_do_this]))
     ]    
+end
+
+function html_for_log_records(report::HTMLLogAnalysisReport,
+                              m::Val{Symbol("get_call_options formations")},
+                              record::LogRecord,
+                              remaining_log_records)::Vector{Node}
+    call = record.kwargs[:call]
+    formations = record.kwargs[:formations]
+    Node[
+        elt("div",
+            elt("table",
+                elt("caption", "get_call_options formations"),
+                [
+                    elt("tr",
+                        elt("td", objrepr(report, f)))
+                    for f in formations
+                        ]...
+                            ))
+    ]
+end
+
+function html_for_log_records(report::HTMLLogAnalysisReport,
+                              m::Val{Symbol("do_schedule get_call_options returned")},
+                              record::LogRecord,
+                              remaining_log_records)::Vector{Node}
+    options = record.kwargs[:options]
+    Node[
+        elt("div",
+            elt("table",
+                elt("caption", "get_call_options returned"),
+                [
+                    elt("tr",
+                        elt("td", opt.preference),
+                        elt("td", objrepr(report, opt.scheduled_call)),
+                        elt("td", objrepr(report, opt.formation)))
+                    for opt in options
+                ]...))
+    ]
 end
 
 function html_for_log_records(report::HTMLLogAnalysisReport,
@@ -370,6 +419,7 @@ function html_for_log_records(report::HTMLLogAnalysisReport,
             "class" => "perform-returned",
             elt("caption", "Perform Returned"),
             elt("tr",
+                elt("th", "history position"),
                 elt("th", "dancer"),
                 elt("th", "time"),
                 elt("th", "direction"),
@@ -377,6 +427,7 @@ function html_for_log_records(report::HTMLLogAnalysisReport,
                 elt("th", "left")),
             [
                 elt("tr",
+                    elt("td", history_position(ds)),
                     elt("td", objrepr(report, ds.dancer)),
                     elt("td", objrepr(report, ds.time)),
                     elt("td", objrepr(report, ds.direction)),
