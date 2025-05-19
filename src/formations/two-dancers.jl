@@ -173,6 +173,9 @@ those_with_role(c::LHMiniWave, ::Belles) = [ c.a, c.b ]
     # Not the same dancer:
     @rejectif ds1.dancer == ds2.dancer
     # Contemporary:
+    # WHAT ABOUT THE CASE WHERE ds1.time == ds1.previous.time?  We
+    # trust that the call engine only includes the newest DancerState
+    # for a given Dancer.
     @continueif ds1.time == ds2.time
     # In the same square:
     @rejectif !in(ds1, sq.expected) || !in(ds2, sq.expected)
