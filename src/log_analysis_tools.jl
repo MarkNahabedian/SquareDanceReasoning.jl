@@ -192,43 +192,45 @@ end
 function html_for_dancer_history(report::HTMLLogAnalysisReport,
                                  rec::LogRecord)
     newest_dancer_states = rec.kwargs[:newest_dancer_states]
-    elt("table",
-        elt("caption", "Dancer History"),
-        elt("tr",
-            elt("th", "dancer"),
-            elt("th", "history position"),
-            elt("th", "time"),
-            elt("th", "direction"),
-            elt("th", "down"),
-            elt("th", "left")),
-        let
-            rows = []
-            for dancer in sort(collect(keys(newest_dancer_states)))
-                hist = history(newest_dancer_states[dancer])
-                for i in 1:length(hist)
-                    push!(rows, elt("tr",
-                                    # dancer:
-                                    if i == 1
-                                        [ elt("td",
-                                              "rowspan" =>"$(length(hist))",
-                                              objrepr(report, dancer)) ]
-                                    else
-                                        []
-                                    end...,
-                                    # history position
-                                    elt("td", history_position(hist[i])),
-                                    # time:
-                                    elt("td", objrepr(report, hist[i].time)),
-                                    # direction:
-                                    elt("td", objrepr(report, hist[i].direction)),
-                                    # down:
-                                    elt("td", objrepr(report, hist[i].down)),
-                                    # left:
-                                    elt("td", objrepr(report, hist[i].left))))
+    elt("div",
+        elt("table",
+            elt("caption", "Dancer History"),
+            elt("tr",
+                elt("th", "dancer"),
+                elt("th", "history position"),
+                elt("th", "time"),
+                elt("th", "direction"),
+                elt("th", "down"),
+                elt("th", "left")),
+            let
+                rows = []
+                for dancer in sort(collect(keys(newest_dancer_states)))
+                    hist = history(newest_dancer_states[dancer])
+                    for i in 1:length(hist)
+                        push!(rows, elt("tr",
+                                        # dancer:
+                                        if i == 1
+                                            [ elt("td",
+                                                  "rowspan" =>"$(length(hist))",
+                                                  objrepr(report, dancer)) ]
+                                        else
+                                            []
+                                        end...,
+                                        # history position
+                                        elt("td", history_position(hist[i])),
+                                        # time:
+                                        elt("td", objrepr(report, hist[i].time)),
+                                        # direction:
+                                        elt("td", objrepr(report, hist[i].direction)),
+                                        # down:
+                                        elt("td", objrepr(report, hist[i].down)),
+                                        # left:
+                                        elt("td", objrepr(report, hist[i].left))))
+                    end
                 end
-            end
-            rows
-        end...)
+                rows
+            end...),
+        animation_svg(collect(values(newest_dancer_states))))
 end
 
 function html_for_log_records(report::HTMLLogAnalysisReport,
@@ -472,6 +474,23 @@ function html_for_log_records(report::HTMLLogAnalysisReport,
                     objrepr(report, log_record.kwargs[:sched_now])))
     ]
 end
+
+function html_for_log_records(report::HTMLLogAnalysisReport,
+                              m::Val{Symbol("do_schedule finished")},
+                              rec::LogRecord,
+                              remaining_log_records)::Vector{Node}
+    Node[
+        elt("div",
+            elt("div",
+                "class" => "do_schedule_finished",
+                "do_schedule finished"),
+            elt("div",
+                html_for_call_history(report, rec)),
+            elt("div",
+                html_for_dancer_history(report, rec)))
+    ]
+end
+
 
 function analysis1_html(log)
     elt("html",

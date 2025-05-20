@@ -100,18 +100,30 @@ function animate_finish(output_file, doc)
 end
 
 
-PARSED_DANCER_SYMBOLS_SVG = nothing
+DANCERS_SYMBOLS_DEFS = nothing
 
-function parsed_dancer_symbols_svg()
-    if PARSED_DANCER_SYMBOLS_SVG == nothing
-        global PARSED_DANCER_SYMBOLS_SVG = read(joinpath(@__DIR__, "dancer_symbols.svg"), Node)
+function dancers_symbols_defs()
+    if DANCERS_SYMBOLS_DEFS == nothing
+        parsed = read(joinpath(@__DIR__, "dancer_symbols.svg"), Node)
+        symbols = []
+        function walk(node::Node)
+            if XML.nodetype(node) == XML.Element && node.tag == "symbol"
+                push!(symbols, node)
+            else
+                for child in XML.children(node)
+                    walk(child)
+                end
+            end
+        end
+        walk(parsed)
+        global DANCERS_SYMBOLS_DEFS = XML.Element("defs", symbols...)
     end
-    PARSED_DANCER_SYMBOLS_SVG
+    DANCERS_SYMBOLS_DEFS
 end
 
 
 """
-    animate(method::AnimationMethod, output_file, dancer_states, bpm)
+    animate(method::AnimationMethod, output_file, dancer_states; bpm=40)
 
 Returns an SVG document fragment that animates the motion of the
 `Dancer`s in `dancer_states`.
@@ -130,11 +142,12 @@ Assuming each unit of `time` in a `DancerState` is a single beat,
 animation.
 """
 function animate(method::AnimationMethod,
-                 output_file, dancer_states::Vector{DancerState},
-                 bpm;
+                 output_file, dancer_states::Vector{DancerState};
+                 bpm=40,
                  symbol_uri_base = collateral_file_relpath("dancer_symbols.svg",
                                                            output_file))
-    doc = animation_svg(method, dancer_states, bpm;
+    doc = animation_svg(method, dancer_states;
+                        bpm=bpm,
                         symbol_uri_base = collateral_file_relpath("dancer_symbols.svg",
                                                                   output_file))
     animate_finish(output_file, doc)
@@ -171,9 +184,7 @@ function animation_svg(method::CSSKeyframesAnimation,
                            keyframes(ds, tbounds)
                        end,"\n")),
               if symbol_uri_base == ""
-                  [
-                      elt("defs", parsed_dancer_symbols_svg())
-                  ]
+                  dancers_symbols_defs()
               else
                   []
               end...,
@@ -254,10 +265,14 @@ function history_for_animation(ds)
 end
 
 function animation_svg(method::PureSVGAnimation,
-                       dancer_states::Vector{DancerState},
-                       bpm;
+                       dancer_states::Vector{DancerState};
+                       bpm=40,
                        symbol_uri_base="")
     dancer_states = sort(dancer_states; by = ds -> ds.dancer)
+    # Add a pause at the end of the sequence:
+    dancer_states = map(dancer_states) do ds
+        DancerState(ds, ds.time + 2, ds.direction, ds.down, ds.left)
+    end
     number_of_couples = ceil(length(dancer_states) / 2)
     tbounds = TimeBounds()
     bounds = Bounds()
@@ -279,9 +294,7 @@ function animation_svg(method::PureSVGAnimation,
                   DIRECTION_DOT_STYLE,
                   dancer_colors_css(number_of_couples)),
               if symbol_uri_base == ""
-                  [
-                      elt("defs", parsed_dancer_symbols_svg())
-                  ]
+                  [ dancers_symbols_defs() ]
               else
                   []
               end...,
@@ -333,11 +346,12 @@ end
 
 const DEFAULT_ANIMATION_METHOD = PureSVGAnimation()
 
-animate(output_file, dancer_states, bpm) =
-    animate(DEFAULT_ANIMATION_METHOD, output_file, dancer_states, bpm;
+animate(output_file, dancer_states; bpm=40) =
+    animate(DEFAULT_ANIMATION_METHOD, output_file, dancer_states;
+            bpm=bpm,
             symbol_uri_base = collateral_file_relpath("dancer_symbols.svg",
                                                       output_file))
 
-animation_svg(dancer_states::Vector{DancerState}, bpm) =
-    animation_svg(DEFAULT_ANIMATION_METHOD, dancer_states, bpm)
+animation_svg(dancer_states::Vector{DancerState}; bpm=40) =
+    animation_svg(DEFAULT_ANIMATION_METHOD, dancer_states; bpm=bpm)
 
