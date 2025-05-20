@@ -37,8 +37,7 @@ function facing_lines_pass_thru(call)
             @test odsf.down == ds.down
         end
         animate(joinpath(@__DIR__, "pass_thru.svg"),
-                askc(Collector{DancerState}(), kb, DancerState),
-                40)
+                askc(Collector{DancerState}(), kb, DancerState))
     end
 end
 
@@ -74,8 +73,7 @@ end
             @test ods.down == ds.down
         end
         animate(joinpath(@__DIR__, "dosados.svg"),
-                askc(Collector{DancerState}(), kb, DancerState),
-                40)
+                askc(Collector{DancerState}(), kb, DancerState))
     end
 end
 

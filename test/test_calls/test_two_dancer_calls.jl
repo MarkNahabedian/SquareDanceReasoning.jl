@@ -25,8 +25,7 @@
         @test dss[5].direction == 1//4
         @test dss[6].direction == 3//4
         animate(joinpath(@__DIR__, "hinge.svg"),
-                askc(Collector{DancerState}(), kb, DancerState),
-                40)
+                askc(Collector{DancerState}(), kb, DancerState))
     end
 end
 
@@ -48,8 +47,7 @@ end
         @test 1 == askc(Counter(), kb, RHMiniWave)
         @test 0 == askc(Counter(), kb, LHMiniWave)
         animate(joinpath(@__DIR__, "partner_hinge.svg"),
-                askc(Collector{DancerState}(), kb, DancerState),
-                40)
+                askc(Collector{DancerState}(), kb, DancerState))
     end
 end
 
@@ -87,8 +85,7 @@ end
         @test location(dss[5]) == location(grid[3, 6])
         @test location(dss[6]) == location(grid[3, 5])
         animate(joinpath(@__DIR__, "trade.svg"),
-                askc(Collector{DancerState}(), kb, DancerState),
-                40)
+                askc(Collector{DancerState}(), kb, DancerState))
     end
 end
 
@@ -121,8 +118,7 @@ end
         @test lhw.a.dancer == square[6]
         @test lhw.b.dancer == square[4]
         animate(joinpath(@__DIR__, "SlideThru.svg"),
-                askc(Collector{DancerState}(), kb, DancerState),
-                40)
+                askc(Collector{DancerState}(), kb, DancerState))
     end
 end
 
@@ -150,8 +146,7 @@ end
         @test cpl.beau.dancer == square[1]
         @test cpl.belle.dancer == square[2]
         animate(joinpath(@__DIR__, "StarThrusvg"),
-                askc(Collector{DancerState}(), kb, DancerState),
-                40)
+                askc(Collector{DancerState}(), kb, DancerState))
     end
 end
 

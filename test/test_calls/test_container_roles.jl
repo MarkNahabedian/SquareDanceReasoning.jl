@@ -47,8 +47,7 @@
         end
         =#
         animate(joinpath(@__DIR__, "centers_trade.svg"),
-                askc(Collector{DancerState}(), kb, DancerState),
-                40)
+                askc(Collector{DancerState}(), kb, DancerState))
     end
 end
 

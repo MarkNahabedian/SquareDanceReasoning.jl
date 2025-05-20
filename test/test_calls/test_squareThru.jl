@@ -16,8 +16,7 @@
         @debug_formations(kb)
         @test 1 == askc(Counter(), kb, BackToBackCouples)
         animate(joinpath(@__DIR__, "SquareThru_facing_couples.svg"),
-                askc(Collector{DancerState}(), kb, DancerState),
-                40)
+                askc(Collector{DancerState}(), kb, DancerState))
     end
 end
 

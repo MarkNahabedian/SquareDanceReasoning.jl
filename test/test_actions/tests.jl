@@ -155,7 +155,7 @@ end
         ds = revolve(ds, center, d, 0.5)
     end
     animate(joinpath(@__DIR__, "revolve-single-dancer.svg"),
-            [ds], 60)
+            [ds])
 end
 
 @testset "test step_to_a_wave" begin

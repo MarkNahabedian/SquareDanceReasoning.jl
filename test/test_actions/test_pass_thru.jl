@@ -65,7 +65,6 @@
     @test 6 == askc(Counter(), kb4, Couple)
     # Write an SVG animation file:
     animate(joinpath(@__DIR__, "pass_thru.svg"),
-            askc(Collector{DancerState}(), kb4, DancerState),
-            40)
+            askc(Collector{DancerState}(), kb4, DancerState))
 end
 
