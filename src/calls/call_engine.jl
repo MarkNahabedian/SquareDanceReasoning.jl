@@ -309,6 +309,9 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                call_history=deepcopy(call_history))
         rethrow(e)
     end
+    @info("do_schedule finished",
+          newest_dancer_states=deepcopy(newest_dancer_states),
+          call_history=deepcopy(call_history))
     return kb
 end
 
