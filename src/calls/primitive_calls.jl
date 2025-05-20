@@ -251,15 +251,21 @@ end
 
 
 """
-    _EndAt(f::TwoDancerFormation, timing)
+    _EndAt(f::TwoDancerFormation, time=0, swap=true)
 
 Primitive square dance call that causes the dancer to end at the
 starting location of the other dancer.
+
+If `swap` is `false` then the dancer ends in its own starting location
+instead of that of the other dancer.
 """
 @with_kw_noshow struct _EndAt <: SquareDanceCall
     two_dancers::TwoDancerFormation
     time::Int = 0
+    swap::Bool = true
 end
+
+_EndAt(two_dancers::TwoDancerFormation, swap::Bool) = _EndAt(; two_dancers=two_dancers, swap=swap)
 
 _EndAt(two_dancers) = _EndAt(; two_dancers = two_dancers)
 
@@ -276,25 +282,13 @@ function perform(c::_EndAt, ds::DancerState, ::SDRKnowledgeBase)
     i = findfirst(fdss) do ds1
         ds1.dancer == ds.dancer
     end
+    this = fdss[i]
     other = fdss[mod1(i+1, length(fdss))]
+    destination = c.swap ? other : this
     @assert other.dancer != ds.dancer
-    #=
-    # The call engine has various checks that expect that time elapsed
-    # between successive dancer states.  To get around those, we
-    # replace the previous DancerState when the call takkes 0 time.
-    if i == 1
-        return DancerState(ds.previous, # c.time == 0 && ds.previous != nothing ? ds.previous : ds,
-                           ds.time + c.time, ds.direction,
-                           fdss[2].down, fdss[2].left)
-    elseif i == 2
-        return DancerState(ds.previous, # c.time == 0 && ds.previous != nothing ? ds.previous : ds,
-                           ds.time + c.time, ds.direction,
-                           fdss[1].down, fdss[1].left)
-    end
-    =#
     # Move ds to the position that other's position in c.two_dancers:
     return DancerState(ds,
                        ds.time + c.time, ds.direction,
-                       other.down, other.left)
+                       destination.down, destination.left)
 end
 
