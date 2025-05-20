@@ -156,9 +156,11 @@ function expand_parts(c::Dosado, f::FaceToFace, sc::ScheduledCall)
         ScheduledCall(start + 0, StepToAWave(role = DesignatedDancers(dancers),
                                              handedness = c.handedness)),
         ScheduledCall(start + 2, StepThru(role = DesignatedDancers(dancers))),
-        ScheduledCall(start + 3, _BackToAWave(role = DesignatedDancers(dancers),
+        ScheduledCall(start + 3, _EndAt(f)),
+        ScheduledCall(start + 4, _BackToAWave(role = DesignatedDancers(dancers),
                                               handedness = opposite(c.handedness))),
-        ScheduledCall(start + 4, _UnStepToAWave(role = DesignatedDancers(dancers)))
+        ScheduledCall(start + 5, _UnStepToAWave(role = DesignatedDancers(dancers))),
+        ScheduledCall(start + 6, _EndAt(f, false))
     ]
 end
 
