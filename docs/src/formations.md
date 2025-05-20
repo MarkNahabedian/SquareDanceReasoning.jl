@@ -49,8 +49,11 @@ Look at other unit tests in `test/test_formation` for examples of how
 to test new formation recognition rules.
 
 If you find that no formations are being asserted in your unit test,
-make sure tht your test doesn't add more dancers to the knowledgebase
+make sure that your test doesn't add more dancers to the knowledgebase
 than are used.  [`TwoDancerFormationsRule`](@ref) requires the
 [`AllPresent`](@ref) fact because [`encroached_on`](@ref) can't work
 correctly until all dancers are up to date.
 
+For rule definitions that use `@reject`, `@rejectif` or `@continueif`,
+These will add entries to the @debug log when a rule exits.  See the
+doc for `Rete.@rule`.
