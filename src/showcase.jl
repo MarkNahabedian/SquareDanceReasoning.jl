@@ -55,8 +55,7 @@ function showcase(filename::String, title::String,
             end
         end
         animate(md_file,
-                askc(Collector{DancerState}(), kb, DancerState),
-                80)
+                askc(Collector{DancerState}(), kb, DancerState))
     end
     open(md_file, "w") do io
         println(io, "# $title")
