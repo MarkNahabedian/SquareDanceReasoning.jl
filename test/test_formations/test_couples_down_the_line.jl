@@ -71,7 +71,7 @@ end
 end
 
 
-@testset "test AfterEightChainOne" begin
+@testset "test BeforeTradeBy" begin
     square = make_square(4)
     kb = make_kb()
     # println(map(m -> typeof(m).parameters[1], collect(kb.outputs)))
@@ -90,7 +90,7 @@ end
     @test 4 == askc(Counter(), kb, Couple)
     @test 1 == askc(Counter(), kb, FacingCouples)
     @test 2 == askc(Counter(), kb, BackToBackCouples)
-    f = askc(Collector{AfterEightChainOne}(), kb, AfterEightChainOne)
+    f = askc(Collector{BeforeTradeBy}(), kb, BeforeTradeBy)
     @test length(f) == 1
     f = f[1]
     @test length(dancer_states(f)) == 8

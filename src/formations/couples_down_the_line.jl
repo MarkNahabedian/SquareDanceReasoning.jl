@@ -1,16 +1,16 @@
-# Rules for 
+# Rules for lines of couples facing in either direction down the line.
 
 
 export FacingTandemCouples, FacingTandemCouplesRule
 export BeforeEightChain, BeforeEightChainRule
-export AfterEightChainOne, AfterEightChainOneRule
+export BeforeTradeBy, BeforeTradeByRule
 export CompletedDoublePassThru, CompletedDoublePassThruRule
 
 
 """
-FacingTandemCouples is a formation of eight dancers (four
-couples) lined up, and is the starting formation for the "double pass
-thru" call.
+FacingTandemCouples is a formation of eight dancers (four couples)
+lined up, and is the starting formation for the "double pass thru"
+call.  This formation is more commonly known as "Double Pass Thru".
 ```
 →→←←
 →→←←
@@ -111,7 +111,7 @@ formations.
 
 
 """
-AfterEightChainOne is a formation of eight dancers (four couples) lined
+BeforeTradeBy is a formation of eight dancers (four couples) lined
 up, and is the starting formation for the call "trade by".  It can
 result from doing a "centers pass thru" from a BeforeEightChain
 formation.
@@ -120,13 +120,13 @@ formation.
 ←→←→
 ```
 """
-struct AfterEightChainOne <: EightDancerFormation
+struct BeforeTradeBy <: EightDancerFormation
     bbcouples1::BackToBackCouples
     bbcouples2::BackToBackCouples
     centers::FacingCouples
 end
 
-@resumable function(f::AfterEightChainOne)()
+@resumable function(f::BeforeTradeBy)()
     for ds in f.bbcouples1()
         @yield ds
     end
@@ -135,19 +135,19 @@ end
     end
 end
 
-handedness(::AfterEightChainOne) = NoHandedness()
+handedness(::BeforeTradeBy) = NoHandedness()
 
-@rule SquareDanceFormationRule.AfterEightChainOneRule(bb1::BackToBackCouples,
-                                                      bb2::BackToBackCouples,
-                                                      centers::FacingCouples,
-                                                      ::AfterEightChainOne,
-                                                      ::FormationContainedIn) begin
+@rule SquareDanceFormationRule.BeforeTradeByRule(bb1::BackToBackCouples,
+                                                 bb2::BackToBackCouples,
+                                                 centers::FacingCouples,
+                                                 ::BeforeTradeBy,
+                                                 ::FormationContainedIn) begin
     @rejectif bb1 == bb2
     @continueif timeof(bb1) == timeof(bb2)
     if (centers.couple1 == bb1.couple1 &&
         centers.couple2 == bb2.couple2)
-        f = AfterEightChainOne(bb1, bb2, centers)
-        emit(AfterEightChainOne(bb1, bb2, centers))
+        f = BeforeTradeBy(bb1, bb2, centers)
+        emit(BeforeTradeBy(bb1, bb2, centers))
         emit(FormationContainedIn(bb1, f))
         emit(FormationContainedIn(bb2, f))
         emit(FormationContainedIn(centers, f))
@@ -155,9 +155,9 @@ handedness(::AfterEightChainOne) = NoHandedness()
 end
 
 @doc """
-AfterEightChainOneRule is the rule for recognizing AfterEightChainOne
+BeforeTradeByRule is the rule for recognizing BeforeTradeBy
 formations.
-""" AfterEightChainOneRule
+""" BeforeTradeByRule
 
 
 """
