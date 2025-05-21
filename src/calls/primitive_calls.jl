@@ -6,7 +6,7 @@
 export _Rest, _GenderedRoll, StepToAWave, _UnStepToAWave,
     _BackToAWave
 export _FaceOriginalPartner, _FaceOriginalCorner
-export _EndAt
+export _EndAt, _Meet
 
 
 """
@@ -227,7 +227,7 @@ end
 
 
 """
-    _BackToAWave, handedness(; role=Everyone(), handedness=RightHanded())
+    _BackToAWave(; role=Everyone(), handedness=RightHanded())
 
 Primitive square dance call that goes from BackToBack to a MiniWave of
 the specified handedness.
@@ -290,5 +290,36 @@ function perform(c::_EndAt, ds::DancerState, ::SDRKnowledgeBase)
     return DancerState(ds,
                        ds.time + c.time, ds.direction,
                        destination.down, destination.left)
+end
+
+
+"""
+    _Meet(; role=Everyone(), duration=0)
+
+Facing dancers move forward until they are close together.
+
+Consider a call like PassThru where the dancers might be close
+together or some distance apart (like in a squared set).  PassThru
+uses _EndAt to put the dancers in each others previous locations.
+What if we want the Heads of a squared set to end up in the middle.
+We have the dancers _Meet first.
+"""
+@with_kw_noshow struct _Meet <: SquareDanceCall
+    role::Role = Everyone()
+    duration = 1
+end
+
+descirption(c::_Meet) = "$(c.role) _Meet"
+
+can_do_from(::_Meet, ::FaceToFace) = 1
+
+function perform(c::_Meet, f::FaceToFace, ::SDRKnowledgeBase)
+    d = distance(f.a, f.b) - COUPLE_DISTANCE
+    if d > 0
+        return FaceToFace(forward(f.a, d/2, c.duration),
+                          forward(f.b, d/2, c.duration))
+    end
+    # Should we add duration in this case?
+    return f
 end
 

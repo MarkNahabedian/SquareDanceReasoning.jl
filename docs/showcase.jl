@@ -71,6 +71,7 @@ let
                  kb,
                  SquareDanceCall[
                      _Rest(time = 2),
+                     _Meet(; role=OriginalHeads()),
                      SquareThru(role = OriginalHeads()),
                      _Rest(time = 2)
                  ];

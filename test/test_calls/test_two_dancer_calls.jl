@@ -1,4 +1,20 @@
 
+@testset "test _Meet from SquaredSet" begin
+    log_to_file(@__DIR__, log_file_name_for_testset(Test.get_testset())) do
+        square = make_square(4)
+        kb = make_kb()
+        receive(kb, square)
+        receive.([kb], square_up(square))
+        @test 1 == askc(Counter(), kb, SquaredSet)
+        kb = do_call(kb, _Meet(; role=OriginalHeads()))
+        f2fs = askc(Collector{FaceToFace}(), kb)
+        @test length(f2fs) == 2
+        for f2f in f2fs
+            @test distance(f2f.a, f2f.b) == COUPLE_DISTANCE
+        end
+    end
+end
+
 @testset "test Hinge" begin
     log_to_file(@__DIR__, log_file_name_for_testset(Test.get_testset())) do
         square = make_square(3)
