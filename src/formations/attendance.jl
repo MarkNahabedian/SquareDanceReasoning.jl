@@ -2,20 +2,27 @@
 # formations.
 
 # In order for formation rules to be able to use the encroached_on
-# test, we must firt know that all of the current DancerStates for a
-# square have been asserted to the knowledgebase.
+# test, we must first know that all of the current DancerStates for a
+# square and time have been asserted to the knowledgebase.
 
 export Attendance, AllPresent, SDSquareHasAttendanceRule, AttendanceRule
 
 """
     Attendance(::SDSquare)
 
-`AAttendance` is a fact in the knowledgebase that keeps track of how many
+`Attendance` is a fact in the knowledgebase that keeps track of how many
 [`DancerState`](@ref)s in a square are present.
 
 This is necessary because tests like [`encroached_on`](@ref) can only
 provide a correct result if all of the `DanecerState`s are available
 for consideration.
+
+When all of the `Dancer`s of s set have `DancerState`s, then
+`Attendance` emits an `AllPresent` fact.
+
+Note that `Attendance` contains mutable data - but once an
+`Attendance` is created, only the values in its `present` field are
+changed.
 """
 struct Attendance <: TemporalFact
     expected::SDSquare
@@ -53,7 +60,9 @@ every [`SDSquare`](@ref) fact.
 """ SDSquareHasAttendanceRule
 
 
-@rule SquareDanceFormationRule.AttendanceRule(a::Attendance, ds::DancerState, ::AllPresent) begin
+@rule SquareDanceFormationRule.AttendanceRule(a::Attendance, ds::DancerState,
+                                              ::AllPresent) begin
+    # The constructor for Attendance has already added all of the necessary keys.
     @continueif haskey(a.present, ds.dancer)
     a.present[ds.dancer] = true
     @continueif all(values(a.present))
@@ -62,8 +71,8 @@ end
 @doc """
     AttendanceRule
 
-AttendanceRule is the rule that updated a Attendance as new
-[`DancerState`](@ref)s are asserted to the nowledgebase, and
+AttendanceRule is the rule that updates an Attendance as new
+[`DancerState`](@ref)s are asserted to the knowledgebase, and
 ultimately asserts [`AllPresent`](@ref).
 """ AttendanceRule
 
