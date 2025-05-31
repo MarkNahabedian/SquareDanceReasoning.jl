@@ -41,7 +41,7 @@ end
 
 using Serialization
 
-function log_to_file(body, dir, filename)
+function log_to_file(body, dir, filename; always_write = false)
     logger = TestLogger()
     rm(filename; force=true)
     success = false
@@ -49,7 +49,7 @@ function log_to_file(body, dir, filename)
         with_logger(body, logger)
         success = true
     finally
-        if !success
+        if !success || always_write
             open(joinpath(dir, filename), "w") do io
                 serialize(io, logger.logs)
             end
