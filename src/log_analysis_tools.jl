@@ -476,6 +476,21 @@ function html_for_log_records(report::HTMLLogAnalysisReport,
 end
 
 function html_for_log_records(report::HTMLLogAnalysisReport,
+                              m::Val{Symbol("do_schedule formations")},
+                              rec::LogRecord,
+                              remaining_log_records)::Vector{Node}                              
+    formations = rec.kwargs[:formations]
+    Node[
+        elt("div", "do_schedule formations",
+            elt("ul",
+                map(formations) do f
+                    elt("li", objrepr(report, f))
+                end...
+            ))
+    ]
+end
+
+function html_for_log_records(report::HTMLLogAnalysisReport,
                               m::Val{Symbol("do_schedule finished")},
                               rec::LogRecord,
                               remaining_log_records)::Vector{Node}
