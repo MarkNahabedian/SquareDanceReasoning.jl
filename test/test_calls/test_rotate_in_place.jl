@@ -156,7 +156,7 @@ end
     end
 end
 
-@testset "tast UTurnBack, AndRoll" begin
+@testset "test UTurnBack, AndRoll" begin
     log_to_file(@__DIR__, log_file_name_for_testset(Test.get_testset())) do
         logger = TestLogger()
         kb = make_kb()
