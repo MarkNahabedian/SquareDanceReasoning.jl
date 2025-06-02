@@ -36,6 +36,18 @@ end
 
 
 """
+"""
+struct NoCallOptionsForCall <: CallEngineException
+    call::SquareDanceCall
+    kb::SDRKnowledgeBase
+end
+
+function Base.showerror(io::IO, e::NoCallOptionsForCall)
+    print(io, "No call options for $(e.call).")
+end
+
+
+"""
     restricted_to(call)::Role
 
 Returns the role that `call` has been restricted to.
@@ -361,7 +373,7 @@ function get_call_options(sc::ScheduledCall, kb::SDRKnowledgeBase)::Vector{CanDo
     end
     @info("get_call_options formations", now, call, formations, kb)
     if length(options) == 0
-        error("No options for $call")
+        throw(NoCallOptionsForCall(call, kb))
     end
     @info("get_call_options initial options", options)
     # Restrict by role:
