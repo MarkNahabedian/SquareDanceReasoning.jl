@@ -25,17 +25,15 @@ Note that `Attendance` contains mutable data - but once an
 changed.
 """
 struct Attendance <: TemporalFact
-    expected::SDSquare
-    present::Dict{Dancer, Bool}
+    present::SortedDict{Dancer, Union{Nothing, DancerState}}
 
     Attendance(s::SDSquare) =
-        new(s,
-            Dict{Dancer, Bool}(map(d -> d => false, s.dancers)))
+        new(SortedDict{Dancer, Union{Nothing, DancerState}}(map(d -> d => nothing, s.dancers)))
 end
 
 
 """
-    AllPresent(::SDSquare)
+    AllPresent(::Vector{DancerState})
 
 `AllPresent` is a fact that is asserted to the knowledgebase by
 [`SDSquareHasAttendanceRule`](@ref) when all of the [`Dancer`](@ref)s
@@ -45,7 +43,7 @@ It can be used as a trigger for rules that depend on all `Dancer`s
 having an associated `DancerState`.
 """
 struct AllPresent <: TemporalFact
-    expected::SDSquare
+    expected::Vector{DancerState}
 end
 
 
@@ -60,19 +58,30 @@ every [`SDSquare`](@ref) fact.
 """ SDSquareHasAttendanceRule
 
 
-@rule SquareDanceFormationRule.AttendanceRule(a::Attendance, ds::DancerState,
-                                              ::AllPresent) begin
-    # The constructor for Attendance has already added all of the necessary keys.
+@rule SquareDanceFormationRule.AttendanceRule(a::Attendance, ds::DancerState, ::AllPresent) begin
+    # The constructor for Attendance has already added all of the
+    # necessary keys.  This test is for the case where the
+    # knowledgebase might contain more than one SDSquare.
     @continueif haskey(a.present, ds.dancer)
-    a.present[ds.dancer] = true
-    @continueif all(values(a.present))
-    emit(AllPresent(a.expected))
+    # NOTE: we are mutating the contents of a fact in the knowledgebase.
+    if a.present[ds.dancer] isa Nothing || ds.time > a.present[ds.dancer].time
+        a.present[ds.dancer] = ds
+    end
+    @continueif all(isa.(values(a.present), [DancerState]))
+    #=
+    times = map(ds -> ds.time, values(a.present))
+    latest = maximum(times)
+    @continueif all(map(t -> t == latest, times))
+    =#
+    emit(AllPresent(collect(values(a.present))))
 end
 @doc """
     AttendanceRule
 
 AttendanceRule is the rule that updates an Attendance as new
 [`DancerState`](@ref)s are asserted to the knowledgebase, and
-ultimately asserts [`AllPresent`](@ref).
+ultimately asserts [`AllPresent`](@ref) when every `Dancer` in the
+`Attendace` has a `DancerState` and those `DancerState`s are all at
+the same time.
 """ AttendanceRule
 
