@@ -36,6 +36,11 @@ end
 
 
 """
+    NoCallOptionsForCall
+
+An exception which can be signalled by the call engine when
+`get_call_options` can't identify any formations from which a call can
+be performed.
 """
 struct NoCallOptionsForCall <: CallEngineException
     call::SquareDanceCall
