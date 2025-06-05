@@ -131,6 +131,7 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                      dbgctx = nothing)
     call_history = []
     newest_dancer_states = Dict{Dancer, DancerState}()
+    local playmates::Vector{TwoDancerFormation}
     function update_newest(ds::DancerState)
         if haskey(newest_dancer_states, ds.dancer)
             # >= rather than > because some actions like breathing or
@@ -143,6 +144,33 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
             newest_dancer_states[ds.dancer] = ds
         end
     end
+    function expand_cdc(cdc::CanDoCall)
+        @info("do_schedule expand_cdc", now=sched.now, cdc)
+        e = expand_parts(cdc)
+        @info("do_schedule expand_parts returned", cdc, e)
+        e
+    end
+    function perform_cdc(cdc::CanDoCall)
+        @info("do_schedule performing",  now=sched.now, cdc)
+        push!(call_history, (sched.now, cdc))
+        f = perform(cdc.scheduled_call.call, cdc.formation, kb)
+        @info("do_schedule perform returned", f)
+        @assert f isa SquareDanceFormation
+        if f isa TwoDancerFormation
+            push!(playmates, f)
+        end
+        for ds in dancer_states(f)
+            #=
+            # This assertion assumes that there are no calls
+            # that require no elapsed time.
+            # Ensure that the dancers that performed the call
+            # experience the passage of time:
+            @assert(ds.time > newest_dancer_states[ds.dancer].time,
+            "$ds, $(newest_dancer_states[ds.dancer].time)")
+            =#
+            update_newest(ds)
+        end
+    end
     askc(update_newest, kb, DancerState)
     try
         while !isempty(sched)
@@ -150,33 +178,6 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                   now = sched.now,
                   queue = sched.scheduled_calls)
             playmates = TwoDancerFormation[]
-            function expand_cdc(cdc::CanDoCall)
-                @info("do_schedule expand_cdc", now=sched.now, cdc)
-                e = expand_parts(cdc)
-                @info("do_schedule expand_parts returned", cdc, e)
-                e
-            end
-            function perform_cdc(cdc::CanDoCall)
-                @info("do_schedule performing",  now=sched.now, cdc)
-                push!(call_history, (sched.now, cdc))
-                f = perform(cdc.scheduled_call.call, cdc.formation, kb)
-                @info("do_schedule perform returned", f)
-                @assert f isa SquareDanceFormation
-                if f isa TwoDancerFormation
-                    push!(playmates, f)
-                end
-                for ds in dancer_states(f)
-                    #=
-                    # This assertion assumes that there are no calls
-                    # that require no elapsed time.
-                    # Ensure that the dancers that performed the call
-                    # experience the passage of time:
-                    @assert(ds.time > newest_dancer_states[ds.dancer].time,
-                            "$ds, $(newest_dancer_states[ds.dancer].time)")
-                    =#
-                    update_newest(ds)
-                end
-            end
             formations = askc(Collector{SquareDanceFormation}(),
                               kb, SquareDanceFormation)
             @info("do_schedule formations",
