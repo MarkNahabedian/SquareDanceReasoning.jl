@@ -25,6 +25,7 @@ include("elt.jl")
 include("dancer_symbols.jl")
 include("dancer_colors.jl")
 include("formation_svg.jl")
+include("formation_html.jl")
 include("animate.jl")
 include("containment_graph.jl")
 
