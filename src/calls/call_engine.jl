@@ -132,6 +132,12 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
     call_history = []
     newest_dancer_states = Dict{Dancer, DancerState}()
     local playmates::Vector{TwoDancerFormation}
+    function update_kb()
+        kb = make_kb(kb)
+        for ds in values(newest_dancer_states)
+            receive(kb, ds)
+        end
+    end
     function update_newest(ds::DancerState)
         if haskey(newest_dancer_states, ds.dancer)
             # >= rather than > because some actions like breathing or
@@ -195,10 +201,7 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                 if (!isempty(call_history) &&
                     call_schedule_isless(last(call_history)[2].scheduled_call.call,
                                          peek(sched).call))
-                    kb = make_kb(kb)
-                    for ds in values(newest_dancer_states)
-                        receive(kb, ds)
-                    end
+                    update_kb()
                     @info("do_schedule updated knowledgebase for zero diration call hack", kb)
                 end
                 # Process a queue entry, performing it if it's "atomic" or
@@ -218,6 +221,8 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                     @info("do_schedule get_call_options returned", options)
                     for cdc in options
                         let
+                            # Check that the call option only concers
+                            # the latest dancer states:
                             not_newest = filter(ds -> ds != newest_dancer_states[ds.dancer],
                                                 collect(cdc.formation()))
                             if !isempty(not_newest)
@@ -248,6 +253,9 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                     @assert done > 0
                 end
             end      # while (!isempty(sched)) && sched.now == peek(sched).when
+
+            # We have processed all of the calls scheduled for a given
+            # time.  Advance the time:
             @info("do_schedule schedule", queue = sched.scheduled_calls)
             # We have finished all of the calls that were scheduled for a
             # given time.
@@ -297,10 +305,7 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
             end
             # Update the knowledgebase:
             if !isempty(sched)
-                kb = make_kb(kb)
-                for ds in values(newest_dancer_states)
-                    receive(kb, ds)
-                end
+                update_kb()
                 @info("do_schedule updated knowledgebase", kb)
             end
         end    # while !isempty(sched)
@@ -315,10 +320,7 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
             end
         end
         # Update the knowledgebase:
-        kb = make_kb(kb)
-        for ds in values(newest_dancer_states)
-            receive(kb, ds)
-        end
+        update_kb()
     catch e
         @error("Exception",
                error=e,
