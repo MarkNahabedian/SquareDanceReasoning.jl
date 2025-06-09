@@ -33,6 +33,23 @@ end
 
 handedness(::FacingTandemCouples) = NoHandedness()
 
+those_with_role(f::FacingTandemCouples, role::Leaders) =
+    [ f.tandem_couples1.leaders()...,
+      f.tandem_couples2.leaders()... ]
+
+those_with_role(f::FacingTandemCouples, role::Trailers) =
+    [ f.tandem_couples1.trailers()...,
+      f.tandem_couples2.trailers()... ]
+
+those_with_role(f::FacingTandemCouples, role::Centers) =
+    [ f.tandem_couples1.leaders()...,
+      f.tandem_couples2.trailers()... ]
+
+those_with_role(f::FacingTandemCouples, role::Ends) =
+    [ f.tandem_couples1.trailers()...,
+      f.tandem_couples2.leaders()...]
+
+
 @rule SquareDanceFormationRule.FacingTandemCouplesRule(tc1::TandemCouples,
                                                        tc2::TandemCouples,
                                                        centers::FacingCouples,
@@ -87,6 +104,14 @@ end
 
 handedness(::BeforeEightChain) = NoHandedness()
 
+those_with_role(f::BeforeEightChain, role::Centers) =
+    [ f.facing_couples1.couple2()...,
+      f.facing_couples2.couple1()... ]
+
+those_with_role(f::BeforeEightChain, role::Ends) =
+    [ f.facing_couples1.couple1()...,
+      f.facing_couples2.couple2()... ]
+
 @rule SquareDanceFormationRule.BeforeEightChainRule(fc1::FacingCouples,
                                                     fc2::FacingCouples,
                                                     centers::BackToBackCouples,
@@ -137,6 +162,14 @@ end
 
 handedness(::BeforeTradeBy) = NoHandedness()
 
+those_with_role(f::BeforeTradeBy, role::Centers) =
+    [ f.bbcouples1.couple1()...,
+      f.bbcouples2.couple2()... ]
+
+those_with_role(f::BeforeTradeBy, role::Ends) =
+    [ f.bbcouples1.couple2()...,
+      f.bbcouples2.couple1()... ]
+
 @rule SquareDanceFormationRule.BeforeTradeByRule(bb1::BackToBackCouples,
                                                  bb2::BackToBackCouples,
                                                  centers::FacingCouples,
@@ -186,6 +219,14 @@ end
 end
 
 handedness(::CompletedDoublePassThru) = NoHandedness()
+
+those_with_role(f::CompletedDoublePassThru, role::Centers) =
+    [ f.tandem_couples1.trailers()...,
+      f.tandem_couples2.trailers()... ]
+
+those_with_role(f::CompletedDoublePassThru, role::Ends) =
+    [ f.tandem_couples1.leaders()...,
+      f.tandem_couples2.leaders()... ]
 
 @rule SquareDanceFormationRule.CompletedDoublePassThruRule(tc1::TandemCouples,
                                                            tc2::TandemCouples,
