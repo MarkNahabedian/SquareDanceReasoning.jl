@@ -85,46 +85,6 @@ li.formation {
 """
 
 
-function dancer_states_table(dancer_states, symbol_uri_base)
-    dancer_state_row(ds::DancerState) =
-        elt("tr",
-            elt("td", formation_id_string(ds),
-                "class" => "formation",
-                "onclick" => formation_onclick(ds)),
-            elt("td", string(ds.dancer),
-                "class" => "formation",
-                "onclick" => formation_onclick(ds)),
-            elt("td", ds.time),
-            elt("td", ds.direction),
-            elt("td", ds.down),
-            elt("td", ds.left),
-            #=
-            elt("td", "class" => "$(couple_color_swatch(ds))",
-                # Full block unicode character
-                "\u2588\u2588\u2588")
-            =#
-            elt("td", formation_svg(ds, symbol_uri_base;
-                                    id = nothing,
-                                    margin=COUPLE_DISTANCE/2))
-            )
-    elt("div", 
-        "class" => "DancerState-table",
-        elt("table",
-            elt("thead",
-                elt("tr",
-                    elt("th", "id"),
-                    elt("th", "dancer"),
-                    elt("th", "time"),
-                    elt("th", "direction"),
-                    elt("th", "down"),
-                    elt("th", "left"),
-                    elt("th", "symbol")),
-            elt("tbody",
-                map(dancer_state_row,
-                    sort(dancer_states; by = ds -> ds.dancer))...))))
-end
-
-
 formation_id_string(d::Dancer) =
     "$(d.couple_number)$(xml_id_letter(d.gender))"
 

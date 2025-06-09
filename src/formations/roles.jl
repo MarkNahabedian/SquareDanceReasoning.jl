@@ -9,7 +9,7 @@ export Role, UniversalRole, FormationContextRole,
     DiamondCenters, Points,
     ObverseRole, CoupleNumbers, DesignatedDancers
 
-export obverse, those_with_role, supported_roles
+export obverse, those_with_role, supported_roles, dancer_state_roles
 
 
 """
@@ -269,3 +269,41 @@ those_with_role(f::OneByFourFormation, ::Centers) = dancer_states(f.centers)
 those_with_role(f::OneByFourFormation, ::Ends) =
     setdiff(dancer_states(f), f.centers())
 
+
+dancer_state_roles(formation::Nothing) =
+    DefaultDict{DancerState, Set{Role}}(Set{Role})
+
+"""
+    dancer_state_roles(formation::SquareDanceFormatio)::AbstractDict{DancerState, Set{Role}}
+
+Returns a dictionary mapping [`DancerState`](@ref) to a list of
+[`Role`](@ref)s that the `DancerState` holds in the specified
+`formation`.
+"""
+function dancer_state_roles(formation::SquareDanceFormation;
+                            exclude_ds_roles=false)::AbstractDict{DancerState, Set{Role}}
+    ignore_these = [
+        # Roles that require parameters:
+        ObverseRole, DesignatedDancers,
+        # Roles that aren't interesting:
+        Everyone,
+    ]
+    result = DefaultDict{DancerState, Set{Role}}(Set{Role})
+    function walk_roles(role_type)
+        if role_type in ignore_these
+            return
+        end
+        if isconcretetype(role_type)
+            role = role_type()
+            for ds in those_with_role(formation, role)
+                push!(result[ds], role)
+            end
+        else
+            for sr in subtypes(role_type)
+                walk_roles(sr)
+            end
+        end
+    end
+    walk_roles(Role)
+    result
+end
