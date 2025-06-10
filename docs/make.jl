@@ -1,3 +1,5 @@
+LOAD_PATH = [ "../Project.toml", "@", "@v#.#", "@stdlib"]
+
 using SquareDanceReasoning
 using Documenter
 using InteractiveUtils
