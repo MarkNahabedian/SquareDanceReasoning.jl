@@ -1,7 +1,7 @@
 ## Processing a Square Dance Call
 
 Every square dance call is represented by an instance of a subtype of
-[`SquareDanceCall`](@ref).  Every instance has a [`role`](@ref)` field
+[`SquareDanceCall`](@ref).  Every instance has a `role` field
 (or a method on [`restricted_to`](@ref)) which can be used to
 restrict the call to only some dancers, for example `OriginalHeads` or
 `Centers`.  Some calls might have additional fields that inform a
