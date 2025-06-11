@@ -1,7 +1,12 @@
-LOAD_PATH = [ "../Project.toml", "@", "@v#.#", "@stdlib"]
-println(Base.load_path())
+
+LOAD_PATH = [
+    joinpath(dirname(@__DIR__), "Project.toml"),
+    joinpath(@__DIR__, "Project.toml"),
+    "@v#.#",
+    "@stdlib"]
 
 using SquareDanceReasoning
+using Rete
 using Documenter
 using InteractiveUtils
 
