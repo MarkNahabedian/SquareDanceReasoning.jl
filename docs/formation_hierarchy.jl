@@ -20,8 +20,13 @@ function generate_formation_hierarchy()
                                      "`$role`"
                                  end, ", ")
                  end
+                 ref = if isconcrete(f)
+                     "formation_drawings/$f.html"
+                 else
+                     "(@ref)"
+                 end
                  println(io, repeat(INDENT, level),
-                         " - [`$f`](@ref)",
+                         " - [`$f`]($ref)",
                          roletext)
                  for st in sort(subtypes(f); by=string)
                      walk(st, level + 1)
