@@ -20,7 +20,7 @@ function generate_formation_hierarchy()
                                      "`$role`"
                                  end, ", ")
                  end
-                 ref = if isconcrete(f)
+                 ref = if isconcretetype(f)
                      "formation_drawings/$f.html"
                  else
                      "(@ref)"
