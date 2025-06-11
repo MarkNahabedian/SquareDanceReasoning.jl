@@ -14,9 +14,9 @@ version = "1.11.0"
 
 [[deps.ColorTypes]]
 deps = ["FixedPointNumbers", "Random"]
-git-tree-sha1 = "c7acce7a7e1078a20a285211dd73cd3941a871d6"
+git-tree-sha1 = "67e11ee83a43eb71ddc950302c53bf33f0690dfe"
 uuid = "3da002f7-5984-5a60-b8a6-cbb66c0b333f"
-version = "0.12.0"
+version = "0.12.1"
 
     [deps.ColorTypes.extensions]
     StyledStringsExt = "StyledStrings"
@@ -26,9 +26,9 @@ version = "0.12.0"
 
 [[deps.Colors]]
 deps = ["ColorTypes", "FixedPointNumbers", "Reexport"]
-git-tree-sha1 = "64e15186f0aa277e174aa81798f7eb8598e0157e"
+git-tree-sha1 = "37ea44092930b1811e666c3bc38065d7d87fcc74"
 uuid = "5ae59095-9a9b-59fe-a467-6f913c188581"
-version = "0.13.0"
+version = "0.13.1"
 
 [[deps.Compat]]
 deps = ["TOML", "UUIDs"]
@@ -47,9 +47,9 @@ version = "1.1.1+0"
 
 [[deps.DataStructures]]
 deps = ["Compat", "InteractiveUtils", "OrderedCollections"]
-git-tree-sha1 = "1d0a14036acb104d9e89698bd408f63ab58cdc82"
+git-tree-sha1 = "4e1fe97fdaed23e9dc21d4d664bea76b65fc50a0"
 uuid = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
-version = "0.18.20"
+version = "0.18.22"
 
 [[deps.Dates]]
 deps = ["Printf"]
@@ -98,9 +98,9 @@ uuid = "e6f89c97-d47a-5376-807f-9c37f3926c36"
 version = "1.1.0"
 
 [[deps.MacroTools]]
-git-tree-sha1 = "72aebe0b5051e5143a079a4685a46da330a40472"
+git-tree-sha1 = "1e0228a030642014fe5cfe68c2c0a818f9e3f522"
 uuid = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
-version = "0.5.15"
+version = "0.5.16"
 
 [[deps.Markdown]]
 deps = ["Base64"]
@@ -117,9 +117,9 @@ uuid = "4536629a-c528-5b80-bd46-f80d51c5b363"
 version = "0.3.27+1"
 
 [[deps.OrderedCollections]]
-git-tree-sha1 = "cc4054e898b852042d7b503313f7ad03de99c3dd"
+git-tree-sha1 = "05868e21324cede2207c6f0f466b4bfef6d5e7ee"
 uuid = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
-version = "1.8.0"
+version = "1.8.1"
 
 [[deps.Parameters]]
 deps = ["OrderedCollections", "UnPack"]
@@ -129,9 +129,9 @@ version = "0.12.3"
 
 [[deps.Parsers]]
 deps = ["Dates", "PrecompileTools", "UUIDs"]
-git-tree-sha1 = "8489905bcdbcfac64d1daa51ca07c0d8f0283821"
+git-tree-sha1 = "7d2f8f21da5db6a806faf7b9b292296da42b2810"
 uuid = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
-version = "2.8.1"
+version = "2.8.3"
 
 [[deps.PrecompileTools]]
 deps = ["Preferences"]
@@ -162,9 +162,9 @@ version = "1.2.2"
 
 [[deps.ResumableFunctions]]
 deps = ["Logging", "MacroTools"]
-git-tree-sha1 = "a806de0d1f85cfc291317b01fb96a6674ff4c267"
+git-tree-sha1 = "50ce33a22309345c0d23ea8f8d182a0495bdadb8"
 uuid = "c5292f4c-5179-55e1-98c5-05642aab7184"
-version = "1.0.2"
+version = "1.0.3"
 
 [[deps.Rete]]
 deps = ["InteractiveUtils", "IterTools", "Logging", "LoggingExtras", "MacroTools", "OrderedCollections", "Printf"]
@@ -209,9 +209,9 @@ version = "1.11.0"
 
 [[deps.XML]]
 deps = ["Mmap", "OrderedCollections"]
-git-tree-sha1 = "360c178fdee6816bcc9d436c6f324d582e84f1d1"
+git-tree-sha1 = "998ec8ddcac0207a617a4da2cd8d09707380623f"
 uuid = "72c71f33-b9b6-44de-8c94-c961784809e2"
-version = "0.3.4"
+version = "0.3.5"
 
 [[deps.libblastrampoline_jll]]
 deps = ["Artifacts", "Libdl"]
