@@ -1,4 +1,5 @@
 LOAD_PATH = [ "../Project.toml", "@", "@v#.#", "@stdlib"]
+println(Base.load_path())
 
 using SquareDanceReasoning
 using Documenter
@@ -10,7 +11,6 @@ DocMeta.setdocmeta!(SquareDanceReasoning, :DocTestSetup, :(using SquareDanceReas
 # Generate the formation hierarchy
 include("formation_hierarchy.jl")
 include("showcase.jl")
-generate_formation_hierarchy()
 generate_rule_hierarchy()
 
 # Generate formation_drawings:
@@ -44,6 +44,8 @@ let
     end
     copy_html_collateral_files()
 end
+
+generate_formation_hierarchy()
 
 # Generate a list of supported square dance calls:
 let
