@@ -145,6 +145,15 @@ Vector of down and left coordinates.
 center(dss) = sum(location, dss) / length(dss)
 
 
+"""
+    location(thing)
+
+Returns the `down` and `left` coordinates of `thing` as a two wlwment
+vectore.  Thing might already be such a two element vector, for
+example, as returned by [`center`](@ref).
+"""
+function location end
+
 function location(v::Vector)
     @assert length(v) == 2
     v
