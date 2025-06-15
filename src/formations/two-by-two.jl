@@ -191,6 +191,17 @@ end
 
 handedness(b::BoxOfFour) = handedness(b.miniwave1)
 
+function circulate_paths(f::BoxOfFour)
+    [
+        CirculatePath([
+            f.tandem1.trailer,
+            f.tandem1.leader,
+            f.tandem2.trailer,
+            f.tandem2.leader
+        ])
+    ]
+end
+
 
 """
 RHBoxOfFour represents a right handed "box circulate" formation.

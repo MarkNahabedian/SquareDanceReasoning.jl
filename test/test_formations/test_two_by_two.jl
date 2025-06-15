@@ -95,6 +95,18 @@ end
     @test box.tandem2.trailer.dancer == square[3]
     @test askc(Counter(), kb, FormationContainedIn) == 12
     collect_formation_examples(kb)
+    cps = circulate_paths(box)
+    @test length(cps) == 1
+    function test_full_circ(from::DancerState, to::DancerState)
+        half = DancerState(from, 1, next_station(cps, from))
+        full = DancerState(half, 1, next_station(cps, half))
+        @test full.direction == to.direction
+        @test location(full) == location(to)
+    end
+    test_full_circ(box.tandem1.trailer, box.tandem1.leader)
+    test_full_circ(box.tandem1.leader, box.tandem2.trailer)
+    test_full_circ(box.tandem2.trailer, box.tandem2.leader)
+    test_full_circ(box.tandem2.leader, box.tandem1.trailer)
 end
 
 @testset "Test LHBoxOfFour" begin
@@ -120,5 +132,17 @@ end
     @test box.tandem2.trailer.dancer == square[3]
     @test askc(Counter(), kb, FormationContainedIn) == 12
     collect_formation_examples(kb)
+    cps = circulate_paths(box)
+    @test length(cps) == 1
+    function test_full_circ(from::DancerState, to::DancerState)
+        half = DancerState(from, 1, next_station(cps, from))
+        full = DancerState(half, 1, next_station(cps, half))
+        @test full.direction == to.direction
+        @test location(full) == location(to)
+    end
+    test_full_circ(box.tandem1.trailer, box.tandem1.leader)
+    test_full_circ(box.tandem1.leader, box.tandem2.trailer)
+    test_full_circ(box.tandem2.trailer, box.tandem2.leader)
+    test_full_circ(box.tandem2.leader, box.tandem1.trailer)
 end
 
