@@ -11,17 +11,24 @@ FULL_CIRCLE represents a change in direction of 360 degrees.
 """
 const FULL_CIRCLE = 1
 
+DIRECTION_RESOLUTION = 256
+
 
 """
     canonicalize(direction)
 
 canonicalizes the direction to be between 0 and 1.
 """
-function canonicalize(direction)
+function canonicalize(direction::Real)
     # Allowing floating point error makes it impossible to distinguish
     # a direction of 0 as an arithmetic result.
-    resolution = 256
-    round(Int, resolution * mod(direction, FULL_CIRCLE)) // resolution
+    r = DIRECTION_RESOLUTION
+    round(Int, r * mod(direction, FULL_CIRCLE)) // r
+end
+
+function canonicalize(direction::Rational)
+    r = DIRECTION_RESOLUTION
+    round(Int, r * mod(direction, FULL_CIRCLE)) // r
 end
 
 
@@ -98,7 +105,7 @@ Returns a unit vector pointing in `direction`, which is specified as a
 fraction of a full circle.
 """
 function unit_vector(direction)
-    slop = 10000
+    slop = 1
     radians = 2 * pi * direction
     [ (slop * cos(radians)) / slop,
       (slop * sin(radians)) / slop
