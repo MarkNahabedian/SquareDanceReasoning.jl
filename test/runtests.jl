@@ -81,15 +81,13 @@ end
 end
 
 @testset "relative direction" begin
-    fd = 1//15       # facing direction
-    # direction vector from d1:
-    dv(direction) = [ cos((fd + direction) * 2 * pi),
-                      sin((fd + direction) * 2 * pi) ]
-    d1 = DancerState(Dancer(1, Unspecified()), 0, fd, 0, 0)
+    d1 = DancerState(Dancer(1, Unspecified()), 0, 1//15, 0, 0)
+    # unit direction vector from d1:
+    dv(direction) = unit_vector(d1.direction + direction)
     # to the left of d1:
-    d2 = DancerState(Dancer(2, Unspecified()), 0, fd, dv(0.25)...)
+    d2 = DancerState(Dancer(2, Unspecified()), 0, d1.direction, dv(1//4)...)
     # in front of d1:
-    d3 = DancerState(Dancer(3, Unspecified()), 0, fd, dv(0.0)...)
+    d3 = DancerState(Dancer(3, Unspecified()), 0, d1.direction, dv(0)...)
     @test in_front_of(d1, d3)
     @test !in_front_of(d3, d1)
     @test !in_front_of(d1, d2)
