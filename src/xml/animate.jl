@@ -184,7 +184,7 @@ function animation_svg(method::CSSKeyframesAnimation,
                            keyframes(ds, tbounds)
                        end,"\n")),
               if symbol_uri_base == ""
-                  dancers_symbols_defs()
+                  [ dancers_symbols_defs() ]
               else
                   []
               end...,
