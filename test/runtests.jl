@@ -2,6 +2,7 @@ using SquareDanceReasoning
 using Test
 using Rete
 using InteractiveUtils
+using XML
 
 
 include("debug_formations.jl")
@@ -193,6 +194,43 @@ end
         end
     end
 end
+
+@testset "Test polar arrangement" begin
+    let
+        compass_points = polar_arrangement(4, [0, 0], 2, 1//2)
+        expect =  [ [ 1//2, -2,  0 ],
+                    [ 3//4,  0, -2 ],
+                    [ 1,     2,  0 ],
+                    [ 5//4,  0,  2 ] ]
+        @test length(compass_points) == length(expect)
+        for i in 1:length(expect)
+            @test isapprox(compass_points[i], expect[i]; atol = 0.0001)
+        end
+    end
+    # Star promenade:
+    center = [0, 0]
+    dancers = sort(collect(make_square(4).dancers))
+    guys = filter(d -> d.gender isa Guy, dancers)
+    gals = filter(d -> d.gender isa Gal, dancers)
+    guy_dss = polar_arrangement(guys, center,
+                                COUPLE_DISTANCE/2, 0,
+                                facing_tangent)
+    gal_dss = polar_arrangement(gals, center,
+                                COUPLE_DISTANCE * 3/2, 0,
+                                facing_tangent)
+    println(zip(guy_dss, gal_dss))
+    for (guy, gal) in zip(guy_dss, gal_dss)
+        @test guy.dancer.gender isa Guy
+        @test gal.dancer.gender isa Gal
+        @test guy.direction == gal.direction
+        @test isapprox(distance(guy, gal), COUPLE_DISTANCE;
+                       atol=0.01)
+        @test direction(center, guy) == direction(center, gal)
+    end
+    XML.write(joinpath(@__DIR__, "star_promenade.svg"),
+              formation_svg([guy_dss..., gal_dss...], ""; inline_stylesheet=true))
+end
+
 
 include("test_formations/tests.jl")
 
