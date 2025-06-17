@@ -35,26 +35,42 @@ end
 
 
 """
-    formation_svg(f::SquareDanceFormation, symbol_uri_base; id=nothing)
+    formation_svg(f::SquareDanceFormation, symbol_uri_base; inline_stylesheet, id=nothing)
 
 Returns an SVG element that illustrates the formation.
 
-`symbol_uri_base` is a relative URL to the SVG symbols file.
-See [`collateral_file_relpath`](@ref).
+`symbol_uri_base` is a relative URL to the SVG symbols file.  See
+[`collateral_file_relpath`](@ref).  If `symbol_uri_base` is the empty
+string then the dancer symbol definitions will be inlined.
 
 If `id` is specified, it will be the XML Id of the drawing.
 
 If margin is specified, its the additional space that surrounds the
 formation.
 """
-function formation_svg(f, symbol_uri_base; id=nothing,
+formation_svg(f, symbol_uri_base; id=nothing, inline_stylesheet = false,
+              margin=COUPLE_DISTANCE / 2) =
+    formation_svg(dancer_states(f), symbol_uri_base; id=id, margin=margin)
+
+function formation_svg(dss::Vector{DancerState}, symbol_uri_base; id=nothing,
+                       inline_stylesheet = false,
                        margin=COUPLE_DISTANCE / 2)
-    dss = dancer_states(f)
     bounds = bump_out(Bounds(dss), margin)
     elt("svg",
         # "id" => "floor",
         "xmlns" => SVG_NAMESPACE,
         bounds_to_viewbox(bounds)...,
+        if inline_stylesheet
+            [ elt("style",
+                  dancer_colors_css(length(dss) / 2)), ]
+        else
+            []
+        end...,
+        if symbol_uri_base == ""
+            [ dancers_symbols_defs() ]
+        else
+            []
+        end...,
         elt("g",
             map(dss) do ds
                 dancer_svg(ds, symbol_uri_base; id=id)
