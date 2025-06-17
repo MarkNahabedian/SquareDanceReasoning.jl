@@ -1,4 +1,4 @@
-export polar_arrangement, facing_center, facing_tangent
+export polar_arrangement, facing_center, right_hand_in, left_hand_in
 
 """
     polar_arrangement(dancers, center, radius, phase_angle, facing_direction)
@@ -14,8 +14,8 @@ That dancer would be facing the center if their facing direction is 1/2.
 
 `facing_direction` takes a `Dancer` and the placement angle of that
 dancer (angle of the vector from center to dancer) and returns the
-facing direction for that dancer.  See [`facing_center`](@ref) and
-[`facing_tangent`](@ref) for examples.
+facing direction for that dancer.  See [`facing_center`](@ref),
+[`right_hand_in`](@ref), and [`left_hand_in`](@ref) for examples.
 """
 function polar_arrangement(dancers::Vector{Dancer}, center,
                            radius, phase_angle,
@@ -58,11 +58,21 @@ facing_center(::Dancer, theta) = opposite(theta)
 
 
 """
-    facing_tangent(::Dancer, theta)
+    right_hand_in(::Dancer, theta)
 
 Used in conjunstion with [`polar_arrangement`](@ref) to cause the
 dancer to be facing in promenade direction with their left shouolder
 towards the center.
 """
-facing_tangent(::Dancer, theta) = quarter_left(theta)
+right_hand_in(::Dancer, theta) = quarter_right(theta)
+
+
+"""
+    fleft_hand_in(::Dancer, theta)
+
+Used in conjunstion with [`polar_arrangement`](@ref) to cause the
+dancer to be facing in promenade direction with their left shouolder
+towards the center.
+"""
+left_hand_in(::Dancer, theta) = quarter_left(theta)
 
