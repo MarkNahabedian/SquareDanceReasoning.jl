@@ -199,15 +199,13 @@ those_with_role(c::LHMiniWave, ::Belles) = [ c.a, c.b ]
                 emit(tdm)
                 emit(FormationContainedIn(ds1, tdm))
                 emit(FormationContainedIn(ds2, tdm))
-                return
             end
+            return
         end
     elseif direction(ds1) == opposite(direction(ds2))
         # FaceToFace, BackToBack or MiniWave We break symetry using
         # dancer facing direction instead of dancer order.
-        if direction(ds2) < direction(ds1)
-            return
-        end
+        @rejectif direction(ds2) < direction(ds1)
         if in_front_of(ds1, ds2) && in_front_of(ds2, ds1)
             let
                 ftf = FaceToFace(ds1, ds2)
@@ -223,8 +221,8 @@ those_with_role(c::LHMiniWave, ::Belles) = [ c.a, c.b ]
                 emit(btb)
                 emit(FormationContainedIn(ds1, btb))
                 emit(FormationContainedIn(ds2, btb))
-                return
             end
+            return
         end
         if right_of(ds1, ds2) && right_of(ds2, ds1)
             let
@@ -232,8 +230,8 @@ those_with_role(c::LHMiniWave, ::Belles) = [ c.a, c.b ]
                 emit(mw)
                 emit(FormationContainedIn(ds1, mw))
                 emit(FormationContainedIn(ds2, mw))
-                return
             end
+            return
         end
         if left_of(ds1, ds2) && left_of(ds2, ds1)
             let
@@ -241,8 +239,8 @@ those_with_role(c::LHMiniWave, ::Belles) = [ c.a, c.b ]
                 emit(mw)
                 emit(FormationContainedIn(ds1, mw))
                 emit(FormationContainedIn(ds2, mw))
-                return
             end
+            return
         end
     end
 end
