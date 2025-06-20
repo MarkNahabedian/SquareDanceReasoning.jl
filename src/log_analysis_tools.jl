@@ -97,7 +97,7 @@ function find_rule_failures(log; rule=missing,
     filter(log) do le
         (le.level == Logging.Debug) &&
         (le.message in tests) &&
-            (rule isa Missing || rule == le.message)
+            (rule isa Missing || rule == le.group)
     end
 end
 
