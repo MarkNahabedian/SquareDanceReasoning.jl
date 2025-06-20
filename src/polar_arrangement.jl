@@ -38,12 +38,21 @@ left.
 Like all angles in this package, `phase_angle` ranges from 0 to 1
 counterclockwise, with 1 being a full circle.  If `phase_angle` is 0,
 The first point is placed `radius` distance `up` from `center`.
+
+`radius` can either be a number or a function of an *index* in the
+range of `1::count`.  This function should return the radius.  This is
+useful when the resulting points need to have different radii.
 """
 function polar_arrangement(count, center, radius, phase_angle)
     delta_theta = 1 // count
     map(0:(count - 1)) do i
         theta = i * delta_theta + phase_angle
-        return [ theta, (center + radius * unit_vector(theta))... ]
+        r = if radius isa Function
+            radius(i)
+        else
+            radius
+        end
+        return [ theta, (center + r * unit_vector(theta))... ]
     end
 end
 
