@@ -18,6 +18,7 @@ Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 ResumableFunctions = "c5292f4c-5179-55e1-98c5-05642aab7184"
 Rete = "3d46c559-9b3d-4aba-9ca1-48ff7627231e"
+Serialization = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
 XML = "72c71f33-b9b6-44de-8c94-c961784809e2"
 
 [compat]
@@ -30,12 +31,12 @@ OrderedCollections = "1"
 Parameters = "0.12"
 ResumableFunctions = "0.6, 1"
 Rete = "1.4"
+Serialization = "1.11.0"
 XML = "0.3"
 julia = "1"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
-Serialization = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
 
 [targets]
-test = ["Test", "Serialization"]
+test = ["Test"]

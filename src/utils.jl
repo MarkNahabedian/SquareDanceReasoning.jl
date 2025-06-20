@@ -1,6 +1,9 @@
 using Base.Iterators: Stateful
+using LoggingExtras: FormatLogger
+using Serialization
 
 export merge_sorted_iterators
+export log_to_file, deserialize_log_file
 
 
 """
@@ -27,5 +30,28 @@ producing those unique elements in order.
             @yield v
         end
     end
+end
+
+
+function log_to_file(body, dir, filename;
+                     always_write = false,
+                     min_level=Info)
+    # always_write and min_level are obsolete.
+    filepath = joinpath(dir, filename)
+    rm(filepath; force=true)
+    open(filepath, "w") do io
+        logger = FormatLogger(serialize, io)
+        with_logger(body, logger)
+    end
+end
+
+function deserialize_log_file(filepath)
+    log = []
+    open(filepath, "r") do io
+        while(!eof(io))
+            push!(log, deserialize(io))
+        end
+    end
+    log
 end
 
