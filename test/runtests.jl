@@ -2,6 +2,7 @@ using SquareDanceReasoning
 using Test
 using Rete
 using InteractiveUtils
+using Logging
 using XML
 
 
@@ -214,11 +215,10 @@ end
     gals = filter(d -> d.gender isa Gal, dancers)
     guy_dss = polar_arrangement(guys, center,
                                 COUPLE_DISTANCE/2, 0,
-                                facing_tangent)
+                                left_hand_in)
     gal_dss = polar_arrangement(gals, center,
                                 COUPLE_DISTANCE * 3/2, 0,
-                                facing_tangent)
-    println(zip(guy_dss, gal_dss))
+                                left_hand_in)
     for (guy, gal) in zip(guy_dss, gal_dss)
         @test guy.dancer.gender isa Guy
         @test gal.dancer.gender isa Gal
