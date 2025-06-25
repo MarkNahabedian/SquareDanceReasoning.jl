@@ -3,7 +3,7 @@ using Logging: with_logger, NullLogger
 
 export showcase, make_showcase_index_file
 
-SHOWCASE_DIR = joinpath(@__DIR__, "..", "docs", "src", "Showcase")
+SHOWCASE_DIR = joinpath(pkgdir(SquareDanceReasoning), "docs", "src", "Showcase")
 
 SHOWCASE_HTML_FILES = []
 
