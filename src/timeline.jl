@@ -51,6 +51,10 @@ DancerState is also the single dancer `SquareDanceFormation`.
             canonicalize_coordinate(down),
             canonicalize_coordinate(left))
     end
+
+    # Construct a DancerState from the printed representation:
+    DancerState(ignore::Int, dancer::Dancer, time, direction, down, left) =
+        DancerState(dancer, time, direction, down, left)
 end
 
 dancer(ds::DancerState) = ds.dancer
