@@ -93,7 +93,7 @@ function analysis1(log)
 end
 
 function find_rule_failures(log; rule=missing,
-                            tests=["@reject", "@rejectinf", "@continueif"])
+                            tests=["@reject", "@rejectif", "@continueif"])
     filter(log) do le
         (le.level == Logging.Debug) &&
         (le.message in tests) &&
