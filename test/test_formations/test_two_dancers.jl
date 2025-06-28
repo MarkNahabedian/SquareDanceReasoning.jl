@@ -33,25 +33,30 @@ end
 end
 
 @testset "test FaceToFace" begin
-    kb, dancers = two_dancer_formation_test_setup([ 1 2; ], [ "→←" ])
-    @test 2 == askc(Counter(), kb, DancerState)
-    found = askc(Collector{FaceToFace}(), kb, FaceToFace)
-    @test 1 == length(found)
-    f = found[1]
-    @test f isa FaceToFace
-    @test handedness(f) == NoHandedness()
-    @test f.a.direction < f.b.direction
-    @test f.a.direction == opposite(f.b.direction)
-    @test f.a.dancer == dancers[1]
-    @test f.b.dancer == dancers[2]
-    @test playmate(f.a.dancer, f) == f.b.dancer
-    @test playmate(f.b.dancer, f) == f.a.dancer
-    @test askc(Counter(), kb, FormationContainedIn) == 2
-    collect_formation_examples(kb)
+    log_to_file(@__DIR__, log_file_name_for_testset(Test.get_testset());
+                min_level = Debug - 1) do
+        kb, dancers = two_dancer_formation_test_setup([ 1 2; ], [ "→←" ])
+        @debug_formations(kb)
+        @test 2 == askc(Counter(), kb, DancerState)
+        found = askc(Collector{FaceToFace}(), kb, FaceToFace)
+        @test 1 == length(found)
+        f = found[1]
+        @test f isa FaceToFace
+        @test handedness(f) == NoHandedness()
+        @test f.a.direction < f.b.direction
+        @test f.a.direction == opposite(f.b.direction)
+        @test f.a.dancer == dancers[1]
+        @test f.b.dancer == dancers[2]
+        @test playmate(f.a.dancer, f) == f.b.dancer
+        @test playmate(f.b.dancer, f) == f.a.dancer
+        @test askc(Counter(), kb, FormationContainedIn) == 2
+        collect_formation_examples(kb)
+    end
 end
-    
+
 @testset "test BackToBack" begin
     kb, dancers = two_dancer_formation_test_setup([ 1 2; ], [ "←→" ])
+    @debug_formations(kb)
     @test 2 == askc(Counter(), kb, DancerState)
     found = askc(Collector{BackToBack}(), kb, BackToBack)
     @test 1 == length(found)
