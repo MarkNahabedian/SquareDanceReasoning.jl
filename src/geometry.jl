@@ -113,26 +113,32 @@ bump_out(bounds::Bounds) = bump_out(bounds, COUPLE_DISTANCE / 2)
 """
     encroached_on(formations, kb)
 
-Returns true if any of the other contemporary `DancerState`s in the
-knowledge base are within the `Bounds` of the specified `formations`.
+Returns the first encroaching `DancerState` if any of the other
+contemporary `DancerState`s in the knowledge base are within the
+`Bounds` of the specified `formations`.  Otherwise returns `nothing`.
 """
 function encroached_on(formations, kb)
     these = flatten(map(dancer_states, formations))
     b = bump_out(Bounds(these))
     time = first(these).time
-    encroaching = false
-    askc(kb, DancerState) do ds
-        if !(ds in these)
-            if ds.time == first(these).time
-                if in_bounds(b, ds)
-                    encroaching = true
-                    # It would be nice to have a short-circuiting exit
-                    # for askc.
+    encroacher = nothing
+    try
+        askc(kb, DancerState) do ds
+            if !(ds in these)
+                if ds.time == first(these).time
+                    if in_bounds(b, ds)
+                        encroacher = ds
+                        throw(:NON_LOCAL_EXIT)
+                    end
                 end
             end
         end
+    catch e
+        if e != :NON_LOCAL_EXIT
+            rethrow(e)
+        end
     end
-    encroaching
+    encroacher
 end
 
 

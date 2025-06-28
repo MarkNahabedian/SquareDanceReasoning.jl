@@ -27,8 +27,11 @@ end
     # Symetry disambiguation
     @rejectif direction(couple1) > direction(couple2)
     # No other dancers in the way:
-    @rejectif encroached_on([couple1, couple2], kb)
-    @rejectif encroached_on([ couple1, couple2 ], kb)
+    encroacher = encroached_on([ couple1, couple2 ], kb)
+    if encroacher != nothing
+        @debug("encroached_on", couple1, couple2, encroacher)
+    end
+    @continueif encroacher isa Nothing
     emit(TwoDifferentCouples(couple1, couple2))
 end
 
