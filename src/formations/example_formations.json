@@ -1476,5 +1476,26 @@
       "a": "3f",
       "b": "4m"
     }
+  },
+  {
+    "_TYPE_": "_MaybeDiamondPoints",
+    "DancerStates": {
+      "1m": {
+        "couple_number": 1,
+        "gender": "Guy",
+        "direction": 0.5,
+        "down": 1.0,
+        "left": 1.0
+      },
+      "2m": {
+        "couple_number": 2,
+        "gender": "Guy",
+        "direction": 0.5,
+        "down": 1.0,
+        "left": 3.0
+      }
+    },
+    "a": "1m",
+    "b": "2m"
   }
 ]

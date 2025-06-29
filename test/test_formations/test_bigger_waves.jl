@@ -26,7 +26,7 @@
         @test Set(dancer.(those_with_role(f, kb, Ends()))) ==
             Set([square[1], square[4]])
     end
-    @test askc(Counter(), kb, FormationContainedIn) == 9
+    @test askc(Counter(), kb, FormationContainedIn) == 15
     collect_formation_examples(kb)
 end
 
@@ -56,7 +56,7 @@ end
         @test Set(dancer.(those_with_role(f, kb, Ends()))) ==
             Set([square[1], square[4]])
     end
-    @test askc(Counter(), kb, FormationContainedIn) == 9
+    @test askc(Counter(), kb, FormationContainedIn) == 15
     collect_formation_examples(kb)
 end
 
@@ -95,7 +95,7 @@ end
         @test Set(dancer.(those_with_role(f, kb, Ends()))) ==
             Set([square[1], square[4], square[5], square[8]])
     end
-    @test askc(Counter(), kb, FormationContainedIn) == 32
+    @test askc(Counter(), kb, FormationContainedIn) == 54
     collect_formation_examples(kb)
 end
 

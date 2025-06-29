@@ -41,7 +41,7 @@
         # We should also have four FaceToFace formations
         @test askc(Counter(), kb, FaceToFace) == 4
     end
-    @test askc(Counter(), kb, FormationContainedIn) == 38
+    @test askc(Counter(), kb, FormationContainedIn) == 50
     collect_formation_examples(kb)
 end
     
@@ -88,7 +88,7 @@ end
             m = find_memory_for_type(kb, BackToBack)
             @test length(m.memory) == 2
         end
-        @test askc(Counter(), kb, FormationContainedIn) == 34
+        @test askc(Counter(), kb, FormationContainedIn) == 46
     end
     collect_formation_examples(kb)
 end

@@ -1,6 +1,6 @@
 
 export Couple, FaceToFace, BackToBack,
-    Tandem, MiniWave, RHMiniWave, LHMiniWave
+    Tandem, MiniWave, RHMiniWave, LHMiniWave, _MaybeDiamondPoints
 export TwoDancerFormationsRule
 
 
@@ -158,6 +158,23 @@ handedness(::LHMiniWave) = LeftHanded()
 those_with_role(c::LHMiniWave, ::Belles) = [ c.a, c.b ]
 
 
+"""
+_MaybeDiamondPoints is like MiniWave, but with the dancers further
+apart.  _MaybeDiamondPoints allows encroaching dancers.  It is used to
+help recognize Diamonds.
+"""
+struct _MaybeDiamondPoints <: TwoDancerFormation
+    a::DancerState
+    b::DancerState
+end
+
+@resumable function(f::_MaybeDiamondPoints)()
+    @yield f.a
+    @yield f.b
+end
+
+
+
 @rule SquareDanceFormationRule.TwoDancerFormationsRule(kb::SDRKnowledgeBase,
                                                        sq::AllPresent,
                                                        ds1::DancerState,
@@ -168,6 +185,7 @@ those_with_role(c::LHMiniWave, ::Belles) = [ c.a, c.b ]
                                                        ::Tandem,
                                                        ::RHMiniWave,
                                                        ::LHMiniWave,
+                                                       ::_MaybeDiamondPoints,
                                                        ::FormationContainedIn) begin
     RULE_DECLARATIONS(FORWARD_TRIGGERS(sq))
     # Not the same dancer:
@@ -178,11 +196,19 @@ those_with_role(c::LHMiniWave, ::Belles) = [ c.a, c.b ]
     # for a given Dancer.
     @continueif ds1.time == ds2.time
     # In the same square:
-    @rejectif !in(ds1, sq.expected) || !in(ds2, sq.expected)
+    @continueif ds1 in sq.expected
+    @continueif ds2 in sq.expected
     # Rather than using near, make sure there are no other dancers
-    # between these two:
-    @rejectif encroached_on([ds1, ds2], kb)
-    if direction(ds1) == direction(ds2)
+    # between these two.  We need to relax this for diamond points though.
+    encroacher =  encroached_on([ds1, ds2], kb)
+    # We must put all of the tests within the predicate of each
+    # conditional clause rather than using @rejectif or @continueif in
+    # the body because we want all branches of the conditional tree to
+    # be considered.  If we need more logging, we can assert an ad-hoc
+    # fact for each branch of the conditional and then have a rulle
+    # for each such fact.  Combinatorics should not be a problem since
+    # each rule will on;y take one fact as input.
+    if direction(ds1) == direction(ds2) && encroacher isa Nothing
         # Couple or Tandem?
         if right_of(ds1, ds2) && left_of(ds2, ds1)
             let
@@ -202,10 +228,11 @@ those_with_role(c::LHMiniWave, ::Belles) = [ c.a, c.b ]
             end
             return
         end
-    elseif direction(ds1) == opposite(direction(ds2))
+    elseif (direction(ds1) == opposite(direction(ds2))
+            && encroacher isa Nothing
+            && direction(ds2) < direction(ds1))
         # FaceToFace, BackToBack or MiniWave We break symetry using
         # dancer facing direction instead of dancer order.
-        @rejectif direction(ds2) < direction(ds1)
         if in_front_of(ds1, ds2) && in_front_of(ds2, ds1)
             let
                 ftf = FaceToFace(ds1, ds2)
@@ -242,6 +269,20 @@ those_with_role(c::LHMiniWave, ::Belles) = [ c.a, c.b ]
             end
             return
         end
+    elseif ((right_of(ds1, ds2) && left_of(ds2, ds1)
+             || right_of(ds1, ds2) && right_of(ds2, ds1)
+             || left_of(ds1, ds2) && left_of(ds2, ds1)
+             || left_of(ds1, ds2) && right_of(ds2, ds1))
+            && (2 * COUPLE_DISTANCE <= distance(ds1, ds2) < 4 * COUPLE_DISTANCE)
+            # Since we allow for the points to have the same facing
+            # direction, we need an additional way to break symetry:
+            && (ds1.direction < ds2.direction
+                || (ds1.direction == ds2.direction &&
+                    ds1.dancer.couple_number < ds2.dancer.couple_number)))
+        f = _MaybeDiamondPoints(ds1, ds2)
+        emit(f)
+        emit(FormationContainedIn(ds1, f))
+        emit(FormationContainedIn(ds2, f))
     end
 end
 
