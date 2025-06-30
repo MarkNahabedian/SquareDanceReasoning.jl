@@ -142,8 +142,8 @@ end
     receive(kb, ds1)
     receive(kb, ds2)
     receive(kb, ds3)
-    @test encroached_on([ds1, ds3], kb)
-    @test !encroached_on([ds1, ds2], kb)
+    @test encroached_on([ds1, ds3], kb) != nothing
+    @test encroached_on([ds1, ds2], kb) == nothing
 end
 
 @testset "center" begin
