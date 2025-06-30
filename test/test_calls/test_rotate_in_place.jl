@@ -32,7 +32,7 @@ using Logging
         @test dss[1].left == 0
         @test dss[2].left == 1
         @test dss[3].left == 2
-        animate(joinpath(@__DIR__, "quarter_turns.svg"), dss)
+        animate(joinpath(ANIMATIONS_DIRECTORY, "quarter_turns.svg"), dss)
     end
 end
 
@@ -152,7 +152,7 @@ end
         @test dss[8].previous.direction == 0//4
         @test dss[8].direction == 1//4
         @debug_formations(kb)
-        animate(joinpath(@__DIR__, "UTurnBack_Couples.svg"), dss)
+        animate(joinpath(ANIMATIONS_DIRECTORY, "UTurnBack_Couples.svg"), dss)
     end
 end
 
@@ -211,7 +211,7 @@ end
             (Dancer(4, Guy()), [ 0 => 1//2, 1 => 1//4, 2 => 0, 4 => 3//4 ])
         @test direction_history(dss[8]) ==
             (Dancer(4, Gal()), [ 0 => 1//2, 1 => 3//4, 2 => 0, 4 => 1//4 ])
-        animate(joinpath(@__DIR__, "UTurnBack_AndRoll.svg"), dss)
+        animate(joinpath(ANIMATIONS_DIRECTORY, "UTurnBack_AndRoll.svg"), dss)
     end
 end
 

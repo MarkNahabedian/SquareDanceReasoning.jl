@@ -25,6 +25,6 @@
             @test dss[i].down == original_dss[i].down
             @test dss[i].left == original_dss[i].left
         end
-        animate(joinpath(@__DIR__, "balance.svg"), dss)
+        animate(joinpath(ANIMATIONS_DIRECTORY, "balance.svg"), dss)
     end
 end

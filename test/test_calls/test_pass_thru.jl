@@ -36,7 +36,7 @@ function facing_lines_pass_thru(call)
             odsf = forward(ods, COUPLE_DISTANCE, 0)
             @test odsf.down == ds.down
         end
-        animate(joinpath(@__DIR__, "pass_thru.svg"),
+        animate(joinpath(ANIMATIONS_DIRECTORY, "pass_thru.svg"),
                 askc(Collector{DancerState}(), kb, DancerState))
     end
 end
@@ -72,7 +72,7 @@ end
             # @test ods.left == ds.left     BREATHING!
             @test ods.down == ds.down
         end
-        animate(joinpath(@__DIR__, "dosados.svg"),
+        animate(joinpath(ANIMATIONS_DIRECTORY, "dosados.svg"),
                 askc(Collector{DancerState}(), kb, DancerState))
     end
 end

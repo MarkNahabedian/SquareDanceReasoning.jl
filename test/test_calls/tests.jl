@@ -4,6 +4,11 @@ using SquareDanceReasoning: Basic1, Basic2, Mainstream, Plus,
 
 cleanup_debug_formations(@__DIR__)
 
+ANIMATIONS_DIRECTORY = joinpath(@__DIR__, "Animations")
+
+mkpath(ANIMATIONS_DIRECTORY)
+
+
 function direction_history(ds::DancerState)
     hist = []
     SquareDanceReasoning.history(ds) do ds1

@@ -46,7 +46,7 @@
             @test pos(wave2.centers.b) == pos(wave.centers.a)
         end
         =#
-        animate(joinpath(@__DIR__, "centers_trade.svg"),
+        animate(joinpath(ANIMATIONS_DIRECTORY, "centers_trade.svg"),
                 askc(Collector{DancerState}(), kb, DancerState))
     end
 end

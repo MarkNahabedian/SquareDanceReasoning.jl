@@ -24,7 +24,7 @@ using Logging
         @test location(ftfc.couple1.beau) == location(ftfc.couple1.belle.previous.previous)
         @test location(ftfc.couple2.beau) == location(ftfc.couple2.belle.previous.previous)
         @test location(ftfc.couple2.belle) == location(ftfc.couple2.beau.previous.previous)
-        animate(joinpath(@__DIR__, "ccourtesy_turn.svg"),
+        animate(joinpath(ANIMATIONS_DIRECTORY, "ccourtesy_turn.svg"),
                 askc(Collector{DancerState}(), kb, DancerState))
     end
 end
