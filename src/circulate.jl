@@ -150,7 +150,7 @@ function next_station(paths::Vector{CirculatePath}, ds::DancerState)
 end
 
 
-# CReate the successor DancerState from the specified CirculateStation:
+# Create the successor DancerState from the specified CirculateStation:
 DancerState(ds::DancerState, time_delta, station::CirculateStation) =
     DancerState(ds, ds.time + time_delta,
                 station.direction, station.down, station.left)
