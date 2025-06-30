@@ -12,6 +12,7 @@ include("one_dancer_calls.jl")
 include("two_dancer_calls.jl")
 include("quarter_in_out.jl")
 include("square_thru.jl")
+include("circulate_family.jl")
 
 # include("circle_left_right.jl")
 
