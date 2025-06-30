@@ -46,10 +46,10 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: MarkNahabedian/SquareDanceReasoning.jl
           files: lcov.info
-      - name Upload call unit test animations
+      - name: Upload call unit test animations
         uses: actions/upload-artifact@v3
         with:
-          name: call-animations
+          name: call_animations
           path: test/test_calls/Animations
   docs:
     name: Documentation
@@ -65,11 +65,11 @@ jobs:
         with:
           version: '1'
       - uses: julia-actions/cache@v2
-      -name: Retrieve call unit test animations
+      - name: Retrieve call unit test animations
         uses: actions/download-artifact@v3
-          with:
-            name: call-animations
-            path: dscs/build/Animations
+        with:
+          name: call_animations
+          path: dscs/build/Animations
 #     - name: Configure doc environment
 #       shell: julia --project=docs --color=yes {0}
 #       run: |
