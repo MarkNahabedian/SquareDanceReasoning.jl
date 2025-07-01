@@ -1,5 +1,5 @@
 
-LOAD_PATH = [
+Base.LOAD_PATH = [
     joinpath(dirname(dirname(@__FILE__)), "Project.toml"),
     joinpath(@__DIR__, "Project.toml"),
     "@v#.#",
