@@ -9,6 +9,8 @@ println(pwd())
 
 println("LOAD_PATH = $LOAD_PATH")
 
+Pkg.status()
+
 using SquareDanceReasoning
 using Rete
 using Documenter
