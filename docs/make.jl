@@ -1,9 +1,11 @@
 
 LOAD_PATH = [
-    joinpath(dirname(@__DIR__), "Project.toml"),
+    joinpath(dirname(dirname(@__FILE__)), "Project.toml"),
     joinpath(@__DIR__, "Project.toml"),
     "@v#.#",
     "@stdlib"]
+
+println(pwd())
 
 println("LOAD_PATH = $LOAD_PATH")
 
