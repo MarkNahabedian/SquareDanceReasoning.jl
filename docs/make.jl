@@ -5,6 +5,8 @@ LOAD_PATH = [
     "@v#.#",
     "@stdlib"]
 
+println("LOAD_PATH = $LOAD_PATH")
+
 using SquareDanceReasoning
 using Rete
 using Documenter
