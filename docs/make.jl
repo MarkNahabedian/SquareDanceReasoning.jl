@@ -1,3 +1,4 @@
+using Pkg
 
 Base.LOAD_PATH = [
     joinpath(dirname(dirname(@__FILE__)), "Project.toml"),
