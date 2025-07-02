@@ -22,7 +22,7 @@ inclusion in the log entry.
 =#
 
 function analysis1(logfile::String)
-    analysis1(deserialize(logfile))
+    analysis1(deserialize_log_file(logfile))
 end
 
 
@@ -174,7 +174,7 @@ function html_for_call_schedule(report::HTMLLogAnalysisReport, queue)
 end
 
 function html_for_call_history(report::HTMLLogAnalysisReport,
-                               rec::LogRecord)
+                               rec::DeserializedLogRecord)
     elt("table",
         "class" => "call-history",
         elt("caption", "Call History"),
@@ -190,7 +190,7 @@ function html_for_call_history(report::HTMLLogAnalysisReport,
 end
 
 function html_for_dancer_history(report::HTMLLogAnalysisReport,
-                                 rec::LogRecord)
+                                 rec::DeserializedLogRecord)
     newest_dancer_states = rec.kwargs[:newest_dancer_states]
     elt("div",
         elt("table",
@@ -234,7 +234,7 @@ function html_for_dancer_history(report::HTMLLogAnalysisReport,
 end
 
 function html_for_log_records(report::HTMLLogAnalysisReport,
-                              remaining_log_records::Vector{LogRecord})::Vector{Node}
+                              remaining_log_records::Vector)::Vector{Node}
     children = Node[]
     while !isempty(remaining_log_records)
         rec = popfirst!(remaining_log_records)
@@ -251,7 +251,7 @@ function html_for_log_records(report::HTMLLogAnalysisReport,
 end
 
 function html_for_log_records(report::HTMLLogAnalysisReport,
-                              rec::LogRecord,
+                              rec::DeserializedLogRecord,
                               remaining_log_records)::Vector{Node}
     html_for_log_records(report,
                          Val(Symbol(rec.message)),
@@ -261,14 +261,14 @@ end
 
 function html_for_log_records(report::HTMLLogAnalysisReport,
                               m::Any,
-                              log_record::LogRecord,
+                              log_record::DeserializedLogRecord,
                               remaining_log_records)::Vector{Node}
     Node[]
 end
 
 function html_for_log_records(report::HTMLLogAnalysisReport,
                               m::Val{:Exception},
-                              rec::LogRecord,
+                              rec::DeserializedLogRecord,
                               remaining_log_records)::Vector{Node}
     err = rec.kwargs[:error]
     @assert rec.level == Logging.Error
@@ -297,7 +297,7 @@ end
 
 function html_for_log_records(report::HTMLLogAnalysisReport,
                               m::Val{Symbol("do_schedule while loop")},
-                              record::LogRecord,
+                              record::DeserializedLogRecord,
                               remaining_log_records)::Vector{Node}
     @assert record.message == "do_schedule while loop"
     children = Node[]
@@ -317,7 +317,7 @@ end
 
 function html_for_log_records(report::HTMLLogAnalysisReport,
                               m::Val{Symbol("do_schedule dequeued")},
-                              record::LogRecord,
+                              record::DeserializedLogRecord,
                               remaining_log_records)::Vector{Node}
     Node[
         elt("div",
@@ -328,7 +328,7 @@ end
 
 function html_for_log_records(report::HTMLLogAnalysisReport,
                               m::Val{Symbol("get_call_options formations")},
-                              record::LogRecord,
+                              record::DeserializedLogRecord,
                               remaining_log_records)::Vector{Node}
     call = record.kwargs[:call]
     formations = record.kwargs[:formations]
@@ -347,7 +347,7 @@ end
 
 function html_for_log_records(report::HTMLLogAnalysisReport,
                               m::Val{Symbol("do_schedule get_call_options returned")},
-                              record::LogRecord,
+                              record::DeserializedLogRecord,
                               remaining_log_records)::Vector{Node}
     options = record.kwargs[:options]
     Node[
@@ -366,7 +366,7 @@ end
 
 function html_for_log_records(report::HTMLLogAnalysisReport,
                               m::Val{Symbol("do_schedule performing")},
-                              record::LogRecord,
+                              record::DeserializedLogRecord,
                               remaining_log_records)::Vector{Node}
     Node[
         elt("div",
@@ -377,7 +377,7 @@ end
 
 function html_for_log_records(report::HTMLLogAnalysisReport,
                               m::Val{Symbol("do_schedule expand_cdc")},
-                              record::LogRecord,
+                              record::DeserializedLogRecord,
                               remaining_log_records)::Vector{Node}
     cdc = record.kwargs[:cdc]
     Node[
@@ -390,7 +390,7 @@ end
 
 function html_for_log_records(report::HTMLLogAnalysisReport,
                               m::Val{Symbol("do_schedule expand_parts returned")},
-                              log_record::LogRecord,
+                              log_record::DeserializedLogRecord,
                               remaining_log_records)::Vector{Node}
     e = log_record.kwargs[:e]
     if isa(e, ScheduledCall)
@@ -414,7 +414,7 @@ end
 
 function html_for_log_records(report::HTMLLogAnalysisReport,
                               m::Val{Symbol("do_schedule perform returned")},
-                              log_record::LogRecord,
+                              log_record::DeserializedLogRecord,
                               remaining_log_records)::Vector{Node}
     Node[
         elt("table",
@@ -442,7 +442,7 @@ end
 
 function html_for_log_records(report::HTMLLogAnalysisReport,
                               m::Val{Symbol("scheduling")},
-                              log_record::LogRecord,
+                              log_record::DeserializedLogRecord,
                               remaining_log_records)::Vector{Node}
     Node[
         elt("div", "scheduling $(log_record.kwargs[:new_entry])")
@@ -451,7 +451,7 @@ end
 
 function html_for_log_records(report::HTMLLogAnalysisReport,
                               m::Val{Symbol("updated schedule")},
-                              log_record::LogRecord,
+                              log_record::DeserializedLogRecord,
                               remaining_log_records)::Vector{Node}
     Node[
         elt("div",
@@ -461,7 +461,7 @@ end
 
 function html_for_log_records(report::HTMLLogAnalysisReport,
                               m::Val{Symbol("The dancers are ahead of the schedule")},
-                              log_record::LogRecord,
+                              log_record::DeserializedLogRecord,
                               remaining_log_records)::Vector{Node}
     Node[
         elt("div",
@@ -477,7 +477,7 @@ end
 
 function html_for_log_records(report::HTMLLogAnalysisReport,
                               m::Val{Symbol("do_schedule formations")},
-                              rec::LogRecord,
+                              rec::DeserializedLogRecord,
                               remaining_log_records)::Vector{Node}                              
     formations = rec.kwargs[:formations]
     Node[
@@ -492,7 +492,7 @@ end
 
 function html_for_log_records(report::HTMLLogAnalysisReport,
                               m::Val{Symbol("do_schedule finished")},
-                              rec::LogRecord,
+                              rec::DeserializedLogRecord,
                               remaining_log_records)::Vector{Node}
     Node[
         elt("div",
@@ -517,7 +517,7 @@ end
 
 function report1(logfile::String)
     output_file = splitext(logfile)[1] * ".html"
-    report1(deserialize(logfile), output_file)
+    report1(deserialize_log_file(logfile), output_file)
 end
 
 function report1(log, output_file)

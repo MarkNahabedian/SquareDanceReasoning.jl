@@ -3,7 +3,7 @@ using LoggingExtras: FormatLogger
 using Serialization
 
 export merge_sorted_iterators
-export log_to_file, deserialize_log_file
+export log_to_file, deserialize_log_file, DeserializedLogRecord
 
 
 """
@@ -45,8 +45,18 @@ function log_to_file(body, dir, filename;
     end
 end
 
-function deserialize_log_file(filepath)
-    log = []
+const DeserializedLogRecord =
+    @NamedTuple{level::Base.CoreLogging.LogLevel,
+                message::String,
+                _module::Module,
+                group::Any,
+                id::Symbol,
+                file::String,
+                line::Int64,
+                kwargs::AbstractDict}
+
+function deserialize_log_file(filepath)::Vector{DeserializedLogRecord}
+    log = DeserializedLogRecord[]
     open(filepath, "r") do io
         while(!eof(io))
             push!(log, deserialize(io))
