@@ -1,29 +1,6 @@
 using LinearAlgebra: dot, normalize!
 
-export breathe, find_collisions
-
-### ONLY USED IN TESTS:
-"""
-   find_collisions(dss::Vector{DancerState})::Vector{Collision}
-
-Find the `DancerState`s that have collided with each other. 
-"""
-function find_collisions(dss::Vector{DancerState})::Vector{Collision}
-    found = Vector{Collision}()
-    for i in 1:(length(dss) - 1)
-        for j in (i+1):length(dss)
-            a = dss[i]
-            b = dss[j]
-            if a == b    # Why would this be?
-                continue
-            end
-            if distance(a, b) < DANCER_COLLISION_DISTANCE
-                push!(found, Collision(a, b))
-            end
-        end
-    end
-    found
-end
+export breathe
 
 #=
 ### NOT USED

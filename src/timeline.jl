@@ -2,7 +2,6 @@
 export DancerState, dancer, TimeBounds, expand, history_position
 export location, direction, square_up
 export DANCER_NEAR_DISTANCE, near, direction
-export Collision, CollisionRule
 export latest_dancer_states, history, earliest
 
 
@@ -222,24 +221,6 @@ function near(d1::DancerState, d2::DancerState)::Bool
     distance(d1, d2) < DANCER_NEAR_DISTANCE
 end
 
-
-DANCER_COLLISION_DISTANCE = 0.8 * COUPLE_DISTANCE
-
-
-"""
-Collision notes that two dancers are occupying the same space.
-"""
-struct Collision
-    a::DancerState
-    b::DancerState
-end
-
-@resumable function(f::Collision)()
-    @yield f.a
-    @yield f.b
-end
-
-dancer_states(f::Collision) = [f()...]
 
 function latest_dancer_states(root::SDRKnowledgeBase)::Dict{Dancer, DancerState}
     latest_dss = Dict{Dancer, DancerState}()

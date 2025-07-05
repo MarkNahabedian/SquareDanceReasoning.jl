@@ -273,9 +273,20 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                 else
                     sched.now = peek(sched).when
                 end
+                @assert old <= sched.now "$old <= $(sched.now)"
                 @info("sched.now advanced from $old to $(sched.now).")
-                @assert old <= sched.now
             end
+            # Synchronize the dancers who lag behind sched.now for furure
+            # calls:
+            for ds in values(newest_dancer_states)
+                if ds.time < sched.now
+                    update_newest(DancerState(ds,
+                                              sched.now,
+                                              ds.direction,
+                                              ds.down, ds.left))
+                end
+            end
+            #=
             # Breathe:
             # Do we need for all of the DancerStates to be
             # synchronized before breathing?
@@ -304,24 +315,20 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                     end
                 end
             end
+            =#
+            # It looks like dancers need to be synchronized first.
+            let
+                collisions = find_collisions(
+                    collect(values(newest_dancer_states)))
+                @debug("do_schedule collisions", collisions)
+                for ds in values(newest_dancer_states)
+                    update_newest(uncollide(collisions, ds))
+                end
+            end
             # Update the knowledgebase:
-            if !isempty(sched)
-                update_kb()
-                @info("do_schedule updated knowledgebase", kb)
-            end
+            update_kb()
+            @info("do_schedule updated knowledgebase", kb)
         end    # while !isempty(sched)
-        # Synchronize the dancers who lag behind sched.now for furure
-        # calls:
-        for ds in values(newest_dancer_states)
-            if ds.time < sched.now
-                update_newest(DancerState(ds,
-                                          sched.now,
-                                          ds.direction,
-                                          ds.down, ds.left))
-            end
-        end
-        # Update the knowledgebase:
-        update_kb()
     catch e
         @error("Exception",
                error=e,

@@ -231,9 +231,11 @@ end
               formation_svg([guy_dss..., gal_dss...], ""; inline_stylesheet=true))
 end
 
+include("test_collisions.jl")
 
 include("test_formations/tests.jl")
 
 include("test_actions/tests.jl")
 
 include("test_calls/tests.jl")
+
