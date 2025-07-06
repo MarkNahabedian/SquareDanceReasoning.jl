@@ -1,14 +1,29 @@
 using SquareDanceReasoning: uncollide, animation_svg
 
 @testset "test Collisions" begin
+    map(filter(readdir(@__DIR__)) do filename
+                (match(r"^test_collisions-[0-9]+.html$", filename) != nothing) ||
+                    (match(r"^test_collisions-[0-9]+.svg$", filename) != nothing)
+        end) do filename
+            rm(filename; force=true)
+        end
     dancers = map(1:4) do couple_number
         Dancer(couple_number, Unspecified())
     end
-    let
-        dancer_states = map(dancers) do dancer
-            i = dancer.couple_number - 1
-            DancerState(dancer, 0, (i>>1) * 1//2, i >> 1, [1, 2, 2, 3][i+1])
+    function dss_from_grid(grid)::Vector{DancerState}
+        dancer_states = Any[ missing, missing, missing, missing ]
+        for ds in grid
+            if ds isa DancerState
+                dancer_states[ds.dancer.couple_number] = ds
+            end
         end
+        convert(Vector{DancerState}, dancer_states)
+    end
+    let
+        grid = grid_arrangement(dancers, [1 2 0; 0 3 4],
+                                [ "↓↓ ",
+                                  " ↑↑" ])
+        dancer_states = dss_from_grid(grid)
         @debug_formations(dancer_states)
         ctr = center(dancer_states)
         dancer_states
@@ -20,14 +35,80 @@ using SquareDanceReasoning: uncollide, animation_svg
         @test length(collisions) == 1
         dancer_states = uncollide(collisions, dancer_states)
         @debug_formations(dancer_states)
-        println(joinpath(dirname(@__FILE__), "test_collisions-$(@__LINE__)"))
         XML.write(joinpath(dirname(@__FILE__), "test_collisions-$(@__LINE__).svg"),
                   animation_svg(dancer_states))
-        @test location(dancer_states[1]) == [0.5, 0.5]
-        @test location(dancer_states[2]) == [0.5, 1.5]
-        @test location(dancer_states[3]) == [0.5, 2.5]
-        @test location(dancer_states[4]) == [0.5, 3.5]
+        @test location(dancer_states[1]) == [1.5, 0.5]
+        @test location(dancer_states[2]) == [1.5, 2.5]
+        @test location(dancer_states[3]) == [1.5, 1.5]
+        @test location(dancer_states[4]) == [1.5, 3.5]
     end
+    let
+        grid = grid_arrangement(dancers, [1 2; 3 4],
+                                [ "↓↓",
+                                  "↑↑" ])
+        dancer_states = dss_from_grid(grid)
+        @debug_formations(dancer_states)
+        ctr = center(dancer_states)
+        dancer_states
+        dancer_states = map(dancer_states) do ds
+            forward(ds, 0.5, 1)
+        end
+        @debug_formations(dancer_states)
+        collisions = find_collisions(dancer_states)
+        @test length(collisions) == 2
+        dancer_states = uncollide(collisions, dancer_states)
+        @debug_formations(dancer_states)
+        XML.write(joinpath(dirname(@__FILE__), "test_collisions-$(@__LINE__).svg"),
+                  animation_svg(dancer_states))
+        @test location(dancer_states[1]) == [1.5, 1]
+        @test location(dancer_states[2]) == [1.5, 3]
+        @test location(dancer_states[3]) == [1.5, 0]
+        @test location(dancer_states[4]) == [1.5, 2]
+    end
+    #=
+    let
+        # This is taken from the way the testset "test Hinge" was failing:
+        grid = grid_arrangement(dancers, [1 2; 3 4],
+                                [ "↓↑",
+                                  "↑↓" ])
+        dancer_states = dss_from_grid(grid)
+        @test map(ds -> ds.dancer.couple_number, dancer_states) == collect(1:4)
+        @debug_formations(dancer_states)
+        for index in [1, 3]
+            ds1 = dancer_states[index]
+            ds2 = dancer_states[index+1]
+            rot = (index == 1) ? 1//4 : -1//4
+            ctr = center([ds1, ds2])
+            dancer_states[index]   = revolve(ds1, ctr, ds1.direction + rot, 1)
+            dancer_states[index+1] = revolve(ds2, ctr, ds2.direction + rot, 1)            
+        end
+        @debug_formations(dancer_states)
+        collisions = find_collisions(dancer_states)
+        @test length(collisions) == 1
+        dancer_states = uncollide(collisions, dancer_states)
+        @test dancer_states[1].direction == 1//4
+        @test dancer_states[2].direction == 3//4
+        @test dancer_states[3].direction == 1//4
+        @test dancer_states[4].direction == 3//4
+        @test location(dancer_states[1]) == [ 1.5, 1.5 ]
+        @test location(dancer_states[2]) == [ 0.5, 1.5 ]
+        @test location(dancer_states[3]) == [ 1.5, 1.5 ]
+        @test location(dancer_states[4]) == [ 2.5, 1.5 ]
+
+        #### COLLIDING DANCDERS DIDN'T GET SEPARATED!!!
+        @debug_formations(dancer_states)
+        XML.write(joinpath(dirname(@__FILE__), "test_collisions-$(@__LINE__).svg"),
+                  animation_svg(dancer_states))
+        @test dancer_states[1].direction == 1//4
+        @test dancer_states[2].direction == 3//4
+        @test dancer_states[3].direction == 1//4
+        @test dancer_states[4].direction == 3//4
+        @test location(dancer_states[2]) == [ 0.0, 1.5 ]
+        @test location(dancer_states[1]) == [ 1.0, 1.5 ]
+        @test location(dancer_states[4]) == [ 2.0, 1.5 ]
+        @test location(dancer_states[4]) == [ 3.0, 1.5 ]
+    end
+    =#
     #=
     # This gets us 5 collisions.  Might we have legitimate situations where
     # we get more collisions than we need to fix the result?
@@ -55,26 +136,4 @@ using SquareDanceReasoning: uncollide, animation_svg
     end
     =#
 end
-
-#=
-Collision[
-    Collision(DancerState(2, Dancer(1, Unspecified()), 1, 0//1, 0.5, 0.0),
-              DancerState(2, Dancer(2, Unspecified()), 1, 1//2, 0.5, 0.5),
-              Float32[0.5, 0.25], [3.061616997868383e-17, 0.5]), 
-
-    Collision(DancerState(2, Dancer(1, Unspecified()), 1, 0//1, 0.5, 0.0),
-              DancerState(2, Dancer(3, Unspecified()), 1, 0//1, 0.5, 0.5),
-              Float32[0.5, 0.25], [3.061616997868383e-17, 0.5]), 
-    Collision(DancerState(2, Dancer(3, Unspecified()), 1, 0//1, 0.5, 0.5),
-              DancerState(2, Dancer(2, Unspecified()), 1, 1//2, 0.5, 0.5),
-              Float32[0.5, 0.5], [3.061616997868383e-17, 0.5]), 
-    Collision(DancerState(2, Dancer(2, Unspecified()), 1, 1//2, 0.5, 0.5),
-              DancerState(2, Dancer(4, Unspecified()), 1, 1//2, 0.5, 1.0),
-              Float32[0.5, 0.75], [-9.184850993605148e-17, -0.5]), 
-
-    Collision(DancerState(2, Dancer(3, Unspecified()), 1, 0//1, 0.5, 0.5),
-              DancerState(2, Dancer(4, Unspecified()), 1, 1//2, 0.5, 1.0),
-              Float32[0.5, 0.75], [3.061616997868383e-17, 0.5])
-]
-=#
 
