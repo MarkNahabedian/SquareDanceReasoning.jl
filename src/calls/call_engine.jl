@@ -330,16 +330,10 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
             @info("do_schedule updated knowledgebase", kb)
         end    # while !isempty(sched)
     catch e
-        @error("Exception",
-               error=e,
-               sched=deepcopy(sched),
-               newest_dancer_states=deepcopy(newest_dancer_states),
-               call_history=deepcopy(call_history))
+        @error("Exception", error=e, sched, newest_dancer_states, call_history)
         rethrow(e)
     end
-    @info("do_schedule finished",
-          newest_dancer_states=deepcopy(newest_dancer_states),
-          call_history=deepcopy(call_history))
+    @info("do_schedule finished", newest_dancer_states, call_history)
     return kb
 end
 
