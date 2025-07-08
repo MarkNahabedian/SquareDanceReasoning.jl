@@ -65,7 +65,6 @@ using SquareDanceReasoning: uncollide, animation_svg
         @test location(dancer_states[3]) == [1.5, 0]
         @test location(dancer_states[4]) == [1.5, 2]
     end
-    #=
     let
         # This is taken from the way the testset "test Hinge" was failing:
         grid = grid_arrangement(dancers, [1 2; 3 4],
@@ -90,12 +89,10 @@ using SquareDanceReasoning: uncollide, animation_svg
         @test dancer_states[2].direction == 3//4
         @test dancer_states[3].direction == 1//4
         @test dancer_states[4].direction == 3//4
-        @test location(dancer_states[1]) == [ 1.5, 1.5 ]
-        @test location(dancer_states[2]) == [ 0.5, 1.5 ]
-        @test location(dancer_states[3]) == [ 1.5, 1.5 ]
-        @test location(dancer_states[4]) == [ 2.5, 1.5 ]
-
-        #### COLLIDING DANCDERS DIDN'T GET SEPARATED!!!
+        @test location(dancer_states[1]) == [ 1, 1.5 ]
+        @test location(dancer_states[2]) == [ 0, 1.5 ]
+        @test location(dancer_states[3]) == [ 2, 1.5 ]
+        @test location(dancer_states[4]) == [ 3, 1.5 ]
         @debug_formations(dancer_states)
         XML.write(joinpath(dirname(@__FILE__), "test_collisions-$(@__LINE__).svg"),
                   animation_svg(dancer_states))
@@ -103,12 +100,11 @@ using SquareDanceReasoning: uncollide, animation_svg
         @test dancer_states[2].direction == 3//4
         @test dancer_states[3].direction == 1//4
         @test dancer_states[4].direction == 3//4
-        @test location(dancer_states[2]) == [ 0.0, 1.5 ]
-        @test location(dancer_states[1]) == [ 1.0, 1.5 ]
-        @test location(dancer_states[4]) == [ 2.0, 1.5 ]
-        @test location(dancer_states[4]) == [ 3.0, 1.5 ]
+        @test location(dancer_states[1]) == [ 1, 1.5 ]
+        @test location(dancer_states[2]) == [ 0, 1.5 ]
+        @test location(dancer_states[3]) == [ 2, 1.5 ]
+        @test location(dancer_states[4]) == [ 3, 1.5 ]
     end
-    =#
     #=
     # This gets us 5 collisions.  Might we have legitimate situations where
     # we get more collisions than we need to fix the result?
