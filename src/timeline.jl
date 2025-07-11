@@ -5,10 +5,12 @@ export DANCER_NEAR_DISTANCE, near, direction
 export latest_dancer_states, history, earliest
 
 
-function canonicalize_coordinate(c)
+function canonicalize_coordinate(c::Number)
     resolution = 256
-    round(resolution * c) / resolution
+    round(Int, resolution * c) / resolution
 end
+
+canonicalize_coordinate(array::Array) =  map(canonicalize_coordinate, array)
 
 
 """
