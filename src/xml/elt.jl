@@ -14,6 +14,10 @@ function elt(f::Function, tagname::AbstractString, things...)
     function add_thing(s)
         if s isa Pair
             attributes[Symbol(s.first)] = XML.escape(string(s.second))
+        elseif s isa AbstractDict    # set of attributes, e.g. from attributes(::XML.Node):
+            for (k, v) in s
+                attributes[Symbol(k)] = v
+            end
         elseif s isa AbstractString
             push!(children, s)
         elseif s isa Number
