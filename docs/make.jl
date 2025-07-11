@@ -1,15 +1,11 @@
+using Pkg
+Pkg.activate(; temp = true)
+Pkg.add("Documenter")
+using Documenter
 
-Base.LOAD_PATH = [
-    joinpath(dirname(dirname(@__FILE__)), "Project.toml"),
-    joinpath(@__DIR__, "Project.toml"),
-    "@v#.#",
-    "@stdlib"]
+Pkg.activate(joinpath(dirname(dirname(@__FILE__)), "Project.toml"))
 
-println(pwd())
-
-println("LOAD_PATH = $LOAD_PATH")
-
-Pkg.status()
+println(Base.load_path())
 
 using SquareDanceReasoning
 using Rete
