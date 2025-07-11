@@ -117,7 +117,7 @@ Returns the first encroaching `DancerState` if any of the other
 contemporary `DancerState`s in the knowledge base are within the
 `Bounds` of the specified `formations`.  Otherwise returns `nothing`.
 """
-function encroached_on(formations, kb)
+function encroached_on(formations, kb::SDRKnowledgeBase)
     these = flatten(map(dancer_states, formations))
     b = bump_out(Bounds(these))
     time = first(these).time
@@ -136,6 +136,24 @@ function encroached_on(formations, kb)
     catch e
         if e != :NON_LOCAL_EXIT
             rethrow(e)
+        end
+    end
+    encroacher
+end
+
+function encroached_on(these::Vector{DancerState}, everyone::Vector{DancerState})
+    b = bump_out(Bounds(these))
+    time = first(these).time
+    encroacher = nothing
+    for ds in these
+        if (ds in these)
+            continue
+        end
+        if ds.time == first(these).time
+            if in_bounds(b, ds)
+                encroacher = ds
+                break
+            end
         end
     end
     encroacher
