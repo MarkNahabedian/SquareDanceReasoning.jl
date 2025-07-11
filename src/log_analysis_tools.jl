@@ -28,8 +28,9 @@ end
 
 function analysis1(log)
     function print_schedule(queue)
-        for pair in queue
-            println("\t", pair[2], "\t", pair[1])
+        for scheduled_call in queue
+            @assert scheduled_call isa ScheduledCall
+            println("\t", scheduled_call.when, "\t", scheduled_call.call)
         end
     end
     for record in log
@@ -160,6 +161,13 @@ function objrepr(::HTMLLogAnalysisReport, obj)
     repr("text/plain", obj;
          context = (:module => SquareDanceReasoning))
 end
+
+function objrepr(::HTMLLogAnalysisReport, obj::AbstractFloat)
+    #    @sprintf("%.3d", obj)  This sppems tp round to integer
+    repr("text/plain", obj;
+         context = (:module => SquareDanceReasoning))
+end
+
 
 function html_for_call_schedule(report::HTMLLogAnalysisReport, queue)
     elt("table",
@@ -456,6 +464,21 @@ function html_for_log_records(report::HTMLLogAnalysisReport,
     Node[
         elt("div",
             html_for_call_schedule(report, log_record.kwargs[:queue]))
+    ]
+end
+
+function html_for_log_records(report::HTMLLogAnalysisReport,
+                              m::Val{Symbol("do_schedule collisions")},
+                              log_record::DeserializedLogRecord,
+                              remaining_log_records)::Vector{Node}
+    collisions = log_record.kwargs[:collisions]
+    Node[
+        elt("div",
+            elt("div", "Collisions"),
+            elt("ul",
+                map(collisions) do c
+                    elt("li", objrepr(report, c))
+                end...))
     ]
 end
 
