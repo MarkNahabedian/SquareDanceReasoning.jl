@@ -298,7 +298,7 @@ function animation_svg(method::PureSVGAnimation,
               else
                   []
               end...,
-              elt("g") do a
+              elt("g", :class => "animation") do a
                   for ds in dancer_states
                       hist = history_for_animation(ds)
                       comment = IOBuffer()
