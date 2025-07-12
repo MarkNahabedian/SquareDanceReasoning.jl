@@ -9,7 +9,6 @@ println(Base.load_path())
 
 using SquareDanceReasoning
 using Rete
-using Documenter
 using InteractiveUtils
 
 DocMeta.setdocmeta!(SquareDanceReasoning, :DocTestSetup, :(using SquareDanceReasoning); recursive=true)
