@@ -286,7 +286,7 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                                               ds.down, ds.left))
                 end
             end
-            #=
+
             # Breathe:
             # Do we need for all of the DancerStates to be
             # synchronized before breathing?
@@ -315,7 +315,7 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                     end
                 end
             end
-            =#
+            #=
             # It looks like dancers need to be synchronized first.
             let
                 collisions = find_collisions(
@@ -325,6 +325,7 @@ function do_schedule(sched::CallSchedule, kb::SDRKnowledgeBase;
                     update_newest(uncollide(collisions, ds))
                 end
             end
+            =#
             # Update the knowledgebase:
             update_kb()
             @info("do_schedule updated knowledgebase", kb)
