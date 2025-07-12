@@ -43,7 +43,7 @@ Bounds(-2.0f0, 2.0f0, -3.0f0, 3.0f0)
     fill: rgb(128 38 217)
 }
   </style>
-  <g>
+  <g class="animation">
     <use id="dancer_1_m" href="../dancer_symbols.svg#Guy" width="10" height="10" class="couple1">
       <animate repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.1904;0.2378;0.3330;0.3809;0.4282;0.5234;0.5713;0.6187;0.7139;0.7617;0.8091;0.9043;1.0000" attributeName="x" values="5.0;5.0;5.0;15.0;5.0;5.0;0.0;-5.0;-5.0;-15.0;-5.0;-5.0;0.0;5.0;5.0;5.0"/>
       <animate repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.1904;0.2378;0.3330;0.3809;0.4282;0.5234;0.5713;0.6187;0.7139;0.7617;0.8091;0.9043;1.0000" attributeName="y" values="-15.0;-15.0;-5.0;0.0;5.0;5.0;15.0;5.0;5.0;0.0;-5.0;-5.0;-15.0;-5.0;-5.0;-5.0"/>
@@ -91,29 +91,49 @@ DancerState(24, Dancer(1, Gal()), 21, 3//4, -0.5, -0.5)
 -->
     </use>
     <use id="dancer_2_m" href="../dancer_symbols.svg#Guy" width="10" height="10" class="couple2">
-      <animate repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.8091;0.9043;1.0000" attributeName="x" values="-15.0;-15.0;-25.0;-25.0;-25.0;-25.0"/>
-      <animate repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.8091;0.9043;1.0000" attributeName="y" values="-5.0;-5.0;-5.0;-5.0;-5.0;-5.0"/>
-      <animateTransform repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.8091;0.9043;1.0000" attributeName="transform" type="rotate" values="0.0 -15.0 -5.0;0.0 -15.0 -5.0;0.0 -25.0 -5.0;0.0 -25.0 -5.0;0.0 -25.0 -5.0;0.0 -25.0 -5.0"/>
+      <animate repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.1904;0.2378;0.3330;0.3809;0.4282;0.5234;0.5713;0.6187;0.7139;0.7617;0.8091;0.9043;1.0000" attributeName="x" values="-15.0;-15.0;-15.0;-25.0;-25.0;-25.0;-25.0;-25.0;-25.0;-25.0;-25.0;-25.0;-25.0;-25.0;-25.0;-25.0"/>
+      <animate repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.1904;0.2378;0.3330;0.3809;0.4282;0.5234;0.5713;0.6187;0.7139;0.7617;0.8091;0.9043;1.0000" attributeName="y" values="-5.0;-5.0;-5.0;-5.0;-5.0;-5.0;-5.0;-5.0;-5.0;-5.0;-5.0;-5.0;-5.0;-5.0;-5.0;-5.0"/>
+      <animateTransform repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.1904;0.2378;0.3330;0.3809;0.4282;0.5234;0.5713;0.6187;0.7139;0.7617;0.8091;0.9043;1.0000" attributeName="transform" type="rotate" values="0.0 -15.0 -5.0;0.0 -15.0 -5.0;0.0 -15.0 -5.0;0.0 -25.0 -5.0;0.0 -25.0 -5.0;0.0 -25.0 -5.0;0.0 -25.0 -5.0;0.0 -25.0 -5.0;0.0 -25.0 -5.0;0.0 -25.0 -5.0;0.0 -25.0 -5.0;0.0 -25.0 -5.0;0.0 -25.0 -5.0;0.0 -25.0 -5.0;0.0 -25.0 -5.0;0.0 -25.0 -5.0"/>
       <!--
 DancerState(1, Dancer(2, Guy()), 0, 1//4, -0.5, -1.5)
 DancerState(2, Dancer(2, Guy()), 2, 1//4, -0.5, -1.5)
-DancerState(7, Dancer(2, Guy()), 3, 1//4, -0.5, -2.5)
-DancerState(8, Dancer(2, Guy()), 17, 1//4, -0.5, -2.5)
-DancerState(9, Dancer(2, Guy()), 19, 1//4, -0.5, -2.5)
-DancerState(10, Dancer(2, Guy()), 21, 1//4, -0.5, -2.5)
+DancerState(3, Dancer(2, Guy()), 3, 1//4, -0.5, -1.5)
+DancerState(5, Dancer(2, Guy()), 4, 1//4, -0.5, -2.5)
+DancerState(6, Dancer(2, Guy()), 5, 1//4, -0.5, -2.5)
+DancerState(7, Dancer(2, Guy()), 7, 1//4, -0.5, -2.5)
+DancerState(9, Dancer(2, Guy()), 8, 1//4, -0.5, -2.5)
+DancerState(10, Dancer(2, Guy()), 9, 1//4, -0.5, -2.5)
+DancerState(11, Dancer(2, Guy()), 11, 1//4, -0.5, -2.5)
+DancerState(13, Dancer(2, Guy()), 12, 1//4, -0.5, -2.5)
+DancerState(14, Dancer(2, Guy()), 13, 1//4, -0.5, -2.5)
+DancerState(15, Dancer(2, Guy()), 15, 1//4, -0.5, -2.5)
+DancerState(17, Dancer(2, Guy()), 16, 1//4, -0.5, -2.5)
+DancerState(18, Dancer(2, Guy()), 17, 1//4, -0.5, -2.5)
+DancerState(19, Dancer(2, Guy()), 19, 1//4, -0.5, -2.5)
+DancerState(20, Dancer(2, Guy()), 21, 1//4, -0.5, -2.5)
 -->
     </use>
     <use id="dancer_2_f" href="../dancer_symbols.svg#Gal" width="10" height="10" class="couple2">
-      <animate repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.8091;0.9043;1.0000" attributeName="x" values="-15.0;-15.0;-25.0;-25.0;-25.0;-25.0"/>
-      <animate repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.8091;0.9043;1.0000" attributeName="y" values="5.0;5.0;5.0;5.0;5.0;5.0"/>
-      <animateTransform repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.8091;0.9043;1.0000" attributeName="transform" type="rotate" values="0.0 -15.0 5.0;0.0 -15.0 5.0;0.0 -25.0 5.0;0.0 -25.0 5.0;0.0 -25.0 5.0;0.0 -25.0 5.0"/>
+      <animate repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.1904;0.2378;0.3330;0.3809;0.4282;0.5234;0.5713;0.6187;0.7139;0.7617;0.8091;0.9043;1.0000" attributeName="x" values="-15.0;-15.0;-15.0;-25.0;-25.0;-25.0;-25.0;-25.0;-25.0;-25.0;-25.0;-25.0;-25.0;-25.0;-25.0;-25.0"/>
+      <animate repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.1904;0.2378;0.3330;0.3809;0.4282;0.5234;0.5713;0.6187;0.7139;0.7617;0.8091;0.9043;1.0000" attributeName="y" values="5.0;5.0;5.0;5.0;5.0;5.0;5.0;5.0;5.0;5.0;5.0;5.0;5.0;5.0;5.0;5.0"/>
+      <animateTransform repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.1904;0.2378;0.3330;0.3809;0.4282;0.5234;0.5713;0.6187;0.7139;0.7617;0.8091;0.9043;1.0000" attributeName="transform" type="rotate" values="0.0 -15.0 5.0;0.0 -15.0 5.0;0.0 -15.0 5.0;0.0 -25.0 5.0;0.0 -25.0 5.0;0.0 -25.0 5.0;0.0 -25.0 5.0;0.0 -25.0 5.0;0.0 -25.0 5.0;0.0 -25.0 5.0;0.0 -25.0 5.0;0.0 -25.0 5.0;0.0 -25.0 5.0;0.0 -25.0 5.0;0.0 -25.0 5.0;0.0 -25.0 5.0"/>
       <!--
 DancerState(1, Dancer(2, Gal()), 0, 1//4, 0.5, -1.5)
 DancerState(2, Dancer(2, Gal()), 2, 1//4, 0.5, -1.5)
-DancerState(7, Dancer(2, Gal()), 3, 1//4, 0.5, -2.5)
-DancerState(8, Dancer(2, Gal()), 17, 1//4, 0.5, -2.5)
-DancerState(9, Dancer(2, Gal()), 19, 1//4, 0.5, -2.5)
-DancerState(10, Dancer(2, Gal()), 21, 1//4, 0.5, -2.5)
+DancerState(3, Dancer(2, Gal()), 3, 1//4, 0.5, -1.5)
+DancerState(5, Dancer(2, Gal()), 4, 1//4, 0.5, -2.5)
+DancerState(6, Dancer(2, Gal()), 5, 1//4, 0.5, -2.5)
+DancerState(7, Dancer(2, Gal()), 7, 1//4, 0.5, -2.5)
+DancerState(9, Dancer(2, Gal()), 8, 1//4, 0.5, -2.5)
+DancerState(10, Dancer(2, Gal()), 9, 1//4, 0.5, -2.5)
+DancerState(11, Dancer(2, Gal()), 11, 1//4, 0.5, -2.5)
+DancerState(13, Dancer(2, Gal()), 12, 1//4, 0.5, -2.5)
+DancerState(14, Dancer(2, Gal()), 13, 1//4, 0.5, -2.5)
+DancerState(15, Dancer(2, Gal()), 15, 1//4, 0.5, -2.5)
+DancerState(17, Dancer(2, Gal()), 16, 1//4, 0.5, -2.5)
+DancerState(18, Dancer(2, Gal()), 17, 1//4, 0.5, -2.5)
+DancerState(19, Dancer(2, Gal()), 19, 1//4, 0.5, -2.5)
+DancerState(20, Dancer(2, Gal()), 21, 1//4, 0.5, -2.5)
 -->
     </use>
     <use id="dancer_3_m" href="../dancer_symbols.svg#Guy" width="10" height="10" class="couple3">
@@ -163,33 +183,53 @@ DancerState(24, Dancer(3, Gal()), 21, 1//4, 0.5, 0.5)
 -->
     </use>
     <use id="dancer_4_m" href="../dancer_symbols.svg#Guy" width="10" height="10" class="couple4">
-      <animate repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.8091;0.9043;1.0000" attributeName="x" values="15.0;15.0;25.0;25.0;25.0;25.0"/>
-      <animate repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.8091;0.9043;1.0000" attributeName="y" values="5.0;5.0;5.0;5.0;5.0;5.0"/>
-      <animateTransform repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.8091;0.9043;1.0000" attributeName="transform" type="rotate" values="-180.0 15.0 5.0;-180.0 15.0 5.0;-180.0 25.0 5.0;-180.0 25.0 5.0;-180.0 25.0 5.0;-180.0 25.0 5.0"/>
+      <animate repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.1904;0.2378;0.3330;0.3809;0.4282;0.5234;0.5713;0.6187;0.7139;0.7617;0.8091;0.9043;1.0000" attributeName="x" values="15.0;15.0;15.0;25.0;25.0;25.0;25.0;25.0;25.0;25.0;25.0;25.0;25.0;25.0;25.0;25.0"/>
+      <animate repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.1904;0.2378;0.3330;0.3809;0.4282;0.5234;0.5713;0.6187;0.7139;0.7617;0.8091;0.9043;1.0000" attributeName="y" values="5.0;5.0;5.0;5.0;5.0;5.0;5.0;5.0;5.0;5.0;5.0;5.0;5.0;5.0;5.0;5.0"/>
+      <animateTransform repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.1904;0.2378;0.3330;0.3809;0.4282;0.5234;0.5713;0.6187;0.7139;0.7617;0.8091;0.9043;1.0000" attributeName="transform" type="rotate" values="-180.0 15.0 5.0;-180.0 15.0 5.0;-180.0 15.0 5.0;-180.0 25.0 5.0;-180.0 25.0 5.0;-180.0 25.0 5.0;-180.0 25.0 5.0;-180.0 25.0 5.0;-180.0 25.0 5.0;-180.0 25.0 5.0;-180.0 25.0 5.0;-180.0 25.0 5.0;-180.0 25.0 5.0;-180.0 25.0 5.0;-180.0 25.0 5.0;-180.0 25.0 5.0"/>
       <!--
 DancerState(1, Dancer(4, Guy()), 0, 3//4, 0.5, 1.5)
 DancerState(2, Dancer(4, Guy()), 2, 3//4, 0.5, 1.5)
-DancerState(7, Dancer(4, Guy()), 3, 3//4, 0.5, 2.5)
-DancerState(8, Dancer(4, Guy()), 17, 3//4, 0.5, 2.5)
-DancerState(9, Dancer(4, Guy()), 19, 3//4, 0.5, 2.5)
-DancerState(10, Dancer(4, Guy()), 21, 3//4, 0.5, 2.5)
+DancerState(3, Dancer(4, Guy()), 3, 3//4, 0.5, 1.5)
+DancerState(5, Dancer(4, Guy()), 4, 3//4, 0.5, 2.5)
+DancerState(6, Dancer(4, Guy()), 5, 3//4, 0.5, 2.5)
+DancerState(7, Dancer(4, Guy()), 7, 3//4, 0.5, 2.5)
+DancerState(9, Dancer(4, Guy()), 8, 3//4, 0.5, 2.5)
+DancerState(10, Dancer(4, Guy()), 9, 3//4, 0.5, 2.5)
+DancerState(11, Dancer(4, Guy()), 11, 3//4, 0.5, 2.5)
+DancerState(13, Dancer(4, Guy()), 12, 3//4, 0.5, 2.5)
+DancerState(14, Dancer(4, Guy()), 13, 3//4, 0.5, 2.5)
+DancerState(15, Dancer(4, Guy()), 15, 3//4, 0.5, 2.5)
+DancerState(17, Dancer(4, Guy()), 16, 3//4, 0.5, 2.5)
+DancerState(18, Dancer(4, Guy()), 17, 3//4, 0.5, 2.5)
+DancerState(19, Dancer(4, Guy()), 19, 3//4, 0.5, 2.5)
+DancerState(20, Dancer(4, Guy()), 21, 3//4, 0.5, 2.5)
 -->
     </use>
     <use id="dancer_4_f" href="../dancer_symbols.svg#Gal" width="10" height="10" class="couple4">
-      <animate repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.8091;0.9043;1.0000" attributeName="x" values="15.0;15.0;25.0;25.0;25.0;25.0"/>
-      <animate repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.8091;0.9043;1.0000" attributeName="y" values="-5.0;-5.0;-5.0;-5.0;-5.0;-5.0"/>
-      <animateTransform repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.8091;0.9043;1.0000" attributeName="transform" type="rotate" values="-180.0 15.0 -5.0;-180.0 15.0 -5.0;-180.0 25.0 -5.0;-180.0 25.0 -5.0;-180.0 25.0 -5.0;-180.0 25.0 -5.0"/>
+      <animate repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.1904;0.2378;0.3330;0.3809;0.4282;0.5234;0.5713;0.6187;0.7139;0.7617;0.8091;0.9043;1.0000" attributeName="x" values="15.0;15.0;15.0;25.0;25.0;25.0;25.0;25.0;25.0;25.0;25.0;25.0;25.0;25.0;25.0;25.0"/>
+      <animate repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.1904;0.2378;0.3330;0.3809;0.4282;0.5234;0.5713;0.6187;0.7139;0.7617;0.8091;0.9043;1.0000" attributeName="y" values="-5.0;-5.0;-5.0;-5.0;-5.0;-5.0;-5.0;-5.0;-5.0;-5.0;-5.0;-5.0;-5.0;-5.0;-5.0;-5.0"/>
+      <animateTransform repeatCount="indefinite" dur="31.5s" keyTimes="0.0000;0.0952;0.1426;0.1904;0.2378;0.3330;0.3809;0.4282;0.5234;0.5713;0.6187;0.7139;0.7617;0.8091;0.9043;1.0000" attributeName="transform" type="rotate" values="-180.0 15.0 -5.0;-180.0 15.0 -5.0;-180.0 15.0 -5.0;-180.0 25.0 -5.0;-180.0 25.0 -5.0;-180.0 25.0 -5.0;-180.0 25.0 -5.0;-180.0 25.0 -5.0;-180.0 25.0 -5.0;-180.0 25.0 -5.0;-180.0 25.0 -5.0;-180.0 25.0 -5.0;-180.0 25.0 -5.0;-180.0 25.0 -5.0;-180.0 25.0 -5.0;-180.0 25.0 -5.0"/>
       <!--
 DancerState(1, Dancer(4, Gal()), 0, 3//4, -0.5, 1.5)
 DancerState(2, Dancer(4, Gal()), 2, 3//4, -0.5, 1.5)
-DancerState(7, Dancer(4, Gal()), 3, 3//4, -0.5, 2.5)
-DancerState(8, Dancer(4, Gal()), 17, 3//4, -0.5, 2.5)
-DancerState(9, Dancer(4, Gal()), 19, 3//4, -0.5, 2.5)
-DancerState(10, Dancer(4, Gal()), 21, 3//4, -0.5, 2.5)
+DancerState(3, Dancer(4, Gal()), 3, 3//4, -0.5, 1.5)
+DancerState(5, Dancer(4, Gal()), 4, 3//4, -0.5, 2.5)
+DancerState(6, Dancer(4, Gal()), 5, 3//4, -0.5, 2.5)
+DancerState(7, Dancer(4, Gal()), 7, 3//4, -0.5, 2.5)
+DancerState(9, Dancer(4, Gal()), 8, 3//4, -0.5, 2.5)
+DancerState(10, Dancer(4, Gal()), 9, 3//4, -0.5, 2.5)
+DancerState(11, Dancer(4, Gal()), 11, 3//4, -0.5, 2.5)
+DancerState(13, Dancer(4, Gal()), 12, 3//4, -0.5, 2.5)
+DancerState(14, Dancer(4, Gal()), 13, 3//4, -0.5, 2.5)
+DancerState(15, Dancer(4, Gal()), 15, 3//4, -0.5, 2.5)
+DancerState(17, Dancer(4, Gal()), 16, 3//4, -0.5, 2.5)
+DancerState(18, Dancer(4, Gal()), 17, 3//4, -0.5, 2.5)
+DancerState(19, Dancer(4, Gal()), 19, 3//4, -0.5, 2.5)
+DancerState(20, Dancer(4, Gal()), 21, 3//4, -0.5, 2.5)
 -->
     </use>
   </g>
 </svg><pre><code class="nohighlight hljs">_Rest(Everyone(), 2)
 _Meet(OriginalHeads(), 1)
 SquareThru(OriginalHeads(), RightHanded(), 4)
-_Rest(Everyone(), 2)</code></pre></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.12.0 on <span class="colophon-date" title="Monday 9 June 2025 23:44">Monday 9 June 2025</span>. Using Julia version 1.11.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+_Rest(Everyone(), 2)</code></pre></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Saturday 12 July 2025 17:54">Saturday 12 July 2025</span>. Using Julia version 1.11.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
