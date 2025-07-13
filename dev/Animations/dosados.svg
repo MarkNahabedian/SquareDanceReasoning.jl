@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-15.000 5.000 80.000 20.000" width="80.0mm" height="20.0mm">
+  <!--
+Bounds(0.5f0, 2.5f0, -1.5f0, 6.5f0)
+-->
+  <style>
+    
+.DirectionDot {
+    stroke: black;
+    fill: black;
+}
+
+    
+.couple1swatch {
+    color: rgb(255 38 38);
+}
+.couple1 {
+    stroke: black;
+    fill: rgb(255 38 38)
+}
+
+.couple2swatch {
+    color: rgb(128 217 38);
+}
+.couple2 {
+    stroke: black;
+    fill: rgb(128 217 38)
+}
+
+.couple3swatch {
+    color: rgb(38 172 172);
+}
+.couple3 {
+    stroke: black;
+    fill: rgb(38 172 172)
+}
+
+.couple4swatch {
+    color: rgb(128 38 217);
+}
+.couple4 {
+    stroke: black;
+    fill: rgb(128 38 217)
+}
+  </style>
+  <g class="animation">
+    <use id="dancer_1_m" href="../../../docs/src/dancer_symbols.svg#Guy" width="10" height="10" class="couple1">
+      <animate repeatCount="indefinite" dur="12.0s" keyTimes="0.0000;0.2500;0.3750;0.5000;0.6250;0.7500;1.0000" attributeName="x" values="10.0;-10.0;10.0;10.0;0.0;10.0;10.0"/>
+      <animate repeatCount="indefinite" dur="12.0s" keyTimes="0.0000;0.2500;0.3750;0.5000;0.6250;0.7500;1.0000" attributeName="y" values="20.0;15.0;10.0;10.0;15.0;20.0;20.0"/>
+      <animateTransform repeatCount="indefinite" dur="12.0s" keyTimes="0.0000;0.2500;0.3750;0.5000;0.6250;0.7500;1.0000" attributeName="transform" type="rotate" values="-90.0 10.0 20.0;-90.0 -10.0 15.0;-90.0 10.0 10.0;-90.0 10.0 10.0;-90.0 0.0 15.0;-90.0 10.0 20.0;-90.0 10.0 20.0"/>
+      <!--
+DancerState(1, Dancer(1, Guy()), 0, 1//2, 2.0, 1.0)
+DancerState(3, Dancer(1, Guy()), 2, 1//2, 1.5, -1.0)
+DancerState(5, Dancer(1, Guy()), 3, 1//2, 1.0, 1.0)
+DancerState(6, Dancer(1, Guy()), 4, 1//2, 1.0, 1.0)
+DancerState(8, Dancer(1, Guy()), 5, 1//2, 1.5, 0.0)
+DancerState(10, Dancer(1, Guy()), 6, 1//2, 2.0, 1.0)
+DancerState(11, Dancer(1, Guy()), 8, 1//2, 2.0, 1.0)
+-->
+    </use>
+    <use id="dancer_1_f" href="../../../docs/src/dancer_symbols.svg#Gal" width="10" height="10" class="couple1">
+      <animate repeatCount="indefinite" dur="12.0s" keyTimes="0.0000;0.2500;0.3750;0.5000;0.6250;0.7500;1.0000" attributeName="x" values="10.0;0.0;10.0;10.0;-10.0;10.0;10.0"/>
+      <animate repeatCount="indefinite" dur="12.0s" keyTimes="0.0000;0.2500;0.3750;0.5000;0.6250;0.7500;1.0000" attributeName="y" values="10.0;15.0;20.0;20.0;15.0;10.0;10.0"/>
+      <animateTransform repeatCount="indefinite" dur="12.0s" keyTimes="0.0000;0.2500;0.3750;0.5000;0.6250;0.7500;1.0000" attributeName="transform" type="rotate" values="90.0 10.0 10.0;90.0 0.0 15.0;90.0 10.0 20.0;90.0 10.0 20.0;90.0 -10.0 15.0;90.0 10.0 10.0;90.0 10.0 10.0"/>
+      <!--
+DancerState(1, Dancer(1, Gal()), 0, 0//1, 1.0, 1.0)
+DancerState(3, Dancer(1, Gal()), 2, 0//1, 1.5, 0.0)
+DancerState(5, Dancer(1, Gal()), 3, 0//1, 2.0, 1.0)
+DancerState(6, Dancer(1, Gal()), 4, 0//1, 2.0, 1.0)
+DancerState(8, Dancer(1, Gal()), 5, 0//1, 1.5, -1.0)
+DancerState(10, Dancer(1, Gal()), 6, 0//1, 1.0, 1.0)
+DancerState(11, Dancer(1, Gal()), 8, 0//1, 1.0, 1.0)
+-->
+    </use>
+    <use id="dancer_2_m" href="../../../docs/src/dancer_symbols.svg#Guy" width="10" height="10" class="couple2">
+      <animate repeatCount="indefinite" dur="12.0s" keyTimes="0.0000;0.2500;0.3750;0.5000;0.6250;0.7500;1.0000" attributeName="x" values="20.0;10.0;20.0;20.0;20.0;20.0;20.0"/>
+      <animate repeatCount="indefinite" dur="12.0s" keyTimes="0.0000;0.2500;0.3750;0.5000;0.6250;0.7500;1.0000" attributeName="y" values="20.0;15.0;10.0;10.0;15.0;20.0;20.0"/>
+      <animateTransform repeatCount="indefinite" dur="12.0s" keyTimes="0.0000;0.2500;0.3750;0.5000;0.6250;0.7500;1.0000" attributeName="transform" type="rotate" values="-90.0 20.0 20.0;-90.0 10.0 15.0;-90.0 20.0 10.0;-90.0 20.0 10.0;-90.0 20.0 15.0;-90.0 20.0 20.0;-90.0 20.0 20.0"/>
+      <!--
+DancerState(1, Dancer(2, Guy()), 0, 1//2, 2.0, 2.0)
+DancerState(3, Dancer(2, Guy()), 2, 1//2, 1.5, 1.0)
+DancerState(5, Dancer(2, Guy()), 3, 1//2, 1.0, 2.0)
+DancerState(6, Dancer(2, Guy()), 4, 1//2, 1.0, 2.0)
+DancerState(8, Dancer(2, Guy()), 5, 1//2, 1.5, 2.0)
+DancerState(10, Dancer(2, Guy()), 6, 1//2, 2.0, 2.0)
+DancerState(11, Dancer(2, Guy()), 8, 1//2, 2.0, 2.0)
+-->
+    </use>
+    <use id="dancer_2_f" href="../../../docs/src/dancer_symbols.svg#Gal" width="10" height="10" class="couple2">
+      <animate repeatCount="indefinite" dur="12.0s" keyTimes="0.0000;0.2500;0.3750;0.5000;0.6250;0.7500;1.0000" attributeName="x" values="20.0;20.0;20.0;20.0;10.0;20.0;20.0"/>
+      <animate repeatCount="indefinite" dur="12.0s" keyTimes="0.0000;0.2500;0.3750;0.5000;0.6250;0.7500;1.0000" attributeName="y" values="10.0;15.0;20.0;20.0;15.0;10.0;10.0"/>
+      <animateTransform repeatCount="indefinite" dur="12.0s" keyTimes="0.0000;0.2500;0.3750;0.5000;0.6250;0.7500;1.0000" attributeName="transform" type="rotate" values="90.0 20.0 10.0;90.0 20.0 15.0;90.0 20.0 20.0;90.0 20.0 20.0;90.0 10.0 15.0;90.0 20.0 10.0;90.0 20.0 10.0"/>
+      <!--
+DancerState(1, Dancer(2, Gal()), 0, 0//1, 1.0, 2.0)
+DancerState(3, Dancer(2, Gal()), 2, 0//1, 1.5, 2.0)
+DancerState(5, Dancer(2, Gal()), 3, 0//1, 2.0, 2.0)
+DancerState(6, Dancer(2, Gal()), 4, 0//1, 2.0, 2.0)
+DancerState(8, Dancer(2, Gal()), 5, 0//1, 1.5, 1.0)
+DancerState(10, Dancer(2, Gal()), 6, 0//1, 1.0, 2.0)
+DancerState(11, Dancer(2, Gal()), 8, 0//1, 1.0, 2.0)
+-->
+    </use>
+    <use id="dancer_3_m" href="../../../docs/src/dancer_symbols.svg#Guy" width="10" height="10" class="couple3">
+      <animate repeatCount="indefinite" dur="12.0s" keyTimes="0.0000;0.2500;0.3750;0.5000;0.6250;0.7500;1.0000" attributeName="x" values="30.0;30.0;30.0;30.0;40.0;30.0;30.0"/>
+      <animate repeatCount="indefinite" dur="12.0s" keyTimes="0.0000;0.2500;0.3750;0.5000;0.6250;0.7500;1.0000" attributeName="y" values="20.0;15.0;10.0;10.0;15.0;20.0;20.0"/>
+      <animateTransform repeatCount="indefinite" dur="12.0s" keyTimes="0.0000;0.2500;0.3750;0.5000;0.6250;0.7500;1.0000" attributeName="transform" type="rotate" values="-90.0 30.0 20.0;-90.0 30.0 15.0;-90.0 30.0 10.0;-90.0 30.0 10.0;-90.0 40.0 15.0;-90.0 30.0 20.0;-90.0 30.0 20.0"/>
+      <!--
+DancerState(1, Dancer(3, Guy()), 0, 1//2, 2.0, 3.0)
+DancerState(3, Dancer(3, Guy()), 2, 1//2, 1.5, 3.0)
+DancerState(5, Dancer(3, Guy()), 3, 1//2, 1.0, 3.0)
+DancerState(6, Dancer(3, Guy()), 4, 1//2, 1.0, 3.0)
+DancerState(8, Dancer(3, Guy()), 5, 1//2, 1.5, 4.0)
+DancerState(10, Dancer(3, Guy()), 6, 1//2, 2.0, 3.0)
+DancerState(11, Dancer(3, Guy()), 8, 1//2, 2.0, 3.0)
+-->
+    </use>
+    <use id="dancer_3_f" href="../../../docs/src/dancer_symbols.svg#Gal" width="10" height="10" class="couple3">
+      <animate repeatCount="indefinite" dur="12.0s" keyTimes="0.0000;0.2500;0.3750;0.5000;0.6250;0.7500;1.0000" attributeName="x" values="30.0;40.0;30.0;30.0;30.0;30.0;30.0"/>
+      <animate repeatCount="indefinite" dur="12.0s" keyTimes="0.0000;0.2500;0.3750;0.5000;0.6250;0.7500;1.0000" attributeName="y" values="10.0;15.0;20.0;20.0;15.0;10.0;10.0"/>
+      <animateTransform repeatCount="indefinite" dur="12.0s" keyTimes="0.0000;0.2500;0.3750;0.5000;0.6250;0.7500;1.0000" attributeName="transform" type="rotate" values="90.0 30.0 10.0;90.0 40.0 15.0;90.0 30.0 20.0;90.0 30.0 20.0;90.0 30.0 15.0;90.0 30.0 10.0;90.0 30.0 10.0"/>
+      <!--
+DancerState(1, Dancer(3, Gal()), 0, 0//1, 1.0, 3.0)
+DancerState(3, Dancer(3, Gal()), 2, 0//1, 1.5, 4.0)
+DancerState(5, Dancer(3, Gal()), 3, 0//1, 2.0, 3.0)
+DancerState(6, Dancer(3, Gal()), 4, 0//1, 2.0, 3.0)
+DancerState(8, Dancer(3, Gal()), 5, 0//1, 1.5, 3.0)
+DancerState(10, Dancer(3, Gal()), 6, 0//1, 1.0, 3.0)
+DancerState(11, Dancer(3, Gal()), 8, 0//1, 1.0, 3.0)
+-->
+    </use>
+    <use id="dancer_4_m" href="../../../docs/src/dancer_symbols.svg#Guy" width="10" height="10" class="couple4">
+      <animate repeatCount="indefinite" dur="12.0s" keyTimes="0.0000;0.2500;0.3750;0.5000;0.6250;0.7500;1.0000" attributeName="x" values="40.0;50.0;40.0;40.0;60.0;40.0;40.0"/>
+      <animate repeatCount="indefinite" dur="12.0s" keyTimes="0.0000;0.2500;0.3750;0.5000;0.6250;0.7500;1.0000" attributeName="y" values="20.0;15.0;10.0;10.0;15.0;20.0;20.0"/>
+      <animateTransform repeatCount="indefinite" dur="12.0s" keyTimes="0.0000;0.2500;0.3750;0.5000;0.6250;0.7500;1.0000" attributeName="transform" type="rotate" values="-90.0 40.0 20.0;-90.0 50.0 15.0;-90.0 40.0 10.0;-90.0 40.0 10.0;-90.0 60.0 15.0;-90.0 40.0 20.0;-90.0 40.0 20.0"/>
+      <!--
+DancerState(1, Dancer(4, Guy()), 0, 1//2, 2.0, 4.0)
+DancerState(3, Dancer(4, Guy()), 2, 1//2, 1.5, 5.0)
+DancerState(5, Dancer(4, Guy()), 3, 1//2, 1.0, 4.0)
+DancerState(6, Dancer(4, Guy()), 4, 1//2, 1.0, 4.0)
+DancerState(8, Dancer(4, Guy()), 5, 1//2, 1.5, 6.0)
+DancerState(10, Dancer(4, Guy()), 6, 1//2, 2.0, 4.0)
+DancerState(11, Dancer(4, Guy()), 8, 1//2, 2.0, 4.0)
+-->
+    </use>
+    <use id="dancer_4_f" href="../../../docs/src/dancer_symbols.svg#Gal" width="10" height="10" class="couple4">
+      <animate repeatCount="indefinite" dur="12.0s" keyTimes="0.0000;0.2500;0.3750;0.5000;0.6250;0.7500;1.0000" attributeName="x" values="40.0;60.0;40.0;40.0;50.0;40.0;40.0"/>
+      <animate repeatCount="indefinite" dur="12.0s" keyTimes="0.0000;0.2500;0.3750;0.5000;0.6250;0.7500;1.0000" attributeName="y" values="10.0;15.0;20.0;20.0;15.0;10.0;10.0"/>
+      <animateTransform repeatCount="indefinite" dur="12.0s" keyTimes="0.0000;0.2500;0.3750;0.5000;0.6250;0.7500;1.0000" attributeName="transform" type="rotate" values="90.0 40.0 10.0;90.0 60.0 15.0;90.0 40.0 20.0;90.0 40.0 20.0;90.0 50.0 15.0;90.0 40.0 10.0;90.0 40.0 10.0"/>
+      <!--
+DancerState(1, Dancer(4, Gal()), 0, 0//1, 1.0, 4.0)
+DancerState(3, Dancer(4, Gal()), 2, 0//1, 1.5, 6.0)
+DancerState(5, Dancer(4, Gal()), 3, 0//1, 2.0, 4.0)
+DancerState(6, Dancer(4, Gal()), 4, 0//1, 2.0, 4.0)
+DancerState(8, Dancer(4, Gal()), 5, 0//1, 1.5, 5.0)
+DancerState(10, Dancer(4, Gal()), 6, 0//1, 1.0, 4.0)
+DancerState(11, Dancer(4, Gal()), 8, 0//1, 1.0, 4.0)
+-->
+    </use>
+  </g>
+</svg>
