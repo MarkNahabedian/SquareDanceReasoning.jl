@@ -89,7 +89,9 @@ let
     open(joinpath(dest, "index.md"), "w") do io
         println(io, "These are animation files for each call that were generated during unit testing:")
         for f in sort(readdir(dest))
-            println(io, "- [$(splitext(f)[1])]($f)")
+            if f != "index.md"
+                println(io, "- [$(splitext(f)[1])]($f)")
+            end
         end
     end
 end
