@@ -100,18 +100,10 @@ couple_number(op::OriginalPartners) = op.guy.couple_number
 
 
 @rule SquareDanceRule.OriginalPartnerRule(sq::SDSquare, guy::Dancer, gal::Dancer, ::OriginalPartners) begin
-    if guy.couple_number != gal.couple_number
-        return
-    end
-    if !isa(guy.gender, Guy)
-        return
-    end
-    if !isa(gal.gender, Gal)
-        return
-    end
-    if !(guy in sq) || !(gal in sq)
-        return
-    end
+    @rejectif guy.couple_number != gal.couple_number
+    @rejectif !isa(guy.gender, Guy)
+    @rejectif !isa(gal.gender, Gal)
+    @rejectif !(guy in sq) || !(gal in sq)
     emit(OriginalPartners(guy, gal))
 end        
 

@@ -95,22 +95,13 @@ end
      # @info("WaveOfFourRule", _group=WaveOfFourRule, wave1, wave2, centers)
     @rejectif wave1 == wave2
     @continueif timeof(wave1) == timeof(wave2)
-    if !(handedness(wave1) == handedness(wave2) &&
-         handedness(wave1) == opposite(handedness(centers)) &&
-         handedness(wave2) == opposite(handedness(centers)))
-        # @info("handedness test", _group=WaveOfFourRule, wave1, wave2, centers) 
-        return
-    end
+    @continueif (handedness(wave1) == handedness(wave2) &&
+        handedness(wave1) == opposite(handedness(centers)) &&
+        handedness(wave2) == opposite(handedness(centers)))
     # How do we break symetry between wave1 and wave2?  They will only
     # connect to centers one way.
-    if centers.a != wave1.a
-        # @info("centers.a", _group=WaveOfFourRule, wave1, centers) 
-        return
-    end
-    if centers.b != wave2.b
-        # @info("centers.b", _group=WaveOfFourRule, wave2, centers) 
-        return
-    end
+    @rejectif centers.a != wave1.a
+    @rejectif centers.b != wave2.b
     if handedness(wave1) == RightHanded()
         constructor = RHWaveOfFour
     elseif handedness(wave1) == LeftHanded()

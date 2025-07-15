@@ -64,17 +64,16 @@ handedness(::FacingCouples) = NoHandedness()
     couple1 = tdc.couple1
     couple2 = tdc.couple2
     @continueif timeof(couple1) == timeof(couple2)
-    if (f2f1.a in couple1 &&
+    @continueif (f2f1.a in couple1 &&
         f2f1.b in couple2 &&
         f2f2.a in couple1 &&
         f2f2.b in couple2)
-        f = FacingCouples(couple1, couple2)
-        emit(f)
-        emit(FormationContainedIn(couple1, f))
-        emit(FormationContainedIn(couple2, f))
-        emit(FormationContainedIn(f2f1, f))
-        emit(FormationContainedIn(f2f2, f))
-    end
+    f = FacingCouples(couple1, couple2)
+    emit(f)
+    emit(FormationContainedIn(couple1, f))
+    emit(FormationContainedIn(couple2, f))
+    emit(FormationContainedIn(f2f1, f))
+    emit(FormationContainedIn(f2f2, f))
 end
 
 @doc """
@@ -111,17 +110,16 @@ handedness(::BackToBackCouples) = NoHandedness()
     couple1 = tdc.couple1
     couple2 = tdc.couple2
     @continueif timeof(couple1) == timeof(couple2)
-    if (b2b1.a in couple1 &&
+    @continueif (b2b1.a in couple1 &&
         b2b1.b in couple2 &&
         b2b2.a in couple1 &&
         b2b2.b in couple2)
-        f = BackToBackCouples(couple1, couple2)
-        emit(f)
-        emit(FormationContainedIn(couple1, f))
-        emit(FormationContainedIn(couple2, f))
-        emit(FormationContainedIn(b2b1, f))
-        emit(FormationContainedIn(b2b2, f))
-    end
+    f = BackToBackCouples(couple1, couple2)
+    emit(f)
+    emit(FormationContainedIn(couple1, f))
+    emit(FormationContainedIn(couple2, f))
+    emit(FormationContainedIn(b2b1, f))
+    emit(FormationContainedIn(b2b2, f))
 end
 
 @doc """
@@ -159,17 +157,16 @@ direction(f::TandemCouples) = direction(f.leaders)
     leaders = tdc.couple1
     trailers = tdc.couple2
     @continueif timeof(leaders) == timeof(trailers)
-    if (tandem1.leader in leaders &&
+    @continueif (tandem1.leader in leaders &&
         tandem1.trailer in trailers &&
         tandem2.leader in leaders &&
         tandem2.trailer in trailers)
-        f = TandemCouples(leaders, trailers)
-        emit(f)
-        emit(FormationContainedIn(leaders, f))
-        emit(FormationContainedIn(trailers, f))
-        emit(FormationContainedIn(tandem1, f))
-        emit(FormationContainedIn(tandem2, f))
-    end
+    f = TandemCouples(leaders, trailers)
+    emit(f)
+    emit(FormationContainedIn(leaders, f))
+    emit(FormationContainedIn(trailers, f))
+    emit(FormationContainedIn(tandem1, f))
+    emit(FormationContainedIn(tandem2, f))
 end
 
 @doc """
@@ -238,29 +235,24 @@ end
     @rejectif mw1 == mw2
     @rejectif t1 == t2
     @continueif timeof(mw1) == timeof(mw2)
-    if !(handedness(mw1) == handedness(mw2))
-        return
-    end
+    @rejectif !(handedness(mw1) == handedness(mw2))
     # Disambiguate tandems by facing direction:
-    if direction(t1) > direction(t2)
-        return
-    end
-    if (t1.leader in mw1() &&
+    @rejectif direction(t1) > direction(t2)
+    @continueif (t1.leader in mw1() &&
         t1.trailer in mw2() &&
         t2.leader in mw2() &&
         t2.trailer in mw1())
-        if handedness(mw1) == RightHanded()
-            box = RHBoxOfFour(mw1, mw2, t1, t2)
-            emit(box)
-        else
-            box = LHBoxOfFour(mw1, mw2, t1, t2)
-            emit(box)
-        end
-        emit(FormationContainedIn(mw1, box))
-        emit(FormationContainedIn(mw2, box))
-        emit(FormationContainedIn(t1, box))
-        emit(FormationContainedIn(t2, box))
+    if handedness(mw1) == RightHanded()
+        box = RHBoxOfFour(mw1, mw2, t1, t2)
+        emit(box)
+    else
+        box = LHBoxOfFour(mw1, mw2, t1, t2)
+        emit(box)
     end
+    emit(FormationContainedIn(mw1, box))
+    emit(FormationContainedIn(mw2, box))
+    emit(FormationContainedIn(t1, box))
+    emit(FormationContainedIn(t2, box))
 end
 
 @doc """
