@@ -310,7 +310,7 @@ function html_for_log_records(report::HTMLLogAnalysisReport,
     @assert record.message == "do_schedule while loop"
     children = Node[]
     push!(children, elt("p", "class" => "time",
-                        "time: " * objrepr(report, record.kwargs[:now])))
+                        "sched.now: " * objrepr(report, record.kwargs[:now])))
     while (!isempty(remaining_log_records) &&
            remaining_log_records[1].message != "do_schedule while loop")
         push!(children,
@@ -530,7 +530,14 @@ function html_for_log_records(report::HTMLLogAnalysisReport,
 end
 
 
-function analysis1_html(log)
+function analysis1_html(logfile::String)
+    output_file = splitext(logfile)[1] * ".html"
+    open(output_file, "w") do io
+        XML.write(io, analysis1_html(deserialize_log_file(logfile)))
+    end
+end
+
+function analysis1_html(log::Vector{DeserializedLogRecord})
     elt("html",
         elt("head",
             elt("style", LOG_ANALYSIS_CSS)),
