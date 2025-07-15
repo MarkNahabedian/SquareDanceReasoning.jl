@@ -269,7 +269,8 @@ function expand_parts(c::Trade, mw::MiniWave, sc::ScheduledCall)
         ScheduledCall(start + 0, Hinge(; role=DesignatedDancers(dancers),
                                        time=1.5)),
         ScheduledCall(start + 1.5, Hinge(; role=DesignatedDancers(dancers),
-                                         time=1.5))
+                                         time=1.5)),
+        ScheduledCall(start + 3, _EndAt(mw))
     ]
 end
 
@@ -285,7 +286,8 @@ function expand_parts(c::Trade, cpl::Couple, sc::ScheduledCall)
         ScheduledCall(start + 2, _FinishTrade(;
                                               original_beau=cpl.beau,
                                               original_belle=cpl.belle,
-                                              time=2))
+                                              time=2)),
+        ScheduledCall(start + 4, _EndAt(cpl))
     ]
 end
 
