@@ -42,8 +42,8 @@ Bounds(-0.5f0, 4.0f0, 0.5f0, 6.5f0)
       <!--
 DancerState(1, Dancer(1, Guy()), 0, 1//2, 1.0, 1.0)
 DancerState(2, Dancer(1, Guy()), 2, 1//4, 0.0, 1.5)
-DancerState(3, Dancer(1, Guy()), 4, 0//1, 1.0, 2.0)
-DancerState(4, Dancer(1, Guy()), 6, 0//1, 1.0, 2.0)
+DancerState(4, Dancer(1, Guy()), 4, 0//1, 1.0, 2.0)
+DancerState(5, Dancer(1, Guy()), 6, 0//1, 1.0, 2.0)
 -->
     </use>
     <use id="dancer_1_f" href="../../../docs/src/dancer_symbols.svg#Gal" width="10" height="10" class="couple1">
@@ -53,8 +53,8 @@ DancerState(4, Dancer(1, Guy()), 6, 0//1, 1.0, 2.0)
       <!--
 DancerState(1, Dancer(1, Gal()), 0, 1//2, 1.0, 2.0)
 DancerState(2, Dancer(1, Gal()), 2, 3//4, 1.0, 1.5)
-DancerState(3, Dancer(1, Gal()), 4, 0//1, 1.0, 1.0)
-DancerState(4, Dancer(1, Gal()), 6, 0//1, 1.0, 1.0)
+DancerState(4, Dancer(1, Gal()), 4, 0//1, 1.0, 1.0)
+DancerState(5, Dancer(1, Gal()), 6, 0//1, 1.0, 1.0)
 -->
     </use>
     <use id="dancer_2_m" href="../../../docs/src/dancer_symbols.svg#Guy" width="10" height="10" class="couple2">
@@ -64,9 +64,9 @@ DancerState(4, Dancer(1, Gal()), 6, 0//1, 1.0, 1.0)
       <!--
 DancerState(1, Dancer(2, Guy()), 0, 0//1, 2.0, 3.0)
 DancerState(2, Dancer(2, Guy()), 1.5, 1//4, 2.5, 3.5)
-DancerState(3, Dancer(2, Guy()), 3.0, 1//2, 2.0, 4.0)
-DancerState(4, Dancer(2, Guy()), 4.0, 1//2, 2.0, 4.0)
-DancerState(5, Dancer(2, Guy()), 6.0, 1//2, 2.0, 4.0)
+DancerState(4, Dancer(2, Guy()), 3.0, 1//2, 2.0, 4.0)
+DancerState(5, Dancer(2, Guy()), 4, 1//2, 2.0, 4.0)
+DancerState(6, Dancer(2, Guy()), 6, 1//2, 2.0, 4.0)
 -->
     </use>
     <use id="dancer_2_f" href="../../../docs/src/dancer_symbols.svg#Gal" width="10" height="10" class="couple2">
@@ -76,9 +76,9 @@ DancerState(5, Dancer(2, Guy()), 6.0, 1//2, 2.0, 4.0)
       <!--
 DancerState(1, Dancer(2, Gal()), 0, 1//2, 2.0, 4.0)
 DancerState(2, Dancer(2, Gal()), 1.5, 3//4, 1.5, 3.5)
-DancerState(3, Dancer(2, Gal()), 3.0, 0//1, 2.0, 3.0)
-DancerState(4, Dancer(2, Gal()), 4.0, 0//1, 2.0, 3.0)
-DancerState(5, Dancer(2, Gal()), 6.0, 0//1, 2.0, 3.0)
+DancerState(4, Dancer(2, Gal()), 3.0, 0//1, 2.0, 3.0)
+DancerState(5, Dancer(2, Gal()), 4, 0//1, 2.0, 3.0)
+DancerState(6, Dancer(2, Gal()), 6, 0//1, 2.0, 3.0)
 -->
     </use>
     <use id="dancer_3_m" href="../../../docs/src/dancer_symbols.svg#Guy" width="10" height="10" class="couple3">
@@ -88,9 +88,9 @@ DancerState(5, Dancer(2, Gal()), 6.0, 0//1, 2.0, 3.0)
       <!--
 DancerState(1, Dancer(3, Guy()), 0, 1//2, 3.0, 5.0)
 DancerState(2, Dancer(3, Guy()), 1.5, 1//4, 2.5, 5.5)
-DancerState(3, Dancer(3, Guy()), 3.0, 0//1, 3.0, 6.0)
-DancerState(4, Dancer(3, Guy()), 4.0, 0//1, 3.0, 6.0)
-DancerState(5, Dancer(3, Guy()), 6.0, 0//1, 3.0, 6.0)
+DancerState(4, Dancer(3, Guy()), 3.0, 0//1, 3.0, 6.0)
+DancerState(5, Dancer(3, Guy()), 4, 0//1, 3.0, 6.0)
+DancerState(6, Dancer(3, Guy()), 6, 0//1, 3.0, 6.0)
 -->
     </use>
     <use id="dancer_3_f" href="../../../docs/src/dancer_symbols.svg#Gal" width="10" height="10" class="couple3">
@@ -100,9 +100,9 @@ DancerState(5, Dancer(3, Guy()), 6.0, 0//1, 3.0, 6.0)
       <!--
 DancerState(1, Dancer(3, Gal()), 0, 0//1, 3.0, 6.0)
 DancerState(2, Dancer(3, Gal()), 1.5, 3//4, 3.5, 5.5)
-DancerState(3, Dancer(3, Gal()), 3.0, 1//2, 3.0, 5.0)
-DancerState(4, Dancer(3, Gal()), 4.0, 1//2, 3.0, 5.0)
-DancerState(5, Dancer(3, Gal()), 6.0, 1//2, 3.0, 5.0)
+DancerState(4, Dancer(3, Gal()), 3.0, 1//2, 3.0, 5.0)
+DancerState(5, Dancer(3, Gal()), 4, 1//2, 3.0, 5.0)
+DancerState(6, Dancer(3, Gal()), 6, 1//2, 3.0, 5.0)
 -->
     </use>
   </g>
