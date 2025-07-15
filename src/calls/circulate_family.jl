@@ -8,6 +8,8 @@ export _FollowCirculatePaths, BoxCirculate
     formation_type::Type
 end
 
+as_text(c::_FollowCirculatePaths) = "_FollowCirculatePaths"
+
 can_do_from(c::_FollowCirculatePaths, f::SquareDanceFormation) =
     f isa c.formation_type ? 1 : 0
 
@@ -47,6 +49,8 @@ end
     role::Role = Everyone()
     half_count = 2
 end
+
+as_text(c::BoxCirculate) = "$(as_text(c.role)) box circulate"
 
 can_do_from(::BoxCirculate, ::BoxOfFour) = 1
 

@@ -28,6 +28,8 @@ Timing: CallerLab: 2.
     role::Role = Everyone()
 end
 
+as_text(c::QuarterIn) = "$(as_text(c.role)) "
+
 can_do_from(::QuarterIn, ::Couple) = 1
 can_do_from(::QuarterIn, ::MiniWave) = 1
 
@@ -48,6 +50,8 @@ Timing: CallerLab: 2.
 @with_kw_noshow struct QuarterOut <: SquareDanceCall
     role::Role = Everyone()
 end
+
+as_text(c::QuarterOut) = "$(as_text(c.role)) quarter out"
 
 can_do_from(::QuarterOut, ::Couple) = 1
 can_do_from(::QuarterOut, ::MiniWave) = 1

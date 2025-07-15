@@ -66,4 +66,9 @@ include("showcase.jl")
 include("json_serialization.jl")
 include("debug.jl")
 
+function __init__()
+    check_for_as_text_methods()
+end
+
 end  # module
+

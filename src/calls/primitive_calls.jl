@@ -191,7 +191,7 @@ Timing: 2.
     time = 2
 end
 
-descirption(c::StepToAWave) = "$(c.role) Step To a Wave"
+as_text(c::StepToAWave) = "$(c.role) Step To a Wave"
 
 can_do_from(::StepToAWave, ::FaceToFace) = 1
 
@@ -217,7 +217,7 @@ Persimably should have the same timing as [`StepToAWave`](@ref)
     # from>
 end
 
-descirption(c::_UnStepToAWave) = "$(c.role) Un Step To a Wave"
+as_text(c::_UnStepToAWave) = "$(c.role) Un Step To a Wave"
 
 can_do_from(::_UnStepToAWave, ::MiniWave) = 1
 
@@ -241,7 +241,7 @@ Timing: 1.
     handedness::Union{RightHanded, LeftHanded} = RightHanded()    
 end
 
-descirption(c::_BackToAWave) = "$(c.role) Backup to a Wave"
+as_text(c::_BackToAWave) = "$(c.role) Backup to a Wave"
 
 can_do_from(::_BackToAWave, ::BackToBack) = 1
 
@@ -269,7 +269,7 @@ _EndAt(two_dancers::TwoDancerFormation, swap::Bool) = _EndAt(; two_dancers=two_d
 
 _EndAt(two_dancers) = _EndAt(; two_dancers = two_dancers)
 
-descirption(c::_EndAt) = "_EndAt"
+as_text(c::_EndAt) = "_EndAt $(c.two_dancers)" * (swap ? " swapped" : "")
 
 call_schedule_isless(c1::_EndAt, c2::SquareDanceCall) = true
 
@@ -309,7 +309,7 @@ We have the dancers _Meet first.
     duration = 1
 end
 
-descirption(c::_Meet) = "$(c.role) _Meet"
+as_text(c::_Meet) = "$(c.role) _Meet"
 
 can_do_from(::_Meet, ::FaceToFace) = 1
 

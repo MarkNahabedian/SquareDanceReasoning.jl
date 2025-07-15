@@ -50,6 +50,8 @@ Timing: CallerLab: 2.
     role::Role = Everyone()
 end
 
+as_text(c::PassThru) = "$(as_text(c.role)) pass thru"
+
 can_do_from(::PassThru, ::FaceToFace) = 1
 
 can_do_from(::PassThru, mw::RHMiniWave) = 1
@@ -100,6 +102,8 @@ Timing: CallerLab doesn't specify timing, but since the timing for
     handedness::Union{RightHanded, LeftHanded} = RightHanded()
 end
 
+as_text(c::PullBy) = "$(as_text(c.role)) pull by"
+
 can_do_from(c::PullBy, mw::MiniWave) =
     (c.handedness == mw.handedness) ? 1 : 0
 
@@ -140,6 +144,8 @@ set, in which case 8.
     role::Role = Everyone()
     handedness::Union{RightHanded, LeftHanded} = RightHanded()
 end
+
+as_text(c::Dosado) = "$(as_text(c.role)) dosado"
 
 can_do_from(::Dosado, ::FaceToFace) = 1
 
@@ -193,6 +199,8 @@ Timing: CallerLab: 2.
     time = 2
 end
 
+as_text(c::Hinge) = "$(as_text(c.role)) hinge"
+
 can_do_from(::Hinge, ::MiniWave) = 1
 
 function perform(call::Hinge, mw::MiniWave, kb::SDRKnowledgeBase)
@@ -222,6 +230,8 @@ Timing: CallerLab: 2.
     # Taminations says timing is 2.
     time = 2
 end
+
+as_text(c::PartnerHinge) = "$(as_text(c.role)) partner hinge"
 
 can_do_from(::PartnerHinge, ::Couple) = 1
 
@@ -258,6 +268,8 @@ end
 
 can_do_from(::Trade, ::Couple) = 1
 can_do_from(::Trade, ::MiniWave) = 1
+
+as_text(c::Trade) = "$(as_text(c.role)) trade"
 
 function expand_parts(c::Trade, mw::MiniWave, sc::ScheduledCall)
     @assert c == sc.call
@@ -308,6 +320,8 @@ end
 
 can_do_from(::_FinishTrade, ::RHMiniWave) = 1
 
+as_text(c::_FinishTrade) = "_FinishTrade"
+
 restricted_to(call::_FinishTrade) =
     DesignatedDancers([ call.original_beau.dancer,
                         call.original_belle.dancer ])
@@ -343,6 +357,8 @@ end
 
 can_do_from(::SlideThru, ::FaceToFace) = 1
 
+as_text(c::SlideThru) = "$(as_text(c.role)) slide thru"
+
 function expand_parts(c::SlideThru, f::FaceToFace, sc::ScheduledCall)
     @assert c == sc.call
     start = sc.when
@@ -364,6 +380,8 @@ Timing: CallerLab: 4.
 @with_kw_noshow struct StarThru <: SquareDanceCall
     role::Role = Everyone()
 end
+
+as_text(c::StarThru) = "$(as_text(c.role)) star thru"
 
 can_do_from(::StarThru, f::FaceToFace) =
     if f.a.dancer.gender == opposite(f.b.dancer.gender)
@@ -396,6 +414,8 @@ Timing: CallerLab: 4.
     role::Role = Everyone()
     inactive::Union{Nothing, DancerState} = nothing
 end
+
+as_text(c::CourtesyTurn) = "$(as_text(c.role)) courtesy turn"
 
 can_do_from(::CourtesyTurn, f::FaceToFace) = 1
 can_do_from(::CourtesyTurn, f::Couple) = 1
