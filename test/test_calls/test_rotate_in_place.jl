@@ -15,7 +15,7 @@ using Logging
         kb = do_call(kb, FaceRight())
         kb = do_call(kb, FaceLeft())
         kb = do_call(kb, _GenderedRoll())
-        dss = sort!(askc(Collector{DancerState}(), kb, DancerState);
+        dss = sort!(askc(Collector{DancerState}(), kb);
                     by = ds -> ds.dancer)
         hist = map(direction_history, dss)
         @test hist == [
@@ -88,6 +88,8 @@ end
         rolled_by(dss) = canonicalize(dss.direction - dss.previous.direction)
         @test rolled_by(dss[3]) == rolled_by(dss[3].previous)
         @test rolled_by(dss[4]) == rolled_by(dss[4].previous)
+        animate(joinpath(ANIMATIONS_DIRECTORY, "and_roll.svg"),
+                askc(Collector{DancerState}(), kb, DancerState))    
     end
 end
 
@@ -242,6 +244,8 @@ end
             @test ds2.down == ds2.previous.down
             @test ds2.left == ds2.previous.left
         end
+        animate(joinpath(ANIMATIONS_DIRECTORY, "FaceOriginalPartner.svg"),
+                askc(Collector{DancerState}(), kb, DancerState))
     end
 end
 
@@ -279,6 +283,8 @@ end
             @test ds2.down == ds2.previous.down
             @test ds2.left == ds2.previous.left
         end
+        animate(joinpath(ANIMATIONS_DIRECTORY, "FaceOriginalCorner.svg"),
+                askc(Collector{DancerState}(), kb, DancerState))
     end
 end
 
