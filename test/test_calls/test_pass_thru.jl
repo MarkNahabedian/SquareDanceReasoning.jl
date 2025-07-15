@@ -72,7 +72,7 @@ end
             # @test ods.left == ds.left     BREATHING!
             @test ods.down == ds.down
         end
-        animate(joinpath(ANIMATIONS_DIRECTORY, "dosados.svg"),
+        animate(joinpath(ANIMATIONS_DIRECTORY, "dosado.svg"),
                 askc(Collector{DancerState}(), kb, DancerState))
     end
 end
