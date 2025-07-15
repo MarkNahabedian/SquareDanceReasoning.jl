@@ -53,6 +53,8 @@
         @test dss4[2].direction == 0
         @test dss4[3].direction == 1//2
         @test dss4[4].direction == 1//2
+        animate(joinpath(ANIMATIONS_DIRECTORY, "quarter_in_quarter_out.svg"),
+                askc(Collector{DancerState}(), kb, DancerState))
     end
 end
 
