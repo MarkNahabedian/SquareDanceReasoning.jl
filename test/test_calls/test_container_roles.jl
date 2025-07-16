@@ -24,7 +24,7 @@
             Set(dancer_states(wave.centers))            
         @test Set(those_with_role(wave.centers, kb, Centers())) ==
             Set(dancer_states(wave.centers))
-        kb = do_call(kb, Trade(role=Centers()))
+        kb = do_call(kb, note_call_text(Trade(role=Centers())))
         @debug_formations(kb)
         # BUG: The animation shows that there are both timing and breathing issues.
         # the centers in the line pause in the middle of their trade.

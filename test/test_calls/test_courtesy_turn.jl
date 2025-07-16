@@ -16,7 +16,7 @@ using Logging
         println(grid)
         receive.([kb], grid)
         @debug_formations(kb)
-        kb = do_call(kb, CourtesyTurn())
+        kb = do_call(kb, note_call_text(CourtesyTurn()))
         @debug_formations(kb)
         ftfc = only(askc(Collector{FacingCouples}(), kb))
         # previous.previous because CourtesyTurn performs two 1//4 rotations:

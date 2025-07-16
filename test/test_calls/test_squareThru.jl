@@ -12,7 +12,7 @@
         receive.([kb], grid)
         @debug_formations(kb)
         @test 1 == askc(Counter(), kb, FacingCouples)
-        kb = do_call(kb, SquareThru())
+        kb = do_call(kb, note_call_text(SquareThru()))
         @debug_formations(kb)
         @test 1 == askc(Counter(), kb, BackToBackCouples)
         animate(joinpath(ANIMATIONS_DIRECTORY, "SquareThru_facing_couples.svg"),

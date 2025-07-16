@@ -28,6 +28,10 @@ end
 
 as_text(c::StepThru) = "$(as_text(c.role)) StepThru"
 
+note_call_text(StepThru())
+note_call_text(StepThru(; role = CurrentHeads()))
+note_call_text(StepThru(; role = Leaders()))
+
 can_do_from(::StepThru, ::MiniWave) = 1
 
 function perform(c::StepThru, mw::MiniWave, kb::SDRKnowledgeBase)
@@ -51,6 +55,10 @@ Timing: CallerLab: 2.
 end
 
 as_text(c::PassThru) = "$(as_text(c.role)) pass thru"
+
+note_call_text(PassThru())
+note_call_text(PassThru(; role = OriginalSides()))
+note_call_text(PassThru(; role = Leaders()))
 
 can_do_from(::PassThru, ::FaceToFace) = 1
 
@@ -104,6 +112,9 @@ end
 
 as_text(c::PullBy) = "$(as_text(c.role)) pull by"
 
+note_call_text(PullBy())
+note_call_text(PullBy(; role = Centers()))
+
 can_do_from(c::PullBy, mw::MiniWave) =
     (c.handedness == mw.handedness) ? 1 : 0
 
@@ -146,6 +157,9 @@ set, in which case 8.
 end
 
 as_text(c::Dosado) = "$(as_text(c.role)) dosado"
+
+note_call_text(Dosado())
+note_call_text(Dosado(; role = Leaders()))
 
 can_do_from(::Dosado, ::FaceToFace) = 1
 
@@ -201,6 +215,8 @@ end
 
 as_text(c::Hinge) = "$(as_text(c.role)) hinge"
 
+note_call_text(Hinge())
+
 can_do_from(::Hinge, ::MiniWave) = 1
 
 function perform(call::Hinge, mw::MiniWave, kb::SDRKnowledgeBase)
@@ -232,6 +248,10 @@ Timing: CallerLab: 2.
 end
 
 as_text(c::PartnerHinge) = "$(as_text(c.role)) partner hinge"
+
+note_call_text(PartnerHinge())
+note_call_text(PartnerHinge(; role = Centers()))
+note_call_text(PartnerHinge(; role = Trailers()))
 
 can_do_from(::PartnerHinge, ::Couple) = 1
 
@@ -270,6 +290,9 @@ can_do_from(::Trade, ::Couple) = 1
 can_do_from(::Trade, ::MiniWave) = 1
 
 as_text(c::Trade) = "$(as_text(c.role)) trade"
+
+note_call_text(Trade())
+note_call_text(Trade(; role = Trailers()))
 
 function expand_parts(c::Trade, mw::MiniWave, sc::ScheduledCall)
     @assert c == sc.call
@@ -359,6 +382,10 @@ can_do_from(::SlideThru, ::FaceToFace) = 1
 
 as_text(c::SlideThru) = "$(as_text(c.role)) slide thru"
 
+note_call_text(SlideThru())
+note_call_text(SlideThru(; role = Ends()))
+
+
 function expand_parts(c::SlideThru, f::FaceToFace, sc::ScheduledCall)
     @assert c == sc.call
     start = sc.when
@@ -382,6 +409,9 @@ Timing: CallerLab: 4.
 end
 
 as_text(c::StarThru) = "$(as_text(c.role)) star thru"
+
+note_call_text(StarThru())
+note_call_text(StarThru(OriginalSides()))
 
 can_do_from(::StarThru, f::FaceToFace) =
     if f.a.dancer.gender == opposite(f.b.dancer.gender)
@@ -416,6 +446,8 @@ Timing: CallerLab: 4.
 end
 
 as_text(c::CourtesyTurn) = "$(as_text(c.role)) courtesy turn"
+
+note_call_text(CourtesyTurn())
 
 can_do_from(::CourtesyTurn, f::FaceToFace) = 1
 can_do_from(::CourtesyTurn, f::Couple) = 1

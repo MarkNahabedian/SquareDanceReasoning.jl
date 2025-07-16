@@ -18,6 +18,10 @@ as_text(c::SquareThru) = (as_text(c.role) *
     (c.handedness == LeftHanded() ? "left " : "") *
     "square thru $(c.count)")
 
+note_call_text(SquareThru())
+note_call_text(SquareThru(OriginalHeads(), RightHanded(), 3))
+note_call_text(SquareThru(OriginalHeads(), LeftHanded(), 2))
+
 can_do_from(::SquareThru, ::FacingCouples) = 1
 
 can_do_from(call::SquareThru, wave::WaveOfFour) =

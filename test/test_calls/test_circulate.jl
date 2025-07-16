@@ -14,7 +14,7 @@
         @debug_formations(kb)
         @test 1 == askc(Counter(), kb, RHBoxOfFour)
         # Whole box circulate:
-        kb = do_call(kb, BoxCirculate(; half_count = 2))
+        kb = do_call(kb, note_call_text(BoxCirculate(; half_count = 2)))
         @debug_formations(kb)
         @test 1 == askc(Counter(), kb, RHMBoxOfFour)
         let
@@ -26,7 +26,7 @@
             @test box.tandem2.leader.dancer == square[2]
         end
         # Half box circulate:
-        kb = do_call(kb, BoxCirculate(; half_count = 1))
+        kb = do_call(kb, note_call_text(BoxCirculate(; half_count = 1)))
         @debug_formations(kb)
         let
             diamond = only(askc(Collector{Diamond}(), kb))

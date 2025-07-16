@@ -12,9 +12,9 @@ using Logging
             "Centers Guy quarter right, Gal quarter left."
         kb = make_kb()
         receive.([kb], dss)
-        kb = do_call(kb, FaceRight())
-        kb = do_call(kb, FaceLeft())
-        kb = do_call(kb, _GenderedRoll())
+        kb = do_call(kb, note_call_text(FaceRight()))
+        kb = do_call(kb, note_call_text(FaceLeft()))
+        kb = do_call(kb, (_GenderedRoll()))
         dss = sort!(askc(Collector{DancerState}(), kb);
                     by = ds -> ds.dancer)
         hist = map(direction_history, dss)
@@ -68,7 +68,7 @@ end
         @debug_formations(kb)
         with_logger(logger) do
             @test isempty(logger.logs)
-            kb = do_call(kb, AndRoll())
+            kb = do_call(kb, note_call_text(AndRoll()))
             found_CanRollAmbiguityException = false
             for m in logger.logs
                 if m.message isa CanRollAmbiguityException
@@ -134,7 +134,7 @@ end
         receive(kb, square)
         receive.([kb], square_up(square))
         @debug_formations(kb)
-        kb = do_call(kb, UTurnBack())
+        kb = do_call(kb, note_call_text(UTurnBack()))
         dss = sort!(askc(Collector{DancerState}(), kb, DancerState);
                     by = ds -> ds.dancer)
         @test dss[1].previous.direction == 3//4
@@ -178,10 +178,10 @@ end
         receive(kb, SDSquare(map(ds -> ds.dancer, dss)))
         receive.([kb], dss)
         @debug_formations(kb)
-        kb = do_call(kb, UTurnBack())
+        kb = do_call(kb, note_call_text(UTurnBack()))
         @debug_formations(kb)
         with_logger(logger) do
-            kb = do_call(kb, AndRoll())
+            kb = do_call(kb, note_call_text(AndRoll()))
             cae_messages = []
             for m in logger.logs
                 if m.message isa CanRollAmbiguityException
@@ -226,7 +226,7 @@ end
         dss = square_up(square)
         receive.([kb], dss)
         @debug_formations(kb)
-        kb = do_call(kb, _FaceOriginalPartner())
+        kb = do_call(kb, note_call_text(_FaceOriginalPartner()))
         @debug_formations(kb)
         couples = Dict{Int, Vector{DancerState}}()
         askc(kb, DancerState) do ds
@@ -258,7 +258,7 @@ end
         dss = square_up(square)
         receive.([kb], dss)
         @debug_formations(kb)
-        kb = do_call(kb, _FaceOriginalCorner())
+        kb = do_call(kb, note_call_text(_FaceOriginalCorner()))
         @debug_formations(kb)
         # corners is keyed by the Guy's couple number
         corners = Dict{Int, Vector{DancerState}}()

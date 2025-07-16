@@ -27,6 +27,7 @@ function facing_lines_pass_thru(call)
         @debug_formations(kb)
         lines = askc(Collector{LineOfFour}(), kb, LineOfFour)
         @test length(lines) == 2
+        note_call_text(call)
         kb = do_call(kb, call)
         @debug_formations(kb)
         for ds in askc(Collector{DancerState}(), kb, DancerState)
@@ -64,7 +65,7 @@ end
         @debug_formations(kb)
         lines = askc(Collector{LineOfFour}(), kb, LineOfFour)
         @test length(lines) == 2
-        kb = do_call(kb, Dosado())
+        kb = do_call(kb, note_call_text(Dosado()))
         @debug_formations(kb)
         for ds in askc(Collector{DancerState}(), kb, DancerState)
             ods = original_ds(ds)

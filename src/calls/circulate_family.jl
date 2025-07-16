@@ -52,6 +52,9 @@ end
 
 as_text(c::BoxCirculate) = "$(as_text(c.role)) box circulate"
 
+note_call_text(BoxCirculate())
+note_call_text(BoxCirculate(; role = Centers()))
+
 can_do_from(::BoxCirculate, ::BoxOfFour) = 1
 
 function expand_parts(c::BoxCirculate, f::BoxOfFour, sc::ScheduledCall)

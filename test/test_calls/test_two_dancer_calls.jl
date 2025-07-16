@@ -6,7 +6,7 @@
         receive(kb, square)
         receive.([kb], square_up(square))
         @test 1 == askc(Counter(), kb, SquaredSet)
-        kb = do_call(kb, _Meet(; role=OriginalHeads()))
+        kb = do_call(kb, note_call_text(_Meet(; role=OriginalHeads())))
         f2fs = askc(Collector{FaceToFace}(), kb)
         @test length(f2fs) == 2
         for f2f in f2fs
@@ -26,7 +26,7 @@ end
         receive.([kb], grid)
         @debug_formations(kb)
         # Dancers 1 and 2 can't Hinge, they can PartnerHinge.
-        kb = do_call(kb, Hinge())
+        kb = do_call(kb, note_call_text(Hinge()))
         @debug_formations(kb)
         dss = sort!(askc(Collector{DancerState}(), kb, DancerState);
                     by = ds -> ds.dancer)
@@ -55,7 +55,7 @@ end
                                 [ "↑↑" ])
         receive.([kb], grid)
         @debug_formations(kb)
-        kb = do_call(kb, PartnerHinge())
+        kb = do_call(kb, note_call_text(PartnerHinge()))
         @debug_formations(kb)
         dss = sort!(askc(Collector{DancerState}(), kb, DancerState);
                     by = ds -> ds.dancer)
@@ -81,7 +81,7 @@ end
                                   "    ↑↓" ])
         receive.([kb], grid)
         @debug_formations(kb)
-        kb = do_call(kb, Trade())
+        kb = do_call(kb, note_call_text(Trade()))
         @debug_formations(kb)
         dss = sort!(askc(Collector{DancerState}(), kb, DancerState);
                     by = ds -> ds.dancer)
@@ -122,7 +122,7 @@ end
         # 3, 5 => RHMiniWave,
         # 4, 6 => LHMiniWave
         @debug_formations(kb)
-        kb = do_call(kb, SlideThru())
+        kb = do_call(kb, note_call_text(SlideThru()))
         @debug_formations(kb)
         cpl = only(askc(Collector{Couple}(), kb, Couple))
         rhw = only(askc(Collector{RHMiniWave}(), kb, RHMiniWave))
@@ -155,7 +155,7 @@ end
         # 3, 5 => FaceToFace (can't do)
         # 4, 6 => FaceToFace (can't do)
         @debug_formations(kb)
-        kb = do_call(kb, StarThru())
+        kb = do_call(kb, note_call_text(StarThru()))
         @debug_formations(kb)
         cpl = only(askc(Collector{Couple}(), kb, Couple))
         @test 2 == askc(Counter(), kb, FaceToFace)

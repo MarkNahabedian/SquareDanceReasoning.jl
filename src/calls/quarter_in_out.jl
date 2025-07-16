@@ -30,6 +30,9 @@ end
 
 as_text(c::QuarterIn) = "$(as_text(c.role)) "
 
+note_call_text(QuarterIn(; role = CurrentHeads()))
+note_call_text(QuarterIn(; role = Centers()))
+
 can_do_from(::QuarterIn, ::Couple) = 1
 can_do_from(::QuarterIn, ::MiniWave) = 1
 
@@ -52,6 +55,10 @@ Timing: CallerLab: 2.
 end
 
 as_text(c::QuarterOut) = "$(as_text(c.role)) quarter out"
+
+note_call_text(QuarterOut(; role = Beaus()))
+note_call_text(QuarterOut(; role = Guys()))
+note_call_text(QuarterOut(; role = Ends()))
 
 can_do_from(::QuarterOut, ::Couple) = 1
 can_do_from(::QuarterOut, ::MiniWave) = 1

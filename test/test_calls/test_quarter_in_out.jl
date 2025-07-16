@@ -17,7 +17,7 @@
                      by = ds -> ds.dancer)
         @test 1 == askc(Counter(), kb, Couple)
         @test 1 == askc(Counter(), kb, RHMiniWave)
-        kb = do_call(kb, QuarterIn())
+        kb = do_call(kb, note_call_text(QuarterIn()))
         @debug_formations(kb)
         dss2 = sort!(askc(Collector{DancerState}(), kb, DancerState);
                      by = ds -> ds.dancer)
@@ -31,14 +31,15 @@
         @test dss2[2].direction == 1//4
         @test dss2[3].direction == 3//4
         @test dss2[4].direction == 1//4
-        kb = do_call(kb, UTurnBack(;
-                                   role = DesignatedDancers([Dancer(2, Guy())])))
+        kb = do_call(kb, note_call_text(
+            UTurnBack(;
+                      role = DesignatedDancers([Dancer(2, Guy())]))))
         @debug_formations(kb)
         dss3 = sort!(askc(Collector{DancerState}(), kb, DancerState);
                      by = ds -> ds.dancer)
         @test 1 == askc(Counter(), kb, Couple)
         @test 1 == askc(Counter(), kb, LHMiniWave)    
-        kb = do_call(kb, QuarterOut())
+        kb = do_call(kb, note_call_text(QuarterOut()))
         @debug_formations(kb)
         dss4 = sort!(askc(Collector{DancerState}(), kb, DancerState);
                      by = ds -> ds.dancer)

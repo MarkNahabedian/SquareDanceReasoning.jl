@@ -26,6 +26,9 @@ end
 
 as_text(c::_Rest) = "$(as_text(c.role)) rest for $(c.time) ticks."
 
+note_call_text(_Rest(; role = Ends(), time = 2))
+note_call_text(_Rest(; role = Belles(), time = 1))
+
 can_do_from(::_Rest, ::DancerState) = 1
 
 function perform(c::_Rest, ds::DancerState, kb::SDRKnowledgeBase)
@@ -54,6 +57,9 @@ end
 
 as_text(c::_FaceOriginalPartner) =
     "$(as_text(c.role)) face your original partner."
+
+note_call_text(_FaceOriginalPartner())
+note_call_text(_FaceOriginalPartner(; role = Guys()))
 
 can_do_from(::_FaceOriginalPartner, ::DancerState) = 1
 
@@ -104,6 +110,9 @@ end
 
 as_text(c::_FaceOriginalCorner) =
     "$(as_text(c.role)) face your original corner."
+
+note_call_text(_FaceOriginalPartner())
+note_call_text(_FaceOriginalCorner(; role = Gals()))
 
 can_do_from(::_FaceOriginalCorner, ::DancerState) = 1
 
@@ -158,6 +167,9 @@ end
 as_text(c::_GenderedRoll) =
     "$(as_text(c.role)) Guy quarter right, Gal quarter left."
 
+note_call_text(_GenderedRoll())
+note_call_text(_GenderedRoll(; role = Ends()))
+
 can_do_from(::_GenderedRoll, ::DancerState) = 1
 
 function perform(c::_GenderedRoll, ds::DancerState, kb::SDRKnowledgeBase)
@@ -193,6 +205,9 @@ end
 
 as_text(c::StepToAWave) = "$(c.role) Step To a Wave"
 
+note_call_text(StepToAWave())
+note_call_text(StepToAWave(; role = OriginalSides()))
+
 can_do_from(::StepToAWave, ::FaceToFace) = 1
 
 function perform(c::StepToAWave, f::FaceToFace, kb::SDRKnowledgeBase)
@@ -219,6 +234,8 @@ end
 
 as_text(c::_UnStepToAWave) = "$(c.role) Un Step To a Wave"
 
+note_call_text(_UnStepToAWave())
+
 can_do_from(::_UnStepToAWave, ::MiniWave) = 1
 
 function perform(c::_UnStepToAWave, f::MiniWave, kb::SDRKnowledgeBase)
@@ -242,6 +259,8 @@ Timing: 1.
 end
 
 as_text(c::_BackToAWave) = "$(c.role) Backup to a Wave"
+
+note_call_text(_BackToAWave())
 
 can_do_from(::_BackToAWave, ::BackToBack) = 1
 
@@ -310,6 +329,8 @@ We have the dancers _Meet first.
 end
 
 as_text(c::_Meet) = "$(c.role) _Meet"
+
+note_call_text(_Meet(role = CurrentSides()))
 
 can_do_from(::_Meet, ::FaceToFace) = 1
 

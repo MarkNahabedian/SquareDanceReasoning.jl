@@ -71,3 +71,11 @@ include("test_quarter_in_out.jl")
 include("test_squareThru.jl")
 include("test_container_roles.jl")
 include("test_courtesy_turn.jl")
+
+
+let
+    open(joinpath(@__DIR__, "CALL_TEXT_EXAMPLES.serialized"), "w") do io
+        serialize(io, CALL_TEXT_EXAMPLES)
+    end
+end
+

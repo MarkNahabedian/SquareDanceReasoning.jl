@@ -22,6 +22,9 @@ end
 
 as_text(c::FaceRight) = "$(as_text(c.role)) quarter right, $(c.time) ticks."
 
+note_call_text(FaceRight())
+note_call_text(FaceRight(; role = Centers()))
+
 can_do_from(::FaceRight, ::DancerState) = 1
 
 function perform(c::FaceRight, ds::DancerState, kb::SDRKnowledgeBase)
@@ -47,6 +50,9 @@ end
 as_text(c::FaceLeft) =
     "$(as_text(c.role)) quarter left, $(c.time) ticks."
 
+note_call_text(FaceLeft())
+note_call_text(FaceLeft(; role = CurrentSides()))
+
 can_do_from(::FaceLeft, ::DancerState) = 1
 
 function perform(c::FaceLeft, ds::DancerState, kb::SDRKnowledgeBase)
@@ -66,6 +72,11 @@ Timing: CallerLab: 2.
 end
 
 as_text(c::UTurnBack) = "$(as_text(c.role)) U Turn Back"
+
+note_call_text(UTurnBack())
+note_call_text(UTurnBack(; role = Ends()))
+note_call_text(UTurnBack(; role = Points()))
+note_call_text(UTurnBack(; role = DiamondCenters()))
 
 can_do_from(::UTurnBack, ::Couple) = 2
 can_do_from(::UTurnBack, ::MiniWave) = 2
@@ -132,6 +143,9 @@ Timing: CallerLab: 2.
 end
 
 as_text(c::AndRoll) = "$(as_text(c.role)) roll."
+
+note_call_text(AndRoll())
+note_call_text(AndRoll(; role = Leaders()))
 
 can_do_from(::AndRoll, ds::DancerState) =
     # This would require a try/catch guard in or above

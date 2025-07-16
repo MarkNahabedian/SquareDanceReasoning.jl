@@ -15,6 +15,8 @@ end
 
 as_text(c::Balance) = "$(as_text(c.role)) Balance"
 
+note_call_text(Balance(; role = OriginalSides()))
+
 can_do_from(::Balance, ::DancerState) = 1
 
 function perform(c::Balance, ds::DancerState, kb::SDRKnowledgeBase)
