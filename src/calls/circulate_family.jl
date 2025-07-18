@@ -1,6 +1,11 @@
 export _FollowCirculatePaths, BoxCirculate
 
+"""
+    _FollowCirculatePaths
 
+_FollowCirculatePaths is an internal *helper* calll to assist with
+implementing various circulate calls form various formations.
+"""
 @with_kw_noshow struct _FollowCirculatePaths <: SquareDanceCall
     role::Role = Everyone()
     half_count = 2
@@ -45,6 +50,11 @@ function perform(c::_FollowCirculatePaths, formation::SquareDanceFormation, kb::
 end
 
 
+"""
+    BoxCirculate(; role, half_count)
+
+CallerLab Basic 1 square dance call.
+"""
 @with_kw_noshow struct BoxCirculate <: SquareDanceCall
     role::Role = Everyone()
     half_count = 2

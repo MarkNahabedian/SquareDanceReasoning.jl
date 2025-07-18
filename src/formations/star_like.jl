@@ -97,3 +97,9 @@ those_with_role(f::Diamond, role::Points) = dancer_states(f.points)
     emit(FormationContainedIn(points, diamond))
 end
 
+@doc """
+    DiamondRule
+
+DiamondRule is a rule for identifying diamond formations.
+""" DiamondRule
+

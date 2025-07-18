@@ -36,6 +36,13 @@ end
     emit(TwoDifferentCouples(couple1, couple2))
 end
 
+@doc """
+    TwoDifferentCouplesRule
+
+TwoDifferentCouplesRule is a precursor rule for rules that recognize
+formations containing at least two couples.
+""" TwoDifferentCouplesRule
+
 
 """
 FacingCouples is a formation that includes two `Couple` formations
