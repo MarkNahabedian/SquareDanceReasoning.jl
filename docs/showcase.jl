@@ -21,7 +21,7 @@ function safe_logger(filename)
                              filename * ".log"))
     end
 end
-
+#=
 let
     filename = "SquareThru_from_FacingCouples"
     start_time = time()
@@ -47,6 +47,7 @@ let
     @info "Elapsed time: $(time() - start_time) seconds."
     end
 end
+=#
 
 let
     filename = "SquareThru_from_SquaredSet"
