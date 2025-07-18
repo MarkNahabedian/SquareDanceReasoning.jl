@@ -12,22 +12,27 @@ function generate_formation_hierarchy()
              println(io,
                      "\nThese are the formations that are currently supported, and the roles supported for those formations:\n")
              function walk(f, level)
-                 roles = FORMATION_ROLES[f]
-                 roletext = if isempty(roles)
-                     ""
+                 if isconcretetype(f)
+                     roles = FORMATION_ROLES[f]
+                     roletext = if isempty(roles)
+                         ""
+                     else
+                         ": " * join(map(roles) do role
+                                         "`$role`"
+                                     end, ", ")
+                     end
+                     ref = if isconcretetype(f)
+                         "formation_drawings/$f.md"
+                     else
+                         "(@ref)"
+                     end
+                     println(io, repeat(INDENT, level),
+                             " - [`$f`]($ref)",
+                             roletext)
                  else
-                     ": " * join(map(roles) do role
-                                     "`$role`"
-                                 end, ", ")
+                     println(io, repeat(INDENT, level),
+                             " - $f")
                  end
-                 ref = if isconcretetype(f)
-                     "formation_drawings/$f.html"
-                 else
-                     "(@ref)"
-                 end
-                 println(io, repeat(INDENT, level),
-                         " - [`$f`]($ref)",
-                         roletext)
                  for st in sort(subtypes(f); by=string)
                      walk(st, level + 1)
                  end
