@@ -2,6 +2,7 @@
 
 export FacingCouples, BackToBackCouples, TandemCouples, CoupleBoxRule
 export BoxOfFour, RHBoxOfFour, LHBoxOfFour, BoxOfFourRule
+export TwoDifferentCouplesRule
 
 
 """
