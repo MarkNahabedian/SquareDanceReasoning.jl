@@ -12,7 +12,7 @@ These are the motion primitives:
 - [`rotate`](@ref)
 - [`revolve`](@ref)
 - [`jitter`](@ref)
-- [1step_to_a_wave`](@ref)
+- [`step_to_a_wave`](@ref)
 - [`back_to_a_wave`](@ref)
 - [`un_step_to_a_wave`](@ref)
 - [`pass_by`](@ref)
