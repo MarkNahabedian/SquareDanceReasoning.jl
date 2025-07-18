@@ -46,7 +46,12 @@ let
     open(joinpath(d, "index.md"), "w") do io
         println(io, "# Formation Drawings\n")
         for f in formation_names
-            println(io, "- [$f]($f.md)")
+            p = joinpath(d, "$f.md")
+            if isfile(p)
+                println(io, "- [$f]($f.md)")
+            else
+                println(io, "- $f")
+            end
         end
     end
     copy_html_collateral_files()
