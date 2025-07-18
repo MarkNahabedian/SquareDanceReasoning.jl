@@ -21,10 +21,9 @@ function generate_formation_hierarchy()
                                          "`$role`"
                                      end, ", ")
                      end
-                     ref = if isconcretetype(f)
-                         "formation_drawings/$f.md"
-                     else
-                         "(@ref)"
+                     ref = "formation_drawings/$f.md"
+                     if !isfile(ref)
+                         ref = "(@ref)"
                      end
                      println(io, repeat(INDENT, level),
                              " - [`$f`]($ref)",
