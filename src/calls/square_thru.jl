@@ -14,7 +14,7 @@ Timing: count=1: 2, count=2: 5, count=3: 7 or 8, count=4: 10.
     count::Int = 4
 end
 
-as_text(c::SquareThru) = (as_text(c.role) *
+as_text(c::SquareThru) = (as_text(c.role) * " " *
     (c.handedness == LeftHanded() ? "left " : "") *
     "square thru $(c.count)")
 

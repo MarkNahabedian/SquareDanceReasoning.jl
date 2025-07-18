@@ -16,7 +16,10 @@ circulate_paths(::SquareDanceFormation) = CirculatePath[]
 
 
 """
-    CirculateStation
+    CirculateStation(direction, down, left)
+    CirculateStation(::DancerState)
+    CirculateStation(::DancerState, direction)
+    CirculateStation(::CirculateStation, new_direction)
 
 A CirculateStation represents one point along a [`CirculatePath`](@ref).
 """

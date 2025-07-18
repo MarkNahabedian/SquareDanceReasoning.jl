@@ -226,7 +226,7 @@ those_with_role(f::SquareDanceFormation, cn::CoupleNumbers) =
     end
 
 as_text(r::CoupleNumbers) =
-    """CoupleNumbers $(join(r.numbers, ", "))"""
+    """couple numbers $(join(r.numbers, ", "))"""
 
 struct DesignatedDancers <: UniversalRole
     dancers::Vector{Dancer}
@@ -244,25 +244,25 @@ those_with_role(f::SquareDanceFormation, r::DesignatedDancers) =
 as_text(d::Dancer) = "$(nameof(typeof(d.gender)))#$(d.couple_number)"
 
 as_text(r::DesignatedDancers) =
-    """Dancers $(join(map(as_text, r.dancers), ", "))"""
+    """dancers $(join(map(as_text, r.dancers), ", "))"""
 
 
-as_text(::Everyone) = "Everyone"
-as_text(::Noone) = "Noone"
-as_text(::Guys) = "Guys"
-as_text(::Gals) = "Gals"
-as_text(::OriginalHeads) = "OriginalHeads"
-as_text(::OriginalSides) = "OriginalSides"
-as_text(::CurrentHeads) = "CurrentHeads"
-as_text(::CurrentSides) = "CurrentSides"
-as_text(::Beaus) = "Beaus"
-as_text(::Belles) = "Belles"
-as_text(::Centers) = "Centers"
-as_text(::Ends) = "Ends"
-as_text(::Leaders) = "Leaders"
-as_text(::Trailers) = "Trailers"
-as_text(::DiamondCenters) = "Centers of your diamonds"
-as_text(::Points) = "Points"
+as_text(::Everyone) = "everyone"
+as_text(::Noone) = "noone"
+as_text(::Guys) = "guys"
+as_text(::Gals) = "gals"
+as_text(::OriginalHeads) = "original heads"
+as_text(::OriginalSides) = "original sides"
+as_text(::CurrentHeads) = "currenth eads"
+as_text(::CurrentSides) = "current sides"
+as_text(::Beaus) = "beaus"
+as_text(::Belles) = "belles"
+as_text(::Centers) = "centers"
+as_text(::Ends) = "ends"
+as_text(::Leaders) = "leaders"
+as_text(::Trailers) = "trailers"
+as_text(::DiamondCenters) = "centers of your diamonds"
+as_text(::Points) = "points"
 
 
 those_with_role(f::OneByFourFormation, ::Centers) = dancer_states(f.centers)

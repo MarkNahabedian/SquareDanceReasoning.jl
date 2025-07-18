@@ -28,7 +28,7 @@ Timing: CallerLab: 2.
     role::Role = Everyone()
 end
 
-as_text(c::QuarterIn) = "$(as_text(c.role)) "
+as_text(c::QuarterIn) = "$(as_text(c.role)) quarter in"
 
 note_call_text(QuarterIn(; role = CurrentHeads()))
 note_call_text(QuarterIn(; role = Centers()))

@@ -203,7 +203,7 @@ Timing: 2.
     time = 2
 end
 
-as_text(c::StepToAWave) = "$(c.role) Step To a Wave"
+as_text(c::StepToAWave) = "$(as_text(c.role)) Step To a Wave"
 
 note_call_text(StepToAWave())
 note_call_text(StepToAWave(; role = OriginalSides()))
@@ -232,7 +232,7 @@ Persimably should have the same timing as [`StepToAWave`](@ref)
     # from>
 end
 
-as_text(c::_UnStepToAWave) = "$(c.role) Un Step To a Wave"
+as_text(c::_UnStepToAWave) = "$(as_text(c.role)) Un Step To a Wave"
 
 note_call_text(_UnStepToAWave())
 
@@ -258,7 +258,7 @@ Timing: 1.
     handedness::Union{RightHanded, LeftHanded} = RightHanded()    
 end
 
-as_text(c::_BackToAWave) = "$(c.role) Backup to a Wave"
+as_text(c::_BackToAWave) = "$(as_text(c.role)) Backup to a Wave"
 
 note_call_text(_BackToAWave())
 
@@ -328,7 +328,7 @@ We have the dancers _Meet first.
     duration = 1
 end
 
-as_text(c::_Meet) = "$(c.role) _Meet"
+as_text(c::_Meet) = "$(as_text(c.role)) _Meet"
 
 note_call_text(_Meet(role = CurrentSides()))
 
