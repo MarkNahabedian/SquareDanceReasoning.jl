@@ -51,7 +51,8 @@ jobs:
         with:
           name: call_animations
           path: test/test_calls/Animations
-      -name: Upload as_text examples
+      - name: Upload as_text examples
+        uses: actions/upload-artifact@v4
         with:
           name: as_text_examples
           path: test/test_calls/CALL_TEXT_EXAMPLES.serialized
