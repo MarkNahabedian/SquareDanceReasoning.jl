@@ -6,10 +6,10 @@ using Logging
                 DancerState(Dancer(2, Gal()), 0, 0, 0, 1),
                 DancerState(Dancer(3, Unspecified()), 0, 0, 0, 2)
                 ]
-        @test as_text(FaceRight()) == "Everyone quarter right, 1 ticks."
-        @test as_text(FaceLeft()) == "Everyone quarter left, 1 ticks."
-        @test as_text(_GenderedRoll(; role=Centers())) ==
-            "Centers Guy quarter right, Gal quarter left."
+        @test as_text(note_call_text(FaceRight())) == "everyone quarter right, 1 ticks."
+        @test as_text(note_call_text(FaceLeft())) == "everyone quarter left, 1 ticks."
+        @test as_text(note_call_text(_GenderedRoll(; role=Centers()))) ==
+            "centers guy quarter right, gal quarter left."
         kb = make_kb()
         receive.([kb], dss)
         kb = do_call(kb, note_call_text(FaceRight()))
@@ -38,7 +38,7 @@ end
 
 @testset "test AndRoll" begin
     log_to_file(@__DIR__, log_file_name_for_testset(Test.get_testset())) do
-        @test as_text(AndRoll()) == "Everyone roll."
+        @test as_text(note_call_text(AndRoll())) == "everyone roll."
         logger = TestLogger()
         # No history:
         ds1 = DancerState(Dancer(1, Guy()), 1, 0, 0, 1)
@@ -128,7 +128,7 @@ end
 
 @testset "test UTurnBack from Couples" begin
     log_to_file(@__DIR__, log_file_name_for_testset(Test.get_testset())) do
-        @test as_text(UTurnBack()) == "Everyone U Turn Back"
+        @test as_text(note_call_text(UTurnBack())) == "everyone u-turn back"
         kb = make_kb()
         square = make_square(4)
         receive(kb, square)

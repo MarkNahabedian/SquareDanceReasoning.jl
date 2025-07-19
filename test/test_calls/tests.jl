@@ -54,7 +54,7 @@ end
         @test 3 == askc(Counter(), kb, LHMiniWave)
         @test 1 == askc(Counter(), kb, RHWaveOfEight)
         call = StepThru()
-        @test as_text(call) == "Everyone StepThru"
+        @test as_text(note_call_text(call)) == "everyone step thru"
         options = get_call_options(ScheduledCall(timeof(grid[1, 1]), call), kb)
         @test 4 == length(options)
         @test all(options) do cdc

@@ -1,25 +1,25 @@
 using Random
 
-export Balance
+export Identify
 
 """
-    Balance(; role=Everyone(), time=2)
+    Identify(; role=Everyone(), time=2)
 
-Implements the Balance square dance call, except that dancers just
-jiggle in place.  Maybe it should be renamed _Identify.
+Implements the Identify square dance call, by having dancers
+jiggle in place.
 """
-@with_kw_noshow struct Balance <: SquareDanceCall
+@with_kw_noshow struct Identify <: SquareDanceCall
     role::Role = Everyone()
     time::Int = 2
 end
 
-as_text(c::Balance) = "$(as_text(c.role)) Balance"
+as_text(c::Identify) = "$(as_text(c.role)) identify"
 
-note_call_text(Balance(; role = OriginalSides()))
+note_call_text(Identify(; role = OriginalSides()))
 
-can_do_from(::Balance, ::DancerState) = 1
+can_do_from(::Identify, ::DancerState) = 1
 
-function perform(c::Balance, ds::DancerState, kb::SDRKnowledgeBase)
+function perform(c::Identify, ds::DancerState, kb::SDRKnowledgeBase)
     inc = 0.1
     how_far = 2//10 * COUPLE_DISTANCE
     home = location(ds)

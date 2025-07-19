@@ -165,7 +165,7 @@ the timing for StarThru is 4, so thisseems reasonable.
 end
 
 as_text(c::_GenderedRoll) =
-    "$(as_text(c.role)) Guy quarter right, Gal quarter left."
+    "$(as_text(c.role)) guy quarter right, gal quarter left."
 
 note_call_text(_GenderedRoll())
 note_call_text(_GenderedRoll(; role = Ends()))

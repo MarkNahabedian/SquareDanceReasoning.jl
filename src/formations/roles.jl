@@ -241,7 +241,11 @@ those_with_role(f::SquareDanceFormation, r::DesignatedDancers) =
         ds.dancer in r.dancers
     end
 
-as_text(d::Dancer) = "$(nameof(typeof(d.gender)))#$(d.couple_number)"
+as_text(d::Dancer) = "$(as_text(d.gender))#$(d.couple_number)"
+
+as_text(::Guy) = "guy"
+as_text(::Gal) = "gal"
+as_text(::Unspecified) = "unspecified"
 
 as_text(r::DesignatedDancers) =
     """dancers $(join(map(as_text, r.dancers), ", "))"""
@@ -253,7 +257,7 @@ as_text(::Guys) = "guys"
 as_text(::Gals) = "gals"
 as_text(::OriginalHeads) = "original heads"
 as_text(::OriginalSides) = "original sides"
-as_text(::CurrentHeads) = "currenth eads"
+as_text(::CurrentHeads) = "current heads"
 as_text(::CurrentSides) = "current sides"
 as_text(::Beaus) = "beaus"
 as_text(::Belles) = "belles"

@@ -71,7 +71,7 @@ Timing: CallerLab: 2.
     role::Role = Everyone()
 end
 
-as_text(c::UTurnBack) = "$(as_text(c.role)) U Turn Back"
+as_text(c::UTurnBack) = "$(as_text(c.role)) u-turn back"
 
 note_call_text(UTurnBack())
 note_call_text(UTurnBack(; role = Ends()))

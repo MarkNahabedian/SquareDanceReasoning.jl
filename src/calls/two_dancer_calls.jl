@@ -26,7 +26,7 @@ end
 
 # Should we rename PassBy to Dosado!2?
 
-as_text(c::StepThru) = "$(as_text(c.role)) StepThru"
+as_text(c::StepThru) = "$(as_text(c.role)) step thru"
 
 note_call_text(StepThru())
 note_call_text(StepThru(; role = CurrentHeads()))
