@@ -10,7 +10,8 @@ export generate_html_as_text_examples
 let
     examples = deserialize(CALL_TEXT_EXAMPLES_FILE)
     example_rows = []
-    for group in values(examples)
+    for key in sort(collect(keys(examples)); by=nameof)
+        group = examples[key]
         for example in group
             push!(example_rows,
                   elt("tr",
