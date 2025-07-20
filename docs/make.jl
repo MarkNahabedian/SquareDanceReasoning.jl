@@ -17,6 +17,7 @@ DocMeta.setdocmeta!(SquareDanceReasoning, :DocTestSetup, :(using SquareDanceReas
 
 # Generate the formation hierarchy
 include("formation_hierarchy.jl")
+include("as_text_examples.jl")
 include("showcase.jl")
 generate_rule_hierarchy()
 
