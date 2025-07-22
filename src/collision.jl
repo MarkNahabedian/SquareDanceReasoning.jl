@@ -49,7 +49,7 @@ dancer_states(f::Collision) = [f()...]
 Returns a vector describing how the `DancerState`'s position should be
 adjusted so that no `DancerState`s are colliding.
 
-Only the first method (which takes vectords of Collisions and
+Only the first method (which takes vectors of Collisions and
 DancerStates) should be called by outside code.  The other two are
 part of the implementation.
 
@@ -59,7 +59,7 @@ together.
 function uncollide end
 
 function uncollide(collision::Collision, ds::DancerState)
-    if ds == collision.a || ds == collision.b
+    if location(ds) == collision.center    # ds == collision.a || ds == collision.b
         if collision.a.direction == collision.b.direction
             uncollide_direction = unit_vector(direction(collision.center, ds.previous))
         else
