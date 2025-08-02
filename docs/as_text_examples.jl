@@ -8,6 +8,7 @@ using XML
 export generate_html_as_text_examples
 
 let
+    println("Deserializing $CALL_TEXT_EXAMPLES_FILE")
     examples = deserialize(CALL_TEXT_EXAMPLES_FILE)
     example_rows = []
     for key in sort(collect(keys(examples)); by=nameof)
