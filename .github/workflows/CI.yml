@@ -55,6 +55,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: as_text_examples
+          # This path must match the value of the Julia global CALL_TEXT_EXAMPLES_FILE:
           path: test/test_calls/CALL_TEXT_EXAMPLES.serialized
   docs:
     name: Documentation
@@ -79,7 +80,14 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: as_text_examples
+          # This path must match the value of the Julia global CALL_TEXT_EXAMPLES_FILE:
           path: test/test_calls/CALL_TEXT_EXAMPLES.serialized
+      - name: Print Workspace File Tree
+        uses: jaywcjlove/github-action-folder-tree@main
+        with:
+          # exclude:
+          path: .
+          depth: 5
 #     - name: Configure doc environment
 #       shell: julia --project=docs --color=yes {0}
 #       run: |
