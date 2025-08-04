@@ -16,7 +16,8 @@ using Rete
 export SquareDanceRule, TemporalFact, SquareDanceFormation, make_kb
 
 
-REPO_ROOT = abspath(joinpath(@__DIR__, ".."))
+REPO_ROOT = dirname(dirname(pathof(SquareDanceReasoning)))
+@assert REPO_ROOT == abspath(joinpath(@__DIR__, ".."))
 
 
 """
