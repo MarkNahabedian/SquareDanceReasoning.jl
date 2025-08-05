@@ -81,11 +81,11 @@ jobs:
         with:
           name: as_text_examples
           # This path must match the value of the Julia global CALL_TEXT_EXAMPLES_FILE:
-          path: test/test_calls/CALL_TEXT_EXAMPLES.serialized
+          path: test/test_calls
       - name: Print Workspace File Tree
         uses: jaywcjlove/github-action-folder-tree@main
         with:
-          # exclude:
+          exclude: ".git"
           path: .
           depth: 5
 #     - name: Configure doc environment
