@@ -23,7 +23,13 @@ dancer at a moment in time.
 `time` is a number defining a temporal ordering.  It could represent a
 number of beats, for example.
 
-DancerState is also the single dancer `SquareDanceFormation`.
+DancerState is also the single dancer `SquareDanceFormation`.  As a
+`SquareDanceFormation`, one can call a `DancerState` to iterate over
+the dancer states of that formation, that its, itself.
+
+The newest `DancerState` contains the entire history for its `Dancer`.
+The next newest is the value of the newest's `previous` field, and so
+on until the very first `DancerState for the Dancer.
 """
 @with_kw_noshow struct DancerState <: SquareDanceFormation
     previous::Union{Nothing, DancerState}
@@ -96,6 +102,8 @@ function Base.show(io::IO, ::MIME"text/plain", ds::DancerState)
 end
 
 Base.in(ds::DancerState, sq::SDSquare) = in(ds.dancer, sq.dancers)
+
+# DancerState iteration support:
 
 
 """
