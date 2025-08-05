@@ -50,10 +50,8 @@ function check_for_as_text_methods()
     end
 end
 
-const CALL_TEXT_EXAMPLES_FILE =
-    joinpath(dirname(dirname(pathof(SquareDanceReasoning))),
-             "test", "test_calls",
-             "CALL_TEXT_EXAMPLES.serialized")
+const CALL_TEXT_EXAMPLES_FILE = joinpath(REPO_ROOT, "test", "test_calls",
+                                         "CALL_TEXT_EXAMPLES.serialized")
 
 function write_call_text_examples()
     let
