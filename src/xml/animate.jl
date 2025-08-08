@@ -309,7 +309,7 @@ function animation_svg(method::PureSVGAnimation,
                       keytimes = join(map(ds -> @sprintf("%06.4f",
                                                          fixed(fraction(tbounds,
                                                                         ds.time))),
-                                          hist), ";")
+                                          hist), "; ")
                       a(elt("use",
                             "id" => dancer_keyframe_id(ds.dancer),
                             "href" => "$symbol_uri_base#$(gender_fragment(ds.dancer.gender))",
