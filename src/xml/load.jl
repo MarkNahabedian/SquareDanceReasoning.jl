@@ -6,8 +6,9 @@ using Printf
 const SVG_NAMESPACE = "http://www.w3.org/2000/svg"
 
 function bounds_to_viewbox(bounds::Bounds)
-    width = abs(DANCER_SVG_SIZE * (bounds.max_left - bounds.min_left))
-    height = abs(DANCER_SVG_SIZE * (bounds.max_down - bounds.min_down))
+    # bounds is in terms of coordinate system units:
+    width = DANCER_SVG_SIZE * abs(bounds.max_left - bounds.min_left)
+    height = DANCER_SVG_SIZE * abs(bounds.max_down - bounds.min_down)
     [
         "viewBox" =>
             @sprintf("%3.3f %3.3f %3.3f %3.3f",
