@@ -321,13 +321,13 @@ function animation_svg(method::PureSVGAnimation,
                                 "dur" => "$(duration_seconds)s",
                                 "keyTimes" => keytimes,
                                 "attributeName" => "x",
-                                "values" => join(map(svg_x, hist), ";")),
+                                "values" => join(map(svg_x, hist), "; ")),
                             elt("animate",
                                 "repeatCount" => "indefinite",
                                 "dur" => "$(duration_seconds)s",
                                 "keyTimes" => keytimes,
                                 "attributeName" => "y",
-                                "values" => join(map(svg_y, hist), ";")),
+                                "values" => join(map(svg_y, hist), "; ")),
                             elt("animateTransform",
                                 "repeatCount" => "indefinite",
                                 "dur" => "$(duration_seconds)s",
@@ -335,7 +335,7 @@ function animation_svg(method::PureSVGAnimation,
                                 "attributeName" => "transform",
                                 "type" => "rotate",
                                 "values" => join(smooth_svg_rotation(hist),
-                                                 ";")),
+                                                 "; ")),
                             xmlComment("\n" * String(take!(comment)))
                             ))
                   end
@@ -349,8 +349,7 @@ const DEFAULT_ANIMATION_METHOD = PureSVGAnimation()
 animate(output_file, dancer_states; bpm=40) =
     animate(DEFAULT_ANIMATION_METHOD, output_file, dancer_states;
             bpm=bpm,
-            symbol_uri_base = collateral_file_relpath("dancer_symbols.svg",
-                                                      output_file))
+            symbol_uri_base = "")
 
 animation_svg(dancer_states::Vector{DancerState}; bpm=40) =
     animation_svg(DEFAULT_ANIMATION_METHOD, dancer_states; bpm=bpm)
