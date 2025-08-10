@@ -69,11 +69,14 @@ Returns the path to the named resource in the environment of
 that is referring to the resource.
 """
 function collateral_file_relpath(resource_name, html_file_destination)
+    @assert isabspath(html_file_destination)
    # Which of targets matches the longest prefix of
    # html_file_destination?
+    splitroot = working_splitpath(REPO_ROOT)
     splitdest = working_splitpath(html_file_destination)
+    @assert length(splitroot) == paths_match_to(splitroot, splitdest)
     best_matched_to = 0
-    best_target = missing
+    best_target = nothing
     for target in TARGET_LOCATIONS
         splittarget = working_splitpath(target)
         matched_to = paths_match_to(splitdest, splittarget)
@@ -82,6 +85,7 @@ function collateral_file_relpath(resource_name, html_file_destination)
             best_target = target
         end
     end
+    @assert best_target != nothing
     # We still need relative path from html_file_destination to
     # resource location:
     dir, _ = splitdir(html_file_destination)
