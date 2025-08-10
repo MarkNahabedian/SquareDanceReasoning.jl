@@ -5,8 +5,7 @@ export center
 
 
 """
-    Bounds(dss::Vector{DancerState};
-                        margin = COUPLE_DISTANCE / 2)
+    Bounds(dss::Vector{DancerState}; margin = COUPLE_DISTANCE / 2)
 
 represents the bounding rectangle surrounding the specified
 `DancerState`s.  If `margin` is 0 then Bounds surrounds just the
@@ -14,6 +13,10 @@ centers of the dancers.
 
 By default, `margin` is `COUPLE_DISTANCE / 2` so that Bounds describes
 the space actually occupied by the dancers.
+
+Typically, `Bounds` objects are constructed from
+SquareDanceFormation`s.  In this case the values within bounds
+(`min_down`, etc.) are in coordinate space units.
 """
 mutable struct Bounds
     min_down
