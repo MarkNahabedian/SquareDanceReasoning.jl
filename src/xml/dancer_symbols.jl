@@ -10,5 +10,6 @@ gender_css_symbol(::Guy) = "href" => "#Guy"
 gender_css_symbol(::Gal) = "href" => "#Gal"
 gender_css_symbol(::Unspecified) = "href" => "#Neutral"
 
+# Each unit in to coordinate system is 10mm in rendered SVG:
 const DANCER_SVG_SIZE = 10
 const SVG_SIZE_UNITS = "mm"
