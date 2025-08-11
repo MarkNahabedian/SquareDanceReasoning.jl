@@ -148,8 +148,7 @@ function animate(method::AnimationMethod,
                                                            output_file))
     doc = animation_svg(method, dancer_states;
                         bpm=bpm,
-                        symbol_uri_base = collateral_file_relpath("dancer_symbols.svg",
-                                                                  output_file))
+                        symbol_uri_base = symbol_uri_base)
     animate_finish(output_file, doc)
 end
 
