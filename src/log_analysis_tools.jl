@@ -21,6 +21,23 @@ inclusion in the log entry.
 
 =#
 
+function wrap_with_html_and_stylesheet(elements::XML.Node)
+    elt("html",
+        elt("head",
+            elt("style", LOG_ANALYSIS_CSS)),
+        elt("body",
+            elements))
+end
+
+function wrap_with_html_and_stylesheet(elements::Vector{XML.Node})
+    elt("html",
+        elt("head",
+            elt("style", LOG_ANALYSIS_CSS)),
+        elt("body",
+            elements...))
+end
+
+
 function analysis1(logfile::String)
     analysis1(deserialize_log_file(logfile))
 end
@@ -197,47 +214,54 @@ function html_for_call_history(report::HTMLLogAnalysisReport,
                 ]...)
 end
 
+function dancer_history_table(dancer_states::Vector{DancerState},
+                              report=HTMLLogAnalysisReport())
+    elt("table",
+        elt("caption", "Dancer History"),
+        elt("tr",
+            elt("th", "dancer"),
+            elt("th", "history position"),
+            elt("th", "time"),
+            elt("th", "direction"),
+            elt("th", "down"),
+            elt("th", "left")),
+        let
+            rows = []
+            for ds in sort(dancer_states; by = ds -> ds.dancer)
+                hist = history(ds)
+                dancer = ds.dancer
+                for i in 1:length(hist)
+                    push!(rows, elt("tr",
+                                    # dancer:
+                                    if i == 1
+                                        [ elt("td",
+                                              "rowspan" =>"$(length(hist))",
+                                              objrepr(report, dancer)) ]
+                                    else
+                                        []
+                                    end...,
+                                    # history position
+                                    elt("td", history_position(hist[i])),
+                                    # time:
+                                    elt("td", objrepr(report, hist[i].time)),
+                                    # direction:
+                                    elt("td", objrepr(report, hist[i].direction)),
+                                    # down:
+                                    elt("td", objrepr(report, hist[i].down)),
+                                    # left:
+                                    elt("td", objrepr(report, hist[i].left))))
+                end
+            end
+            rows
+        end...)
+end
+
 function html_for_dancer_history(report::HTMLLogAnalysisReport,
                                  rec::DeserializedLogRecord)
     newest_dancer_states = rec.kwargs[:newest_dancer_states]
     elt("div",
-        elt("table",
-            elt("caption", "Dancer History"),
-            elt("tr",
-                elt("th", "dancer"),
-                elt("th", "history position"),
-                elt("th", "time"),
-                elt("th", "direction"),
-                elt("th", "down"),
-                elt("th", "left")),
-            let
-                rows = []
-                for dancer in sort(collect(keys(newest_dancer_states)))
-                    hist = history(newest_dancer_states[dancer])
-                    for i in 1:length(hist)
-                        push!(rows, elt("tr",
-                                        # dancer:
-                                        if i == 1
-                                            [ elt("td",
-                                                  "rowspan" =>"$(length(hist))",
-                                                  objrepr(report, dancer)) ]
-                                        else
-                                            []
-                                        end...,
-                                        # history position
-                                        elt("td", history_position(hist[i])),
-                                        # time:
-                                        elt("td", objrepr(report, hist[i].time)),
-                                        # direction:
-                                        elt("td", objrepr(report, hist[i].direction)),
-                                        # down:
-                                        elt("td", objrepr(report, hist[i].down)),
-                                        # left:
-                                        elt("td", objrepr(report, hist[i].left))))
-                    end
-                end
-                rows
-            end...),
+        dancer_history_table(collect(values(newest_dancer_states)),
+                             report),
         animation_svg(collect(values(newest_dancer_states))))
 end
 
@@ -538,11 +562,8 @@ function analysis1_html(logfile::String)
 end
 
 function analysis1_html(log::Vector{DeserializedLogRecord})
-    elt("html",
-        elt("head",
-            elt("style", LOG_ANALYSIS_CSS)),
-        elt("body",
-            html_for_log_records(HTMLLogAnalysisReport(), log)...))
+    wrap_with_html_and_stylesheet(
+        html_for_log_records(HTMLLogAnalysisReport(), log))
 end
 
 function report1(logfile::String)
