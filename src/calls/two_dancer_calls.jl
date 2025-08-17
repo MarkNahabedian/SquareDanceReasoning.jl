@@ -69,6 +69,7 @@ TODO:
 Caller lab: From a Squared Set, Heads Pass Thru is proper. It ends
 with the Heads back on Squared Set spots. See Squared Set Convention.
 
+We can use _EndAt.
 =#
 
 function expand_parts(c::PassThru, f::FaceToFace, sc::ScheduledCall)
@@ -256,19 +257,27 @@ note_call_text(PartnerHinge(; role = Trailers()))
 can_do_from(::PartnerHinge, ::Couple) = 1
 
 function perform(call::PartnerHinge, couple::Couple, kb::SDRKnowledgeBase)
+    # Taminations says of Partner Hinge that the center handhold does
+    # not change location.
     c = center(couple)
     cpl = RHMiniWave(let
                          dir = couple.beau.direction - 1//4
                          (d, l) = revolve(location(couple.beau),
                                           c, -1//4,
-                                          COUPLE_DISTANCE)
+                                          COUPLE_DISTANCE/2)
                          DancerState(couple.beau, couple.beau.time + call.time,
                                      couple.beau.direction - 1//4,
                                      d, l)
                      end,
-                     DancerState(couple.belle, couple.belle.time + call.time,
-                                 couple.belle.direction + 1//4,
-                                 c...))
+                     let
+                         dir = couple.beau.direction + 1//4
+                         (d, l) = revolve(location(couple.belle),
+                                          c, -1//4,
+                                          COUPLE_DISTANCE/2)
+                         DancerState(couple.belle, couple.belle.time + call.time,
+                                     couple.belle.direction + 1//4,
+                                     d, l)
+                     end)
     cpl
 end
 
