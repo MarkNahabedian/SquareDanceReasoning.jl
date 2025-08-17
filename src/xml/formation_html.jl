@@ -72,6 +72,7 @@ function write_formation_html_file(title, output_path,
                     elt("h2", "Dancer Location and Facing Direction"),
                     dancer_states_table(dss, symbol_uri_base, roles)),
                 elt("div",
+                    # Should we just be using formation_svg here?
                     elt("svg",
                         "id" => "floor",
                         "xmlns" => SVG_NAMESPACE,

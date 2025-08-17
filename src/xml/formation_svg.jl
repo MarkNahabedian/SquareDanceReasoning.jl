@@ -60,6 +60,7 @@ function formation_svg(dss::Vector{DancerState}, symbol_uri_base; id=nothing,
         # "id" => "floor",
         "xmlns" => SVG_NAMESPACE,
         bounds_to_viewbox(bounds)...,
+        "preserveAspectRatio" => "xMidYMid meet",
         if inline_stylesheet
             [ elt("style",
                   dancer_colors_css(length(dss) / 2)), ]
