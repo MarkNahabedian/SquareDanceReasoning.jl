@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="5.000 -5.000 20.000 20.000" width="20.0mm" height="20.0mm" preserveAspectRatio="xMidYMid meet">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="5.000 0.000 20.000 20.000" width="20.0mm" height="20.0mm" preserveAspectRatio="xMidYMid meet">
   <!--
-Bounds(-0.5f0, 1.5f0, 0.5f0, 2.5f0)
+Bounds(0.0f0, 2.0f0, 0.5f0, 2.5f0)
 -->
   <style>
     
@@ -41,22 +41,22 @@ Bounds(-0.5f0, 1.5f0, 0.5f0, 2.5f0)
   <g class="animation">
     <use id="dancer_1_m" href="#Guy" width="10" height="10" class="couple1">
       <animate repeatCount="indefinite" dur="6.0s" keyTimes="0.0000; 0.5000; 1.0000" attributeName="x" values="10.0; 15.0; 15.0"/>
-      <animate repeatCount="indefinite" dur="6.0s" keyTimes="0.0000; 0.5000; 1.0000" attributeName="y" values="10.0; 0.0; 0.0"/>
-      <animateTransform repeatCount="indefinite" dur="6.0s" keyTimes="0.0000; 0.5000; 1.0000" attributeName="transform" type="rotate" values="-90.0 10.0 10.0; 0.0 15.0 0.0; 0.0 15.0 0.0"/>
+      <animate repeatCount="indefinite" dur="6.0s" keyTimes="0.0000; 0.5000; 1.0000" attributeName="y" values="10.0; 5.0; 5.0"/>
+      <animateTransform repeatCount="indefinite" dur="6.0s" keyTimes="0.0000; 0.5000; 1.0000" attributeName="transform" type="rotate" values="-90.0 10.0 10.0; 0.0 15.0 5.0; 0.0 15.0 5.0"/>
       <!--
 DancerState(1, Dancer(1, Guy()), 0, 1//2, 1.0, 1.0)
-DancerState(2, Dancer(1, Guy()), 2, 1//4, 0.0, 1.5)
-DancerState(3, Dancer(1, Guy()), 4, 1//4, 0.0, 1.5)
+DancerState(2, Dancer(1, Guy()), 2, 1//4, 0.5, 1.5)
+DancerState(3, Dancer(1, Guy()), 4, 1//4, 0.5, 1.5)
 -->
     </use>
     <use id="dancer_1_f" href="#Gal" width="10" height="10" class="couple1">
       <animate repeatCount="indefinite" dur="6.0s" keyTimes="0.0000; 0.5000; 1.0000" attributeName="x" values="20.0; 15.0; 15.0"/>
-      <animate repeatCount="indefinite" dur="6.0s" keyTimes="0.0000; 0.5000; 1.0000" attributeName="y" values="10.0; 10.0; 10.0"/>
-      <animateTransform repeatCount="indefinite" dur="6.0s" keyTimes="0.0000; 0.5000; 1.0000" attributeName="transform" type="rotate" values="-90.0 20.0 10.0; -180.0 15.0 10.0; -180.0 15.0 10.0"/>
+      <animate repeatCount="indefinite" dur="6.0s" keyTimes="0.0000; 0.5000; 1.0000" attributeName="y" values="10.0; 15.0; 15.0"/>
+      <animateTransform repeatCount="indefinite" dur="6.0s" keyTimes="0.0000; 0.5000; 1.0000" attributeName="transform" type="rotate" values="-90.0 20.0 10.0; -180.0 15.0 15.0; -180.0 15.0 15.0"/>
       <!--
 DancerState(1, Dancer(1, Gal()), 0, 1//2, 1.0, 2.0)
-DancerState(2, Dancer(1, Gal()), 2, 3//4, 1.0, 1.5)
-DancerState(3, Dancer(1, Gal()), 4, 3//4, 1.0, 1.5)
+DancerState(2, Dancer(1, Gal()), 2, 3//4, 1.5, 1.5)
+DancerState(3, Dancer(1, Gal()), 4, 3//4, 1.5, 1.5)
 -->
     </use>
   </g>
