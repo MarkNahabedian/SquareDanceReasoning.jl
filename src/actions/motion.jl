@@ -88,6 +88,15 @@ function revolve(ds::DancerState, center,
                 new_direction, downEnd, leftEnd)
 end
 
+
+"""
+    revolve(location, center, sweep, distance_from_center)
+
+Returns a new location as two values(down and left coordinates) that
+is the result of revolving an object that was at `location` around
+`center` by `sweep` and changing its distance from the center to
+`distance_from_center`.
+"""
 function revolve(location, center, sweep, distance_from_center)
     # absdirection is the direction from center
     vStart = location - center
