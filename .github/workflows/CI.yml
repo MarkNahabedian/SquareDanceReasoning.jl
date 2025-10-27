@@ -47,12 +47,12 @@ jobs:
           slug: MarkNahabedian/SquareDanceReasoning.jl
           files: lcov.info
       - name: Upload call unit test animations
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: call_animations
           path: test/test_calls/Animations
       - name: Upload as_text examples
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: as_text_examples
           # This path must match the value of the Julia global CALL_TEXT_EXAMPLES_FILE:
@@ -72,12 +72,12 @@ jobs:
           version: '1'
       - uses: julia-actions/cache@v2
       - name: Retrieve call unit test animations
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: call_animations
           path: test/test_calls/Animations
       - name: Retrieve as_text examples
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: as_text_examples
           # This path must match the value of the Julia global CALL_TEXT_EXAMPLES_FILE:
