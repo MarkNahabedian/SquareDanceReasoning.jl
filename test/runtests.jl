@@ -4,6 +4,7 @@ using Rete
 using InteractiveUtils
 using Logging
 using XML
+using OrderedCollections
 
 
 include("debug_formations.jl")
@@ -229,6 +230,64 @@ end
     end
     XML.write(joinpath(@__DIR__, "star_promenade.svg"),
               formation_svg([guy_dss..., gal_dss...], ""; inline_stylesheet=true))
+end
+
+@testset "Test formation example serialization" begin
+    fc = let
+        square = make_square(2)
+        kb = make_kb()
+        receive(kb, square)
+        receive(kb, DancerState(square[1], 0, 1//4, 1, 1))
+        receive(kb, DancerState(square[2], 0, 1//4, 2, 1))
+        receive(kb, DancerState(square[3], 0, 3//4, 2, 2))
+        receive(kb, DancerState(square[4], 0, 3//4, 1, 2))
+        askc(Collector{FacingCouples}(), kb, FacingCouples)[1]
+    end
+    ds1 = dancer_states(fc)[1]
+    @test JSON.lower(SubFormationJSONStyle(), ds1) == "1m"
+    @test JSON.lower(TopLevelFormationJSONStyle(), ds1) ==
+        OrderedCollections.OrderedDict(
+            "couple_number" => 1,
+            "gender"        => "Guy",
+            "direction"     => 1//4,
+            "down"          => 1.0,
+            "left"          => 1.0)
+    @test JSON.lower(TopLevelFormationJSONStyle(), fc) ==
+        OrderedDict(
+            "_TYPE_" => "FacingCouples",
+            "DancerStates" => OrderedDict(
+                "1m" => OrderedDict(
+                    "couple_number" => 1,
+                    "gender" => "Guy",
+                    "direction" => 1//4,
+                    "down" => 1.0f0,
+                    "left" => 1.0f0),
+                "1f" => OrderedDict(
+                    "couple_number" => 1,
+                    "gender" => "Gal",
+                    "direction" => 1//4,
+                    "down" => 2.0f0,
+                    "left" => 1.0f0),
+                "2m" => OrderedDict(
+                    "couple_number" => 2,
+                    "gender" => "Guy",
+                    "direction" => 3//4,
+                    "down" => 2.0f0,
+                    "left" => 2.0f0),
+                "2f" => OrderedDict(
+                    "couple_number" => 2,
+                    "gender" => "Gal",
+                    "direction" => 3//4,
+                    "down" => 1.0f0,
+                    "left" => 2.0f0)),
+            :couple1 => OrderedDict(
+                "_TYPE_" => "Couple",
+                :beau => "1m",
+                :belle => "1f"),
+            :couple2 => OrderedDict(
+                "_TYPE_" => "Couple",
+                :beau => "2m",
+                :belle => "2f"))
 end
 
 include("test_collisions.jl")
