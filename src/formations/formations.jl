@@ -23,7 +23,7 @@ function formation_name_to_type(name::AbstractString)
     FORMATION_NAME_TO_TYPE[name]
 end
 
-# For each subtype of SquareDanceFormation, are any fields of type
+# For each subtype of SquareDanceFormation, are any fields of a type
 # other than SquareDanceFormation?
 let
     others = []
