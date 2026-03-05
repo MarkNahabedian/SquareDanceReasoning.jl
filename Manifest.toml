@@ -2,7 +2,7 @@
 
 julia_version = "1.12.1"
 manifest_format = "2.0"
-project_hash = "043ea9099585fcd39d9d1fea439d771a537e0f68"
+project_hash = "688be58bf84f45ba6a07153ed1e951b7e350f268"
 
 [[deps.Artifacts]]
 uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
@@ -188,6 +188,12 @@ version = "0.7.0"
 [[deps.Serialization]]
 uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
 version = "1.11.0"
+
+[[deps.SquareDanceReasoning]]
+deps = ["Colors", "DataStructures", "InteractiveUtils", "IterTools", "JSON", "LinearAlgebra", "Logging", "LoggingExtras", "OrderedCollections", "Parameters", "Printf", "Random", "ResumableFunctions", "Rete", "Serialization", "XML"]
+path = "."
+uuid = "b9c7be03-8993-4d9d-899b-7f8d1d493d3a"
+version = "1.0.0-DEV"
 
 [[deps.Statistics]]
 deps = ["LinearAlgebra"]
